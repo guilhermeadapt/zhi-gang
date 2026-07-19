@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0a0c11" />
+  <meta name="description" content="Guias da guild Wanted — DPS e Healer para GvG." />
+  <title>Wanted · Guias</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(1000px 500px at 50% -10%, rgba(90,120,255,.18), transparent 70%),
+        #0a0c11;
+      color: #eef1f7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      line-height: 1.6;
+    }
+    .wrap { width: 100%; max-width: 520px; text-align: center; }
+    .kicker {
+      font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+      color: #8b93a7; margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(2.4rem, 9vw, 3.6rem); line-height: 1.05; letter-spacing: .02em;
+      background: linear-gradient(120deg, #8ea2ff, #cbd4ff);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .sub { color: #9aa3b7; margin: 14px 0 36px; }
+    .guides { display: grid; gap: 16px; }
+    a.guide {
+      display: flex; align-items: center; gap: 16px;
+      text-decoration: none; text-align: left;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding: 20px 22px;
+      color: #eef1f7;
+      transition: border-color .15s ease, background .15s ease, transform .15s ease;
+    }
+    a.guide:hover { background: rgba(255,255,255,.07); border-color: rgba(142,162,255,.6); transform: translateY(-2px); }
+    .ico {
+      width: 46px; height: 46px; flex: none;
+      border-radius: 12px; display: grid; place-items: center;
+      font-size: 22px; font-weight: 800;
+    }
+    .ico.dps { background: linear-gradient(140deg, #ff5a36, #ffab36); color: #1a0f0a; }
+    .ico.heal { background: linear-gradient(140deg, #2fd27a, #37c0c0); color: #062015; }
+    .guide .t { font-size: 1.15rem; font-weight: 700; }
+    .guide .d { font-size: .9rem; color: #9aa3b7; }
+    .arrow { margin-left: auto; color: #8b93a7; font-size: 1.4rem; }
+    footer { margin-top: 40px; font-size: 13px; color: #6f7789; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="kicker">Guild</div>
+    <h1>Wanted</h1>
+    <p class="sub">Guias de GvG — escolha sua função.</p>
+
+    <div class="guides">
+      <a class="guide" href="./dps/">
+        <span class="ico dps">DPS</span>
+        <span>
+          <span class="t">Guia do DPS</span><br />
+          <span class="d">Build, kit, decisão e dano no GvG</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="guide" href="./healer/">
+        <span class="ico heal">HEAL</span>
+        <span>
+          <span class="t">Guia do Healer</span><br />
+          <span class="d">Build, posicionamento, kit e sobrevivência</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <footer>Wanted · guias da guild</footer>
+  </div>
+</body>
+</html>
