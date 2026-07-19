@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#0a0c11" />
-  <meta name="description" content="Guias da guild Wanted — DPS e Healer para GvG." />
+  <meta name="description" content="Guias da guild Wanted — Tank, DPS e Healer para GvG." />
   <title>Wanted · Guias</title>
   <style>
     :root{
@@ -15,6 +15,7 @@
       --card-line:rgba(255,255,255,.09);
       --text:#eef1f7;
       --muted:#96a0b5;
+      --tank-a:#3b82f6; --tank-b:#38bdf8;
       --dps-a:#ff6a2b; --dps-b:#ffb038;
       --heal-a:#26d47f; --heal-b:#37c6c0;
     }
@@ -66,11 +67,13 @@
     a.guide::before{ /* faixa de cor da função */
       content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px;
     }
+    a.guide.tank::before{background:linear-gradient(var(--tank-a),var(--tank-b));}
     a.guide.dps::before{background:linear-gradient(var(--dps-a),var(--dps-b));}
     a.guide.heal::before{background:linear-gradient(var(--heal-a),var(--heal-b));}
     a.guide:active{transform:scale(.985);}
     @media(hover:hover){
       a.guide:hover{transform:translateY(-2px);background:rgba(255,255,255,.06);}
+      a.guide.tank:hover{border-color:rgba(70,150,255,.55);}
       a.guide.dps:hover{border-color:rgba(255,140,60,.55);}
       a.guide.heal:hover{border-color:rgba(45,210,130,.55);}
     }
@@ -80,9 +83,10 @@
       display:grid;place-items:center;
     }
     .ico svg{width:26px;height:26px;}
+    .ico.tank{background:linear-gradient(150deg,var(--tank-a),var(--tank-b));box-shadow:0 10px 26px -12px rgba(60,140,255,.8);}
     .ico.dps{background:linear-gradient(150deg,var(--dps-a),var(--dps-b));box-shadow:0 10px 26px -12px rgba(255,120,50,.8);}
     .ico.heal{background:linear-gradient(150deg,var(--heal-a),var(--heal-b));box-shadow:0 10px 26px -12px rgba(45,210,140,.8);}
-    .ico.dps svg{stroke:#2a1206;} .ico.heal svg{stroke:#04231a;fill:#04231a;}
+    .ico.tank svg{stroke:#06122b;fill:#06122b;} .ico.dps svg{stroke:#2a1206;} .ico.heal svg{stroke:#04231a;fill:#04231a;}
 
     .txt{min-width:0;flex:1;}
     .txt .t{font-size:1.16rem;font-weight:750;letter-spacing:.01em;}
@@ -91,7 +95,7 @@
       font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
       margin-bottom:3px;
     }
-    .dps .role{color:#ff9d5c;} .heal .role{color:#4fe0a0;}
+    .tank .role{color:#6fb2ff;} .dps .role{color:#ff9d5c;} .heal .role{color:#4fe0a0;}
     .arrow{margin-left:6px;flex:none;color:#7f89a1;transition:transform .16s ease;}
     @media(hover:hover){a.guide:hover .arrow{transform:translateX(3px);color:var(--text);}}
 
@@ -106,6 +110,23 @@
     <p class="sub">Guias de GvG — escolha sua função.</p>
 
     <div class="guides">
+      <a class="guide tank" href="./tank/">
+        <span class="ico tank">
+          <!-- escudo -->
+          <svg viewBox="0 0 24 24" stroke-width="0">
+            <path d="M12 2l7 3v6c0 4.6-3.1 8.4-7 9.9C8.1 19.4 5 15.6 5 11V5l7-3z"/>
+          </svg>
+        </span>
+        <span class="txt">
+          <span class="role">Tank</span>
+          <div class="t">Guia do Tank</div>
+          <div class="d">Build, frontline, controle e resistência</div>
+        </span>
+        <span class="arrow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
       <a class="guide dps" href="./dps/">
         <span class="ico dps">
           <!-- espada -->
