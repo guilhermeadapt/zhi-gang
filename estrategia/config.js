@@ -15,7 +15,7 @@ const WWM = {
   mapSize: { w: 1217, h: 864 },
 
   assets: {
-    // Mapa base (limpo) — gerado pela guild.
+    // Mapa base (limpo, grama até a borda) — gerado pela guild (v2).
     map: '../assets/map/board.jpg',
 
     // Ícones dos objetivos (placeholder do vendor-ref — TODO: trocar por próprios).
@@ -36,50 +36,55 @@ const WWM = {
    * sobre o mapa base — ajuste arrastando. icone: chave em assets.icons ou
    * um tipo desenhado (jungle). up: default no cenário Start.
    */
-  // Posições calibradas sobre o mapa base (board.jpg). Ajustáveis arrastando.
+  // Posições calibradas sobre o mapa base. `movel:true` = arrastável (árvore/ganso);
+  // os demais são FIXOS (torres, boss, outpost, jungle não se movem).
+  // TODO: refinar posições no mapa novo que a guild vai gerar.
   objetivos: [
-    // 3 torres por lado (top / mid / bot) — Oeste (azul) e Leste (vermelho)
+    // 3 torres por lado (top / mid / bot) — FIXAS
     { id: 'torre_top_o', grupo: 'Torres', rotulo: 'Torre Top (O)', icone: 'tower_blue', x: 0.393, y: 0.312 },
     { id: 'torre_mid_o', grupo: 'Torres', rotulo: 'Torre Mid (O)', icone: 'tower_blue', x: 0.393, y: 0.499 },
     { id: 'torre_bot_o', grupo: 'Torres', rotulo: 'Torre Bot (O)', icone: 'tower_blue', x: 0.393, y: 0.687 },
     { id: 'torre_top_l', grupo: 'Torres', rotulo: 'Torre Top (L)', icone: 'tower_red',  x: 0.626, y: 0.312 },
     { id: 'torre_mid_l', grupo: 'Torres', rotulo: 'Torre Mid (L)', icone: 'tower_red',  x: 0.626, y: 0.499 },
     { id: 'torre_bot_l', grupo: 'Torres', rotulo: 'Torre Bot (L)', icone: 'tower_red',  x: 0.626, y: 0.687 },
-    // ganso nos 2 lados (junto aos portões)
-    { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.196, y: 0.499 },
-    { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.827, y: 0.499 },
-    // árvore nos 2 lados — nasce no portão e caminha até o portão inimigo (333m, lane mid)
-    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.159, y: 0.499, caminho: { a: [0.159, 0.499], b: [0.864, 0.499] } },
-    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.864, y: 0.499, caminho: { a: [0.864, 0.499], b: [0.159, 0.499] } },
-    // boss / nirvana (2, ao centro)
-    { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.475, y: 0.41 },
-    { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.475, y: 0.60 },
-    // jungle (mini-ninjas) — 8 camps
-    { id: 'jg_1', grupo: 'Jungle', rotulo: 'Jungle 1', icone: 'jungle', x: 0.37, y: 0.40 },
-    { id: 'jg_2', grupo: 'Jungle', rotulo: 'Jungle 2', icone: 'jungle', x: 0.45, y: 0.38 },
-    { id: 'jg_3', grupo: 'Jungle', rotulo: 'Jungle 3', icone: 'jungle', x: 0.55, y: 0.38 },
+    // ganso nos 2 lados (nasce no portão) — MÓVEL (mas só dentro da base)
+    { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.196, y: 0.499, movel: true },
+    { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.827, y: 0.499, movel: true },
+    // árvore nasce no MESMO ponto do ganso e caminha até o portão inimigo (333m) — MÓVEL
+    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.196, y: 0.499, movel: true, caminho: { a: [0.196, 0.499], b: [0.827, 0.499] } },
+    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.827, y: 0.499, movel: true, caminho: { a: [0.827, 0.499], b: [0.196, 0.499] } },
+    // boss / nirvana nas 2 PONTAS (norte e sul) — FIXO
+    { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.420, y: 0.122 },
+    { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.579, y: 0.856 },
+    // outpost — nasce quase ao lado do boss (FIXO). Sem ícone próprio (marcador).
+    { id: 'outpost_n', grupo: 'Outpost', rotulo: 'Outpost (N)', icone: 'outpost', x: 0.545, y: 0.150 },
+    { id: 'outpost_s', grupo: 'Outpost', rotulo: 'Outpost (S)', icone: 'outpost', x: 0.455, y: 0.828 },
+    // jungle (mini-ninjas) — 8 camps FIXOS
+    { id: 'jg_1', grupo: 'Jungle', rotulo: 'Jungle 1', icone: 'jungle', x: 0.37, y: 0.44 },
+    { id: 'jg_2', grupo: 'Jungle', rotulo: 'Jungle 2', icone: 'jungle', x: 0.45, y: 0.45 },
+    { id: 'jg_3', grupo: 'Jungle', rotulo: 'Jungle 3', icone: 'jungle', x: 0.55, y: 0.40 },
     { id: 'jg_4', grupo: 'Jungle', rotulo: 'Jungle 4', icone: 'jungle', x: 0.63, y: 0.40 },
     { id: 'jg_5', grupo: 'Jungle', rotulo: 'Jungle 5', icone: 'jungle', x: 0.37, y: 0.60 },
     { id: 'jg_6', grupo: 'Jungle', rotulo: 'Jungle 6', icone: 'jungle', x: 0.45, y: 0.62 },
-    { id: 'jg_7', grupo: 'Jungle', rotulo: 'Jungle 7', icone: 'jungle', x: 0.55, y: 0.62 },
-    { id: 'jg_8', grupo: 'Jungle', rotulo: 'Jungle 8', icone: 'jungle', x: 0.63, y: 0.60 },
+    { id: 'jg_7', grupo: 'Jungle', rotulo: 'Jungle 7', icone: 'jungle', x: 0.55, y: 0.56 },
+    { id: 'jg_8', grupo: 'Jungle', rotulo: 'Jungle 8', icone: 'jungle', x: 0.63, y: 0.63 },
   ],
-  objetivosGrupos: ['Torres', 'Ganso', 'Árvore', 'Boss', 'Jungle'],
+  objetivosGrupos: ['Torres', 'Ganso', 'Árvore', 'Boss', 'Outpost', 'Jungle'],
   treeMeters: 333,   // distância total do caminho da árvore (base -> portão inimigo)
 
-  /* --- funções (mesmas cores do site Zhi Guides) ------------------------- */
+  /* --- funções (Tank / DPS / Healer — Support = DPS) --------------------- */
   roleColors: {
-    Tank:    '#89abc5', // board (azul)
-    DPS:     '#E25B52', // crimson
-    Healer:  '#4CC9A4', // jade
-    Support: '#B98BE0', // roxo (debuffer)
+    Tank:   '#89abc5', // board (azul)
+    DPS:    '#E25B52', // crimson
+    Healer: '#4CC9A4', // jade
   },
-  roleOrder: ['Tank', 'Healer', 'DPS', 'Support'],
+  roleOrder: ['Tank', 'Healer', 'DPS'],
   ptSize: 5,   // tamanho alvo de cada PT (usado no auto-montar)
 
-  /* mapeia as classes do raid-helper (Discord) para as nossas funções */
+  /* mapeia as classes do raid-helper (Discord) para as nossas funções.
+     Support não existe como função própria — entra como DPS. */
   classMap: {
-    Tank: 'Tank', Healer: 'Healer', Ranged: 'DPS', Melee: 'DPS', Support: 'Support',
+    Tank: 'Tank', Healer: 'Healer', Ranged: 'DPS', Melee: 'DPS', Support: 'DPS',
   },
 
   /* --- PTs disponíveis na paleta ----------------------------------------
@@ -101,8 +106,8 @@ const WWM = {
     { nome: 'Defesa', hint: 'PT4–6', pts: ['PT4', 'PT5', 'PT6'] },
   ],
 
-  // paleta das ferramentas de desenho
-  drawColors: ['#D9A441', '#E25B52', '#89ABC5', '#4CC9A4', '#F2F2F2', '#111318'],
+  // paleta das ferramentas de desenho — cores fortes (boa leitura sobre o mapa)
+  drawColors: ['#FFC21A', '#FF3B30', '#2E7DFF', '#17C964', '#FFFFFF', '#0A0A0A'],
   drawWidths: [2, 3, 5],
 
   /* --- comportamento default --------------------------------------------- */
