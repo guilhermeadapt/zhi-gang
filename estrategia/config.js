@@ -63,8 +63,25 @@ const WWM = {
     objectivesOn: true,       // começa mostrando os objetivos na arte do mapa
   },
 
-  /* --- persistência (rascunho localStorage) ------------------------------ */
-  storageKey: 'zhi_estrategia_rascunho_v1',
+  /* --- fases padrão da partida (a timeline do brief) ---------------------
+   * "Semeia" a árvore de cenários. As variantes condicionais viram cenários
+   * irmãos na mesma fase (ex.: Torres → "se levamos" / "se não levamos").
+   */
+  fasesPadrao: [
+    { fase: 'Start',          nome: 'Start (30m)',      condicao: null },
+    { fase: 'Torres',         nome: 'Torres',           condicao: 'se levamos' },
+    { fase: 'Torres',         nome: 'Torres',           condicao: 'se não levamos' },
+    { fase: 'Ganso',          nome: 'Ganso',            condicao: null },
+    { fase: 'Halftime',       nome: 'Halftime',         condicao: null },
+    { fase: 'Boss / Nirvana', nome: 'Boss / Nirvana',   condicao: null },
+    { fase: 'Pós-Nirvana',    nome: 'Pós-Nirvana',      condicao: 'vitória' },
+    { fase: 'Pós-Nirvana',    nome: 'Pós-Nirvana',      condicao: 'derrota' },
+    { fase: 'Colapso',        nome: 'Colapso de Árvores', condicao: null },
+  ],
+
+  /* --- persistência (localStorage) --------------------------------------- */
+  projectKey: 'zhi_estrategia_projeto_v1',   // projeto completo (cenários)
+  storageKey: 'zhi_estrategia_rascunho_v1',  // rascunho antigo (etapa 1) — migrado
 };
 
 // expõe global (app.js consome)

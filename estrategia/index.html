@@ -8,88 +8,62 @@
   <meta name="description" content="Mapa interativo de estratégia GvG da guild Wanted — montar e apresentar o plano por fase. Uso interno." />
   <title>Mapa de Estratégia · Zhi Guides</title>
 
-  <!-- fontes iguais aos guias -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" />
 
   <style>
     :root{
-      --ink:#0a0c11;
-      --ink-2:#12151d;
-      --ink-3:#0e1118;
-      --line:rgba(217,164,65,.20);
-      --line-soft:rgba(255,255,255,.07);
-      --text:#EDEBE4;
-      --muted:#9aa2b4;
-      --gold:#D9A441;
-      --gold-2:#f0c66b;
-      --board:#89abc5;   /* tank */
-      --crimson:#E25B52; /* dps  */
-      --jade:#4CC9A4;    /* healer */
-      --disp:'Oswald',system-ui,sans-serif;
-      --body:'Barlow',system-ui,sans-serif;
-      --cjk:'Noto Serif SC',serif;
-      --topbar-h:60px;
+      --ink:#0a0c11; --ink-2:#12151d; --ink-3:#0e1118;
+      --line:rgba(217,164,65,.20); --line-soft:rgba(255,255,255,.07);
+      --text:#EDEBE4; --muted:#9aa2b4;
+      --gold:#D9A441; --gold-2:#f0c66b;
+      --board:#89abc5; --crimson:#E25B52; --jade:#4CC9A4;
+      --disp:'Oswald',system-ui,sans-serif; --body:'Barlow',system-ui,sans-serif; --cjk:'Noto Serif SC',serif;
+      --topbar-h:60px; --dock-h:168px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0;font-family:var(--body);color:var(--text);
-      background:
-        radial-gradient(120% 90% at 50% -10%, #12151d 0%, transparent 60%),
-        var(--ink);
-      overflow:hidden;
-    }
+    body{margin:0;font-family:var(--body);color:var(--text);
+      background:radial-gradient(120% 90% at 50% -10%, #12151d 0%, transparent 60%), var(--ink);
+      overflow:hidden;}
     button{font-family:inherit}
+    ::-webkit-scrollbar{height:9px;width:9px}
+    ::-webkit-scrollbar-thumb{background:#2a2f3a;border-radius:9px}
+    ::-webkit-scrollbar-track{background:transparent}
 
     /* ---------- TOPBAR ---------- */
-    .topbar{
-      position:relative;z-index:20;height:var(--topbar-h);
-      display:flex;align-items:center;gap:18px;
-      padding:0 16px 0 14px;
-      background:linear-gradient(180deg,rgba(18,21,29,.96),rgba(10,12,17,.96));
-      border-bottom:1px solid var(--line);
-      box-shadow:0 10px 30px -22px #000;
-    }
-    .back{
-      display:inline-flex;align-items:center;gap:6px;flex:none;
-      font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
-      color:var(--gold);text-decoration:none;padding:8px 13px 8px 10px;
-      border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02);
-      transition:color .15s,border-color .15s,background .15s;
-    }
+    .topbar{position:relative;z-index:30;height:var(--topbar-h);display:flex;align-items:center;gap:16px;
+      padding:0 14px;background:linear-gradient(180deg,rgba(18,21,29,.96),rgba(10,12,17,.96));
+      border-bottom:1px solid var(--line);box-shadow:0 10px 30px -22px #000;}
+    .back{display:inline-flex;align-items:center;gap:6px;flex:none;font-family:var(--disp);font-weight:600;
+      font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);text-decoration:none;
+      padding:8px 13px 8px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02);
+      transition:color .15s,border-color .15s,background .15s;}
     .back .ar{font-size:16px;line-height:1;margin-top:-1px}
     .back:hover{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(217,164,65,.06)}
-
     .brand{display:flex;align-items:center;gap:12px;min-width:0}
-    .brand .glyph{
-      font-family:var(--cjk);font-weight:700;font-size:30px;line-height:1;color:var(--gold);
+    .brand .glyph{font-family:var(--cjk);font-weight:700;font-size:30px;line-height:1;color:var(--gold);
       width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:11px;
       background:radial-gradient(120% 120% at 30% 20%,rgba(217,164,65,.16),transparent 70%),#0b0e15;
       border:1px solid color-mix(in srgb,var(--gold) 34%,transparent);
-      box-shadow:inset 0 0 18px -8px color-mix(in srgb,var(--gold) 60%,transparent);
-    }
+      box-shadow:inset 0 0 18px -8px color-mix(in srgb,var(--gold) 60%,transparent);}
     .brand .txt{display:flex;flex-direction:column;min-width:0}
     .brand .kicker{font-family:var(--disp);font-weight:600;font-size:9.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
     .brand h1{margin:0;font-family:var(--disp);font-weight:700;font-size:20px;line-height:1.05;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
     .top-spacer{flex:1 1 auto}
-
     .top-actions{display:flex;align-items:center;gap:8px;flex:none}
-    .tbtn{
-      display:inline-flex;align-items:center;gap:7px;cursor:pointer;
-      font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
-      color:var(--muted);background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-radius:9px;
-      padding:8px 12px;transition:color .15s,border-color .15s,background .15s;
-    }
+
+    .tbtn{display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-family:var(--disp);font-weight:600;
+      font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.02);
+      border:1px solid var(--line-soft);border-radius:9px;padding:8px 12px;transition:color .15s,border-color .15s,background .15s;}
     .tbtn:hover{color:var(--text);border-color:var(--line)}
     .tbtn svg{width:15px;height:15px;flex:none}
+    .tbtn.primary{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .tbtn.primary:hover{filter:brightness(1.06)}
 
-    /* toggle de objetivos */
-    .toggle{display:inline-flex;align-items:center;gap:9px;cursor:pointer;user-select:none;
-      font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-      padding:6px 4px;}
+    .toggle{display:inline-flex;align-items:center;gap:9px;cursor:pointer;user-select:none;font-family:var(--disp);
+      font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 4px;}
     .toggle input{position:absolute;opacity:0;pointer-events:none}
     .toggle .track{width:38px;height:21px;border-radius:999px;background:#22262f;border:1px solid var(--line-soft);
       position:relative;transition:background .18s,border-color .18s;flex:none}
@@ -99,96 +73,144 @@
     .toggle input:checked + .track::after{transform:translateX(17px);background:#241a06}
     .toggle .state{min-width:26px;color:var(--text)}
 
-    /* ---------- WORKSPACE ---------- */
-    .workspace{
-      position:relative;height:calc(100vh - var(--topbar-h));height:calc(100dvh - var(--topbar-h));
-      display:flex;
-    }
+    /* barra de apresentação (no topo, quando apresentando) */
+    .present-bar{display:none;align-items:center;gap:14px;flex:1 1 auto;min-width:0}
+    .present-bar .pb-title{font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:.03em;text-transform:uppercase;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+    .present-bar .pb-cond{font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+      color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:3px 9px;border-radius:999px;flex:none}
+    .present-bar .pb-prog{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.12em;color:var(--muted);flex:none;font-variant-numeric:tabular-nums}
 
-    /* painel do mapa */
-    .map-panel{
-      position:relative;flex:1 1 auto;min-width:0;
-      display:grid;place-items:center;padding:18px;
-      background:
-        radial-gradient(90% 80% at 50% 40%, rgba(20,24,33,.5), transparent 70%);
-      overflow:hidden;
-    }
-    #stageWrap{position:relative;line-height:0;
-      box-shadow:0 30px 80px -40px #000, 0 0 0 1px var(--line-soft);
-      border-radius:10px;overflow:hidden;}
+    /* ---------- WORKSPACE (grid) ---------- */
+    .workspace{position:relative;height:calc(100vh - var(--topbar-h));height:calc(100dvh - var(--topbar-h));
+      display:grid;grid-template-columns:1fr 288px;grid-template-rows:1fr var(--dock-h);}
+
+    .stage-col{grid-column:1;grid-row:1;position:relative;min-width:0;min-height:0}
+    .map-panel{position:absolute;inset:0;display:grid;place-items:center;padding:16px;
+      background:radial-gradient(90% 80% at 50% 40%, rgba(20,24,33,.5), transparent 70%);overflow:hidden;}
+    #stageWrap{position:relative;line-height:0;box-shadow:0 30px 80px -40px #000, 0 0 0 1px var(--line-soft);border-radius:10px;overflow:hidden;}
     #stage{display:block}
-    /* leve moldura dourada */
-    #stageWrap::after{content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;
-      box-shadow:inset 0 0 0 1px rgba(217,164,65,.14)}
+    #stageWrap::after{content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(217,164,65,.14)}
     .map-panel.dragover #stageWrap::after{box-shadow:inset 0 0 0 2px var(--gold),inset 0 0 40px -8px rgba(217,164,65,.4)}
-
-    .map-hint{
-      position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-      z-index:5;pointer-events:none;text-align:center;
-      background:rgba(10,12,17,.78);border:1px solid var(--line);border-radius:12px;
-      padding:14px 20px;backdrop-filter:blur(2px);max-width:80%;
-      font-family:var(--disp);font-weight:500;letter-spacing:.03em;color:var(--text);font-size:14px;
-      transition:opacity .25s;
-    }
+    .map-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;pointer-events:none;text-align:center;
+      background:rgba(10,12,17,.78);border:1px solid var(--line);border-radius:12px;padding:14px 20px;backdrop-filter:blur(2px);
+      max-width:80%;font-family:var(--disp);font-weight:500;letter-spacing:.03em;color:var(--text);font-size:14px;transition:opacity .25s;}
     .map-hint small{display:block;margin-top:5px;color:var(--muted);font-family:var(--body);font-size:12px;letter-spacing:0;text-transform:none}
     .map-hint.hide{opacity:0}
 
     /* ---------- ROSTER (direita) ---------- */
-    .roster{
-      flex:none;width:288px;background:linear-gradient(180deg,var(--ink-2),var(--ink-3));
-      border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;
-    }
-    .roster-head{
-      display:flex;align-items:baseline;justify-content:space-between;gap:8px;
-      padding:15px 16px 12px;border-bottom:1px solid var(--line-soft);
-    }
-    .roster-head .h{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+    .roster{grid-column:2;grid-row:1;background:linear-gradient(180deg,var(--ink-2),var(--ink-3));
+      border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;min-height:0}
+    .roster-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:13px 16px 11px;border-bottom:1px solid var(--line-soft)}
+    .roster-head .h{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
     .roster-head .sub{font-size:11px;color:var(--muted)}
-
-    .pt-list{padding:12px 14px;overflow-y:auto;flex:1 1 auto}
-    .pt-chip{
-      display:flex;align-items:center;gap:11px;width:100%;
-      padding:10px 12px;margin-bottom:8px;cursor:grab;
-      background:linear-gradient(180deg,var(--ink-2),#0e1118);
-      border:1px solid var(--line-soft);border-radius:11px;
-      transition:border-color .15s,transform .06s,box-shadow .15s;
-      user-select:none;
-    }
+    .pt-list{padding:11px 13px;overflow-y:auto;flex:1 1 auto}
+    .pt-chip{display:flex;align-items:center;gap:11px;width:100%;padding:9px 12px;margin-bottom:7px;cursor:grab;
+      background:linear-gradient(180deg,var(--ink-2),#0e1118);border:1px solid var(--line-soft);border-radius:11px;
+      transition:border-color .15s,transform .06s,box-shadow .15s;user-select:none;}
     .pt-chip:hover{border-color:color-mix(in srgb,var(--accent) 55%,transparent);box-shadow:0 10px 26px -20px var(--accent)}
     .pt-chip:active{cursor:grabbing;transform:scale(.99)}
-    .pt-chip .dot{
-      width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;
-      font-family:var(--disp);font-weight:700;font-size:11px;color:#0a0c11;
-      background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);
-    }
+    .pt-chip .dot{width:29px;height:29px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--disp);
+      font-weight:700;font-size:11px;color:#0a0c11;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
     .pt-chip .lbl{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}
     .pt-chip .lbl b{font-family:var(--disp);font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--text)}
     .pt-chip .lbl span{font-size:11px;color:var(--muted)}
     .pt-chip .status{font-family:var(--disp);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex:none}
     .pt-chip.placed{opacity:.62}
     .pt-chip.placed .status{color:var(--accent)}
-    .pt-chip.placed .dot::after{content:"✓";position:absolute;font-size:12px}
-
-    .roster-foot{border-top:1px solid var(--line-soft);padding:12px 16px}
-    .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+    .roster-foot{border-top:1px solid var(--line-soft);padding:11px 16px}
+    .legend{display:flex;gap:14px;flex-wrap:wrap}
     .legend .li{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
     .legend .sw{width:11px;height:11px;border-radius:3px;flex:none}
-    .foot-note{font-size:10.5px;color:var(--muted);line-height:1.4;margin-top:8px}
-    .foot-note kbd{font-family:var(--disp);font-size:10px;background:#1a1e27;border:1px solid var(--line-soft);
-      border-radius:4px;padding:1px 5px;color:var(--text)}
 
-    /* ---------- MOBILE ---------- */
+    /* ---------- DOCK (nota + trilha de cenários) ---------- */
+    .dock{grid-column:1 / span 2;grid-row:2;display:flex;flex-direction:column;
+      background:linear-gradient(180deg,#0d1017,#0a0c11);border-top:1px solid var(--line);min-height:0}
+    .dock-note{display:flex;align-items:stretch;gap:12px;padding:11px 16px 9px}
+    .dock-note .nlabel{flex:none;display:flex;flex-direction:column;gap:3px;width:150px;padding-top:2px}
+    .dock-note .nlabel .nh{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+    .dock-note .nlabel .ns{font-size:10.5px;color:var(--muted);line-height:1.35}
+    #noteInput{flex:1 1 auto;resize:none;min-height:46px;max-height:70px;padding:9px 12px;border-radius:9px;
+      background:#0b0e15;border:1px solid var(--line-soft);color:var(--text);font-family:var(--body);font-size:13.5px;line-height:1.4;
+      transition:border-color .15s}
+    #noteInput:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    #noteInput::placeholder{color:#5f6672}
+
+    .dock-rail{display:flex;align-items:stretch;gap:10px;padding:2px 16px 12px;min-height:0;flex:1 1 auto}
+    .rail-scroll{display:flex;align-items:stretch;gap:8px;overflow-x:auto;overflow-y:hidden;flex:1 1 auto;padding:3px 2px 6px}
+    .scene{position:relative;flex:none;width:150px;display:flex;flex-direction:column;justify-content:space-between;gap:4px;
+      padding:9px 11px;cursor:pointer;text-align:left;color:var(--text);
+      background:linear-gradient(180deg,var(--ink-2),#0d1017);border:1px solid var(--line-soft);border-radius:10px;
+      transition:border-color .15s,box-shadow .15s,transform .06s}
+    .scene:hover{border-color:var(--line)}
+    .scene.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 12px 30px -18px var(--gold)}
+    .scene .sc-top{display:flex;align-items:center;gap:7px}
+    .scene .sc-idx{font-family:var(--disp);font-weight:700;font-size:10px;color:#0a0c11;background:var(--muted);
+      width:18px;height:18px;border-radius:5px;display:grid;place-items:center;flex:none}
+    .scene.active .sc-idx{background:linear-gradient(180deg,var(--gold-2),var(--gold))}
+    .scene .sc-name{font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .scene .sc-cond{font-family:var(--body);font-size:10.5px;color:var(--gold-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .scene .sc-meta{font-family:var(--disp);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .scene .sc-del{position:absolute;top:5px;right:5px;width:17px;height:17px;border:0;border-radius:5px;cursor:pointer;
+      background:rgba(0,0,0,.35);color:var(--muted);font-size:13px;line-height:1;display:none;place-items:center}
+    .scene:hover .sc-del{display:grid}
+    .scene .sc-del:hover{color:var(--crimson);background:rgba(226,91,82,.15)}
+    .scene.dragging{opacity:.4}
+    .scene.drop-before{box-shadow:-3px 0 0 var(--gold)}
+    .scene.drop-after{box-shadow:3px 0 0 var(--gold)}
+
+    .rail-actions{flex:none;display:flex;flex-direction:column;gap:7px;justify-content:center}
+    .rbtn{display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;font-family:var(--disp);font-weight:600;
+      font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text);background:rgba(255,255,255,.03);
+      border:1px solid var(--line-soft);border-radius:9px;padding:8px 12px;transition:border-color .15s,background .15s,color .15s}
+    .rbtn:hover{border-color:var(--line)}
+    .rbtn.gold{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .rbtn svg{width:13px;height:13px}
+    .rail-actions .rmeta{font-size:9.5px;color:var(--muted);text-align:center;letter-spacing:.04em;line-height:1.3}
+
+    /* ---------- MODO APRESENTAÇÃO ---------- */
+    .present-note{display:none;position:absolute;left:0;right:0;bottom:0;z-index:12;
+      align-items:flex-end;gap:14px;padding:16px 22px 22px;
+      background:linear-gradient(0deg,rgba(8,10,14,.94) 30%,rgba(8,10,14,.6) 70%,transparent);}
+    .present-note .pn-body{flex:1 1 auto;min-width:0}
+    .present-note .pn-phase{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-weight:600;font-size:11px;
+      letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+    .present-note .pn-phase .pn-badge{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:2px 9px;border-radius:999px;letter-spacing:.08em}
+    .present-note .pn-text{margin:0;font-family:var(--body);font-size:clamp(15px,2.1vw,20px);line-height:1.42;color:var(--text);
+      max-width:78ch;text-wrap:pretty}
+    .present-note .pn-text.empty{color:#5f6672;font-style:italic}
+    .pnav{flex:none;width:52px;height:52px;border-radius:50%;cursor:pointer;display:grid;place-items:center;
+      font-family:var(--disp);font-size:26px;line-height:1;color:var(--text);
+      background:rgba(20,24,33,.85);border:1px solid var(--line);transition:background .15s,color .15s,transform .1s}
+    .pnav:hover{background:rgba(217,164,65,.16);color:var(--gold-2)}
+    .pnav:active{transform:scale(.95)}
+    .pnav:disabled{opacity:.3;cursor:default}
+
+    body.present .top-actions{display:none}
+    body.present .present-bar{display:flex}
+    body.present .back{display:none}
+    body.present .brand h1,body.present .brand .kicker{display:none}
+    body.present .workspace{grid-template-columns:1fr;grid-template-rows:1fr}
+    body.present .roster,body.present .dock{display:none}
+    body.present .present-note{display:flex}
+    body.present .map-hint{display:none}
+
+    /* ---------- MOBILE (só apresentação) ---------- */
     .mobile-note{display:none}
     @media (max-width:860px){
-      .roster{display:none}
-      .top-actions .tbtn-clear{display:none}
-      .mobile-note{
-        display:flex;position:absolute;left:0;right:0;bottom:0;z-index:15;
-        align-items:center;gap:10px;padding:12px 16px;
-        background:rgba(10,12,17,.92);border-top:1px solid var(--line);
-        font-size:12px;color:var(--muted);line-height:1.35;
-      }
-      .mobile-note b{color:var(--gold);font-family:var(--disp);font-weight:600;letter-spacing:.04em}
+      :root{--dock-h:0px}
+      .roster,.dock{display:none}
+      .workspace{grid-template-columns:1fr;grid-template-rows:1fr}
+      .top-actions .tbtn-obj-wrap,.top-actions #seedBtn{display:none}
+      /* no mobile já entra apresentando */
+      body:not(.present) .present-note{display:flex}
+      body:not(.present) .map-hint{display:none}
+      .present-bar{display:flex}
+      .top-actions{display:none}
+      .back{display:inline-flex}
+      .mobile-note{position:absolute;left:12px;right:12px;top:10px;z-index:20;display:block;text-align:center;
+        font-size:11px;color:var(--muted);background:rgba(10,12,17,.8);border:1px solid var(--line-soft);border-radius:8px;padding:6px 10px}
+      .mobile-note b{color:var(--gold);font-family:var(--disp);font-weight:600}
     }
   </style>
 </head>
@@ -197,35 +219,58 @@
     <a class="back" href="../" aria-label="Voltar ao menu Zhi Guides"><span class="ar" aria-hidden="true">‹</span> Menu</a>
     <div class="brand">
       <span class="glyph" aria-hidden="true">圖</span>
-      <div class="txt">
-        <span class="kicker">Zhi Guides · Wanted</span>
-        <h1>Mapa de Estratégia</h1>
-      </div>
+      <div class="txt"><span class="kicker">Zhi Guides · Wanted</span><h1>Mapa de Estratégia</h1></div>
+    </div>
+
+    <!-- barra durante apresentação -->
+    <div class="present-bar">
+      <span class="pb-title" id="pbTitle">—</span>
+      <span class="pb-cond" id="pbCond" hidden></span>
+      <span class="top-spacer"></span>
+      <span class="pb-prog" id="pbProg">1 / 1</span>
     </div>
 
     <div class="top-spacer"></div>
 
     <div class="top-actions">
-      <label class="toggle" title="Mostra ou esconde os objetivos desenhados na arte do mapa">
-        <input type="checkbox" id="objToggle" />
-        <span class="track" aria-hidden="true"></span>
-        <span>Objetivos</span>
-        <span class="state" id="objState">ON</span>
-      </label>
-      <button class="tbtn tbtn-clear" id="clearBtn" title="Remove todas as PTs do mapa">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
-        Limpar
+      <span class="tbtn-obj-wrap">
+        <label class="toggle" title="Mostra ou esconde os objetivos desenhados na arte do mapa">
+          <input type="checkbox" id="objToggle" />
+          <span class="track" aria-hidden="true"></span>
+          <span>Objetivos</span><span class="state" id="objState">ON</span>
+        </label>
+      </span>
+      <button class="tbtn" id="seedBtn" title="Cria os cenários das fases padrão da partida">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+        Fases padrão
+      </button>
+      <button class="tbtn primary" id="presentBtn" title="Modo apresentação (tela cheia, navega pelos cenários)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20v12H2z"/><path d="M8 20h8M12 16v4"/></svg>
+        Apresentar
       </button>
     </div>
+    <button class="tbtn primary" id="exitBtn" style="display:none" title="Sair da apresentação (Esc)">Sair ✕</button>
   </header>
 
   <div class="workspace">
-    <div class="map-panel" id="mapPanel">
-      <div id="stageWrap"><div id="stage"></div></div>
-      <div class="map-hint" id="mapHint">
-        Arraste uma PT da lista para o mapa
-        <small>Depois é só mover. Duplo-clique num token para remover.</small>
+    <div class="stage-col">
+      <div class="map-panel" id="mapPanel">
+        <div id="stageWrap"><div id="stage"></div></div>
+        <div class="map-hint" id="mapHint">
+          Arraste uma PT da lista para o mapa
+          <small>Cada cenário é uma "foto" das posições. Crie fases e navegue por elas embaixo.</small>
+        </div>
       </div>
+      <!-- nota em destaque durante apresentação -->
+      <div class="present-note" id="presentNote">
+        <button class="pnav" id="prevBtn" aria-label="Cenário anterior">‹</button>
+        <div class="pn-body">
+          <span class="pn-phase"><span id="pnPhase">Fase</span><span class="pn-badge" id="pnBadge" hidden></span></span>
+          <p class="pn-text" id="pnText">—</p>
+        </div>
+        <button class="pnav" id="nextBtn" aria-label="Próximo cenário">›</button>
+      </div>
+      <div class="mobile-note"><b>Modo apresentação.</b> A edição é feita no desktop.</div>
     </div>
 
     <aside class="roster">
@@ -233,23 +278,40 @@
         <span class="h">PTs</span>
         <span class="sub"><b id="placedCount">0</b> no mapa</span>
       </div>
-      <div class="pt-list" id="ptList"><!-- chips injetados --></div>
+      <div class="pt-list" id="ptList"></div>
       <div class="roster-foot">
         <div class="legend">
           <div class="li"><span class="sw" style="background:#89abc5"></span>Tank</div>
           <div class="li"><span class="sw" style="background:#E25B52"></span>DPS</div>
           <div class="li"><span class="sw" style="background:#4CC9A4"></span>Healer</div>
         </div>
-        <p class="foot-note">
-          Etapa 1: posicionar as PTs. Nas próximas: fases &amp; cenários, notas, desenho e roster do Discord.
-          <br />Arraste um chip para o mapa · <kbd>duplo-clique</kbd> remove.
-        </p>
       </div>
     </aside>
 
-    <div class="mobile-note">
-      <span><b>Só visualização no celular.</b> A edição (arrastar PTs, desenhar) é feita no desktop. O modo apresentação para mobile vem numa próxima etapa.</span>
-    </div>
+    <section class="dock">
+      <div class="dock-note">
+        <div class="nlabel">
+          <span class="nh">Cenário atual</span>
+          <input id="nameInput" placeholder="Nome da fase" style="background:#0b0e15;border:1px solid var(--line-soft);color:var(--text);font-family:var(--disp);font-weight:600;font-size:13px;border-radius:7px;padding:5px 8px;width:100%;margin:2px 0" />
+          <input id="condInput" placeholder="condição (ex: se levamos)" style="background:transparent;border:1px solid var(--line-soft);color:var(--gold-2);font-family:var(--body);font-size:11px;border-radius:7px;padding:4px 8px;width:100%" />
+        </div>
+        <textarea id="noteInput" placeholder="A fala do estrategista neste cenário. Ex: PT1/PT2 vão de torre; PT3 segura a árvore; PT4 abre corredor…"></textarea>
+      </div>
+      <div class="dock-rail">
+        <div class="rail-scroll" id="rail"></div>
+        <div class="rail-actions">
+          <button class="rbtn gold" id="dupScene" title="Cria um novo cenário já com as PTs posicionadas como estão agora">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            Duplicar
+          </button>
+          <button class="rbtn" id="addScene" title="Cria um cenário em branco">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            Cenário
+          </button>
+          <span class="rmeta">arraste p/ reordenar</span>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script src="../assets/vendor/konva.min.js"></script>
