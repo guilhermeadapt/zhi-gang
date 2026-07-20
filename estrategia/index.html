@@ -73,10 +73,23 @@
     .stage-col{grid-column:1;grid-row:1;position:relative;min-width:0;min-height:0}
     .map-panel{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
       background:radial-gradient(90% 80% at 50% 40%, rgba(20,24,33,.5), transparent 70%);overflow:hidden;}
-    #stageWrap{position:relative;line-height:0;filter:drop-shadow(0 24px 60px rgba(0,0,0,.55));}
+    #stageWrap{position:relative;line-height:0;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -24px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.05);}
     #stage{display:block}
-    #stageWrap::after{content:"";position:absolute;inset:-6px;border-radius:12px;pointer-events:none;transition:box-shadow .15s}
+    #stageWrap::after{content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;transition:box-shadow .15s}
     .map-panel.dragover #stageWrap::after{box-shadow:inset 0 0 0 2px var(--gold),inset 0 0 50px -8px rgba(217,164,65,.35)}
+    /* controles de zoom */
+    .zoom-ctrl{position:absolute;right:14px;bottom:14px;z-index:8;display:flex;flex-direction:column;gap:5px}
+    .zoom-ctrl button{width:34px;height:34px;display:grid;place-items:center;cursor:pointer;border:1px solid var(--line);border-radius:9px;
+      background:rgba(12,15,22,.92);color:var(--text);font-family:var(--disp);font-size:17px;line-height:1;backdrop-filter:blur(4px);transition:.12s;box-shadow:0 10px 26px -18px #000}
+    .zoom-ctrl button:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .zoom-ctrl button svg{width:15px;height:15px}
+    body.present .zoom-ctrl{display:none}
+    /* header de grupo no painel de objetivos (toggle do grupo) */
+    .obj-gh{display:flex;align-items:center;gap:8px;padding:6px 4px 5px;margin-top:6px;cursor:pointer;border-bottom:1px solid var(--line-soft)}
+    .obj-gh input{accent-color:var(--gold);width:15px;height:15px}
+    .obj-gh .gname{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+    .obj-gh.any .gname{color:var(--gold-2)}
+    .obj-gh .gcount{margin-left:auto;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
     .map-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;pointer-events:none;text-align:center;
       background:rgba(10,12,17,.78);border:1px solid var(--line);border-radius:12px;padding:13px 18px;backdrop-filter:blur(2px);
       max-width:80%;font-family:var(--disp);font-weight:500;letter-spacing:.03em;color:var(--text);font-size:13.5px;transition:opacity .25s;}
@@ -332,10 +345,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
         Roster
       </button>
-      <button class="tbtn" id="seedBtn" title="Cria os cenários das fases padrão da partida">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
-        Fases padrão
-      </button>
       <button class="tbtn ico" id="exportBtn" title="Exportar o plano como JSON" aria-label="Exportar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg></button>
       <button class="tbtn ico" id="importBtn" title="Importar um plano de JSON" aria-label="Importar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M5 21h14"/></svg></button>
       <input type="file" id="importFile" accept="application/json,.json" hidden />
@@ -391,6 +400,11 @@
         <div class="pn-body"><span class="pn-phase"><span id="pnPhase">Fase</span><span class="pn-badge" id="pnBadge" hidden></span></span><p class="pn-text" id="pnText">—</p></div>
         <button class="pnav" id="nextBtn" aria-label="Próximo cenário">›</button>
       </div>
+      <div class="zoom-ctrl" id="zoomCtrl">
+        <button id="zoomIn" title="Aproximar" aria-label="Aproximar">+</button>
+        <button id="zoomOut" title="Afastar" aria-label="Afastar">−</button>
+        <button id="zoomReset" title="Ajustar / centralizar" aria-label="Ajustar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+      </div>
       <div class="dock-mini" id="dockMini" hidden>
         <button class="dm-nav" id="miniPrev" aria-label="Anterior">‹</button>
         <span class="dm-name" id="miniName">—</span>
@@ -431,6 +445,7 @@
         <div class="dock-actions">
           <button class="rbtn gold" id="dupScene" title="Cria um novo cenário já com PTs, desenhos e objetivos como estão agora"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Duplicar</button>
           <button class="rbtn" id="addScene" title="Cria um cenário em branco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Cenário</button>
+          <button class="rbtn" id="seedBtn" title="Semeia os cenários das fases padrão da partida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>Fases padrão</button>
         </div>
       </div>
       <div class="dock-rail"><div class="rail-scroll" id="rail"></div></div>

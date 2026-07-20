@@ -31,7 +31,7 @@
   const objBtn = $('objBtn'), objPanel = $('objPanel'), objClose = $('objClose'), objGroups = $('objGroups');
   const fasesBtn = $('fasesBtn'), dockCollapse = $('dockCollapse'), dockMini = $('dockMini'), dockExpand = $('dockExpand'), miniName = $('miniName'), miniPrev = $('miniPrev'), miniNext = $('miniNext');
 
-  const state = { scenarios: [], currentId: null, roster: [], tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false };
+  const state = { scenarios: [], currentId: null, roster: [], objetivoPosGlobal: {}, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false };
   const partyById = new Map(CFG.parties.map(p => [p.id, p]));
   const objById = new Map(CFG.objetivos.map(o => [o.id, o]));
   let popoverPt = null, rosterDraft = [];
@@ -86,6 +86,8 @@
   }
   function clampPos(x, y, s) { const minX = W - W * s, minY = H - H * s; if (s <= 1) return { x: 0, y: 0 }; return { x: Math.min(0, Math.max(minX, x)), y: Math.min(0, Math.max(minY, y)) }; }
   function updateStageDrag() { stage.draggable(stage.scaleX() > 1 && state.tool === 'select'); }
+  function zoomBy(factor) { const cx = W / 2, cy = H / 2, old = stage.scaleX(); let ns = Math.max(1, Math.min(4, old * factor)); const mp = { x: (cx - stage.x()) / old, y: (cy - stage.y()) / old }; stage.scale({ x: ns, y: ns }); stage.position(clampPos(cx - mp.x * ns, cy - mp.y * ns, ns)); stage.batchDraw(); updateStageDrag(); hidePopover(); }
+  function zoomReset() { stage.scale({ x: 1, y: 1 }); stage.position({ x: 0, y: 0 }); stage.batchDraw(); updateStageDrag(); hidePopover(); }
   function frac() { const p = stage.getPointerPosition(); if (!p) return null; const s = stage.scaleX() || 1; return { xf: clamp01((p.x - stage.x()) / s / W), yf: clamp01((p.y - stage.y()) / s / H) }; }
 
   // ---- undo (cenário inteiro: tokens, desenhos, objetivos, posições, destacados) ----
@@ -151,7 +153,9 @@
     const p = partyById.get(d.pt), rc = roleColor(d.funcao), rm = Math.max(8, R * 0.56);
     const g = new Konva.Group({ draggable: !state.present, id: 'mem-' + d.id });
     g.add(new Konva.Circle({ radius: rm, fill: '#0b0e15', stroke: rc, strokeWidth: Math.max(1.6, rm * 0.22), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4, shadowOffsetY: 1 }));
-    g.add(new Konva.Text({ text: d.funcao[0], fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: rm * 0.9, fill: rc, align: 'center', verticalAlign: 'middle', width: rm * 2, height: rm * 2, offsetX: rm, offsetY: rm }));
+    const ci = iconImgs[(CFG.classIcons || {})[d.funcao]];
+    if (ci && ci.width) { const s = rm * 1.5, h = s * (ci.height / ci.width); g.add(new Konva.Image({ image: ci, width: s, height: h, offsetX: s / 2, offsetY: h / 2 })); }
+    else g.add(new Konva.Text({ text: d.funcao[0], fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: rm * 0.9, fill: rc, align: 'center', verticalAlign: 'middle', width: rm * 2, height: rm * 2, offsetX: rm, offsetY: rm }));
     const lbl = new Konva.Label({ x: rm + 3, y: -rm * 0.55 });
     lbl.add(new Konva.Tag({ fill: 'rgba(10,12,17,.78)', stroke: p.cor, strokeWidth: 0.8, cornerRadius: 3 }));
     lbl.add(new Konva.Text({ text: d.nome, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: Math.max(8.5, R * 0.4), fill: '#EDEBE4', padding: 2 }));
@@ -208,7 +212,7 @@
   function hidePopover() { ptPopover.hidden = true; popoverPt = null; }
 
   // ---- objetivos ----
-  function objPos(o) { if (o.movel) { const p = cur().objetivoPos && cur().objetivoPos[o.id]; if (p) return { x: p.x, y: p.y }; } return { x: o.x, y: o.y }; }
+  function objPos(o) { if (o.movel) { const p = cur().objetivoPos && cur().objetivoPos[o.id]; if (p) return { x: p.x, y: p.y }; } else { const g = state.objetivoPosGlobal[o.id]; if (g) return { x: g.x, y: g.y }; } return { x: o.x, y: o.y }; }
   function treeMeters(o, xf, yf) { const a = o.caminho.a, b = o.caminho.b, ax = b[0] - a[0], ay = b[1] - a[1]; const t = ((xf - a[0]) * ax + (yf - a[1]) * ay) / (ax * ax + ay * ay || 1); return Math.round(Math.max(0, Math.min(1, t)) * CFG.treeMeters); }
   function renderObjectives() {
     objLayer.destroyChildren();
@@ -217,19 +221,20 @@
       if (!up[o.id]) return;
       const pos = objPos(o);
       if (o.caminho) objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, o.caminho.b[0] * W, o.caminho.b[1] * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.05), dash: [4, 6], listening: false }));
-      const g = new Konva.Group({ x: pos.x * W, y: pos.y * H, draggable: !state.present && !!o.movel });
+      const calib = !objPanel.hidden, canDrag = !state.present && (!!o.movel || calib);
+      const g = new Konva.Group({ x: pos.x * W, y: pos.y * H, draggable: canDrag });
       g.add(new Konva.Circle({ radius: os * 0.58, fill: 'rgba(8,10,14,.34)', stroke: 'rgba(255,255,255,.1)', strokeWidth: 1 }));
+      if (calib && !o.movel) g.add(new Konva.Circle({ radius: os * 0.66, stroke: '#D9A441', strokeWidth: 1.5, dash: [3, 3], opacity: 0.9 }));   // sinaliza calibração
       const img = iconImgs[o.icone];
       if (img && img.width) { const h = os * (img.height / img.width); g.add(new Konva.Image({ image: img, width: os, height: h, offsetX: os / 2, offsetY: h / 2 })); }
       else { const isOut = o.icone === 'outpost', col = isOut ? '#D9A441' : '#4CC9A4', txt = isOut ? 'OUT' : 'JG'; g.add(new Konva.Circle({ radius: os * 0.4, fill: hexA(col, 0.2), stroke: col, strokeWidth: 1.5 })); g.add(new Konva.Text({ text: txt, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (isOut ? 0.26 : 0.32), fill: col, align: 'center', verticalAlign: 'middle', width: os, height: os, offsetX: os / 2, offsetY: os / 2 })); }
       if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.58 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.3), fill: '#f0c66b', padding: 3 })); ml.offsetX(ml.getClientRect({ skipTransform: true }).width / 2); g.add(ml); }
-      // remover objetivo: duplo-clique
       g.on('dblclick dbltap', e => { e.cancelBubble = true; pushUndo(); delete cur().objetivos[o.id]; if (cur().objetivoPos) delete cur().objetivoPos[o.id]; renderObjectives(); if (!objPanel.hidden) renderObjPanel(); saveProject(); });
-      if (!state.present && o.movel) {
+      if (canDrag) {
         g.dragBoundFunc(clampToStage);
-        g.on('dragstart', pushUndo);
+        g.on('dragstart', () => { if (o.movel) pushUndo(); });
         g.on('dragmove', () => { if (o.caminho) { const t = g.findOne('.tm'); if (t) { t.findOne('Text').text(treeMeters(o, g.x() / W, g.y() / H) + 'm'); t.offsetX(t.getClientRect({ skipTransform: true }).width / 2); } } objLayer.batchDraw(); });
-        g.on('dragend', () => { cur().objetivoPos = cur().objetivoPos || {}; cur().objetivoPos[o.id] = { x: clamp01(g.x() / W), y: clamp01(g.y() / H) }; saveProject(); });
+        g.on('dragend', () => { const p = { x: clamp01(g.x() / W), y: clamp01(g.y() / H) }; if (o.movel) { cur().objetivoPos = cur().objetivoPos || {}; cur().objetivoPos[o.id] = p; } else { state.objetivoPosGlobal[o.id] = p; } saveProject(); });
         g.on('mouseenter', () => stage.container().style.cursor = 'grab');
         g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
       } else {
@@ -240,21 +245,28 @@
     });
     objLayer.batchDraw();
   }
+  function setObjUp(id, on) { const c = cur().objetivos; if (on) c[id] = true; else { delete c[id]; if (cur().objetivoPos) delete cur().objetivoPos[id]; } }
   function renderObjPanel() {
     const up = cur() ? (cur().objetivos || {}) : {}; objGroups.innerHTML = '';
     CFG.objetivosGrupos.forEach(grp => {
       const list = CFG.objetivos.filter(o => o.grupo === grp); if (!list.length) return;
-      const box = document.createElement('div'); box.className = 'obj-g'; box.innerHTML = '<div class="gh">' + grp + '</div>';
+      const nUp = list.filter(o => up[o.id]).length, allUp = nUp === list.length;
+      const box = document.createElement('div'); box.className = 'obj-g';
+      const gh = document.createElement('label'); gh.className = 'obj-gh' + (nUp ? ' any' : '');
+      gh.innerHTML = '<input type="checkbox"' + (allUp ? ' checked' : '') + '><span class="gname">' + grp + '</span><span class="gcount">' + nUp + '/' + list.length + '</span>';
+      const gcb = gh.querySelector('input'); gcb.indeterminate = nUp > 0 && !allUp;
+      gcb.addEventListener('change', () => { pushUndo(); list.forEach(o => setObjUp(o.id, gcb.checked)); renderObjectives(); renderObjPanel(); saveProject(); });
+      box.appendChild(gh);
       list.forEach(o => {
         const row = document.createElement('label'); row.className = 'obj-row' + (up[o.id] ? ' up' : '');
         row.innerHTML = '<input type="checkbox"' + (up[o.id] ? ' checked' : '') + '><span class="on"></span><span class="nm">' + esc(o.rotulo) + '</span>';
-        row.querySelector('input').addEventListener('change', e => { pushUndo(); const c = cur().objetivos; if (e.target.checked) c[o.id] = true; else { delete c[o.id]; if (cur().objetivoPos) delete cur().objetivoPos[o.id]; } row.classList.toggle('up', e.target.checked); renderObjectives(); saveProject(); });
+        row.querySelector('input').addEventListener('change', e => { pushUndo(); setObjUp(o.id, e.target.checked); row.classList.toggle('up', e.target.checked); renderObjectives(); renderObjPanel(); saveProject(); });
         box.appendChild(row);
       });
       objGroups.appendChild(box);
     });
   }
-  function toggleObjPanel(force) { const show = force != null ? force : objPanel.hidden; if (show) { renderObjPanel(); objPanel.hidden = false; objBtn.classList.add('on'); } else { objPanel.hidden = true; objBtn.classList.remove('on'); } }
+  function toggleObjPanel(force) { const show = force != null ? force : objPanel.hidden; if (show) { renderObjPanel(); objPanel.hidden = false; objBtn.classList.add('on'); } else { objPanel.hidden = true; objBtn.classList.remove('on'); } renderObjectives(); }
 
   // ---- desenho ----
   function toolCursor() { return DRAW.includes(state.tool) ? 'crosshair' : 'default'; }
@@ -329,11 +341,12 @@
   function autoAssign() { const avail = rosterDraft.filter(p => !p.ausente && !p.reserva); avail.forEach(p => p.pt = null); if (!avail.length) { renderGrid(); return; } const nPT = Math.max(1, Math.min(CFG.parties.length, Math.ceil(avail.length / CFG.ptSize))); const buckets = Array.from({ length: nPT }, () => []); let bi = 0; const deal = list => { list.forEach(p => { buckets[bi % nPT].push(p); bi++; }); }; bi = 0; deal(avail.filter(p => p.funcao === 'Tank')); bi = 0; deal(avail.filter(p => p.funcao === 'Healer')); bi = 0; deal(avail.filter(p => p.funcao === 'DPS')); buckets.forEach((b, k) => b.forEach(p => p.pt = PT_IDS[k])); renderGrid(); }
 
   // ---- export / import / compartilhar / reset ----
-  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, cenarios: state.scenarios }; }
+  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, objetivoPosGlobal: state.objetivoPosGlobal, cenarios: state.scenarios }; }
+  function sanitizePosMap(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}; }
   function exportProject() { const blob = new Blob([JSON.stringify(projectData(), null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob), d = new Date(), pad = n => String(n).padStart(2, '0'); const a = document.createElement('a'); a.href = url; a.download = 'estrategia-wanted-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
-  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste plano.'); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
+  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste plano.'); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
   function importProjectFile(file) { const reader = new FileReader(); reader.onload = () => { let d; try { d = JSON.parse(reader.result); } catch (e) { alert('Arquivo inválido: não é um JSON.'); return; } if (!Array.isArray(d.cenarios) && !Array.isArray(d.scenarios)) { alert('Não encontrei cenários neste arquivo.'); return; } if (state.scenarios.some(s => !isPristine(s)) && !confirm('Importar vai substituir o plano atual. Continuar?')) return; applyImported(d); }; reader.readAsText(file); }
-  function resetAll() { if (!confirm('Resetar tudo e começar um plano do zero? (não dá pra desfazer)')) return; try { localStorage.removeItem(CFG.projectKey); } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; state.roster = []; toggleObjPanel(false); hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); toast('Plano resetado ✓'); }
+  function resetAll() { if (!confirm('Resetar tudo e começar um plano do zero? (não dá pra desfazer)')) return; try { localStorage.removeItem(CFG.projectKey); } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; state.roster = []; state.objetivoPosGlobal = {}; toggleObjPanel(false); hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); toast('Plano resetado ✓'); }
   function b64urlFromBytes(bytes) { let bin = ''; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function bytesFromB64url(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); const bin = atob(s); const a = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return a; }
   async function encodeShare(obj) { const bytes = new TextEncoder().encode(JSON.stringify(obj)); if (window.CompressionStream) { const st = new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip')); return 'g' + b64urlFromBytes(new Uint8Array(await new Response(st).arrayBuffer())); } return 'r' + b64urlFromBytes(bytes); }
@@ -370,6 +383,7 @@
     exportBtn.addEventListener('click', exportProject); importBtn.addEventListener('click', () => importFile.click());
     importFile.addEventListener('change', e => { const f = e.target.files[0]; if (f) importProjectFile(f); e.target.value = ''; });
     shareBtn.addEventListener('click', shareLink); resetBtn.addEventListener('click', resetAll);
+    $('zoomIn').addEventListener('click', () => zoomBy(1.25)); $('zoomOut').addEventListener('click', () => zoomBy(0.8)); $('zoomReset').addEventListener('click', zoomReset);
     presentBtn.addEventListener('click', enterPresent); exitBtn.addEventListener('click', exitPresent);
     prevBtn.addEventListener('click', () => go(-1)); nextBtn.addEventListener('click', () => go(1));
     miniPrev.addEventListener('click', () => go(-1)); miniNext.addEventListener('click', () => go(1));
@@ -402,8 +416,8 @@
   function setDock(open) { document.body.classList.toggle('dock-collapsed', !open); dockMini.hidden = open; fasesBtn.classList.toggle('on', open); if (!open) updateMini(); requestAnimationFrame(fit); }
 
   // ---- persistência ----
-  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster })); } catch (e) {} }
-  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
+  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, objetivoPosGlobal: state.objetivoPosGlobal })); } catch (e) {} }
+  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
   function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => ({ pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) })) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => ({ id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
