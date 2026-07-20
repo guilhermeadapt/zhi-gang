@@ -36,28 +36,33 @@ const WWM = {
    * sobre o mapa base — ajuste arrastando. icone: chave em assets.icons ou
    * um tipo desenhado (jungle). up: default no cenário Start.
    */
+  // Posições calibradas sobre o mapa base (board.jpg). Ajustáveis arrastando.
   objetivos: [
-    // 3 torres por lado (top / mid / bot) — Oeste (ataque) e Leste (defesa)
-    { id: 'torre_top_o', grupo: 'Torres', rotulo: 'Torre Top (O)', icone: 'tower_blue', x: 0.34, y: 0.31 },
-    { id: 'torre_mid_o', grupo: 'Torres', rotulo: 'Torre Mid (O)', icone: 'tower_blue', x: 0.25, y: 0.47 },
-    { id: 'torre_bot_o', grupo: 'Torres', rotulo: 'Torre Bot (O)', icone: 'tower_blue', x: 0.34, y: 0.63 },
-    { id: 'torre_top_l', grupo: 'Torres', rotulo: 'Torre Top (L)', icone: 'tower_red',  x: 0.66, y: 0.31 },
-    { id: 'torre_mid_l', grupo: 'Torres', rotulo: 'Torre Mid (L)', icone: 'tower_red',  x: 0.75, y: 0.47 },
-    { id: 'torre_bot_l', grupo: 'Torres', rotulo: 'Torre Bot (L)', icone: 'tower_red',  x: 0.66, y: 0.63 },
-    // ganso nos 2 lados
-    { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.40, y: 0.52 },
-    { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.60, y: 0.52 },
-    // árvore nos 2 lados — nasce no portão da base e caminha até o portão inimigo (333m)
-    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.09, y: 0.47, caminho: { a: [0.09, 0.47], b: [0.91, 0.47] } },
-    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.91, y: 0.47, caminho: { a: [0.91, 0.47], b: [0.09, 0.47] } },
-    // boss / nirvana norte e sul
-    { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.50, y: 0.11 },
-    { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.495, y: 0.885 },
-    // jungle nos 4 cantos internos
-    { id: 'jg_no', grupo: 'Jungle', rotulo: 'Jungle NO', icone: 'jungle', x: 0.30, y: 0.24 },
-    { id: 'jg_ne', grupo: 'Jungle', rotulo: 'Jungle NE', icone: 'jungle', x: 0.70, y: 0.24 },
-    { id: 'jg_so', grupo: 'Jungle', rotulo: 'Jungle SO', icone: 'jungle', x: 0.30, y: 0.72 },
-    { id: 'jg_se', grupo: 'Jungle', rotulo: 'Jungle SE', icone: 'jungle', x: 0.70, y: 0.72 },
+    // 3 torres por lado (top / mid / bot) — Oeste (azul) e Leste (vermelho)
+    { id: 'torre_top_o', grupo: 'Torres', rotulo: 'Torre Top (O)', icone: 'tower_blue', x: 0.393, y: 0.312 },
+    { id: 'torre_mid_o', grupo: 'Torres', rotulo: 'Torre Mid (O)', icone: 'tower_blue', x: 0.393, y: 0.499 },
+    { id: 'torre_bot_o', grupo: 'Torres', rotulo: 'Torre Bot (O)', icone: 'tower_blue', x: 0.393, y: 0.687 },
+    { id: 'torre_top_l', grupo: 'Torres', rotulo: 'Torre Top (L)', icone: 'tower_red',  x: 0.626, y: 0.312 },
+    { id: 'torre_mid_l', grupo: 'Torres', rotulo: 'Torre Mid (L)', icone: 'tower_red',  x: 0.626, y: 0.499 },
+    { id: 'torre_bot_l', grupo: 'Torres', rotulo: 'Torre Bot (L)', icone: 'tower_red',  x: 0.626, y: 0.687 },
+    // ganso nos 2 lados (junto aos portões)
+    { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.196, y: 0.499 },
+    { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.827, y: 0.499 },
+    // árvore nos 2 lados — nasce no portão e caminha até o portão inimigo (333m, lane mid)
+    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.159, y: 0.499, caminho: { a: [0.159, 0.499], b: [0.864, 0.499] } },
+    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.864, y: 0.499, caminho: { a: [0.864, 0.499], b: [0.159, 0.499] } },
+    // boss / nirvana (2, ao centro)
+    { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.475, y: 0.41 },
+    { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.475, y: 0.60 },
+    // jungle (mini-ninjas) — 8 camps
+    { id: 'jg_1', grupo: 'Jungle', rotulo: 'Jungle 1', icone: 'jungle', x: 0.37, y: 0.40 },
+    { id: 'jg_2', grupo: 'Jungle', rotulo: 'Jungle 2', icone: 'jungle', x: 0.45, y: 0.38 },
+    { id: 'jg_3', grupo: 'Jungle', rotulo: 'Jungle 3', icone: 'jungle', x: 0.55, y: 0.38 },
+    { id: 'jg_4', grupo: 'Jungle', rotulo: 'Jungle 4', icone: 'jungle', x: 0.63, y: 0.40 },
+    { id: 'jg_5', grupo: 'Jungle', rotulo: 'Jungle 5', icone: 'jungle', x: 0.37, y: 0.60 },
+    { id: 'jg_6', grupo: 'Jungle', rotulo: 'Jungle 6', icone: 'jungle', x: 0.45, y: 0.62 },
+    { id: 'jg_7', grupo: 'Jungle', rotulo: 'Jungle 7', icone: 'jungle', x: 0.55, y: 0.62 },
+    { id: 'jg_8', grupo: 'Jungle', rotulo: 'Jungle 8', icone: 'jungle', x: 0.63, y: 0.60 },
   ],
   objetivosGrupos: ['Torres', 'Ganso', 'Árvore', 'Boss', 'Jungle'],
   treeMeters: 333,   // distância total do caminho da árvore (base -> portão inimigo)
