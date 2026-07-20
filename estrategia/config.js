@@ -37,9 +37,17 @@ const WWM = {
 
   /* --- funções (mesmas cores do site Zhi Guides) ------------------------- */
   roleColors: {
-    Tank:   '#89abc5', // board (azul)
-    DPS:    '#E25B52', // crimson
-    Healer: '#4CC9A4', // jade
+    Tank:    '#89abc5', // board (azul)
+    DPS:     '#E25B52', // crimson
+    Healer:  '#4CC9A4', // jade
+    Support: '#B98BE0', // roxo (debuffer)
+  },
+  roleOrder: ['Tank', 'Healer', 'DPS', 'Support'],
+  ptSize: 5,   // tamanho alvo de cada PT (usado no auto-montar)
+
+  /* mapeia as classes do raid-helper (Discord) para as nossas funções */
+  classMap: {
+    Tank: 'Tank', Healer: 'Healer', Ranged: 'DPS', Melee: 'DPS', Support: 'Support',
   },
 
   /* --- PTs disponíveis na paleta ----------------------------------------
