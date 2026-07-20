@@ -171,6 +171,7 @@
     .pt-chip .dot{width:27px;height:27px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--disp);font-weight:700;font-size:11px;color:#0a0c11;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);}
     .pt-chip .lbl{display:flex;flex-direction:column;min-width:0;flex:1 1 auto;gap:1px}
     .pt-chip .lbl b{font-family:var(--disp);font-weight:600;font-size:13.5px;letter-spacing:.04em;color:var(--text)}
+    .pt-chip .pt-desc-line{font-size:10.5px;color:var(--gold-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
     .pt-chip .comp{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px}
     .pt-chip .comp .cd{display:inline-flex;align-items:center;gap:3px}
     .pt-chip .comp .cd i{width:7px;height:7px;border-radius:50%;display:inline-block}
@@ -294,6 +295,38 @@
     .rrow .rdel:hover{color:var(--crimson);background:rgba(226,91,82,.12)}
     .modal > footer{display:flex;align-items:center;gap:9px;padding:12px 16px;border-top:1px solid var(--line-soft)}
     .modal > footer .fspacer{flex:1 1 auto}
+
+    /* confirm próprio */
+    .confirm-box{width:min(380px,92vw);background:linear-gradient(180deg,var(--ink-2),var(--ink-3));border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 40px 90px -30px #000}
+    .confirm-box p{margin:0 0 16px;font-size:14px;line-height:1.45;color:var(--text)}
+    .confirm-actions{display:flex;gap:9px;justify-content:flex-end}
+    .confirm-actions .rbtn{padding:9px 16px}
+
+    /* editor de PT */
+    .pt-editor{width:min(400px,94vw);max-height:86vh;display:flex;flex-direction:column;background:linear-gradient(180deg,var(--ink-2),var(--ink-3));border:1px solid var(--line);border-radius:15px;box-shadow:0 40px 90px -30px #000;overflow:hidden}
+    .pt-editor > header{display:flex;align-items:center;gap:11px;padding:14px 16px;border-bottom:1px solid var(--line-soft)}
+    .pt-editor .pe-dot{width:26px;height:26px;border-radius:50%;flex:none;box-shadow:0 0 0 3px rgba(255,255,255,.06)}
+    .pt-editor h3{margin:0;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.05em;text-transform:uppercase}
+    .pt-editor .x{margin-left:auto;width:30px;height:30px;border-radius:8px;border:1px solid var(--line-soft);background:transparent;color:var(--muted);cursor:pointer;font-size:16px}
+    .pt-editor .x:hover{color:var(--text);border-color:var(--line)}
+    .pe-body{padding:14px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:7px}
+    .pe-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:6px}
+    .pe-count{color:var(--muted);letter-spacing:0}
+    .pe-desc{background:#0b0e15;border:1px solid var(--line-soft);color:var(--text);border-radius:8px;padding:9px 11px;font-size:13.5px;font-family:var(--body)}
+    .pe-desc:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .pe-members{display:flex;flex-direction:column;gap:4px}
+    .pe-mem{display:flex;align-items:center;gap:9px;padding:7px 9px;background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-radius:8px}
+    .pe-mem .rl{width:9px;height:9px;border-radius:50%;flex:none}
+    .pe-mem .nm{font-size:13px;flex:1 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pe-mem .cl{font-size:9.5px;font-family:var(--disp);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+    .pe-mem .rm{width:22px;height:22px;border:0;background:transparent;color:var(--muted);cursor:pointer;border-radius:6px;font-size:13px;flex:none}
+    .pe-mem .rm:hover{color:var(--crimson);background:rgba(226,91,82,.12)}
+    .pe-mem.res{opacity:.7}
+    .pe-empty{font-size:12px;color:var(--muted);font-style:italic;padding:4px 2px}
+    .pe-add{display:flex;gap:7px;margin-top:6px}
+    .pe-add select{flex:1 1 auto;background:#0b0e15;border:1px solid var(--line-soft);color:var(--text);border-radius:8px;padding:8px;font-size:12.5px}
+    .pt-editor > footer{padding:11px 16px;border-top:1px solid var(--line-soft)}
+    .pe-hint{font-size:10.5px;color:var(--muted)}
 
     /* toast */
     .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(8px);z-index:70;opacity:0;
@@ -486,6 +519,35 @@
         <span class="parse-msg" id="saveMsg" style="min-width:120px;text-align:right"></span>
         <button class="rbtn gold" id="rosterSave">Salvar roster</button>
       </footer>
+    </div>
+  </div>
+
+  <!-- confirm próprio (funciona no iframe do preview) -->
+  <div class="modal-backdrop" id="confirmModal" hidden>
+    <div class="confirm-box">
+      <p id="confirmMsg">Tem certeza?</p>
+      <div class="confirm-actions">
+        <button class="rbtn" id="confirmNo">Cancelar</button>
+        <button class="rbtn gold" id="confirmYes">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- editor de PT -->
+  <div class="modal-backdrop" id="ptModal" hidden>
+    <div class="pt-editor">
+      <header><span class="pe-dot" id="peDot"></span><h3 id="peTitle">PT</h3><button class="x" id="peClose" aria-label="Fechar">✕</button></header>
+      <div class="pe-body">
+        <label class="pe-lbl">Descrição / objetivo da PT</label>
+        <input id="peDesc" class="pe-desc" placeholder="ex: Siege Damage · Torre Top · Segura árvore…" />
+        <label class="pe-lbl">Membros <span id="peCount" class="pe-count"></span></label>
+        <div class="pe-members" id="peMembers"></div>
+        <div class="pe-add">
+          <select id="peAddSel"></select>
+          <button class="rbtn" id="peAddBtn">+ Adicionar</button>
+        </div>
+      </div>
+      <footer><span class="pe-hint">Editar aqui muda o roster. Arraste a PT pro mapa normalmente.</span></footer>
     </div>
   </div>
 

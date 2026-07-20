@@ -30,8 +30,11 @@
   const drawTools = $('drawTools'), dtColors = $('dtColors'), dtWidth = $('dtWidth'), undoBtn = $('undoBtn'), redoBtn = $('redoBtn'), clearDraw = $('clearDraw');
   const objBtn = $('objBtn'), objPanel = $('objPanel'), objClose = $('objClose'), objGroups = $('objGroups');
   const fasesBtn = $('fasesBtn'), dockCollapse = $('dockCollapse'), dockMini = $('dockMini'), dockExpand = $('dockExpand'), miniName = $('miniName'), miniPrev = $('miniPrev'), miniNext = $('miniNext');
+  const confirmModal = $('confirmModal'), confirmMsg = $('confirmMsg'), confirmYes = $('confirmYes'), confirmNo = $('confirmNo');
+  const ptModal = $('ptModal'), peDot = $('peDot'), peTitle = $('peTitle'), peClose = $('peClose'), peDesc = $('peDesc'), peMembers = $('peMembers'), peCount = $('peCount'), peAddSel = $('peAddSel'), peAddBtn = $('peAddBtn');
 
-  const state = { scenarios: [], currentId: null, roster: [], objetivoPosGlobal: {}, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false };
+  const state = { scenarios: [], currentId: null, roster: [], ptDesc: {}, objetivoPosGlobal: {}, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false };
+  let hintDismissed = false, editingPt = null;
   const partyById = new Map(CFG.parties.map(p => [p.id, p]));
   const objById = new Map(CFG.objetivos.map(o => [o.id, o]));
   let popoverPt = null, rosterDraft = [];
@@ -68,7 +71,7 @@
     loadProject(); bgImage.image(mapImg); bgLayer.batchDraw(); buildColorSwatches();
     document.body.classList.add('dock-collapsed'); dockMini.hidden = false;   // fases fechadas por padrão
     renderSidebar(); renderRail(); loadScenarioIntoUI(); fit(); wireEvents(); maybeLoadShared();
-    setTimeout(() => mapHint.classList.add('hide'), 5000);                     // aviso some em 5s
+    setTimeout(() => { hintDismissed = true; mapHint.classList.add('hide'); }, 5000);   // aviso some em 5s (definitivo)
     setTimeout(() => toast('Scroll = zoom · arraste o mapa para mover'), 900);
   }
 
@@ -116,8 +119,10 @@
         const compHtml = total ? dots + (resN ? '<span class="cd" style="color:#9aa2b4">+' + resN + ' res</span>' : '') : 'sem membros';
         const chip = document.createElement('div'); chip.className = 'pt-chip' + (placed.includes(pid) ? ' placed' : ''); chip.style.setProperty('--accent', p.cor);
         chip.setAttribute('draggable', 'true'); chip.dataset.pt = pid;
-        chip.innerHTML = '<span class="dot">' + pid.replace('PT', '') + '</span><span class="lbl"><b>' + pid + '</b><span class="comp' + (total ? '' : ' vazia') + '">' + compHtml + '</span></span><span class="status">' + (placed.includes(pid) ? 'No mapa' : 'Arraste') + '</span>';
+        const desc = state.ptDesc[pid];
+        chip.innerHTML = '<span class="dot">' + pid.replace('PT', '') + '</span><span class="lbl"><b>' + pid + '</b>' + (desc ? '<span class="pt-desc-line">' + esc(desc) + '</span>' : '') + '<span class="comp' + (total ? '' : ' vazia') + '">' + compHtml + '</span></span><span class="status">' + (placed.includes(pid) ? 'No mapa' : 'Arraste') + '</span>';
         chip.addEventListener('dragstart', ev => { if (state.present) { ev.preventDefault(); return; } ev.dataTransfer.setData('text/plain', pid); ev.dataTransfer.effectAllowed = 'copy'; });
+        chip.addEventListener('click', () => openPtEditor(pid));
         ptList.appendChild(chip);
       });
     });
@@ -177,14 +182,14 @@
   function renderTokens() {
     tokenLayer.destroyChildren();
     const toks = cur() ? cur().tokens : [];
-    (cur() ? cur().destacados : []).forEach(d => { const pp = ptPos(d.pt); if (!pp) return; const p = partyById.get(d.pt); tokenLayer.add(new Konva.Line({ name: 'conn-' + d.id, points: [pp.x, pp.y, d.xf * W, d.yf * H], stroke: p.cor, strokeWidth: Math.max(1.4, R * 0.09), dash: [6, 5], opacity: 0.8, listening: false })); });
+    (cur() ? cur().destacados : []).forEach(d => { const pp = ptPos(d.pt); if (!pp) return; const p = partyById.get(d.pt); tokenLayer.add(new Konva.Line({ name: 'conn-' + d.id, points: [pp.x, pp.y, d.xf * W, d.yf * H], stroke: p.cor, strokeWidth: Math.max(2.6, R * 0.19), dash: [Math.max(7, R * 0.5), Math.max(5, R * 0.34)], opacity: 0.9, listening: false })); });
     toks.forEach(t => tokenLayer.add(makePtToken(t)));
     (cur() ? cur().destacados : []).forEach(d => { if (ptPos(d.pt)) tokenLayer.add(makeMemberToken(d)); });
     tokenLayer.batchDraw(); syncPlacedChips();
-    mapHint.classList.toggle('hide', toks.length > 0 || (cur() && cur().desenhos.length) || state.present);
+    mapHint.classList.toggle('hide', hintDismissed || toks.length > 0 || (cur() && cur().desenhos.length) || state.present);
   }
   function updateConnectors() { (cur() ? cur().destacados : []).forEach(d => { const line = tokenLayer.findOne('.conn-' + d.id); if (!line) return; const pn = tokenLayer.findOne('.pt-' + d.pt), mn = tokenLayer.findOne('#mem-' + d.id); if (pn && mn) line.points([pn.x(), pn.y(), mn.x(), mn.y()]); }); tokenLayer.batchDraw(); }
-  function placeToken(pt, xf, yf) { if (!partyById.has(pt) || state.present) return; pushUndo(); const toks = cur().tokens, ex = toks.find(t => t.pt === pt); if (ex) { ex.xf = clamp01(xf); ex.yf = clamp01(yf); } else toks.push({ pt, xf: clamp01(xf), yf: clamp01(yf) }); renderTokens(); saveProject(); }
+  function placeToken(pt, xf, yf) { if (!partyById.has(pt) || state.present) return; hintDismissed = true; pushUndo(); const toks = cur().tokens, ex = toks.find(t => t.pt === pt); if (ex) { ex.xf = clamp01(xf); ex.yf = clamp01(yf); } else toks.push({ pt, xf: clamp01(xf), yf: clamp01(yf) }); renderTokens(); saveProject(); }
   function removeToken(pt) { pushUndo(); const s = cur(); s.tokens = s.tokens.filter(t => t.pt !== pt); s.destacados = s.destacados.filter(d => d.pt !== pt); hidePopover(); renderTokens(); saveProject(); }
   function detachMember(pt, nome, funcao, xf, yf) { if (!ptPos(pt)) return; pushUndo(); cur().destacados.push({ id: uid(), pt, nome, funcao, xf: clamp01(xf), yf: clamp01(yf) }); hidePopover(); renderTokens(); saveProject(); }
 
@@ -286,7 +291,7 @@
   function beginDraw() { if (state.present || !DRAW.includes(state.tool)) return; const f = frac(); if (!f) return; live = { tipo: state.tool, pontos: state.tool === 'livre' ? [[f.xf, f.yf]] : [[f.xf, f.yf], [f.xf, f.yf]], cor: state.drawColor, largura: state.drawWidth, shape: null }; live.shape = shapeFromDesenho(live); drawLayer.add(live.shape); drawLayer.batchDraw(); }
   function moveDraw() { if (!live) return; const f = frac(); if (!f) return; if (live.tipo === 'livre') live.pontos.push([f.xf, f.yf]); else live.pontos[1] = [f.xf, f.yf]; live.shape.destroy(); live.shape = shapeFromDesenho(live); drawLayer.add(live.shape); drawLayer.batchDraw(); }
   function endDraw() { if (!live) return; const d = live; live = null; d.shape && d.shape.destroy(); const tiny = d.tipo === 'livre' ? d.pontos.length < 3 : Math.hypot((d.pontos[1][0] - d.pontos[0][0]) * W, (d.pontos[1][1] - d.pontos[0][1]) * H) < 6; if (tiny) { drawLayer.batchDraw(); return; } pushUndo(); cur().desenhos.push({ tipo: d.tipo, pontos: d.pontos.map(p => [p[0], p[1]]), cor: d.cor, largura: d.largura }); renderDrawings(); renderTokens(); saveProject(); }
-  function clearDrawings() { if (!cur().desenhos.length) return; if (!confirm('Limpar os desenhos deste cenário?')) return; pushUndo(); cur().desenhos = []; renderDrawings(); renderTokens(); saveProject(); }
+  async function clearDrawings() { if (!cur().desenhos.length) return; if (!await askConfirm('Limpar os desenhos deste cenário?')) return; pushUndo(); cur().desenhos = []; renderDrawings(); renderTokens(); saveProject(); }
 
   // ---- cenários ----
   function renderRail() {
@@ -310,7 +315,7 @@
   function insertAfterCurrent(s) { const i = curIndex(); state.scenarios.splice(i < 0 ? state.scenarios.length : i + 1, 0, s); saveProject(); }
   function addScenarioBlank() { const s = newScenario({ fase: 'Cenário', nome: 'Cenário ' + (state.scenarios.length + 1) }); insertAfterCurrent(s); selectScenario(s.id); }
   function duplicateCurrent() { const s = cur(); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados: s.destacados.map(d => Object.assign({}, d, { id: uid() })), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
-  function deleteScenario(id) { if (state.scenarios.length <= 1) { alert('É preciso ter ao menos um cenário.'); return; } const i = state.scenarios.findIndex(s => s.id === id); if (i < 0) return; if (!isPristine(state.scenarios[i]) && !confirm('Excluir o cenário "' + (state.scenarios[i].nome || '') + '"?')) return; state.scenarios.splice(i, 1); if (state.currentId === id) state.currentId = state.scenarios[Math.max(0, i - 1)].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
+  async function deleteScenario(id) { if (state.scenarios.length <= 1) { toast('É preciso ter ao menos um cenário'); return; } const i = state.scenarios.findIndex(s => s.id === id); if (i < 0) return; if (!isPristine(state.scenarios[i]) && !await askConfirm('Excluir o cenário "' + (state.scenarios[i].nome || '') + '"?')) return; state.scenarios.splice(i, 1); if (state.currentId === id) state.currentId = state.scenarios[Math.max(0, i - 1)].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
   function reorder(dragIdV, targetId, before) { const from = state.scenarios.findIndex(s => s.id === dragIdV); if (from < 0) return; const [m] = state.scenarios.splice(from, 1); let to = state.scenarios.findIndex(s => s.id === targetId); if (to < 0) state.scenarios.push(m); else state.scenarios.splice(before ? to : to + 1, 0, m); renderRail(); saveProject(); }
   function seedStandard() { const key = e => (e.nome || '') + '|' + (e.condicao || ''); if (state.scenarios.length === 1 && isPristine(state.scenarios[0])) state.scenarios = []; const have = new Set(state.scenarios.map(key)); CFG.fasesPadrao.forEach(f => { if (!have.has(key(f))) state.scenarios.push(newScenario({ fase: f.fase, nome: f.nome, condicao: f.condicao })); }); state.currentId = state.scenarios[0].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
   function syncCard() { const s = cur(), card = rail.querySelector('.scene.active'); if (!card) return; card.querySelector('.sc-name').textContent = s.nome || 'Cenário'; const condEl = card.querySelector('.sc-cond'), metaEl = card.querySelector('.sc-meta'); if (s.condicao) { if (condEl) condEl.textContent = '▸ ' + s.condicao; else { const el = document.createElement('span'); el.className = 'sc-cond'; el.textContent = '▸ ' + s.condicao; if (metaEl) metaEl.replaceWith(el); else card.appendChild(el); } } else if (condEl) { const el = document.createElement('span'); el.className = 'sc-meta'; el.textContent = s.fase || ''; condEl.replaceWith(el); } updateMini(); }
@@ -341,19 +346,46 @@
   function autoAssign() { const avail = rosterDraft.filter(p => !p.ausente && !p.reserva); avail.forEach(p => p.pt = null); if (!avail.length) { renderGrid(); return; } const nPT = Math.max(1, Math.min(CFG.parties.length, Math.ceil(avail.length / CFG.ptSize))); const buckets = Array.from({ length: nPT }, () => []); let bi = 0; const deal = list => { list.forEach(p => { buckets[bi % nPT].push(p); bi++; }); }; bi = 0; deal(avail.filter(p => p.funcao === 'Tank')); bi = 0; deal(avail.filter(p => p.funcao === 'Healer')); bi = 0; deal(avail.filter(p => p.funcao === 'DPS')); buckets.forEach((b, k) => b.forEach(p => p.pt = PT_IDS[k])); renderGrid(); }
 
   // ---- export / import / compartilhar / reset ----
-  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, objetivoPosGlobal: state.objetivoPosGlobal, cenarios: state.scenarios }; }
+  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, ptDesc: state.ptDesc, objetivoPosGlobal: state.objetivoPosGlobal, cenarios: state.scenarios }; }
+  function sanitizeDesc(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => PT_IDS.includes(k) && typeof v === 'string' && v.trim()).map(([k, v]) => [k, String(v)])) : {}; }
   function sanitizePosMap(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}; }
   function exportProject() { const blob = new Blob([JSON.stringify(projectData(), null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob), d = new Date(), pad = n => String(n).padStart(2, '0'); const a = document.createElement('a'); a.href = url; a.download = 'estrategia-wanted-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
-  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste plano.'); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
-  function importProjectFile(file) { const reader = new FileReader(); reader.onload = () => { let d; try { d = JSON.parse(reader.result); } catch (e) { alert('Arquivo inválido: não é um JSON.'); return; } if (!Array.isArray(d.cenarios) && !Array.isArray(d.scenarios)) { alert('Não encontrei cenários neste arquivo.'); return; } if (state.scenarios.some(s => !isPristine(s)) && !confirm('Importar vai substituir o plano atual. Continuar?')) return; applyImported(d); }; reader.readAsText(file); }
-  function resetAll() { if (!confirm('Resetar tudo e começar um plano do zero? (não dá pra desfazer)')) return; try { localStorage.removeItem(CFG.projectKey); } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; state.roster = []; state.objetivoPosGlobal = {}; toggleObjPanel(false); hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); toast('Plano resetado ✓'); }
+  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste plano.'); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
+  function importProjectFile(file) { const reader = new FileReader(); reader.onload = async () => { let d; try { d = JSON.parse(reader.result); } catch (e) { toast('Arquivo inválido: não é um JSON'); return; } if (!Array.isArray(d.cenarios) && !Array.isArray(d.scenarios)) { toast('Não encontrei cenários neste arquivo'); return; } if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Importar vai substituir o plano atual. Continuar?')) return; applyImported(d); }; reader.readAsText(file); }
+  async function resetAll() { if (!await askConfirm('Resetar tudo e começar um plano do zero? Isso apaga o plano atual (PTs, cenários, desenhos, roster).')) return; try { localStorage.removeItem(CFG.projectKey); } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; state.roster = []; state.ptDesc = {}; state.objetivoPosGlobal = {}; toggleObjPanel(false); hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); toast('Plano resetado ✓'); }
   function b64urlFromBytes(bytes) { let bin = ''; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function bytesFromB64url(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); const bin = atob(s); const a = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return a; }
   async function encodeShare(obj) { const bytes = new TextEncoder().encode(JSON.stringify(obj)); if (window.CompressionStream) { const st = new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip')); return 'g' + b64urlFromBytes(new Uint8Array(await new Response(st).arrayBuffer())); } return 'r' + b64urlFromBytes(bytes); }
   async function decodeShare(str) { const flag = str[0]; let bytes = bytesFromB64url(str.slice(1)); if (flag === 'g' && window.DecompressionStream) { const st = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')); bytes = new Uint8Array(await new Response(st).arrayBuffer()); } return JSON.parse(new TextDecoder().decode(bytes)); }
   async function shareLink() { try { const enc = await encodeShare(projectData()); const url = location.origin + location.pathname + '#p=' + enc; history.replaceState(null, '', '#p=' + enc); let copied = false; try { await navigator.clipboard.writeText(url); copied = true; } catch (e) {} toast(copied ? 'Link copiado ✓ — cole no Discord' : 'Link gerado — copie da barra de endereço'); } catch (e) { toast('Não consegui gerar o link'); } }
-  async function maybeLoadShared() { const m = /[#&]p=([^&]+)/.exec(location.hash); if (!m) return; let d; try { d = await decodeShare(decodeURIComponent(m[1])); } catch (e) { toast('Link de plano inválido'); return; } if (state.scenarios.some(s => !isPristine(s)) && !confirm('Este link abre um plano compartilhado. Abrir substitui o rascunho atual. Continuar?')) return; if (applyImported(d)) toast('Plano do link carregado ✓'); }
+  async function maybeLoadShared() { const m = /[#&]p=([^&]+)/.exec(location.hash); if (!m) return; let d; try { d = await decodeShare(decodeURIComponent(m[1])); } catch (e) { toast('Link de plano inválido'); return; } if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Este link abre um plano compartilhado. Abrir substitui o rascunho atual. Continuar?')) return; if (applyImported(d)) toast('Plano do link carregado ✓'); }
   let toastT = null; function toast(msg) { toastEl.innerHTML = msg.replace(/✓/g, '<b>✓</b>'); toastEl.hidden = false; requestAnimationFrame(() => toastEl.classList.add('show')); clearTimeout(toastT); toastT = setTimeout(() => { toastEl.classList.remove('show'); setTimeout(() => toastEl.hidden = true, 220); }, 2600); }
+  // confirm próprio (o confirm() nativo é bloqueado no iframe do preview)
+  function askConfirm(msg) { return new Promise(res => { confirmMsg.textContent = msg; confirmModal.hidden = false; const done = v => { confirmModal.hidden = true; confirmYes.onclick = confirmNo.onclick = null; res(v); }; confirmYes.onclick = () => done(true); confirmNo.onclick = () => done(false); confirmModal.onclick = e => { if (e.target === confirmModal) done(false); }; }); }
+
+  // ---- editor de PT (descrição + membros) ----
+  function openPtEditor(pt) {
+    if (state.present || !partyById.has(pt)) return;
+    editingPt = pt; const p = partyById.get(pt);
+    peDot.style.background = p.cor; peTitle.textContent = pt;
+    peDesc.value = state.ptDesc[pt] || '';
+    renderPtEditor(); ptModal.hidden = false; peDesc.focus();
+  }
+  function renderPtEditor() {
+    const pt = editingPt; const tit = membersOf(pt, false), res = membersOf(pt, true);
+    peCount.textContent = tit.length + (res.length ? ' + ' + res.length + ' res' : '');
+    let html = '';
+    if (!tit.length && !res.length) html += '<div class="pe-empty">Sem membros nesta PT. Adicione abaixo.</div>';
+    tit.concat(res).forEach(m => html += '<div class="pe-mem' + (m.reserva ? ' res' : '') + '"><span class="rl" style="background:' + roleColor(m.funcao) + '"></span><span class="nm">' + esc(m.nome) + '</span><span class="cl">' + m.funcao + (m.reserva ? ' · res' : '') + '</span><button class="rm" data-id="' + m.id + '" title="Tirar da PT">✕</button></div>');
+    peMembers.innerHTML = html;
+    peMembers.querySelectorAll('.rm').forEach(b => b.addEventListener('click', () => { const pl = state.roster.find(x => x.id === b.dataset.id); if (pl) { pl.pt = null; saveProject(); renderSidebar(); renderTokens(); renderPtEditor(); fillAddSel(); } }));
+    fillAddSel();
+  }
+  function fillAddSel() {
+    const avail = state.roster.filter(p => p.pt !== editingPt && !p.ausente).sort((a, b) => a.nome.localeCompare(b.nome));
+    peAddSel.innerHTML = avail.length ? avail.map(p => '<option value="' + p.id + '">' + esc(p.nome) + ' · ' + p.funcao + (p.pt ? ' (' + p.pt + ')' : p.reserva ? ' (res)' : '') + '</option>').join('') : '<option value="">— ninguém disponível —</option>';
+  }
+  function closePtEditor() { ptModal.hidden = true; editingPt = null; }
 
   // ---- eventos ----
   function wireEvents() {
@@ -379,7 +411,7 @@
     condInput.addEventListener('input', () => { cur().condicao = condInput.value.trim() || null; syncCard(); saveProject(); });
     noteInput.addEventListener('input', () => { cur().nota = noteInput.value; saveProject(); });
     addScene.addEventListener('click', addScenarioBlank); dupScene.addEventListener('click', duplicateCurrent);
-    seedBtn.addEventListener('click', () => { if (state.scenarios.some(s => !isPristine(s)) && !confirm('Adicionar os cenários das fases padrão ao projeto?')) return; seedStandard(); });
+    seedBtn.addEventListener('click', async () => { if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Adicionar os cenários das fases padrão ao projeto?')) return; seedStandard(); });
     exportBtn.addEventListener('click', exportProject); importBtn.addEventListener('click', () => importFile.click());
     importFile.addEventListener('change', e => { const f = e.target.files[0]; if (f) importProjectFile(f); e.target.value = ''; });
     shareBtn.addEventListener('click', shareLink); resetBtn.addEventListener('click', resetAll);
@@ -392,6 +424,8 @@
     dockExpand.addEventListener('click', () => setDock(true));
 
     document.addEventListener('keydown', e => {
+      if (!confirmModal.hidden) { if (e.key === 'Escape') { confirmNo.onclick && confirmNo.onclick(); } return; }
+      if (!ptModal.hidden) { if (e.key === 'Escape') closePtEditor(); return; }
       if (!rosterModal.hidden) { if (e.key === 'Escape') closeRoster(); return; }
       const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement && document.activeElement.tagName);
       if (state.present) { if (e.key === 'Escape') exitPresent(); else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); } return; }
@@ -406,7 +440,12 @@
     rosterModal.addEventListener('click', e => { if (e.target === rosterModal) closeRoster(); });
     parseBtn.addEventListener('click', () => { const parsed = parseRoster(rosterPaste.value); if (!parsed.length) { parseMsg.className = 'parse-msg err'; parseMsg.textContent = 'Não reconheci jogadores. Confira o formato.'; return; } rosterDraft = parsed; parseMsg.className = 'parse-msg ok'; parseMsg.textContent = parsed.length + ' jogadores reconhecidos.'; renderGrid(); });
     autoBtn.addEventListener('click', autoAssign);
-    rosterClear2.addEventListener('click', () => { if (confirm('Limpar todos os jogadores?')) { rosterDraft = []; renderGrid(); } });
+    rosterClear2.addEventListener('click', async () => { if (await askConfirm('Limpar todos os jogadores?')) { rosterDraft = []; renderGrid(); } });
+    // editor de PT
+    peClose.addEventListener('click', closePtEditor);
+    ptModal.addEventListener('click', e => { if (e.target === ptModal) closePtEditor(); });
+    peDesc.addEventListener('input', () => { if (editingPt) { state.ptDesc[editingPt] = peDesc.value.trim(); if (!state.ptDesc[editingPt]) delete state.ptDesc[editingPt]; renderSidebar(); saveProject(); } });
+    peAddBtn.addEventListener('click', () => { const id = peAddSel.value; if (!id) return; const pl = state.roster.find(x => x.id === id); if (pl) { pl.pt = editingPt; pl.reserva = false; saveProject(); renderSidebar(); renderTokens(); renderPtEditor(); } });
     rosterGrid.addEventListener('change', e => { const row = e.target.closest('.rrow'); if (!row) return; const p = rosterDraft[+row.dataset.i]; if (!p) return; if (e.target.classList.contains('f-fn')) p.funcao = e.target.value; else if (e.target.classList.contains('f-pt')) p.pt = e.target.value || null; else if (e.target.classList.contains('f-res')) p.reserva = e.target.checked; renderGrid(); });
     rosterGrid.addEventListener('click', e => { if (!e.target.classList.contains('rdel')) return; const row = e.target.closest('.rrow'); if (!row) return; rosterDraft.splice(+row.dataset.i, 1); renderGrid(); });
     rosterSave.addEventListener('click', () => { state.roster = rosterDraft.map(p => Object.assign({}, p)); saveProject(); renderSidebar(); renderTokens(); saveMsg.className = 'parse-msg ok'; saveMsg.textContent = 'Roster salvo ✓'; setTimeout(closeRoster, 500); });
@@ -416,8 +455,8 @@
   function setDock(open) { document.body.classList.toggle('dock-collapsed', !open); dockMini.hidden = open; fasesBtn.classList.toggle('on', open); if (!open) updateMini(); requestAnimationFrame(fit); }
 
   // ---- persistência ----
-  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, objetivoPosGlobal: state.objetivoPosGlobal })); } catch (e) {} }
-  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
+  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, objetivoPosGlobal: state.objetivoPosGlobal })); } catch (e) {} }
+  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
   function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => ({ pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) })) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => ({ id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
