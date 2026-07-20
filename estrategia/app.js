@@ -30,6 +30,7 @@
   const rosterPaste = $('rosterPaste'), parseBtn = $('parseBtn'), parseMsg = $('parseMsg'), autoBtn = $('autoBtn');
   const rosterGrid = $('rosterGrid'), gEsc = $('gEsc'), gRes = $('gRes'), gAus = $('gAus'), gComp = $('gComp');
   const rosterSave = $('rosterSave'), rosterClear2 = $('rosterClear2'), saveMsg = $('saveMsg');
+  const exportBtn = $('exportBtn'), importBtn = $('importBtn'), importFile = $('importFile');
 
   // ---- estado ----
   const state = {
@@ -511,6 +512,9 @@
       if (state.scenarios.some(s => !isPristine(s)) && !confirm('Adicionar os cenários das fases padrão ao projeto?')) return;
       seedStandard();
     });
+    exportBtn.addEventListener('click', exportProject);
+    importBtn.addEventListener('click', () => importFile.click());
+    importFile.addEventListener('change', e => { const f = e.target.files[0]; if (f) importProjectFile(f); e.target.value = ''; });
     presentBtn.addEventListener('click', enterPresent);
     exitBtn.addEventListener('click', exitPresent);
     prevBtn.addEventListener('click', () => go(-1));
@@ -563,6 +567,42 @@
     const relayout = () => { if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(fit); };
     new ResizeObserver(relayout).observe(mapPanel);
     window.addEventListener('resize', relayout);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Export / Import JSON (salvar e compartilhar um plano)
+  // ---------------------------------------------------------------------------
+  function projectData() {
+    return { app: 'zhi-estrategia', v: 2, exportedAt: new Date().toISOString(),
+      objectivesOn: state.objectivesOn, currentId: state.currentId,
+      roster: state.roster, cenarios: state.scenarios };
+  }
+  function exportProject() {
+    const data = projectData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const d = new Date(), pad = n => String(n).padStart(2, '0');
+    const a = document.createElement('a');
+    a.href = url; a.download = 'estrategia-wanted-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  function importProjectFile(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      let d;
+      try { d = JSON.parse(reader.result); } catch (e) { alert('Arquivo inválido: não é um JSON.'); return; }
+      // aceita tanto o formato de export (cenarios) quanto o do localStorage (scenarios)
+      const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null);
+      if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste arquivo.'); return; }
+      if (state.scenarios.some(s => !isPristine(s)) && !confirm('Importar vai substituir o plano atual. Continuar?')) return;
+      state.scenarios = scenarios.map(sanitizeScenario);
+      state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : [];
+      state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id;
+      if (typeof d.objectivesOn === 'boolean') state.objectivesOn = d.objectivesOn;
+      hidePopover(); applyObjectivesUI(); renderRail(); loadScenarioIntoUI(); renderSidebar(); renderTokens(); saveProject();
+    };
+    reader.readAsText(file);
   }
 
   // ---------------------------------------------------------------------------

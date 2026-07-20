@@ -61,6 +61,8 @@
     .tbtn svg{width:14px;height:14px;flex:none}
     .tbtn.primary{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     .tbtn.primary:hover{filter:brightness(1.06)}
+    .tbtn.ico{padding:7px 9px}
+    .tbtn.ico svg{width:15px;height:15px}
 
     .toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-family:var(--disp);
       font-weight:600;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:5px 3px;}
@@ -300,6 +302,13 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
         Fases padrão
       </button>
+      <button class="tbtn ico" id="exportBtn" title="Exportar o plano como arquivo JSON (salvar/compartilhar)" aria-label="Exportar JSON">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg>
+      </button>
+      <button class="tbtn ico" id="importBtn" title="Importar um plano de arquivo JSON" aria-label="Importar JSON">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M5 21h14"/></svg>
+      </button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden />
       <button class="tbtn primary" id="presentBtn" title="Modo apresentação (tela cheia)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20v12H2z"/><path d="M8 20h8M12 16v4"/></svg>
         Apresentar
