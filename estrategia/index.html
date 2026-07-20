@@ -69,7 +69,7 @@
 
     /* ---------- WORKSPACE ---------- */
     .workspace{position:relative;height:calc(100vh - var(--topbar-h));height:calc(100dvh - var(--topbar-h));
-      display:grid;grid-template-columns:1fr var(--roster-w);grid-template-rows:1fr var(--dock-h);}
+      display:grid;grid-template-columns:1fr var(--roster-w);grid-template-rows:1fr;}
     .stage-col{grid-column:1;grid-row:1;position:relative;min-width:0;min-height:0}
     .map-panel{position:absolute;inset:0;display:grid;place-items:center;padding:10px;
       background:radial-gradient(90% 80% at 50% 40%, rgba(20,24,33,.5), transparent 70%);overflow:hidden;}
@@ -127,6 +127,7 @@
     .pt-popover li .detach{margin-left:auto;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);
       border-radius:6px;font-size:10px;padding:2px 7px;cursor:pointer;font-family:var(--disp);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;transition:.12s}
     .pt-popover li .detach:hover{color:var(--gold);border-color:var(--line)}
+    .pt-popover .po-desc{font-size:11.5px;color:var(--gold-2);margin:-2px 0 8px;line-height:1.35}
     .pt-popover .empty{font-size:12px;color:var(--muted);font-style:italic}
     .pt-popover .phint{margin-top:8px;font-size:10px;color:#5f6672;line-height:1.35}
 
@@ -200,13 +201,15 @@
     .dock-mini .dm-exp{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border:0;border-radius:999px;padding:6px 11px;cursor:pointer;margin-left:2px}
     body.present .dock-mini{display:none}
 
-    /* ---------- DOCK ---------- */
-    .dock{position:relative;grid-column:1 / span 2;grid-row:2;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d1017,#0a0c11);border-top:1px solid var(--line);min-height:0}
-    .dock-collapse{position:absolute;right:12px;top:-13px;z-index:5;font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
-      color:var(--muted);background:linear-gradient(180deg,var(--ink-2),#0b0e15);border:1px solid var(--line);border-radius:8px 8px 0 0;border-bottom:0;padding:4px 12px 5px;cursor:pointer;transition:color .15s}
-    .dock-collapse:hover{color:var(--gold)}
-    body.dock-collapsed{--dock-h:0px}
-    body.dock-collapsed .dock{display:none}
+    /* ---------- FASES (painel flutuante em cima) ---------- */
+    .dock{position:absolute;top:12px;left:12px;right:12px;z-index:18;max-height:calc(100% - 24px);display:flex;flex-direction:column;
+      background:linear-gradient(180deg,var(--ink-2),var(--ink-3));border:1px solid var(--line);border-radius:13px;box-shadow:0 34px 80px -28px #000}
+    body:not(.fases-open) .dock{display:none}
+    .dock-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 5px}
+    .dock-head .dh-title{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+    .dock-collapse{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);background:transparent;border:1px solid var(--line-soft);border-radius:8px;padding:5px 11px;cursor:pointer;transition:color .15s}
+    .dock-collapse:hover{color:var(--gold);border-color:var(--line)}
     .dock-top{display:flex;align-items:stretch;gap:10px;padding:9px 14px 6px}
     .scene-edit{flex:none;width:196px;display:flex;flex-direction:column;gap:5px}
     .scene-edit .f-name{background:#0b0e15;border:1px solid var(--line-soft);color:var(--text);font-family:var(--disp);font-weight:600;font-size:13px;border-radius:7px;padding:6px 9px;width:100%}
@@ -314,6 +317,12 @@
     .pe-count{color:var(--muted);letter-spacing:0}
     .pe-desc{background:#0b0e15;border:1px solid var(--line-soft);color:var(--text);border-radius:8px;padding:9px 11px;font-size:13.5px;font-family:var(--body)}
     .pe-desc:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .pe-icons{display:flex;flex-wrap:wrap;gap:5px}
+    .pe-icons button{width:34px;height:34px;font-size:18px;line-height:1;display:grid;place-items:center;cursor:pointer;
+      background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;transition:.12s}
+    .pe-icons button:hover{border-color:var(--line)}
+    .pe-icons button.sel{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold);background:rgba(217,164,65,.1)}
+    .pe-icons button.none{font-size:10px;font-family:var(--disp);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
     .pe-members{display:flex;flex-direction:column;gap:4px}
     .pe-mem{display:flex;align-items:center;gap:9px;padding:7px 9px;background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-radius:8px}
     .pe-mem .rl{width:9px;height:9px;border-radius:50%;flex:none}
@@ -465,7 +474,7 @@
     </aside>
 
     <section class="dock">
-      <button class="dock-collapse" id="dockCollapse" title="Ocultar as fases (dá mais mapa)">▾ Ocultar fases</button>
+      <div class="dock-head"><span class="dh-title">Fases &amp; cenários</span><button class="dock-collapse" id="dockCollapse" title="Fechar">✕ Fechar</button></div>
       <div class="dock-top">
         <div class="scene-edit">
           <input id="nameInput" class="f-name" placeholder="Nome da fase" />
@@ -540,6 +549,8 @@
       <div class="pe-body">
         <label class="pe-lbl">Descrição / objetivo da PT</label>
         <input id="peDesc" class="pe-desc" placeholder="ex: Siege Damage · Torre Top · Segura árvore…" />
+        <label class="pe-lbl">Ícone da PT</label>
+        <div class="pe-icons" id="peIcons"></div>
         <label class="pe-lbl">Membros <span id="peCount" class="pe-count"></span></label>
         <div class="pe-members" id="peMembers"></div>
         <div class="pe-add">

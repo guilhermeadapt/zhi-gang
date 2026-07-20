@@ -18,23 +18,19 @@ const WWM = {
     // Mapa base (limpo, grama até a borda, cortado) — gerado pela guild (v2).
     map: '../assets/map/board.jpg',
 
-    // Ícones (placeholder do vendor-ref — TODO: trocar por próprios).
+    // Ícones de classe (para os tokens de membro destacado).
     icons: {
-      tower_blue: '../assets/vendor-ref/tower_blue.png',
-      tower_red:  '../assets/vendor-ref/tower_red.png',
-      goose_blue: '../assets/vendor-ref/goose_blue.png',
-      goose_red:  '../assets/vendor-ref/goose_red.png',
-      tree_blue:  '../assets/vendor-ref/tree_blue.png',
-      tree_red:   '../assets/vendor-ref/tree_red.png',
-      boss:       '../assets/vendor-ref/boss.png',
-      tank:       '../assets/vendor-ref/tank.png',
-      dps:        '../assets/vendor-ref/dps.png',
-      healer:     '../assets/vendor-ref/healer.png',
+      tank:   '../assets/vendor-ref/tank.png',
+      dps:    '../assets/vendor-ref/dps.png',
+      healer: '../assets/vendor-ref/healer.png',
     },
   },
 
-  // ícone de classe por função (para os tokens de membro destacado)
+  // ícone de classe por função (tokens de membro destacado)
   classIcons: { Tank: 'tank', DPS: 'dps', Healer: 'healer' },
+
+  // galeria de ícones para as PTs (emoji) — o estrategista escolhe no editor
+  ptIcons: ['⚔️', '🛡️', '🏹', '💥', '🎯', '🌳', '🦢', '👑', '🔥', '❄️', '⚡', '🩸', '🚩', '🐉', '💀', '⭐'],
 
   /* --- catálogo de objetivos -------------------------------------------
    * Cada objetivo pode ser ligado/desligado ("up") por cenário e reposicionado
