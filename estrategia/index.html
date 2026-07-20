@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0a0c11" />
+  <meta name="description" content="Mapa interativo de estratégia GvG da guild Wanted — montar e apresentar o plano por fase. Uso interno." />
+  <title>Mapa de Estratégia · Zhi Guides</title>
+
+  <!-- fontes iguais aos guias -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --ink:#0a0c11;
+      --ink-2:#12151d;
+      --ink-3:#0e1118;
+      --line:rgba(217,164,65,.20);
+      --line-soft:rgba(255,255,255,.07);
+      --text:#EDEBE4;
+      --muted:#9aa2b4;
+      --gold:#D9A441;
+      --gold-2:#f0c66b;
+      --board:#89abc5;   /* tank */
+      --crimson:#E25B52; /* dps  */
+      --jade:#4CC9A4;    /* healer */
+      --disp:'Oswald',system-ui,sans-serif;
+      --body:'Barlow',system-ui,sans-serif;
+      --cjk:'Noto Serif SC',serif;
+      --topbar-h:60px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:var(--body);color:var(--text);
+      background:
+        radial-gradient(120% 90% at 50% -10%, #12151d 0%, transparent 60%),
+        var(--ink);
+      overflow:hidden;
+    }
+    button{font-family:inherit}
+
+    /* ---------- TOPBAR ---------- */
+    .topbar{
+      position:relative;z-index:20;height:var(--topbar-h);
+      display:flex;align-items:center;gap:18px;
+      padding:0 16px 0 14px;
+      background:linear-gradient(180deg,rgba(18,21,29,.96),rgba(10,12,17,.96));
+      border-bottom:1px solid var(--line);
+      box-shadow:0 10px 30px -22px #000;
+    }
+    .back{
+      display:inline-flex;align-items:center;gap:6px;flex:none;
+      font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--gold);text-decoration:none;padding:8px 13px 8px 10px;
+      border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02);
+      transition:color .15s,border-color .15s,background .15s;
+    }
+    .back .ar{font-size:16px;line-height:1;margin-top:-1px}
+    .back:hover{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(217,164,65,.06)}
+
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .brand .glyph{
+      font-family:var(--cjk);font-weight:700;font-size:30px;line-height:1;color:var(--gold);
+      width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:11px;
+      background:radial-gradient(120% 120% at 30% 20%,rgba(217,164,65,.16),transparent 70%),#0b0e15;
+      border:1px solid color-mix(in srgb,var(--gold) 34%,transparent);
+      box-shadow:inset 0 0 18px -8px color-mix(in srgb,var(--gold) 60%,transparent);
+    }
+    .brand .txt{display:flex;flex-direction:column;min-width:0}
+    .brand .kicker{font-family:var(--disp);font-weight:600;font-size:9.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+    .brand h1{margin:0;font-family:var(--disp);font-weight:700;font-size:20px;line-height:1.05;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .top-spacer{flex:1 1 auto}
+
+    .top-actions{display:flex;align-items:center;gap:8px;flex:none}
+    .tbtn{
+      display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+      font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-radius:9px;
+      padding:8px 12px;transition:color .15s,border-color .15s,background .15s;
+    }
+    .tbtn:hover{color:var(--text);border-color:var(--line)}
+    .tbtn svg{width:15px;height:15px;flex:none}
+
+    /* toggle de objetivos */
+    .toggle{display:inline-flex;align-items:center;gap:9px;cursor:pointer;user-select:none;
+      font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+      padding:6px 4px;}
+    .toggle input{position:absolute;opacity:0;pointer-events:none}
+    .toggle .track{width:38px;height:21px;border-radius:999px;background:#22262f;border:1px solid var(--line-soft);
+      position:relative;transition:background .18s,border-color .18s;flex:none}
+    .toggle .track::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;
+      background:#9aa2b4;transition:transform .18s,background .18s}
+    .toggle input:checked + .track{background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .toggle input:checked + .track::after{transform:translateX(17px);background:#241a06}
+    .toggle .state{min-width:26px;color:var(--text)}
+
+    /* ---------- WORKSPACE ---------- */
+    .workspace{
+      position:relative;height:calc(100vh - var(--topbar-h));height:calc(100dvh - var(--topbar-h));
+      display:flex;
+    }
+
+    /* painel do mapa */
+    .map-panel{
+      position:relative;flex:1 1 auto;min-width:0;
+      display:grid;place-items:center;padding:18px;
+      background:
+        radial-gradient(90% 80% at 50% 40%, rgba(20,24,33,.5), transparent 70%);
+      overflow:hidden;
+    }
+    #stageWrap{position:relative;line-height:0;
+      box-shadow:0 30px 80px -40px #000, 0 0 0 1px var(--line-soft);
+      border-radius:10px;overflow:hidden;}
+    #stage{display:block}
+    /* leve moldura dourada */
+    #stageWrap::after{content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;
+      box-shadow:inset 0 0 0 1px rgba(217,164,65,.14)}
+    .map-panel.dragover #stageWrap::after{box-shadow:inset 0 0 0 2px var(--gold),inset 0 0 40px -8px rgba(217,164,65,.4)}
+
+    .map-hint{
+      position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+      z-index:5;pointer-events:none;text-align:center;
+      background:rgba(10,12,17,.78);border:1px solid var(--line);border-radius:12px;
+      padding:14px 20px;backdrop-filter:blur(2px);max-width:80%;
+      font-family:var(--disp);font-weight:500;letter-spacing:.03em;color:var(--text);font-size:14px;
+      transition:opacity .25s;
+    }
+    .map-hint small{display:block;margin-top:5px;color:var(--muted);font-family:var(--body);font-size:12px;letter-spacing:0;text-transform:none}
+    .map-hint.hide{opacity:0}
+
+    /* ---------- ROSTER (direita) ---------- */
+    .roster{
+      flex:none;width:288px;background:linear-gradient(180deg,var(--ink-2),var(--ink-3));
+      border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;
+    }
+    .roster-head{
+      display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+      padding:15px 16px 12px;border-bottom:1px solid var(--line-soft);
+    }
+    .roster-head .h{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+    .roster-head .sub{font-size:11px;color:var(--muted)}
+
+    .pt-list{padding:12px 14px;overflow-y:auto;flex:1 1 auto}
+    .pt-chip{
+      display:flex;align-items:center;gap:11px;width:100%;
+      padding:10px 12px;margin-bottom:8px;cursor:grab;
+      background:linear-gradient(180deg,var(--ink-2),#0e1118);
+      border:1px solid var(--line-soft);border-radius:11px;
+      transition:border-color .15s,transform .06s,box-shadow .15s;
+      user-select:none;
+    }
+    .pt-chip:hover{border-color:color-mix(in srgb,var(--accent) 55%,transparent);box-shadow:0 10px 26px -20px var(--accent)}
+    .pt-chip:active{cursor:grabbing;transform:scale(.99)}
+    .pt-chip .dot{
+      width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;
+      font-family:var(--disp);font-weight:700;font-size:11px;color:#0a0c11;
+      background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent);
+    }
+    .pt-chip .lbl{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}
+    .pt-chip .lbl b{font-family:var(--disp);font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--text)}
+    .pt-chip .lbl span{font-size:11px;color:var(--muted)}
+    .pt-chip .status{font-family:var(--disp);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex:none}
+    .pt-chip.placed{opacity:.62}
+    .pt-chip.placed .status{color:var(--accent)}
+    .pt-chip.placed .dot::after{content:"✓";position:absolute;font-size:12px}
+
+    .roster-foot{border-top:1px solid var(--line-soft);padding:12px 16px}
+    .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+    .legend .li{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+    .legend .sw{width:11px;height:11px;border-radius:3px;flex:none}
+    .foot-note{font-size:10.5px;color:var(--muted);line-height:1.4;margin-top:8px}
+    .foot-note kbd{font-family:var(--disp);font-size:10px;background:#1a1e27;border:1px solid var(--line-soft);
+      border-radius:4px;padding:1px 5px;color:var(--text)}
+
+    /* ---------- MOBILE ---------- */
+    .mobile-note{display:none}
+    @media (max-width:860px){
+      .roster{display:none}
+      .top-actions .tbtn-clear{display:none}
+      .mobile-note{
+        display:flex;position:absolute;left:0;right:0;bottom:0;z-index:15;
+        align-items:center;gap:10px;padding:12px 16px;
+        background:rgba(10,12,17,.92);border-top:1px solid var(--line);
+        font-size:12px;color:var(--muted);line-height:1.35;
+      }
+      .mobile-note b{color:var(--gold);font-family:var(--disp);font-weight:600;letter-spacing:.04em}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="../" aria-label="Voltar ao menu Zhi Guides"><span class="ar" aria-hidden="true">‹</span> Menu</a>
+    <div class="brand">
+      <span class="glyph" aria-hidden="true">圖</span>
+      <div class="txt">
+        <span class="kicker">Zhi Guides · Wanted</span>
+        <h1>Mapa de Estratégia</h1>
+      </div>
+    </div>
+
+    <div class="top-spacer"></div>
+
+    <div class="top-actions">
+      <label class="toggle" title="Mostra ou esconde os objetivos desenhados na arte do mapa">
+        <input type="checkbox" id="objToggle" />
+        <span class="track" aria-hidden="true"></span>
+        <span>Objetivos</span>
+        <span class="state" id="objState">ON</span>
+      </label>
+      <button class="tbtn tbtn-clear" id="clearBtn" title="Remove todas as PTs do mapa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+        Limpar
+      </button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <div class="map-panel" id="mapPanel">
+      <div id="stageWrap"><div id="stage"></div></div>
+      <div class="map-hint" id="mapHint">
+        Arraste uma PT da lista para o mapa
+        <small>Depois é só mover. Duplo-clique num token para remover.</small>
+      </div>
+    </div>
+
+    <aside class="roster">
+      <div class="roster-head">
+        <span class="h">PTs</span>
+        <span class="sub"><b id="placedCount">0</b> no mapa</span>
+      </div>
+      <div class="pt-list" id="ptList"><!-- chips injetados --></div>
+      <div class="roster-foot">
+        <div class="legend">
+          <div class="li"><span class="sw" style="background:#89abc5"></span>Tank</div>
+          <div class="li"><span class="sw" style="background:#E25B52"></span>DPS</div>
+          <div class="li"><span class="sw" style="background:#4CC9A4"></span>Healer</div>
+        </div>
+        <p class="foot-note">
+          Etapa 1: posicionar as PTs. Nas próximas: fases &amp; cenários, notas, desenho e roster do Discord.
+          <br />Arraste um chip para o mapa · <kbd>duplo-clique</kbd> remove.
+        </p>
+      </div>
+    </aside>
+
+    <div class="mobile-note">
+      <span><b>Só visualização no celular.</b> A edição (arrastar PTs, desenhar) é feita no desktop. O modo apresentação para mobile vem numa próxima etapa.</span>
+    </div>
+  </div>
+
+  <script src="../assets/vendor/konva.min.js"></script>
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
