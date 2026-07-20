@@ -681,12 +681,118 @@ header::after,.part::before,footer::before{background:linear-gradient(90deg,var(
 .status-call b{font-family:'Oswald';font-size:12px;text-transform:uppercase;color:var(--board-2)}.status-call span{font-size:13.5px;color:var(--muted)}
 .source-note{margin-top:18px;padding:13px 15px;border-left:2px solid var(--board);background:var(--board-soft);font-size:13px;color:var(--muted)}
 
+/* Checklist do Playbook: o conteúdo usa labels diretos, sem itens de lista. */
+#checklist .sec-side{display:flex;align-items:center;gap:7px}
+#checklist .ckl>label{min-width:0;border-top:1px solid var(--line)}
+#checklist .ckl>label span{min-width:0;overflow-wrap:anywhere}
+#checklist .ckl input:focus-visible{outline:2px solid var(--gold-2);outline-offset:3px}
+
 @media(max-width:900px){.doctrine-grid,.role-grid,.objective-grid,.state-grid{grid-template-columns:1fr 1fr}.hero-stats{grid-template-columns:1fr 1fr}.timeline{grid-template-columns:1fr}.timeline::before{left:19px;right:auto;top:0;bottom:0;width:1px;height:auto}.time-node{padding:0 0 0 48px}.time-node::before{top:3px;left:12px}}
+@media(max-width:820px){
+  #checklist .sec-head{flex-wrap:wrap}
+  #checklist .sec-side{display:flex;width:100%;margin-left:25px;padding-top:0;justify-content:flex-start}
+}
 @media(max-width:640px){
   .doctrine-grid,.role-grid,.objective-grid,.state-grid,.compare{grid-template-columns:1fr}
   .formation-track{grid-template-columns:1fr}.formation-track>div:not(:last-child)::after{content:'↓';right:auto;left:50%;top:auto;bottom:-13px;transform:translateX(-50%)}
   .matrix{min-width:720px}.hero-stats{gap:7px}.hero-stat{padding:10px 11px}
   .bands{grid-template-columns:1fr}.band{min-height:68px}.status-call{grid-template-columns:1fr;gap:4px}
+}
+
+/* ===== Otimização visual v2 · hierarquia, densidade e mobile ===== */
+
+/* Abertura mais informativa sem aumentar a altura. */
+.hero-stat{position:relative;min-height:72px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.12)}
+.hero-stat::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:var(--board)}
+.hero-stat:nth-child(1)::before{background:var(--board)}
+.hero-stat:nth-child(2)::before{background:var(--gold)}
+.hero-stat:nth-child(3)::before{background:var(--jade)}
+.hero-stat:nth-child(4)::before{background:var(--crimson)}
+.hero-stat span{line-height:1.35}
+.board-seal{box-shadow:0 12px 32px rgba(0,0,0,.14);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+header+.panel{position:relative;border-color:var(--board-line);background:linear-gradient(105deg,var(--board-soft),rgba(16,19,27,.82) 54%);box-shadow:0 16px 44px rgba(0,0,0,.13)}
+header+.panel::before{content:'';position:absolute;left:-1px;top:16px;bottom:16px;width:2px;background:linear-gradient(var(--gold),var(--board),var(--jade))}
+
+/* Cada capítulo ganha uma assinatura própria e reconhecível no scroll. */
+.front{--part-accent:var(--board);--part-soft:var(--board-soft);--part-line:var(--board-line);margin-top:72px;padding:34px 38px 30px;border-color:var(--part-line);background:linear-gradient(115deg,var(--part-soft),transparent 56%),var(--ink-2);box-shadow:0 22px 58px rgba(0,0,0,.16)}
+.front::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--part-accent),transparent 76%)}
+#parte-1,#parte-5{--part-accent:var(--board);--part-soft:var(--board-soft);--part-line:var(--board-line)}
+#parte-2{--part-accent:var(--gold);--part-soft:var(--gold-soft);--part-line:var(--gold-line)}
+#parte-3,#parte-6{--part-accent:var(--jade);--part-soft:var(--jade-soft);--part-line:var(--jade-line)}
+#parte-4{--part-accent:var(--crimson);--part-soft:var(--crimson-soft);--part-line:var(--crimson-line)}
+#apendice{--part-accent:var(--muted-2);--part-soft:rgba(139,149,170,.07);--part-line:var(--line-3)}
+.front .cjk,.front .fp-k{color:var(--part-accent)}
+.front .fp-chips{margin-top:18px}
+.front .fp-chips a{border-color:var(--part-line);background:rgba(9,11,16,.34)}
+.front .fp-chips a:hover{color:var(--text);border-color:var(--part-accent);background:var(--part-soft)}
+
+/* O rail lateral replica as cores dos capítulos. */
+.rail a{--rail-accent:var(--board);--rail-soft:var(--board-soft);--rail-line:var(--board-line)}
+.rail a:nth-of-type(2){--rail-accent:var(--gold);--rail-soft:var(--gold-soft);--rail-line:var(--gold-line)}
+.rail a:nth-of-type(3),.rail a:nth-of-type(6){--rail-accent:var(--jade);--rail-soft:var(--jade-soft);--rail-line:var(--jade-line)}
+.rail a:nth-of-type(4){--rail-accent:var(--crimson);--rail-soft:var(--crimson-soft);--rail-line:var(--crimson-line)}
+.rail a:nth-of-type(7){--rail-accent:var(--muted-2);--rail-soft:rgba(139,149,170,.08);--rail-line:var(--line-3)}
+.rail a:hover .nd{border-color:var(--rail-line)}
+.rail a.on .nd{border-color:var(--rail-accent);background:var(--rail-soft)}
+.rail a.on .nd b{color:var(--rail-accent)}
+
+/* Menos repetição visual: cartões mais legíveis e seções mais compactas. */
+section{padding-top:40px;scroll-margin-top:72px}
+.sec-head{margin-bottom:18px}
+.doctrine-card,.role-card,.objective-card,.state-card,.compare>div,.protocol>li{box-shadow:0 10px 30px rgba(0,0,0,.10)}
+.doctrine-card,.role-card,.objective-card,.state-card{padding:17px 18px}
+.card-k{display:flex;align-items:center;gap:7px}
+.card-k::before{content:'';width:5px;height:5px;flex:0 0 5px;border-radius:50%;background:currentColor;opacity:.72}
+.callout{position:relative;overflow:hidden;padding-left:20px;box-shadow:0 12px 34px rgba(0,0,0,.10)}
+.callout::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--board)}
+.callout.atk::before{background:var(--gold)}
+.callout.def::before{background:var(--jade)}
+.callout.warn::before{background:var(--crimson)}
+.protocol>li{transition:border-color var(--t-fast),background var(--t-fast)}
+
+/* Tabelas viram blocos consistentes e permanecem consultáveis no touch. */
+.table-scroll{margin:18px 0;border:1px solid var(--line-2);background:rgba(16,19,27,.62);scrollbar-width:thin;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.table-scroll .matrix{margin:0}
+.matrix th,.matrix td{border-width:0 1px 1px 0}
+.matrix tr:last-child td{border-bottom:0}
+.matrix th:last-child,.matrix td:last-child{border-right:0}
+
+@media(hover:hover){
+  .hero-stat,.doctrine-card,.role-card,.objective-card,.state-card,.compare>div{transition:transform var(--t-med),border-color var(--t-fast),background var(--t-fast)}
+  .hero-stat:hover,.doctrine-card:hover,.role-card:hover,.objective-card:hover,.state-card:hover,.compare>div:hover{transform:translateY(-2px);border-color:var(--board-line)}
+  .protocol>li:hover{border-color:var(--board-line);background:linear-gradient(90deg,var(--board-soft),var(--ink-2) 42%)}
+}
+
+@media(max-width:820px){
+  section{padding-top:34px}
+  .front{margin-top:52px;padding:26px 22px 23px}
+  .front .fp-chips{margin-top:15px;gap:6px}
+  .front .fp-chips a{padding:5px 11px}
+}
+
+@media(max-width:640px){
+  body::before{opacity:.22}
+  .hero-scene svg path{filter:none}
+  header{padding-bottom:24px}
+  section{padding-top:31px}
+  .sec-head{gap:12px;margin-bottom:15px}
+  .sec-note{font-size:13.5px;line-height:1.55}
+  .hero-stat{min-height:66px;padding:10px 11px}
+  .doctrine-grid,.role-grid,.objective-grid,.state-grid{gap:9px;margin:14px 0}
+  .doctrine-card,.role-card,.objective-card,.state-card,.compare>div{padding:15px 16px}
+  .callout{margin:14px 0;padding:15px 16px 15px 18px}
+  .protocol{gap:6px}.protocol>li{padding:11px 12px}
+  .table-scroll{margin:15px 0}
+  .matrix th,.matrix td{padding:10px 11px}
+  .matrix th:first-child,.matrix td:first-child{position:sticky;left:0;z-index:2;min-width:150px;box-shadow:8px 0 16px rgba(0,0,0,.20)}
+  .matrix th:first-child{z-index:3;background:#18202a}
+  .matrix td:first-child{background:#11151e}
+  .bands{padding:10px;gap:6px}
+  .board-seal{max-width:100%;white-space:normal;line-height:1.35}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hero-stat,.doctrine-card,.role-card,.objective-card,.state-card,.compare>div,.protocol>li{transition:none!important}
 }
 
 
@@ -882,7 +988,7 @@ header::after,.part::before,footer::before{background:linear-gradient(90deg,var(
 
   <section id="checklist">
     <div class="sec-head"><div class="sec-bar"></div><div><div class="sec-title">Checklist pré-guerra</div><div class="sec-note">Fica salvo neste navegador e não perde marcação ao trocar o idioma.</div></div><div class="sec-side"><span id="ck-prog">0/16</span> · <button class="copybtn" id="ck-reset" type="button">resetar</button></div></div>
-    <div class="cklist reveal" id="ckl">
+    <div class="ckl reveal" id="ckl">
       <label><input type="checkbox" data-ck="board"><span><b>Board montado</b> — cinco da PT na mesma fileira.</span></label>
       <label><input type="checkbox" data-ck="symbols"><span><b>Símbolos e jungles</b> marcados por classe e cor.</span></label>
       <label><input type="checkbox" data-ck="mission"><span><b>Missão e casa da PT</b> confirmadas.</span></label>
