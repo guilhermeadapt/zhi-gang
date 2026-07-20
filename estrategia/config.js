@@ -37,21 +37,30 @@ const WWM = {
    * um tipo desenhado (jungle). up: default no cenário Start.
    */
   objetivos: [
-    { id: 'boss_n',   grupo: 'Boss',   rotulo: 'Boss / Nirvana (Norte)', icone: 'boss',       x: 0.50, y: 0.11 },
-    { id: 'boss_s',   grupo: 'Boss',   rotulo: 'Boss / Nirvana (Sul)',   icone: 'boss',       x: 0.495, y: 0.885 },
-    { id: 'ganso',    grupo: 'Ganso',  rotulo: 'Ganso',                  icone: 'goose_blue', x: 0.50, y: 0.50 },
-    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)',         icone: 'tree_blue',  x: 0.175, y: 0.47 },
-    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)',         icone: 'tree_red',   x: 0.825, y: 0.47 },
-    { id: 'torre_o',  grupo: 'Torres', rotulo: 'Torre Oeste',            icone: 'tower_blue', x: 0.085, y: 0.47 },
-    { id: 'torre_l',  grupo: 'Torres', rotulo: 'Torre Leste',            icone: 'tower_red',  x: 0.915, y: 0.47 },
-    { id: 'torre_n',  grupo: 'Torres', rotulo: 'Torre Norte',            icone: 'tower_blue', x: 0.50, y: 0.20 },
-    { id: 'torre_s',  grupo: 'Torres', rotulo: 'Torre Sul',              icone: 'tower_red',  x: 0.50, y: 0.79 },
-    { id: 'jg_no',    grupo: 'Jungle', rotulo: 'Jungle NO',              icone: 'jungle',     x: 0.35, y: 0.28 },
-    { id: 'jg_ne',    grupo: 'Jungle', rotulo: 'Jungle NE',              icone: 'jungle',     x: 0.65, y: 0.28 },
-    { id: 'jg_so',    grupo: 'Jungle', rotulo: 'Jungle SO',              icone: 'jungle',     x: 0.35, y: 0.70 },
-    { id: 'jg_se',    grupo: 'Jungle', rotulo: 'Jungle SE',              icone: 'jungle',     x: 0.65, y: 0.70 },
+    // 3 torres por lado (top / mid / bot) — Oeste (ataque) e Leste (defesa)
+    { id: 'torre_top_o', grupo: 'Torres', rotulo: 'Torre Top (O)', icone: 'tower_blue', x: 0.34, y: 0.31 },
+    { id: 'torre_mid_o', grupo: 'Torres', rotulo: 'Torre Mid (O)', icone: 'tower_blue', x: 0.25, y: 0.47 },
+    { id: 'torre_bot_o', grupo: 'Torres', rotulo: 'Torre Bot (O)', icone: 'tower_blue', x: 0.34, y: 0.63 },
+    { id: 'torre_top_l', grupo: 'Torres', rotulo: 'Torre Top (L)', icone: 'tower_red',  x: 0.66, y: 0.31 },
+    { id: 'torre_mid_l', grupo: 'Torres', rotulo: 'Torre Mid (L)', icone: 'tower_red',  x: 0.75, y: 0.47 },
+    { id: 'torre_bot_l', grupo: 'Torres', rotulo: 'Torre Bot (L)', icone: 'tower_red',  x: 0.66, y: 0.63 },
+    // ganso nos 2 lados
+    { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.40, y: 0.52 },
+    { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.60, y: 0.52 },
+    // árvore nos 2 lados — nasce no portão da base e caminha até o portão inimigo (333m)
+    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.09, y: 0.47, caminho: { a: [0.09, 0.47], b: [0.91, 0.47] } },
+    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.91, y: 0.47, caminho: { a: [0.91, 0.47], b: [0.09, 0.47] } },
+    // boss / nirvana norte e sul
+    { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.50, y: 0.11 },
+    { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.495, y: 0.885 },
+    // jungle nos 4 cantos internos
+    { id: 'jg_no', grupo: 'Jungle', rotulo: 'Jungle NO', icone: 'jungle', x: 0.30, y: 0.24 },
+    { id: 'jg_ne', grupo: 'Jungle', rotulo: 'Jungle NE', icone: 'jungle', x: 0.70, y: 0.24 },
+    { id: 'jg_so', grupo: 'Jungle', rotulo: 'Jungle SO', icone: 'jungle', x: 0.30, y: 0.72 },
+    { id: 'jg_se', grupo: 'Jungle', rotulo: 'Jungle SE', icone: 'jungle', x: 0.70, y: 0.72 },
   ],
   objetivosGrupos: ['Torres', 'Ganso', 'Árvore', 'Boss', 'Jungle'],
+  treeMeters: 333,   // distância total do caminho da árvore (base -> portão inimigo)
 
   /* --- funções (mesmas cores do site Zhi Guides) ------------------------- */
   roleColors: {
@@ -89,7 +98,7 @@ const WWM = {
 
   // paleta das ferramentas de desenho
   drawColors: ['#D9A441', '#E25B52', '#89ABC5', '#4CC9A4', '#F2F2F2', '#111318'],
-  drawWidths: [3, 5, 8],
+  drawWidths: [2, 3, 5],
 
   /* --- comportamento default --------------------------------------------- */
   defaults: {

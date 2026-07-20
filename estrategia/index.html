@@ -106,6 +106,9 @@
     .pt-popover ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
     .pt-popover li{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text)}
     .pt-popover li .rl{width:7px;height:7px;border-radius:50%;flex:none}
+    .pt-popover li.mem{cursor:grab}
+    .pt-popover li.mem:active{cursor:grabbing}
+    .pt-popover li.mem:hover{color:var(--gold-2)}
     .pt-popover li.res{color:var(--muted)}
     .pt-popover li .tag{margin-left:auto;font-size:9px;font-family:var(--disp);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
     .pt-popover li .detach{margin-left:auto;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);
@@ -167,8 +170,29 @@
     .legend .li{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted)}
     .legend .sw{width:10px;height:10px;border-radius:3px;flex:none}
 
+    /* zoom hint */
+    .zoom-hint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6;pointer-events:none;
+      font-family:var(--disp);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+      background:rgba(10,12,17,.7);border:1px solid var(--line-soft);border-radius:999px;padding:4px 11px;opacity:.75;transition:opacity .3s}
+    body.present .zoom-hint{display:none}
+
+    /* mini navegação (fases ocultas) */
+    .dock-mini{position:absolute;left:14px;bottom:12px;z-index:9;display:flex;align-items:center;gap:6px;
+      background:rgba(12,15,22,.92);border:1px solid var(--line);border-radius:999px;padding:5px 6px;backdrop-filter:blur(4px);box-shadow:0 14px 34px -20px #000}
+    .dock-mini[hidden]{display:none}
+    .dock-mini .dm-nav{width:26px;height:26px;border-radius:50%;border:1px solid var(--line-soft);background:transparent;color:var(--text);cursor:pointer;font-family:var(--disp);font-size:16px;line-height:1}
+    .dock-mini .dm-nav:hover{color:var(--gold);border-color:var(--line)}
+    .dock-mini .dm-name{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.03em;color:var(--text);padding:0 6px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dock-mini .dm-exp{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border:0;border-radius:999px;padding:6px 11px;cursor:pointer;margin-left:2px}
+    body.present .dock-mini{display:none}
+
     /* ---------- DOCK ---------- */
-    .dock{grid-column:1 / span 2;grid-row:2;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d1017,#0a0c11);border-top:1px solid var(--line);min-height:0}
+    .dock{position:relative;grid-column:1 / span 2;grid-row:2;display:flex;flex-direction:column;background:linear-gradient(180deg,#0d1017,#0a0c11);border-top:1px solid var(--line);min-height:0}
+    .dock-collapse{position:absolute;right:12px;top:-13px;z-index:5;font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);background:linear-gradient(180deg,var(--ink-2),#0b0e15);border:1px solid var(--line);border-radius:8px 8px 0 0;border-bottom:0;padding:4px 12px 5px;cursor:pointer;transition:color .15s}
+    .dock-collapse:hover{color:var(--gold)}
+    body.dock-collapsed{--dock-h:0px}
+    body.dock-collapsed .dock{display:none}
     .dock-top{display:flex;align-items:stretch;gap:10px;padding:9px 14px 6px}
     .scene-edit{flex:none;width:196px;display:flex;flex-direction:column;gap:5px}
     .scene-edit .f-name{background:#0b0e15;border:1px solid var(--line-soft);color:var(--text);font-family:var(--disp);font-weight:600;font-size:13px;border-radius:7px;padding:6px 9px;width:100%}
@@ -334,6 +358,7 @@
           <button class="dt" data-tool="linha" title="Linha (L)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 19L19 5"/></svg></button>
           <button class="dt" data-tool="livre" title="Traço livre (D)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3 0 3-6 6-6s3 6 6 6 3-4 6-4"/></svg></button>
           <button class="dt" data-tool="retangulo" title="Área (R)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="1.5"/></svg></button>
+          <button class="dt" data-tool="link" title="Ligar PTs / objetivos (C) — clique em dois para conectar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M8 8a4 4 0 0 0 0 8M16 8a4 4 0 0 1 0 8"/></svg></button>
           <div class="dt-sep"></div>
           <div class="dt-colors" id="dtColors"></div>
           <div class="dt-sep"></div>
@@ -362,6 +387,13 @@
         <div class="pn-body"><span class="pn-phase"><span id="pnPhase">Fase</span><span class="pn-badge" id="pnBadge" hidden></span></span><p class="pn-text" id="pnText">—</p></div>
         <button class="pnav" id="nextBtn" aria-label="Próximo cenário">›</button>
       </div>
+      <div class="dock-mini" id="dockMini" hidden>
+        <button class="dm-nav" id="miniPrev" aria-label="Anterior">‹</button>
+        <span class="dm-name" id="miniName">—</span>
+        <button class="dm-nav" id="miniNext" aria-label="Próximo">›</button>
+        <button class="dm-exp" id="dockExpand" title="Mostrar as fases">▴ Fases</button>
+      </div>
+      <div class="zoom-hint" id="zoomHint">Scroll = zoom · arraste o mapa p/ mover</div>
       <div class="mobile-note"><b>Modo apresentação.</b> A edição é feita no desktop.</div>
     </div>
 
@@ -384,6 +416,7 @@
     </aside>
 
     <section class="dock">
+      <button class="dock-collapse" id="dockCollapse" title="Ocultar as fases (dá mais mapa)">▾ Ocultar fases</button>
       <div class="dock-top">
         <div class="scene-edit">
           <input id="nameInput" class="f-name" placeholder="Nome da fase" />
