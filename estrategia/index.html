@@ -63,6 +63,10 @@
     .tbtn.primary{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     .tbtn.primary:hover{filter:brightness(1.06)}
     .tbtn.ico{padding:7px 9px} .tbtn.ico svg{width:15px;height:15px}
+    .lang-sel{display:inline-flex;border:1px solid var(--line-soft);border-radius:9px;overflow:hidden;flex:none}
+    .lang-sel button{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.05em;color:var(--muted);background:transparent;border:0;padding:7px 9px;cursor:pointer;transition:.15s}
+    .lang-sel button:hover{color:var(--text)}
+    .lang-sel button.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold))}
 
     .present-bar{display:none;align-items:center;gap:14px;flex:1 1 auto;min-width:0}
     .present-bar .pb-title{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
@@ -107,10 +111,25 @@
     .draw-tools .dt.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     .draw-tools .dt svg{width:17px;height:17px}
     .draw-tools .dt-sep{height:1px;background:var(--line-soft);margin:3px 2px}
-    .dt-colors{display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:2px 1px}
-    .dt-colors .sw{width:14px;height:14px;border-radius:4px;cursor:pointer;border:1px solid rgba(255,255,255,.25)}
-    .dt-colors .sw.active{outline:2px solid var(--gold);outline-offset:1px}
     .draw-tools .dt.wide{font-size:12px;font-weight:700;font-family:var(--disp)}
+    .draw-tools{position:absolute}   /* garante contexto p/ flyouts */
+    .dt-cbtn .dt-csw{width:17px;height:17px;border-radius:5px;border:1.5px solid rgba(255,255,255,.4);box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+    .dt-wbtn{font-size:13px;font-weight:700;font-family:var(--disp)}
+    .dt-pop{position:absolute;left:100%;margin-left:8px;background:rgba(12,15,22,.98);border:1px solid var(--line);border-radius:10px;padding:9px;box-shadow:0 18px 45px -18px #000;z-index:20;width:142px}
+    .dt-pop[hidden]{display:none}
+    .dt-sw-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+    .dt-sw-grid .sw{width:100%;aspect-ratio:1;border-radius:5px;cursor:pointer;border:1px solid rgba(255,255,255,.28)}
+    .dt-sw-grid .sw.active{outline:2px solid var(--gold);outline-offset:1px}
+    .dt-hex{display:flex;gap:5px;margin-top:8px}
+    .dt-hex input{flex:1;min-width:0;background:#0b0e15;border:1px solid var(--line-soft);border-radius:6px;color:var(--text);font-family:ui-monospace,Menlo,monospace;font-size:11px;padding:5px 7px}
+    .dt-hex input:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .dt-hex button{flex:none;border:1px solid var(--gold);background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#241a06;border-radius:6px;font-weight:700;padding:0 9px;cursor:pointer}
+    .dt-wpop{width:120px}
+    #dtWidthOpts{display:flex;flex-direction:column;gap:4px}
+    #dtWidthOpts button{display:flex;align-items:center;gap:9px;background:transparent;border:1px solid var(--line-soft);border-radius:7px;padding:7px 9px;cursor:pointer;color:var(--muted);transition:.12s}
+    #dtWidthOpts button:hover{color:var(--text);border-color:var(--line)}
+    #dtWidthOpts button.active{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(217,164,65,.08)}
+    #dtWidthOpts button .wbar{background:currentColor;border-radius:3px;flex:1}
     body.present .draw-tools{display:none}
     /* seletor de ícones (carimbo) */
     .mark-picker{position:absolute;left:62px;top:16px;z-index:9;width:216px;max-height:calc(100vh - 130px);overflow-y:auto;
@@ -151,6 +170,49 @@
     .pt-popover .po-desc{font-size:11.5px;color:var(--gold-2);margin:-2px 0 8px;line-height:1.35}
     .pt-popover .empty{font-size:12px;color:var(--muted);font-style:italic}
     .pt-popover .phint{margin-top:8px;font-size:10px;color:#5f6672;line-height:1.35}
+    .pt-popover .po-link{margin:2px 0 8px;width:100%;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-2);background:rgba(217,164,65,.08);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:7px;padding:7px;cursor:pointer;transition:.14s}
+    .pt-popover .po-link:hover{background:rgba(217,164,65,.16)}
+    .pt-popover .po-hp{margin:2px 0 8px}
+    .pt-popover .po-hp-l{font-family:var(--disp);font-weight:600;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .pt-popover .po-hp-l b{color:var(--gold-2);font-size:11px}
+    .pt-popover .po-range,.icon-menu .im-range{width:100%;accent-color:var(--gold);height:4px;margin-top:5px}
+    /* menu de ícone (objetivo / membro) — HP, vincular, remover */
+    .icon-menu{position:absolute;z-index:15;min-width:190px;max-width:240px;padding:11px 12px;background:rgba(12,15,22,.98);border:1px solid var(--line);border-radius:13px;box-shadow:0 24px 60px -24px #000,inset 0 1px 0 rgba(255,255,255,.04)}
+    .icon-menu .im-hd{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+    .icon-menu .im-hd b{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .icon-menu .im-dot{width:11px;height:11px;border-radius:50%;flex:none}
+    .icon-menu .im-x{flex:none;width:24px;height:24px;border:1px solid var(--line-soft);background:transparent;color:var(--muted);border-radius:6px;cursor:pointer;font-size:12px}
+    .icon-menu .im-x:hover{color:var(--text);border-color:var(--line)}
+    .icon-menu .im-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .icon-menu .im-hp{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+    .icon-menu .im-range{flex:1;min-width:0;accent-color:var(--gold);height:4px}
+    .icon-menu .im-hpv{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;font-size:13px;color:var(--gold-2);min-width:38px;text-align:right}
+    .icon-menu .im-quick{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:11px}
+    .icon-menu .im-quick button{font-family:var(--disp);font-weight:700;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:6px 0;cursor:pointer;transition:.12s}
+    .icon-menu .im-quick button:hover{color:var(--text);border-color:var(--line)}
+    .icon-menu .im-quick button.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .icon-menu .im-actions{display:flex;gap:7px}
+    .icon-menu .im-link{flex:1;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-2);background:rgba(217,164,65,.08);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:7px;padding:8px;cursor:pointer;transition:.14s}
+    .icon-menu .im-link:hover{background:rgba(217,164,65,.16)}
+    .icon-menu .im-del{flex:none;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line-soft);border-radius:7px;padding:8px 12px;cursor:pointer;transition:.14s}
+    .icon-menu .im-del:hover{color:var(--crimson);border-color:color-mix(in srgb,var(--crimson) 50%,transparent)}
+    .icon-menu .im-dead{width:100%;margin-bottom:10px;font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;padding:8px;cursor:pointer;transition:.14s}
+    .icon-menu .im-dead:hover{color:var(--text);border-color:var(--line)}
+    .icon-menu .im-dead.on{color:#fff;background:linear-gradient(180deg,#c74440,#a5322e);border-color:#c74440}
+    .icon-menu .im-buffs{display:flex;flex-direction:column;gap:5px;margin-bottom:11px}
+    .icon-menu .im-buff{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;padding:7px 9px;cursor:pointer;text-align:left;transition:.14s}
+    .icon-menu .im-buff:hover{color:var(--text);border-color:var(--line)}
+    .icon-menu .im-buff.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .icon-menu .im-carry{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px}
+    .icon-menu .im-cchip{display:inline-flex;align-items:center;gap:4px;font-family:var(--disp);font-weight:600;font-size:10.5px;color:var(--gold-2);background:rgba(217,164,65,.1);border:1px solid color-mix(in srgb,var(--gold) 32%,transparent);border-radius:7px;padding:3px 4px 3px 8px}
+    .icon-menu .im-cchip button{width:16px;height:16px;border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:11px;border-radius:4px}
+    .icon-menu .im-cchip button:hover{color:var(--crimson)}
+    .icon-menu .im-cadd{font-family:var(--disp);font-weight:600;font-size:10.5px;color:var(--muted);background:rgba(255,255,255,.03);border:1px dashed var(--line-soft);border-radius:7px;padding:5px 10px;cursor:pointer}
+    .icon-menu .im-cadd:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .icon-menu .im-note{width:100%;resize:vertical;min-height:56px;background:#0b0e15;border:1px solid var(--line-soft);border-radius:8px;color:var(--text);font-family:var(--body);font-size:12.5px;line-height:1.35;padding:8px 10px;margin-bottom:9px}
+    .icon-menu .im-note:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    body.linking #stageWrap{cursor:crosshair}
+    body.linking #stage{cursor:crosshair}
 
     /* painel de objetivos */
     .obj-panel{position:absolute;right:14px;top:12px;z-index:40;width:250px;max-height:calc(100vh - 90px);overflow-y:auto;
@@ -316,46 +378,100 @@
     .view-toggle{display:inline-flex;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
     .view-toggle button{font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:transparent;border:0;padding:6px 11px;cursor:pointer}
     .view-toggle button.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold))}
-    /* montador visual (board) */
-    .board-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line-soft)}
+    /* montador visual (board) — tela grande, jogadores em linhas, ícones de classe */
+    #rosterModal.board-mode .modal{width:min(1400px,98vw);max-height:96vh;height:96vh}
+    #rosterModal.board-mode .paste-col{display:none}
+    #rosterModal.board-mode .modal-body{grid-template-columns:1fr}
+    /* board-mode: enxuga o topo pra caber as 6 PTs */
+    #rosterModal.board-mode .bd-legend{display:none}
+    #rosterModal.board-mode .modal > header{padding:9px 16px}
+    #rosterModal.board-mode .modal > header .msub{display:none}
+    #rosterModal.board-mode .grid-head{padding:7px 16px}
+    #rosterModal.board-mode .board-tools{padding:7px 16px}
+    .board-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line-soft)}
     .board-tools[hidden]{display:none}
-    .bd-legend{font-size:11px;color:var(--muted);line-height:1.4;flex:1;min-width:160px}
-    .roster-board{overflow-y:auto;flex:1 1 auto;padding:12px 14px;display:flex;flex-direction:column;gap:12px}
+    .bd-legend{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;min-width:200px}
+    .roster-board{overflow-y:auto;flex:1 1 auto;padding:14px 16px;display:flex;flex-direction:column;gap:14px}
     .roster-board[hidden]{display:none}
-    .bd-zone{border:1px solid var(--line-soft);border-radius:11px;background:rgba(255,255,255,.015);padding:9px 10px;transition:.12s}
+    .bd-zone{border:1px solid var(--line-soft);border-radius:12px;background:rgba(255,255,255,.015);padding:10px 11px;transition:.12s}
     .bd-zone.over{border-color:var(--gold);background:rgba(217,164,65,.08);box-shadow:inset 0 0 0 1px var(--gold)}
-    .bd-zh{display:flex;align-items:center;gap:7px;font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
-    .bd-c{font-variant-numeric:tabular-nums}
+    .bd-zh{display:flex;align-items:center;gap:7px;font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+    .bd-c{font-variant-numeric:tabular-nums;margin-left:auto;color:var(--text)}
     .bd-pool{background:rgba(217,164,65,.05);border-color:var(--line)}
     .bd-res{background:rgba(137,171,197,.05)}
-    .bd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .bd-pt-h{display:flex;align-items:center;gap:7px;margin-bottom:7px;font-family:var(--disp)}
-    .bd-pt-h .dot{width:10px;height:10px;border-radius:50%;flex:none}
-    .bd-pt-h b{font-weight:700;font-size:12px;letter-spacing:.08em}
-    .bd-pt-h .bd-comp{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
-    .bd-pt-h .bd-n{margin-left:auto;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+    /* pool e reservas gerais: chips em colunas responsivas (compacto) */
+    .bd-pool .bd-chips,.bd-res .bd-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
+    /* board com 6 PTs de uma vez: coluna esquerda (arrastar) + grade 3x2 */
+    .bd-layout{display:flex;gap:14px;align-items:flex-start}
+    .bd-side{width:246px;flex:none;display:flex;flex-direction:column;gap:12px;position:sticky;top:0}
+    .bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:1fr}
+    #rosterModal.board-mode .bd-grid{flex:1;min-width:0;grid-template-columns:repeat(3,1fr)}
+    .bd-zh .bd-allres{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:6px;padding:3px 7px;cursor:pointer;margin-left:auto}
+    .bd-zh .bd-allres:hover{color:var(--gold);border-color:var(--line)}
+    .bd-pool .bd-zh .bd-c{margin-left:6px}
+    .bd-chip .c-rep{font-size:12.5px;color:#f0c66b;font-weight:700;line-height:1}
+    .bd-pop .bp-p{font-family:var(--disp);font-weight:700;font-size:10.5px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 9px;cursor:pointer}
+    .bd-pop .bp-p:hover{color:var(--text);border-color:var(--line)}
+    .bd-pop .bp-p.active{color:#0b0e15;background:var(--rc,#D9A441);border-color:var(--rc,#D9A441)}
+    .bd-pop .bp-rep.active{color:#241a06;background:linear-gradient(180deg,#f0c66b,#D9A441);border-color:var(--gold)}
+    @media(max-width:860px){.bd-layout{flex-direction:column}.bd-side{width:auto;position:static}#rosterModal.board-mode .bd-grid{grid-template-columns:1fr}.bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+    /* grade de PTs */
+    .bd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+    .bd-pt-card{border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.022),rgba(255,255,255,.005));padding:11px 12px;display:flex;flex-direction:column;gap:8px}
+    .bd-pt-h{display:flex;align-items:center;gap:8px;font-family:var(--disp)}
+    .bd-pt-h .dot{width:11px;height:11px;border-radius:50%;flex:none}
+    .bd-pt-h b{font-weight:700;font-size:13.5px;letter-spacing:.06em}
+    .bd-pt-h .bd-comp{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .bd-pt-h .bd-n{margin-left:auto;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:700}
     .bd-pt-h .bd-n.over{color:var(--crimson)}
-    .bd-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:30px}
-    .bd-empty{font-size:11px;color:#5c6474;font-style:italic;align-self:center}
-    .bd-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:8px;cursor:grab;
-      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));border:1px solid var(--line-soft);
-      font-size:12.5px;color:var(--text);user-select:none;max-width:100%}
-    .bd-chip:hover{border-color:color-mix(in srgb,var(--rc) 55%,transparent)}
+    .bd-obs{width:100%;background:#0b0e15;border:1px solid var(--line-soft);border-radius:8px;color:var(--gold-2);font-family:var(--body);font-size:12px;padding:7px 9px}
+    .bd-obs::placeholder{color:#5c6474}
+    .bd-obs:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .bd-sub{font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#6b7385;margin-top:2px}
+    .bd-sub.res{color:#5f7488}
+    .bd-pt-card{padding:9px 10px;gap:6px}
+    .bd-pt-card .bd-zone{padding:5px 6px;border-radius:9px}
+    .bd-ptres{background:rgba(137,171,197,.04)}
+    .bd-ptres .bd-zh.mini{margin-bottom:0;font-size:8.5px;color:#5f7488}
+    .bd-ptres.slim{padding:3px 8px;opacity:.7}
+    .bd-ptres.slim .bd-zh.mini{margin:0}
+    /* observações escondidas atrás do lápis */
+    .bd-obs-btn{margin-left:6px;flex:none;width:22px;height:22px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);border-radius:6px;cursor:pointer;font-size:12px;line-height:1}
+    .bd-obs-btn:hover{color:var(--gold);border-color:var(--line)}
+    .bd-obs-btn.has{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 40%,transparent);background:rgba(217,164,65,.08)}
+    .bd-obs-line{font-size:11.5px;color:var(--gold-2);line-height:1.3;cursor:text;padding:1px 2px}
+    .bd-obs{display:none}
+    .bd-pt-card.obs-edit .bd-obs{display:block}
+    .bd-pt-card.obs-edit .bd-obs-line{display:none}
+    /* chips agora são LINHAS de largura total */
+    .bd-chips{display:flex;flex-direction:column;gap:5px;min-height:30px}
+    .bd-empty{font-size:11px;color:#5c6474;font-style:italic;padding:5px 4px}
+    .bd-chip{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:9px;cursor:grab;width:100%;
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.012));border:1px solid var(--line-soft);
+      border-left:3px solid var(--rc);font-size:13px;color:var(--text);user-select:none}
+    .bd-chip:hover{border-color:color-mix(in srgb,var(--rc) 55%,transparent);background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
     .bd-chip.dragging{opacity:.4}
-    .bd-chip .c-role{width:8px;height:8px;border-radius:50%;background:var(--rc);flex:none}
-    .bd-chip .c-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
-    .bd-chip .c-tags{display:inline-flex;align-items:center;gap:3px}
-    .bd-chip .c-tag2{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 4px}
-    .bd-chip .c-flag{font-size:12px;line-height:1}
-    /* popover de tarja/flags */
-    .bd-pop{position:fixed;z-index:80;width:230px;background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:11px;padding:11px;box-shadow:0 20px 50px -20px #000;backdrop-filter:blur(4px)}
+    .bd-chip .c-grip{color:#4d5566;font-size:11px;letter-spacing:-2px;flex:none;cursor:grab}
+    .bd-chip .c-ico{width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:50%;background:#0b0e15;
+      border:1.5px solid var(--rc);box-shadow:inset 0 0 8px -4px var(--rc)}
+    .bd-chip .c-ico img{width:16px;height:16px;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+    .bd-chip .c-ico.dotonly{background:var(--rc)}
+    .bd-chip .c-ico.sm{width:16px;height:16px;border-width:1px}.bd-chip .c-ico.sm img{width:11px;height:11px}
+    .bd-chip .c-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+    .bd-chip .c-role{font-family:var(--disp);font-weight:700;font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--rc);flex:none}
+    .bd-chip .c-tags{display:inline-flex;align-items:center;gap:4px;flex:none}
+    .bd-chip .c-tag2{flex:none;font-family:var(--disp);font-weight:600;font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:#c9a24a;background:rgba(217,164,65,.1);border:1px solid color-mix(in srgb,var(--gold) 28%,transparent);border-radius:4px;padding:1px 4px;max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .bd-chip .c-flag{font-size:13px;line-height:1}
+    /* popover de função/tarja/flags */
+    .bd-pop{position:fixed;z-index:80;width:236px;background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:11px;padding:11px;box-shadow:0 20px 50px -20px #000;backdrop-filter:blur(4px)}
     .bd-pop[hidden]{display:none}
-    .bd-pop .bp-nm{font-family:var(--disp);font-weight:700;font-size:12px;color:var(--text);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .bd-pop .bp-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:8px 0 5px}
+    .bd-pop .bp-nm{font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--text);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bd-pop .bp-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:9px 0 5px}
     .bd-pop .bp-row{display:flex;flex-wrap:wrap;gap:5px}
-    .bd-pop .bp-t,.bd-pop .bp-f{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 8px;cursor:pointer}
-    .bd-pop .bp-t:hover,.bd-pop .bp-f:hover{color:var(--text);border-color:var(--line)}
+    .bd-pop .bp-t,.bd-pop .bp-f,.bd-pop .bp-r{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 9px;cursor:pointer}
+    .bd-pop .bp-t:hover,.bd-pop .bp-f:hover,.bd-pop .bp-r:hover{color:var(--text);border-color:var(--line)}
     .bd-pop .bp-t.active,.bd-pop .bp-f.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .bd-pop .bp-r.active{color:#0b0e15;background:var(--rc);border-color:var(--rc)}
     /* badges de tarja/flag nas listas de membros (popover/editor) */
     .mb-tag{font-family:var(--disp);font-weight:600;font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 4px;margin-left:5px;vertical-align:1px}
     .mb-flag{font-size:12px;margin-left:3px;vertical-align:-1px}
@@ -424,30 +540,51 @@
 
     /* ---------- MOBILE ---------- */
     .mobile-note{display:none}
+    /* ---------- mobile EDITÁVEL (não é só visualização) ---------- */
     @media (max-width:860px){
       :root{--dock-h:0px;--topbar-h:52px}
-      .roster,.dock,.draw-tools,.obj-panel{display:none}
       .workspace{grid-template-columns:1fr;grid-template-rows:1fr}
-      .top-actions #seedBtn,.top-actions #rosterBtn,.top-actions #objBtn,.top-actions #exportBtn,.top-actions #importBtn,.top-actions #shareBtn{display:none}
-      body:not(.present) .present-note{display:flex}
-      body:not(.present) .map-hint{display:none}
-      .present-bar{display:flex}.top-actions{display:none}.back{display:inline-flex}
       .modal-body{grid-template-columns:1fr}
-      /* topbar compacta no mobile (não quebra linha) */
-      .topbar{gap:9px;padding:0 10px}
-      .brand{gap:8px}
-      .brand .glyph{width:34px;height:34px;font-size:21px;border-radius:9px}
+      .mobile-note{display:none}
+      body:not(.present) .map-hint{display:none}
+      /* topbar compacta com AÇÕES essenciais (edição no toque) */
+      .topbar{gap:7px;padding:0 9px}
+      .brand .glyph{width:32px;height:32px;font-size:20px;border-radius:9px}
+      .brand .txt{display:none}
       .brand .kicker{display:none}
-      .brand h1{font-size:15px}
-      .back{font-size:11px;padding:6px 10px 6px 8px}
+      .back{font-size:0;padding:7px 9px}
+      .back .ar{font-size:17px;margin:0}
+      .lang-sel{flex:none}
+      .lang-sel button{padding:6px 7px;font-size:10px}
+      .present-bar{display:none}
+      .top-actions{display:flex;gap:6px}
+      .top-actions #seedBtn,.top-actions #exportBtn,.top-actions #importBtn,.top-actions #resetBtn,.top-actions #shareBtn,.top-actions #fasesBtn{display:none}
+      .top-actions .tbtn > span[data-i18n]{display:none}
+      .top-actions .tbtn{padding:7px 9px}
+      /* ferramentas de desenho: barra flutuante à esquerda */
+      .draw-tools{display:flex;left:8px;top:8px;z-index:16}
+      /* painel de objetivos vira folha inferior */
+      .obj-panel{display:block;left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:54vh}
+      /* roster (lista de PTs pra posicionar) vira gaveta lateral */
+      .roster{position:fixed;top:var(--topbar-h);right:0;bottom:0;width:min(320px,87vw);z-index:46;
+        transform:translateX(103%);transition:transform .22s ease;border-left:1px solid var(--line);display:flex}
+      body.mob-roster .roster{transform:none;box-shadow:-24px 0 70px -22px #000}
+      .roster-mclose{display:grid}
+      /* dock de fases vira folha inferior quando aberto */
+      .dock{left:8px;right:8px;top:auto;bottom:8px;max-height:58vh}
       .map-panel{padding:6px}
       #stageWrap{border-radius:12px}
+      body:not(.present) .present-note{display:none}
+      /* menus/popover cabem melhor */
+      .pt-popover,.icon-menu{max-width:min(260px,90vw)}
     }
+    .roster-mclose{display:none;position:absolute;top:10px;right:12px;width:28px;height:28px;place-items:center;
+      border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);border-radius:7px;cursor:pointer;z-index:2}
   </style>
 </head>
 <body>
   <header class="topbar">
-    <a class="back" href="../" aria-label="Voltar ao menu Zhi Guides"><span class="ar" aria-hidden="true">‹</span> Menu</a>
+    <a class="back" href="../" aria-label="Menu"><span class="ar" aria-hidden="true">‹</span> <span data-i18n="menu">Menu</span></a>
     <div class="brand">
       <span class="glyph" aria-hidden="true">圖</span>
       <div class="txt"><span class="kicker">Zhi Guides · Wanted</span><h1>Game Plan</h1></div>
@@ -459,33 +596,34 @@
       <span class="pb-prog" id="pbProg">1 / 1</span>
     </div>
     <div class="top-spacer"></div>
+    <div class="lang-sel" id="langSel"><button type="button" data-lang="pt">PT</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button></div>
     <div class="top-actions">
       <button class="tbtn" id="fasesBtn" title="Mostrar / ocultar as fases (embaixo)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="4" height="6" rx="1"/><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="6" width="4" height="14" rx="1"/></svg>
-        Fases
+        <span data-i18n="phases">Fases</span>
       </button>
-      <button class="tbtn" id="objBtn" title="Escolher quais objetivos estão 'up' neste cenário">
+      <button class="tbtn" id="objBtn" title="Objetivos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
-        Objetivos
+        <span data-i18n="objectives">Objetivos</span>
       </button>
-      <button class="tbtn" id="rosterBtn" title="Montar o roster a partir da inscrição do Discord">
+      <button class="tbtn" id="rosterBtn" title="Roster">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
-        Roster
+        <span data-i18n="roster">Roster</span>
       </button>
       <button class="tbtn ico" id="exportBtn" title="Exportar o plano como JSON" aria-label="Exportar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg></button>
       <button class="tbtn ico" id="importBtn" title="Importar um plano de JSON" aria-label="Importar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M5 21h14"/></svg></button>
       <input type="file" id="importFile" accept="application/json,.json" hidden />
       <button class="tbtn ico" id="resetBtn" title="Resetar — começar um plano do zero" aria-label="Resetar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
-      <button class="tbtn" id="shareBtn" title="Copiar um link que abre este plano (posições, desenhos, objetivos e roster)">
+      <button class="tbtn" id="shareBtn" title="Compartilhar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
-        Compartilhar
+        <span data-i18n="share">Compartilhar</span>
       </button>
-      <button class="tbtn primary" id="presentBtn" title="Modo apresentação (tela cheia)">
+      <button class="tbtn primary" id="presentBtn" title="Apresentar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20v12H2z"/><path d="M8 20h8M12 16v4"/></svg>
-        Apresentar
+        <span data-i18n="present">Apresentar</span>
       </button>
     </div>
-    <button class="tbtn primary" id="exitBtn" style="display:none" title="Sair da apresentação (Esc)">Sair ✕</button>
+    <button class="tbtn primary" id="exitBtn" style="display:none" title="Sair"><span data-i18n="exit">Sair</span> ✕</button>
   </header>
 
   <div class="workspace">
@@ -500,13 +638,18 @@
           <button class="dt" data-tool="livre" title="Traço livre (D)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3 0 3-6 6-6s3 6 6 6 3-4 6-4"/></svg></button>
           <button class="dt" data-tool="retangulo" title="Área (R)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="1.5"/></svg></button>
           <button class="dt" data-tool="marca" title="Ícone / marcador (I)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></button>
+          <button class="dt" data-tool="nota" title="Anotação / post-it (N)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v11l-5 5H4z"/><path d="M20 15h-5v5"/></svg></button>
           <div class="dt-sep"></div>
-          <div class="dt-colors" id="dtColors"></div>
+          <button class="dt dt-cbtn" id="dtColorBtn" title="Cor do traço"><span class="dt-csw" id="dtCurColor"></span></button>
+          <button class="dt dt-wbtn" id="dtWidthBtn" title="Espessura do traço">▬</button>
           <div class="dt-sep"></div>
-          <button class="dt wide" id="dtWidth" title="Espessura do traço">▬</button>
           <button class="dt" id="undoBtn" title="Desfazer (Ctrl+Z)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg></button>
           <button class="dt" id="redoBtn" title="Refazer (Ctrl+Y)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h1"/></svg></button>
           <button class="dt" id="clearDraw" title="Limpar desenhos e ícones do cenário"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>
+          <div class="dt-sep"></div>
+          <button class="dt on" id="namesTgl" title="Mostrar / ocultar nomes dos players"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2M9 5v14M7 19h4"/><path d="M14 19l3-8 3 8M15 16h4"/></svg></button>
+          <div class="dt-pop" id="dtColorPop" hidden><div class="dt-sw-grid" id="dtColors"></div><div class="dt-hex"><input id="dtHex" maxlength="7" placeholder="#hex" spellcheck="false" /><button id="dtHexApply" title="Aplicar">✓</button></div></div>
+          <div class="dt-pop dt-wpop" id="dtWidthPop" hidden><div id="dtWidthOpts"></div></div>
         </div>
 
         <div class="mark-picker" id="markPicker" hidden>
@@ -515,17 +658,18 @@
         </div>
 
         <div class="map-hint" id="mapHint">
-          Arraste uma PT da lista para o mapa
-          <small>Cada cenário é uma "foto": posições, desenhos e objetivos up. Crie fases e navegue embaixo.</small>
+          <span data-i18n="dragHint">Arraste uma PT da lista para o mapa</span>
+          <small data-i18n="dragHint2">Cada cenário é uma "foto": posições, desenhos e objetivos up. Crie fases e navegue embaixo.</small>
         </div>
       </div>
 
       <div class="pt-popover" id="ptPopover" hidden></div>
+      <div class="icon-menu" id="iconMenu" hidden></div>
 
       <div class="obj-panel" id="objPanel" hidden>
-        <header><b>Objetivos up</b><span>neste cenário</span><button class="x" id="objClose" aria-label="Fechar">✕</button></header>
+        <header><b data-i18n="objUp">Objetivos up</b><span data-i18n="objInScene">neste cenário</span><button class="x" id="objClose" aria-label="Fechar">✕</button></header>
         <div class="obj-groups" id="objGroups"></div>
-        <footer>Marque o que está "up" nesta fase. No mapa, arraste cada ícone para posicioná-lo (vale para todos os cenários). <button type="button" id="objDump" class="obj-dump">Copiar posições</button></footer>
+        <footer><span data-i18n="objFoot">Marque o que está "up" nesta fase. No mapa, arraste cada ícone para posicioná-lo (vale para todos os cenários).</span> <button type="button" id="objDump" class="obj-dump" data-i18n="copyPos">Copiar posições</button></footer>
       </div>
 
       <div class="present-note" id="presentNote">
@@ -548,11 +692,12 @@
     </div>
 
     <aside class="roster">
-      <div class="roster-head"><span class="h">PTs</span><button class="edit" id="editRosterBtn">Editar roster</button></div>
+      <button class="roster-mclose" id="rosterMClose" aria-label="Fechar">✕</button>
+      <div class="roster-head"><span class="h" data-i18n="pts">PTs</span><button class="edit" id="editRosterBtn" data-i18n="editRoster">Editar roster</button></div>
       <div class="roster-sum" id="rosterSum">
-        <span class="st"><b id="sumEsc">0</b> escalados</span>
-        <span class="st"><b id="sumRes">0</b> reservas</span>
-        <span class="st"><b id="sumAus">0</b> ausentes</span>
+        <span class="st"><b id="sumEsc">0</b> <span data-i18n="scaled">escalados</span></span>
+        <span class="st"><b id="sumRes">0</b> <span data-i18n="reserves">reservas</span></span>
+        <span class="st"><b id="sumAus">0</b> <span data-i18n="absent">ausentes</span></span>
       </div>
       <div class="pt-list" id="ptList"></div>
       <div class="roster-foot">
@@ -590,41 +735,41 @@
     <div class="modal" role="dialog" aria-modal="true" aria-label="Roster">
       <header>
         <span class="mglyph" aria-hidden="true">名</span>
-        <div><h3>Roster</h3><div class="msub">Cole a montagem do Board e ajuste PT / reservas</div></div>
+        <div><h3 data-i18n="rosterTitle">Roster</h3><div class="msub" data-i18n="rosterSub">Cole a montagem do Board e ajuste PT / reservas</div></div>
         <button class="x" id="rosterClose" aria-label="Fechar">✕</button>
       </header>
       <div class="modal-body">
         <div class="paste-col">
-          <label for="rosterPaste">Montagem do Discord</label>
+          <label for="rosterPaste" data-i18n="discordMontage">Montagem do Discord</label>
           <textarea id="rosterPaste" placeholder='Cole aqui o JSON do raid-helper (o bloco { "date":..., "signUps":[...] }) OU texto simples:&#10;PT1 — Fulano (Tank), Ciclano (DPS)&#10;PT2 — …&#10;Reservas — Sicrano (DPS)'></textarea>
-          <button class="rbtn gold" id="parseBtn" style="justify-content:center">Processar</button>
+          <button class="rbtn gold" id="parseBtn" style="justify-content:center" data-i18n="process">Processar</button>
           <div class="parse-msg" id="parseMsg"></div>
           <p class="hint">Detecta o JSON do raid-helper (Ranged/Melee → DPS; Absence → ausente; Bench → reserva). Depois ajuste na grade e distribua nas PTs.</p>
-          <button class="rbtn" id="autoBtn" style="justify-content:center" title="Distribui os escalados nas PTs equilibrando funções">⚙ Auto-montar PTs</button>
+          <button class="rbtn" id="autoBtn" style="justify-content:center" title="Distribui os escalados nas PTs equilibrando funções" data-i18n="autoMount">⚙ Auto-montar PTs</button>
         </div>
         <div class="grid-col">
           <div class="grid-head">
-            <span class="gt"><b id="gEsc">0</b> escalados</span>
-            <span class="gt"><b id="gRes">0</b> reservas</span>
-            <span class="gt"><b id="gAus">0</b> ausentes</span>
+            <span class="gt"><b id="gEsc">0</b> <span data-i18n="scaled">escalados</span></span>
+            <span class="gt"><b id="gRes">0</b> <span data-i18n="reserves">reservas</span></span>
+            <span class="gt"><b id="gAus">0</b> <span data-i18n="absent">ausentes</span></span>
             <span class="top-spacer"></span>
             <span class="gt" id="gComp"></span>
-            <div class="view-toggle" id="viewToggle"><button type="button" data-view="grid" class="active">Tabela</button><button type="button" data-view="board">Board</button></div>
+            <div class="view-toggle" id="viewToggle"><button type="button" data-view="grid" class="active" data-i18n="tabTable">Tabela</button><button type="button" data-view="board" data-i18n="tabBoard">Board</button></div>
           </div>
-          <div class="roster-grid" id="rosterGrid"><div class="rrow head"><span>Jogador</span><span>Função</span><span>PT</span><span>Res.</span><span></span></div></div>
+          <div class="roster-grid" id="rosterGrid"><div class="rrow head"><span data-i18n="colPlayer">Jogador</span><span data-i18n="colRole">Função</span><span data-i18n="colPT">PT</span><span data-i18n="colRes">Res.</span><span></span></div></div>
           <div class="board-tools" id="boardTools" hidden>
-            <button class="rbtn gold" id="bdAuto" style="padding:8px 12px">⚙ Auto-preencher</button>
-            <button class="rbtn" id="bdClearPt" style="padding:8px 12px">Esvaziar PTs</button>
-            <span class="bd-legend">Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.</span>
+            <button class="rbtn gold" id="bdAuto" style="padding:8px 12px" data-i18n="bdAuto">⚙ Auto-preencher</button>
+            <button class="rbtn" id="bdClearPt" style="padding:8px 12px" data-i18n="bdEmpty">Esvaziar PTs</button>
+            <span class="bd-legend" data-i18n-html="bdLegend">Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.</span>
           </div>
           <div class="roster-board" id="rosterBoard" hidden></div>
         </div>
       </div>
       <footer>
-        <button class="rbtn" id="rosterClear2">Limpar tudo</button>
+        <button class="rbtn" id="rosterClear2" data-i18n="clearAll">Limpar tudo</button>
         <span class="fspacer"></span>
         <span class="parse-msg" id="saveMsg" style="min-width:120px;text-align:right"></span>
-        <button class="rbtn gold" id="rosterSave">Salvar roster</button>
+        <button class="rbtn gold" id="rosterSave" data-i18n="saveRoster">Salvar roster</button>
       </footer>
     </div>
     <div class="bd-pop" id="bdPop" hidden></div>
@@ -644,9 +789,9 @@
   <!-- compartilhar: mostra o link copiável -->
   <div class="modal-backdrop" id="shareModal" hidden>
     <div class="confirm-box">
-      <p style="margin-bottom:10px">Link do plano — copie e mande no Discord:</p>
+      <p style="margin-bottom:10px" id="shareTitleP" data-i18n="shareTitle">Link do plano — copie e mande no Discord:</p>
       <input id="shareUrl" class="pe-desc" readonly style="width:100%;font-size:11px;font-family:ui-monospace,monospace" />
-      <div class="confirm-actions" style="margin-top:14px"><button class="rbtn" id="shareClose">Fechar</button><button class="rbtn gold" id="shareCopy">Copiar</button></div>
+      <div class="confirm-actions" style="margin-top:14px"><button class="rbtn" id="shareClose" data-i18n="close">Fechar</button><button class="rbtn gold" id="shareCopy" data-i18n="copy">Copiar</button></div>
     </div>
   </div>
 
@@ -673,7 +818,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=18"></script>
-  <script src="./app.js?v=18"></script>
+  <script src="./config.js?v=29"></script>
+  <script src="./app.js?v=29"></script>
 </body>
 </html>

@@ -32,7 +32,26 @@ const WWM = {
       tank:       '../assets/vendor-ref/tank.png',
       dps:        '../assets/vendor-ref/dps.png',
       healer:     '../assets/vendor-ref/healer.png',
+      // Outpost (estrutura ao lado do Boss) — arte própria da guild.
+      outpost:    '../assets/vendor-ref/outpost.png',
     },
+  },
+
+  // buffs ativáveis por objetivo (torre / ganso / árvore). Mostram um selo no ícone.
+  //  escudo 🛡️ = City Protection (invulnerável) ; espada 🗡️ = buff de dano.
+  objBuffs: {
+    tower: [
+      { id: 'cityprot', icon: '🛡️', label: 'City Protection' },
+      { id: 'ygap',     icon: '🗡️', label: 'You Got a Problem' },
+    ],
+    goose: [
+      { id: 'cityprot', icon: '🛡️', label: 'City Protection' },
+      { id: 'hairpull', icon: '🗡️', label: 'Hair Pulling' },
+    ],
+    tree: [
+      { id: 'sprint',    icon: '💨', label: 'Sprint' },
+      { id: 'relentless', icon: '🐗', label: 'Relentless' },
+    ],
   },
 
   // ícone de classe por função (tokens de membro destacado)
@@ -40,6 +59,8 @@ const WWM = {
 
   // galeria de ícones para as PTs (emoji) — o estrategista escolhe no editor
   ptIcons: ['⚔️', '🛡️', '🏹', '💥', '🎯', '🌳', '🦢', '👑', '🔥', '❄️', '⚡', '🩸', '🚩', '🐉', '💀', '⭐'],
+  // ícones de PT usando os assets do jogo (chaves de assets.icons): Tank, DPS, Healer, Boss, Ganso, Árvore, JG, Outpost
+  ptIconAssets: ['tank', 'dps', 'healer', 'boss', 'goose_blue', 'tree_blue', 'jungle', 'outpost'],
 
   // paleta de ícones "carimbáveis" no mapa (ferramenta Ícone):
   //  assets = arte do jogo (chaves de assets.icons); emojis = símbolos livres
@@ -72,8 +93,9 @@ const WWM = {
     { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.222, y: 0.509, movel: true, flip: true },
     { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.793, y: 0.503, movel: true },
     // árvore nasce no MESMO ponto do ganso e caminha até o portão inimigo (333m) — MÓVEL
-    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.195, y: 0.511, movel: true, flip: true, caminho: { a: [0.195, 0.511], b: [0.831, 0.511] } },
-    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.831, y: 0.511, movel: true, caminho: { a: [0.831, 0.511], b: [0.195, 0.511] } },
+    // a árvore anda do seu ponto até o PORTÃO inimigo — 333m. Portão calibrado pela guild.
+    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.195, y: 0.511, movel: true, flip: true, caminho: { a: [0.195, 0.511], b: [0.7628, 0.5069] } },
+    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.831, y: 0.511, movel: true, caminho: { a: [0.831, 0.511], b: [0.2542, 0.5069] } },
     // boss / nirvana nas 2 PONTAS (norte e sul) — FIXO
     { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.438, y: 0.136 },
     { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.594, y: 0.869 },
@@ -107,7 +129,7 @@ const WWM = {
   // 3 dps (até 4). O resto vira reserva.
   ptComp: { Healer: { alvo: 1, max: 2 }, Tank: { alvo: 1, max: 2 }, DPS: { alvo: 3, max: 4 } },
   // tarja secundária (2ª função) que alguns players têm
-  secondaryTags: ['Carry', 'Twin', 'Box', 'Strategic'],
+  secondaryTags: ['Tank', 'Healer', 'DPS', 'Fan', 'Carry', 'Twin', 'Box', 'Strategic'],
   // características especiais (um player pode ter mais de uma)
   specialFlags: [
     { id: 'commander', label: 'Commander', icon: '👑' },
@@ -141,8 +163,8 @@ const WWM = {
   ],
 
   // paleta das ferramentas de desenho — cores fortes (boa leitura sobre o mapa)
-  drawColors: ['#FFC21A', '#FF3B30', '#2E7DFF', '#17C964', '#FFFFFF', '#0A0A0A'],
-  drawWidths: [2, 3, 5],
+  drawColors: ['#FFC21A', '#FF8A1E', '#FF3B30', '#E84393', '#B06BFF', '#2E7DFF', '#22C1E8', '#17C964', '#00B894', '#8A6D3B', '#FFFFFF', '#0A0A0A'],
+  drawWidths: [2, 3, 5, 8],
 
   /* --- comportamento default --------------------------------------------- */
   defaults: {
