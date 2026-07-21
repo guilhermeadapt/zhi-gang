@@ -267,10 +267,10 @@
       <div class="ev-note">Aperte assim que o inimigo <b>usar</b> — conta o cooldown até ele poder usar de novo. Atalhos de teclado <b>1/2/3</b> (aba focada), <b>✎</b> ajusta o tempo, aperte de novo pra reiniciar.</div>
       <div class="cd-bg">
         <div class="cd-bg-row">
-          <span class="s-name">Tecla de mídia (2º plano) <small>⏯/⏭ reinicia o City Protection mesmo com a aba minimizada</small></span>
+          <span class="s-name">Teclas de mídia (2º plano) <small>reiniciam os cooldowns mesmo com a aba minimizada — ⏭ City · ⏮ Sprint · ⏯ Relentless</small></span>
           <div class="switch" id="swMediaKey" role="switch"></div>
         </div>
-        <div class="cd-bg-hint" id="mediaHint" hidden>Ativado ✓ Use a tecla <b>⏭/⏯</b> do teclado. Pra acionar pelo <b>F5</b> do jogo, mapeie no AutoHotkey: <code>F5::Send {Media_Next}</code></div>
+        <div class="cd-bg-hint" id="mediaHint" hidden>Ativado ✓ Nenhum navegador captura tecla comum (F5) fora de foco — só teclas de mídia. Pra acionar pelo teclado do jogo, mapeie no AutoHotkey:<br><code>F5::Send {Media_Next}</code> City · <code>F6::Send {Media_Prev}</code> Sprint · <code>F7::Send {Media_Play_Pause}</code> Relentless</div>
       </div>
     </section>
     </div><!-- /main-left -->
@@ -523,13 +523,15 @@
           if(!silentAudio){ silentAudio=new Audio(makeSilentWav()); silentAudio.loop=true; }
           silentAudio.play().catch(function(){ showToast('⚠️','Não consegui ativar (permita áudio)', true); });
           if('mediaSession' in navigator){
-            try{ navigator.mediaSession.metadata=new MediaMetadata({ title:'War Timer — City Protection', artist:'Wanted GvG' }); }catch(e){}
+            try{ navigator.mediaSession.metadata=new MediaMetadata({ title:'War Timer — Cooldowns', artist:'Wanted GvG' }); }catch(e){}
             try{ navigator.mediaSession.playbackState='playing'; }catch(e){}
-            ['play','pause','nexttrack','previoustrack','stop'].forEach(function(a){
-              try{ navigator.mediaSession.setActionHandler(a, function(){ if(silentAudio) silentAudio.play().catch(function(){}); try{ navigator.mediaSession.playbackState='playing'; }catch(e){} pressCd('city', true); }); }catch(e){}
+            // cada tecla de mídia dispara um cooldown diferente
+            var actMap={ nexttrack:'city', previoustrack:'sprint', play:'relentless', pause:'relentless', stop:'city' };
+            Object.keys(actMap).forEach(function(a){
+              try{ navigator.mediaSession.setActionHandler(a, function(){ if(silentAudio) silentAudio.play().catch(function(){}); try{ navigator.mediaSession.playbackState='playing'; }catch(e){} pressCd(actMap[a], true); }); }catch(e){}
             });
           }
-          showToast('⏭️','Atalho de mídia ativo — City Protection', false);
+          showToast('⏭️','Atalho de mídia ativo', false);
         }catch(e){ showToast('⚠️','Não suportado neste navegador', true); mediaOn=false; $('swMediaKey').classList.remove('on'); $('mediaHint').hidden=true; }
       } else {
         if(silentAudio){ try{ silentAudio.pause(); }catch(e){} }
