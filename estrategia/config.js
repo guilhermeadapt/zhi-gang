@@ -41,6 +41,13 @@ const WWM = {
   // galeria de ícones para as PTs (emoji) — o estrategista escolhe no editor
   ptIcons: ['⚔️', '🛡️', '🏹', '💥', '🎯', '🌳', '🦢', '👑', '🔥', '❄️', '⚡', '🩸', '🚩', '🐉', '💀', '⭐'],
 
+  // paleta de ícones "carimbáveis" no mapa (ferramenta Ícone):
+  //  assets = arte do jogo (chaves de assets.icons); emojis = símbolos livres
+  markIcons: {
+    assets: ['tower_blue', 'tower_red', 'goose_blue', 'goose_red', 'tree_blue', 'tree_red', 'boss', 'jungle', 'tank', 'dps', 'healer'],
+    emojis: ['⚔️', '🛡️', '🏹', '🎯', '⚠️', '❗', '❌', '✅', '⭐', '🔥', '💥', '💀', '🚩', '📍', '👑', '🐉', '🩸', '🛑', '⬆️', '⬇️', '⬅️', '➡️', '🔵', '🔴', '🟢', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'],
+  },
+
   /* --- catálogo de objetivos -------------------------------------------
    * Cada objetivo pode ser ligado/desligado ("up") por cenário e reposicionado
    * arrastando (posição salva no projeto). Posições iniciais são estimativas
