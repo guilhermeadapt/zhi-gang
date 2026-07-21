@@ -344,46 +344,68 @@
     .view-toggle{display:inline-flex;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
     .view-toggle button{font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:transparent;border:0;padding:6px 11px;cursor:pointer}
     .view-toggle button.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold))}
-    /* montador visual (board) */
-    .board-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line-soft)}
+    /* montador visual (board) — tela grande, jogadores em linhas, ícones de classe */
+    #rosterModal.board-mode .modal{width:min(1400px,98vw);max-height:94vh}
+    #rosterModal.board-mode .paste-col{display:none}
+    #rosterModal.board-mode .modal-body{grid-template-columns:1fr}
+    .board-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line-soft)}
     .board-tools[hidden]{display:none}
-    .bd-legend{font-size:11px;color:var(--muted);line-height:1.4;flex:1;min-width:160px}
-    .roster-board{overflow-y:auto;flex:1 1 auto;padding:12px 14px;display:flex;flex-direction:column;gap:12px}
+    .bd-legend{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;min-width:200px}
+    .roster-board{overflow-y:auto;flex:1 1 auto;padding:14px 16px;display:flex;flex-direction:column;gap:14px}
     .roster-board[hidden]{display:none}
-    .bd-zone{border:1px solid var(--line-soft);border-radius:11px;background:rgba(255,255,255,.015);padding:9px 10px;transition:.12s}
+    .bd-zone{border:1px solid var(--line-soft);border-radius:12px;background:rgba(255,255,255,.015);padding:10px 11px;transition:.12s}
     .bd-zone.over{border-color:var(--gold);background:rgba(217,164,65,.08);box-shadow:inset 0 0 0 1px var(--gold)}
-    .bd-zh{display:flex;align-items:center;gap:7px;font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
-    .bd-c{font-variant-numeric:tabular-nums}
+    .bd-zh{display:flex;align-items:center;gap:7px;font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+    .bd-c{font-variant-numeric:tabular-nums;margin-left:auto;color:var(--text)}
     .bd-pool{background:rgba(217,164,65,.05);border-color:var(--line)}
     .bd-res{background:rgba(137,171,197,.05)}
-    .bd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .bd-pt-h{display:flex;align-items:center;gap:7px;margin-bottom:7px;font-family:var(--disp)}
-    .bd-pt-h .dot{width:10px;height:10px;border-radius:50%;flex:none}
-    .bd-pt-h b{font-weight:700;font-size:12px;letter-spacing:.08em}
-    .bd-pt-h .bd-comp{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
-    .bd-pt-h .bd-n{margin-left:auto;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+    /* pool e reservas gerais: chips em colunas responsivas (compacto) */
+    .bd-pool .bd-chips,.bd-res .bd-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
+    /* grade de PTs */
+    .bd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+    .bd-pt-card{border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.022),rgba(255,255,255,.005));padding:11px 12px;display:flex;flex-direction:column;gap:8px}
+    .bd-pt-h{display:flex;align-items:center;gap:8px;font-family:var(--disp)}
+    .bd-pt-h .dot{width:11px;height:11px;border-radius:50%;flex:none}
+    .bd-pt-h b{font-weight:700;font-size:13.5px;letter-spacing:.06em}
+    .bd-pt-h .bd-comp{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .bd-pt-h .bd-n{margin-left:auto;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:700}
     .bd-pt-h .bd-n.over{color:var(--crimson)}
-    .bd-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:30px}
-    .bd-empty{font-size:11px;color:#5c6474;font-style:italic;align-self:center}
-    .bd-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:8px;cursor:grab;
-      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));border:1px solid var(--line-soft);
-      font-size:12.5px;color:var(--text);user-select:none;max-width:100%}
-    .bd-chip:hover{border-color:color-mix(in srgb,var(--rc) 55%,transparent)}
+    .bd-obs{width:100%;background:#0b0e15;border:1px solid var(--line-soft);border-radius:8px;color:var(--gold-2);font-family:var(--body);font-size:12px;padding:7px 9px}
+    .bd-obs::placeholder{color:#5c6474}
+    .bd-obs:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .bd-sub{font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#6b7385;margin-top:2px}
+    .bd-sub.res{color:#5f7488}
+    .bd-pt-card .bd-zone{padding:6px 7px;border-radius:9px}
+    .bd-ptres{background:rgba(137,171,197,.04)}
+    /* chips agora são LINHAS de largura total */
+    .bd-chips{display:flex;flex-direction:column;gap:5px;min-height:30px}
+    .bd-empty{font-size:11px;color:#5c6474;font-style:italic;padding:5px 4px}
+    .bd-chip{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:9px;cursor:grab;width:100%;
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.012));border:1px solid var(--line-soft);
+      border-left:3px solid var(--rc);font-size:13px;color:var(--text);user-select:none}
+    .bd-chip:hover{border-color:color-mix(in srgb,var(--rc) 55%,transparent);background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
     .bd-chip.dragging{opacity:.4}
-    .bd-chip .c-role{width:8px;height:8px;border-radius:50%;background:var(--rc);flex:none}
-    .bd-chip .c-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
-    .bd-chip .c-tags{display:inline-flex;align-items:center;gap:3px}
-    .bd-chip .c-tag2{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 4px}
-    .bd-chip .c-flag{font-size:12px;line-height:1}
-    /* popover de tarja/flags */
-    .bd-pop{position:fixed;z-index:80;width:230px;background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:11px;padding:11px;box-shadow:0 20px 50px -20px #000;backdrop-filter:blur(4px)}
+    .bd-chip .c-grip{color:#4d5566;font-size:11px;letter-spacing:-2px;flex:none;cursor:grab}
+    .bd-chip .c-ico{width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:50%;background:#0b0e15;
+      border:1.5px solid var(--rc);box-shadow:inset 0 0 8px -4px var(--rc)}
+    .bd-chip .c-ico img{width:16px;height:16px;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+    .bd-chip .c-ico.dotonly{background:var(--rc)}
+    .bd-chip .c-ico.sm{width:16px;height:16px;border-width:1px}.bd-chip .c-ico.sm img{width:11px;height:11px}
+    .bd-chip .c-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+    .bd-chip .c-role{font-family:var(--disp);font-weight:700;font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--rc);flex:none}
+    .bd-chip .c-tags{display:inline-flex;align-items:center;gap:4px;flex:none}
+    .bd-chip .c-tag2{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 5px}
+    .bd-chip .c-flag{font-size:13px;line-height:1}
+    /* popover de função/tarja/flags */
+    .bd-pop{position:fixed;z-index:80;width:236px;background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:11px;padding:11px;box-shadow:0 20px 50px -20px #000;backdrop-filter:blur(4px)}
     .bd-pop[hidden]{display:none}
-    .bd-pop .bp-nm{font-family:var(--disp);font-weight:700;font-size:12px;color:var(--text);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .bd-pop .bp-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:8px 0 5px}
+    .bd-pop .bp-nm{font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--text);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bd-pop .bp-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:9px 0 5px}
     .bd-pop .bp-row{display:flex;flex-wrap:wrap;gap:5px}
-    .bd-pop .bp-t,.bd-pop .bp-f{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 8px;cursor:pointer}
-    .bd-pop .bp-t:hover,.bd-pop .bp-f:hover{color:var(--text);border-color:var(--line)}
+    .bd-pop .bp-t,.bd-pop .bp-f,.bd-pop .bp-r{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 9px;cursor:pointer}
+    .bd-pop .bp-t:hover,.bd-pop .bp-f:hover,.bd-pop .bp-r:hover{color:var(--text);border-color:var(--line)}
     .bd-pop .bp-t.active,.bd-pop .bp-f.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .bd-pop .bp-r.active{color:#0b0e15;background:var(--rc);border-color:var(--rc)}
     /* badges de tarja/flag nas listas de membros (popover/editor) */
     .mb-tag{font-family:var(--disp);font-weight:600;font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 4px;margin-left:5px;vertical-align:1px}
     .mb-flag{font-size:12px;margin-left:3px;vertical-align:-1px}
@@ -725,7 +747,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=21"></script>
-  <script src="./app.js?v=21"></script>
+  <script src="./config.js?v=22"></script>
+  <script src="./app.js?v=22"></script>
 </body>
 </html>

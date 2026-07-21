@@ -23,7 +23,7 @@
       dragHint:'Arraste uma PT da lista para o mapa', dragHint2:'Cada cenário é uma "foto": posições, desenhos e objetivos up. Crie fases e navegue embaixo.',
       pts:'PTs', editRoster:'Editar roster', scaled:'escalados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defesa', drag:'ARRASTE', noMembers:'sem membros', onMap:'No mapa', dragShort:'Arraste', tapShort:'Tocar',
       rosterTitle:'Roster', rosterSub:'Cole a montagem do Board e ajuste PT / reservas', discordMontage:'Montagem do Discord', process:'Processar', autoMount:'⚙ Auto-montar PTs', clearAll:'Limpar tudo', saveRoster:'Salvar roster',
-      tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', bdLegend:'Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.',
+      tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', bdLegend:'Arraste cada jogador para a PT, para as <b>reservas da PT</b> ou reservas gerais. Clique num jogador para função, tarja e flags. Alvo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas da PT', genReserves:'Reservas gerais', obsPh:'Observações da PT…', roleLbl:'Função',
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
       shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover',
@@ -35,7 +35,7 @@
       dragHint:'Arrastra una PT de la lista al mapa', dragHint2:'Cada escena es una "foto": posiciones, dibujos y objetivos activos. Crea fases y navega abajo.',
       pts:'PTs', editRoster:'Editar roster', scaled:'convocados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defensa', drag:'ARRASTRA', noMembers:'sin miembros', onMap:'En el mapa', dragShort:'Arrastra', tapShort:'Tocar',
       rosterTitle:'Roster', rosterSub:'Pega la formación del Board y ajusta PT / reservas', discordMontage:'Formación del Discord', process:'Procesar', autoMount:'⚙ Auto-armar PTs', clearAll:'Limpiar todo', saveRoster:'Guardar roster',
-      tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', bdLegend:'Objetivo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · el resto va a reserva. Arrastra a los jugadores; haz clic en uno para tarja/flags.',
+      tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', bdLegend:'Arrastra cada jugador a la PT, a las <b>reservas de la PT</b> o reservas generales. Haz clic en un jugador para función, tarja y flags. Objetivo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas de la PT', genReserves:'Reservas generales', obsPh:'Observaciones de la PT…', roleLbl:'Función',
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
       shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover',
@@ -47,7 +47,7 @@
       dragHint:'Drag a PT from the list onto the map', dragHint2:'Each scene is a "snapshot": positions, drawings and objectives up. Create phases and navigate below.',
       pts:'PTs', editRoster:'Edit roster', scaled:'assigned', reserves:'reserves', absent:'absent', atk:'Attack', def:'Defense', drag:'DRAG', noMembers:'no members', onMap:'On map', dragShort:'Drag', tapShort:'Tap',
       rosterTitle:'Roster', rosterSub:'Paste the Board sign-up and adjust PT / reserves', discordMontage:'Discord sign-up', process:'Process', autoMount:'⚙ Auto-build PTs', clearAll:'Clear all', saveRoster:'Save roster',
-      tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', bdLegend:'Target per PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · the rest go to reserves. Drag players; click one for tag/flags.',
+      tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', bdLegend:'Drag each player to the PT, to the <b>PT reserves</b> or general reserves. Click a player for role, tag and flags. Target: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Starters', ptReserves:'PT reserves', genReserves:'General reserves', obsPh:'PT notes…', roleLbl:'Role',
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
       shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move',
@@ -491,7 +491,7 @@
 
   // ---- ícones carimbados no mapa (marcas) ----
   let markSel = { kind: 'asset', val: (CFG.markIcons && CFG.markIcons.assets && CFG.markIcons.assets[0]) || 'boss' };
-  function markSize() { return Math.max(16, W * 0.034); }
+  function markSize() { return Math.max(11, W * 0.02); }
   function renderMarks() {
     markLayer.destroyChildren();
     const list = (cur() ? cur().marcas : []) || [], ms = markSize();
@@ -606,50 +606,66 @@
     rosterView = v; if (viewToggle) viewToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
     const board = v === 'board';
     rosterGrid.hidden = board; boardTools.hidden = !board; rosterBoard.hidden = !board;
+    rosterModal.classList.toggle('board-mode', board);
     if (bdPop) bdPop.hidden = true;
     if (board) renderBoard();
   }
   function bdFlagsHTML(p) { return (p.flags || []).map(fid => { const f = (CFG.specialFlags || []).find(x => x.id === fid); return f ? '<span class="c-flag" title="' + esc(f.label) + '">' + f.icon + '</span>' : ''; }).join(''); }
+  function classIcoHTML(funcao, sm) { const key = (CFG.classIcons || {})[funcao]; const src = key && CFG.assets && CFG.assets.icons ? CFG.assets.icons[key] : ''; const cls = 'c-ico' + (sm ? ' sm' : ''); return src ? '<span class="' + cls + '" style="--rc:' + roleColor(funcao) + '"><img src="' + src + '" alt="' + funcao + '"></span>' : '<span class="' + cls + ' dotonly" style="--rc:' + roleColor(funcao) + '"></span>'; }
+  function byRole(arr) { return arr.slice().sort((a, b) => (CFG.roleOrder.indexOf(a.funcao) - CFG.roleOrder.indexOf(b.funcao)) || a.nome.localeCompare(b.nome)); }
   function bdChip(p) {
     const tag2 = p.tag2 ? '<span class="c-tag2">' + esc(p.tag2) + '</span>' : '';
     return '<div class="bd-chip" draggable="true" data-id="' + p.id + '" style="--rc:' + roleColor(p.funcao) + '">'
-      + '<span class="c-role" title="' + p.funcao + '"></span><span class="c-name">' + esc(p.nome) + '</span>'
+      + '<span class="c-grip">⋮⋮</span>' + classIcoHTML(p.funcao)
+      + '<span class="c-name">' + esc(p.nome) + '</span><span class="c-role">' + p.funcao + '</span>'
       + '<span class="c-tags">' + tag2 + bdFlagsHTML(p) + '</span></div>';
   }
   function bdZone(zoneId, label, chips, cls, extra) {
     return '<div class="bd-zone ' + (cls || '') + '" data-zone="' + zoneId + '"><div class="bd-zh">' + label + (extra || '') + '</div>'
-      + '<div class="bd-chips">' + (chips.length ? chips.map(bdChip).join('') : '<span class="bd-empty">—</span>') + '</div></div>';
+      + '<div class="bd-chips">' + (chips.length ? chips.map(bdChip).join('') : '<span class="bd-empty">' + t('dropHere') + '</span>') + '</div></div>';
   }
   function renderBoard() {
     if (!rosterBoard) return;
     const active = rosterDraft.filter(p => !p.ausente);
-    const pool = active.filter(p => !p.pt && !p.reserva);
-    const res = active.filter(p => p.reserva);
+    const pool = byRole(active.filter(p => !p.pt && !p.reserva));
+    const gres = byRole(active.filter(p => !p.pt && p.reserva));
     let html = bdZone('pool', t('available'), pool, 'bd-pool', ' <span class="bd-c">' + pool.length + '</span>');
     html += '<div class="bd-grid">';
     PT_IDS.forEach(pid => {
-      const party = partyById.get(pid), mem = active.filter(x => x.pt === pid);
-      const c = { Tank: 0, Healer: 0, DPS: 0 }; mem.forEach(m => c[m.funcao]++);
-      const head = '<span class="dot" style="background:' + party.cor + '"></span><b>' + pid + '</b>'
+      const party = partyById.get(pid);
+      const tit = byRole(active.filter(x => x.pt === pid && !x.reserva));
+      const ptres = byRole(active.filter(x => x.pt === pid && x.reserva));
+      const c = { Tank: 0, Healer: 0, DPS: 0 }; tit.forEach(m => c[m.funcao]++);
+      const head = '<span class="dot" style="background:' + party.cor + '"></span><b>' + (state.ptIcon[pid] ? state.ptIcon[pid] + ' ' : '') + pid + '</b>'
         + '<span class="bd-comp">' + c.Tank + 'T · ' + c.Healer + 'H · ' + c.DPS + 'D</span>'
-        + '<span class="bd-n' + (mem.length > CFG.ptSize ? ' over' : '') + '">' + mem.length + '/' + CFG.ptSize + '</span>';
-      html += '<div class="bd-zone bd-pt" data-zone="' + pid + '"><div class="bd-pt-h">' + head + '</div>'
-        + '<div class="bd-chips">' + (mem.length ? mem.map(bdChip).join('') : '<span class="bd-empty">'+t('dropHere')+'</span>') + '</div></div>';
+        + '<span class="bd-n' + (tit.length > CFG.ptSize ? ' over' : '') + '">' + tit.length + '/' + CFG.ptSize + '</span>';
+      const obs = state.ptDesc[pid] || '';
+      html += '<div class="bd-pt-card">'
+        + '<div class="bd-pt-h">' + head + '</div>'
+        + '<input class="bd-obs" data-pt="' + pid + '" placeholder="' + t('obsPh') + '" value="' + esc(obs) + '">'
+        + '<div class="bd-sub">' + t('titulars') + '</div>'
+        + '<div class="bd-zone bd-pt" data-zone="' + pid + '"><div class="bd-chips">' + (tit.length ? tit.map(bdChip).join('') : '<span class="bd-empty">' + t('dropHere') + '</span>') + '</div></div>'
+        + '<div class="bd-sub res">' + t('ptReserves') + '</div>'
+        + '<div class="bd-zone bd-ptres" data-zone="' + pid + '-res"><div class="bd-chips">' + (ptres.length ? ptres.map(bdChip).join('') : '<span class="bd-empty">' + t('dropHere') + '</span>') + '</div></div>'
+        + '</div>';
     });
     html += '</div>';
-    html += bdZone('res', t('reservesLbl'), res, 'bd-res', ' <span class="bd-c">' + res.length + '</span>');
+    html += bdZone('res', t('genReserves'), gres, 'bd-res', ' <span class="bd-c">' + gres.length + '</span>');
     rosterBoard.innerHTML = html;
   }
   function bdMove(id, zone) {
     const p = rosterDraft.find(x => x.id === id); if (!p) return;
     if (zone === 'pool') { p.pt = null; p.reserva = false; }
     else if (zone === 'res') { p.pt = null; p.reserva = true; }
+    else if (typeof zone === 'string' && zone.slice(-4) === '-res' && PT_IDS.includes(zone.slice(0, -4))) { p.pt = zone.slice(0, -4); p.reserva = true; }
     else if (PT_IDS.includes(zone)) { p.pt = zone; p.reserva = false; }
     refreshRoster();
   }
   function openBdPop(id, anchor) {
     const p = rosterDraft.find(x => x.id === id); if (!p || !bdPop) return; bdPopId = id;
-    let html = '<div class="bp-nm">' + esc(p.nome) + '</div><div class="bp-sec">'+t('secTag')+'</div><div class="bp-row">';
+    let html = '<div class="bp-nm">' + esc(p.nome) + '</div><div class="bp-sec">' + t('roleLbl') + '</div><div class="bp-row">';
+    ['Tank', 'Healer', 'DPS'].forEach(fn => { html += '<button class="bp-r' + (p.funcao === fn ? ' active' : '') + '" data-role="' + fn + '" style="--rc:' + roleColor(fn) + '">' + fn + '</button>'; });
+    html += '</div><div class="bp-sec">' + t('secTag') + '</div><div class="bp-row">';
     html += '<button class="bp-t' + (!p.tag2 ? ' active' : '') + '" data-tag="">' + t('tagNone') + '</button>';
     (CFG.secondaryTags || []).forEach(tg => { html += '<button class="bp-t' + (p.tag2 === tg ? ' active' : '') + '" data-tag="' + tg + '">' + esc(tg) + '</button>'; });
     html += '</div><div class="bp-sec">'+t('special')+'</div><div class="bp-row">';
@@ -802,10 +818,12 @@
     rosterBoard.addEventListener('click', e => { const c = e.target.closest('.bd-chip'); if (c) openBdPop(c.dataset.id, c); });
     bdPop.addEventListener('click', e => {
       const p = rosterDraft.find(x => x.id === bdPopId); if (!p) return;
-      const t = e.target.closest('.bp-t'), f = e.target.closest('.bp-f');
-      if (t) { p.tag2 = t.dataset.tag || null; bdPop.querySelectorAll('.bp-t').forEach(x => x.classList.toggle('active', (x.dataset.tag || '') === (p.tag2 || ''))); refreshRoster(); }
+      const r = e.target.closest('.bp-r'), tg = e.target.closest('.bp-t'), f = e.target.closest('.bp-f');
+      if (r) { p.funcao = r.dataset.role; bdPop.querySelectorAll('.bp-r').forEach(x => x.classList.toggle('active', x.dataset.role === p.funcao)); refreshRoster(); }
+      else if (tg) { p.tag2 = tg.dataset.tag || null; bdPop.querySelectorAll('.bp-t').forEach(x => x.classList.toggle('active', (x.dataset.tag || '') === (p.tag2 || ''))); refreshRoster(); }
       else if (f) { const id = f.dataset.flag; p.flags = p.flags || []; const i = p.flags.indexOf(id); if (i >= 0) p.flags.splice(i, 1); else p.flags.push(id); f.classList.toggle('active', p.flags.indexOf(id) >= 0); refreshRoster(); }
     });
+    rosterBoard.addEventListener('input', e => { const o = e.target.closest('.bd-obs'); if (o) { const pid = o.dataset.pt, v = o.value.trim(); if (v) state.ptDesc[pid] = v; else delete state.ptDesc[pid]; saveProject(); renderSidebar(); } });
     document.addEventListener('click', e => { if (bdPop && !bdPop.hidden && !e.target.closest('#bdPop') && !e.target.closest('.bd-chip')) bdPop.hidden = true; });
     rosterClear2.addEventListener('click', async () => { if (await askConfirm('Limpar todos os jogadores?')) { rosterDraft = []; renderGrid(); } });
     // editor de PT
