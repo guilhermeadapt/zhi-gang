@@ -26,9 +26,11 @@
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
+    html{background:var(--ink)}
     body{font-family:var(--body);color:var(--text);min-height:100dvh;-webkit-font-smoothing:antialiased;
       background:radial-gradient(125% 60% at 50% -12%, rgba(217,164,65,.12), transparent 60%),
-                 radial-gradient(90% 50% at 50% 116%, rgba(137,171,197,.06), transparent 70%), var(--ink);}
+                 radial-gradient(90% 50% at 50% 116%, rgba(137,171,197,.06), transparent 70%), var(--ink);
+      background-attachment:fixed;}
     button{font-family:inherit;cursor:pointer}
     input{font-family:inherit}
     ::-webkit-scrollbar{width:9px}
