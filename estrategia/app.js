@@ -29,6 +29,7 @@
   const exportBtn = $('exportBtn'), importBtn = $('importBtn'), importFile = $('importFile'), shareBtn = $('shareBtn'), resetBtn = $('resetBtn'), toastEl = $('toast');
   const shareModal = $('shareModal'), shareUrl = $('shareUrl'), shareCopy = $('shareCopy'), shareClose = $('shareClose');
   const drawTools = $('drawTools'), dtColors = $('dtColors'), dtWidth = $('dtWidth'), undoBtn = $('undoBtn'), redoBtn = $('redoBtn'), clearDraw = $('clearDraw');
+  const markPicker = $('markPicker'), markGrid = $('markGrid');
   const objBtn = $('objBtn'), objPanel = $('objPanel'), objClose = $('objClose'), objGroups = $('objGroups');
   const fasesBtn = $('fasesBtn'), dockCollapse = $('dockCollapse'), dockMini = $('dockMini'), dockExpand = $('dockExpand'), miniName = $('miniName'), miniPrev = $('miniPrev'), miniNext = $('miniNext');
   const confirmModal = $('confirmModal'), confirmMsg = $('confirmMsg'), confirmYes = $('confirmYes'), confirmNo = $('confirmNo');
@@ -46,8 +47,9 @@
   const bgLayer = new Konva.Layer({ listening: false });
   const drawLayer = new Konva.Layer({ listening: false });
   const objLayer = new Konva.Layer();
+  const markLayer = new Konva.Layer();
   const tokenLayer = new Konva.Layer();
-  stage.add(bgLayer, drawLayer, objLayer, tokenLayer);
+  stage.add(bgLayer, drawLayer, objLayer, markLayer, tokenLayer);
   const bgImage = new Konva.Image({ x: 0, y: 0 });
   bgLayer.add(bgImage);
   let W = 10, H = 10, R = 20;
@@ -57,8 +59,8 @@
   function uid() { return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function cur() { return state.scenarios.find(s => s.id === state.currentId) || state.scenarios[0]; }
   function curIndex() { return state.scenarios.findIndex(s => s.id === state.currentId); }
-  function newScenario(o) { return Object.assign({ id: uid(), fase: 'Cenário', nome: 'Novo cenário', condicao: null, tokens: [], desenhos: [], objetivos: {}, objetivoPos: {}, destacados: [], nota: '' }, o || {}); }
-  function isPristine(s) { return s && !(s.tokens || []).length && !(s.desenhos || []).length && !(s.nota || '').trim() && !Object.keys(s.objetivos || {}).length && !(s.destacados || []).length; }
+  function newScenario(o) { return Object.assign({ id: uid(), fase: 'Cenário', nome: 'Novo cenário', condicao: null, tokens: [], desenhos: [], marcas: [], objetivos: {}, objetivoPos: {}, destacados: [], nota: '' }, o || {}); }
+  function isPristine(s) { return s && !(s.tokens || []).length && !(s.desenhos || []).length && !(s.marcas || []).length && !(s.nota || '').trim() && !Object.keys(s.objetivos || {}).length && !(s.destacados || []).length; }
   function clamp01(n) { n = Number(n); return isNaN(n) ? 0 : Math.max(0, Math.min(1, n)); }
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
   function roleColor(f) { return CFG.roleColors[f] || CFG.roleColors.DPS; }
@@ -70,7 +72,7 @@
   mapImg.onload = mapImg.onerror = done; mapImg.src = CFG.assets.map;
   iconKeys.forEach(k => { const im = new Image(); iconImgs[k] = im; im.onload = im.onerror = done; im.src = CFG.assets.icons[k]; });
   function init() {
-    loadProject(); bgImage.image(mapImg); bgLayer.batchDraw(); buildColorSwatches();
+    loadProject(); bgImage.image(mapImg); bgLayer.batchDraw(); buildColorSwatches(); buildMarkPicker();
     dockMini.hidden = false;   // mini-nav sempre visível; painel de Fases começa fechado
     renderSidebar(); renderRail(); loadScenarioIntoUI(); fit(); wireEvents(); maybeLoadShared();
     setTimeout(() => { hintDismissed = true; mapHint.classList.add('hide'); }, 5000);   // aviso some em 5s (definitivo)
@@ -87,7 +89,7 @@
     stage.size({ width: W, height: H });
     stageWrap.style.width = W + 'px'; stageWrap.style.height = H + 'px';
     bgImage.size({ width: W, height: H }); bgLayer.batchDraw();
-    hidePopover(); updateStageDrag(); renderDrawings(); renderObjectives(); renderTokens();
+    hidePopover(); updateStageDrag(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens();
   }
   function clampPos(x, y, s) { const minX = W - W * s, minY = H - H * s; if (s <= 1) return { x: 0, y: 0 }; return { x: Math.min(0, Math.max(minX, x)), y: Math.min(0, Math.max(minY, y)) }; }
   function updateStageDrag() { stage.draggable(stage.scaleX() > 1 && state.tool === 'select'); }
@@ -96,9 +98,9 @@
   function frac() { const p = stage.getPointerPosition(); if (!p) return null; const s = stage.scaleX() || 1; return { xf: clamp01((p.x - stage.x()) / s / W), yf: clamp01((p.y - stage.y()) / s / H) }; }
 
   // ---- undo (cenário inteiro: tokens, desenhos, objetivos, posições, destacados) ----
-  function snap() { const s = cur(); return JSON.stringify({ tokens: s.tokens, desenhos: s.desenhos, objetivos: s.objetivos, objetivoPos: s.objetivoPos, destacados: s.destacados, nota: s.nota }); }
+  function snap() { const s = cur(); return JSON.stringify({ tokens: s.tokens, desenhos: s.desenhos, marcas: s.marcas || [], objetivos: s.objetivos, objetivoPos: s.objetivoPos, destacados: s.destacados, nota: s.nota }); }
   function pushUndo() { const id = cur().id; const st = (undoStacks[id] = undoStacks[id] || []); st.push(snap()); if (st.length > 60) st.shift(); redoStacks[id] = []; }
-  function applySnap(json) { const s = cur(), d = JSON.parse(json); s.tokens = d.tokens; s.desenhos = d.desenhos; s.objetivos = d.objetivos; s.objetivoPos = d.objetivoPos; s.destacados = d.destacados; s.nota = d.nota; loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); if (!objPanel.hidden) renderObjPanel(); saveProject(); }
+  function applySnap(json) { const s = cur(), d = JSON.parse(json); s.tokens = d.tokens; s.desenhos = d.desenhos; s.marcas = d.marcas || []; s.objetivos = d.objetivos; s.objetivoPos = d.objetivoPos; s.destacados = d.destacados; s.nota = d.nota; loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); if (!objPanel.hidden) renderObjPanel(); saveProject(); }
   function doUndo() { const id = cur().id, u = undoStacks[id]; if (!u || !u.length) return; (redoStacks[id] = redoStacks[id] || []).push(snap()); applySnap(u.pop()); }
   function doRedo() { const id = cur().id, r = redoStacks[id]; if (!r || !r.length) return; (undoStacks[id] = undoStacks[id] || []).push(snap()); applySnap(r.pop()); }
 
@@ -290,9 +292,22 @@
   function toggleObjPanel(force) { const show = force != null ? force : objPanel.hidden; if (show) { renderObjPanel(); objPanel.hidden = false; objBtn.classList.add('on'); } else { objPanel.hidden = true; objBtn.classList.remove('on'); } renderObjectives(); }
 
   // ---- desenho ----
-  function toolCursor() { return DRAW.includes(state.tool) ? 'crosshair' : 'default'; }
+  function toolCursor() { return (DRAW.includes(state.tool) || state.tool === 'marca') ? 'crosshair' : 'default'; }
   function buildColorSwatches() { dtColors.innerHTML = ''; CFG.drawColors.forEach(c => { const sw = document.createElement('div'); sw.className = 'sw' + (c === state.drawColor ? ' active' : ''); sw.style.background = c; sw.title = c; sw.dataset.c = c; sw.addEventListener('click', () => { state.drawColor = c; dtColors.querySelectorAll('.sw').forEach(s => s.classList.toggle('active', s.dataset.c === c)); }); dtColors.appendChild(sw); }); }
-  function setTool(t) { state.tool = t; drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t)); const drawing = DRAW.includes(t); tokenLayer.listening(!drawing); objLayer.listening(!drawing); stage.container().style.cursor = toolCursor(); if (drawing) hidePopover(); updateStageDrag(); }
+  function buildMarkPicker() {
+    if (!markGrid) return; const M = CFG.markIcons || { assets: [], emojis: [] };
+    const cell = (kind, val, inner, title) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'mk' + (markSel.kind === kind && markSel.val === val ? ' active' : ''); b.dataset.kind = kind; b.dataset.val = val; b.title = title || val; b.innerHTML = inner; b.addEventListener('click', () => { markSel = { kind, val }; markGrid.querySelectorAll('.mk').forEach(x => x.classList.toggle('active', x.dataset.kind === kind && x.dataset.val === val)); if (state.tool !== 'marca') setTool('marca'); }); return b; };
+    markGrid.innerHTML = '';
+    const hA = document.createElement('div'); hA.className = 'mk-h'; hA.textContent = 'Assets'; markGrid.appendChild(hA);
+    const gA = document.createElement('div'); gA.className = 'mk-row';
+    (M.assets || []).forEach(k => { const src = CFG.assets.icons[k]; if (!src) return; gA.appendChild(cell('asset', k, '<img src="' + src + '" alt="">', k)); });
+    markGrid.appendChild(gA);
+    const hE = document.createElement('div'); hE.className = 'mk-h'; hE.textContent = 'Emojis'; markGrid.appendChild(hE);
+    const gE = document.createElement('div'); gE.className = 'mk-row';
+    (M.emojis || []).forEach(em => gE.appendChild(cell('emoji', em, '<span class="mk-em">' + em + '</span>', em)));
+    markGrid.appendChild(gE);
+  }
+  function setTool(t) { state.tool = t; drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t)); const noHit = DRAW.includes(t) || t === 'marca'; tokenLayer.listening(!noHit); objLayer.listening(!noHit); stage.container().style.cursor = toolCursor(); if (noHit) hidePopover(); if (markPicker) markPicker.hidden = (t !== 'marca'); renderMarks(); updateStageDrag(); }
   function pxPts(pts) { const a = []; pts.forEach(p => { a.push(p[0] * W, p[1] * H); }); return a; }
   function shapeFromDesenho(d) {
     const stroke = d.cor || '#FFC21A', sw = d.largura || 3;
@@ -307,7 +322,41 @@
   function beginDraw() { if (state.present || !DRAW.includes(state.tool)) return; const f = frac(); if (!f) return; live = { tipo: state.tool, pontos: state.tool === 'livre' ? [[f.xf, f.yf]] : [[f.xf, f.yf], [f.xf, f.yf]], cor: state.drawColor, largura: state.drawWidth, shape: null }; live.shape = shapeFromDesenho(live); drawLayer.add(live.shape); drawLayer.batchDraw(); }
   function moveDraw() { if (!live) return; const f = frac(); if (!f) return; if (live.tipo === 'livre') live.pontos.push([f.xf, f.yf]); else live.pontos[1] = [f.xf, f.yf]; live.shape.destroy(); live.shape = shapeFromDesenho(live); drawLayer.add(live.shape); drawLayer.batchDraw(); }
   function endDraw() { if (!live) return; const d = live; live = null; d.shape && d.shape.destroy(); const tiny = d.tipo === 'livre' ? d.pontos.length < 3 : Math.hypot((d.pontos[1][0] - d.pontos[0][0]) * W, (d.pontos[1][1] - d.pontos[0][1]) * H) < 6; if (tiny) { drawLayer.batchDraw(); return; } pushUndo(); cur().desenhos.push({ tipo: d.tipo, pontos: d.pontos.map(p => [p[0], p[1]]), cor: d.cor, largura: d.largura }); renderDrawings(); renderTokens(); saveProject(); }
-  async function clearDrawings() { if (!cur().desenhos.length) return; if (!await askConfirm('Limpar os desenhos deste cenário?')) return; pushUndo(); cur().desenhos = []; renderDrawings(); renderTokens(); saveProject(); }
+  async function clearDrawings() { const hasM = (cur().marcas || []).length; if (!cur().desenhos.length && !hasM) return; if (!await askConfirm('Limpar desenhos e ícones deste cenário?')) return; pushUndo(); cur().desenhos = []; cur().marcas = []; renderDrawings(); renderMarks(); renderTokens(); saveProject(); }
+
+  // ---- ícones carimbados no mapa (marcas) ----
+  let markSel = { kind: 'asset', val: (CFG.markIcons && CFG.markIcons.assets && CFG.markIcons.assets[0]) || 'boss' };
+  function markSize() { return Math.max(16, W * 0.034); }
+  function renderMarks() {
+    markLayer.destroyChildren();
+    const list = (cur() ? cur().marcas : []) || [], ms = markSize();
+    list.forEach(m => {
+      const canDrag = !state.present && state.tool === 'select';
+      const g = new Konva.Group({ x: m.x * W, y: m.y * H, draggable: canDrag });
+      if (m.kind === 'asset') {
+        const img = iconImgs[m.val];
+        if (img && img.width) { const h = ms * (img.height / img.width); g.add(new Konva.Image({ image: img, width: ms, height: h, offsetX: ms / 2, offsetY: h / 2, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.4, shadowOffsetY: 1 })); }
+      } else {
+        g.add(new Konva.Text({ text: m.val, fontSize: ms, align: 'center', verticalAlign: 'middle', width: ms * 1.7, height: ms * 1.5, offsetX: ms * 0.85, offsetY: ms * 0.75, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.5, shadowOffsetY: 1 }));
+      }
+      g.on('dblclick dbltap', e => { e.cancelBubble = true; pushUndo(); cur().marcas = (cur().marcas || []).filter(x => x.id !== m.id); renderMarks(); saveProject(); });
+      if (canDrag) {
+        g.dragBoundFunc(clampToStage);
+        g.on('dragstart', () => { pushUndo(); g.moveToTop(); });
+        g.on('dragend', () => { const mm = (cur().marcas || []).find(x => x.id === m.id); if (mm) { mm.x = clamp01(g.x() / W); mm.y = clamp01(g.y() / H); saveProject(); } });
+        g.on('mouseenter', () => stage.container().style.cursor = 'grab');
+        g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
+      }
+      markLayer.add(g);
+    });
+    markLayer.batchDraw();
+  }
+  function placeMark() {
+    if (state.present) return; const f = frac(); if (!f) return;
+    pushUndo(); cur().marcas = cur().marcas || [];
+    cur().marcas.push({ id: uid(), x: f.xf, y: f.yf, kind: markSel.kind, val: markSel.val });
+    hintDismissed = true; renderMarks(); saveProject();
+  }
 
   // ---- cenários ----
   function renderRail() {
@@ -326,11 +375,11 @@
     const a = rail.querySelector('.scene.active'); if (a) a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
   const dragRef = {}; function clearHints() { rail.querySelectorAll('.drop-before,.drop-after').forEach(c => c.classList.remove('drop-before', 'drop-after')); }
-  function selectScenario(id) { if (id === state.currentId) return; hidePopover(); state.currentId = id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); updateMini(); if (!objPanel.hidden) renderObjPanel(); if (state.present) updatePresentUI(); saveProject(); }
+  function selectScenario(id) { if (id === state.currentId) return; hidePopover(); state.currentId = id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); renderSidebar(); updateMini(); if (!objPanel.hidden) renderObjPanel(); if (state.present) updatePresentUI(); saveProject(); }
   function loadScenarioIntoUI() { const s = cur(); if (!s) return; nameInput.value = s.nome || ''; condInput.value = s.condicao || ''; noteInput.value = s.nota || ''; updateMini(); }
   function insertAfterCurrent(s) { const i = curIndex(); state.scenarios.splice(i < 0 ? state.scenarios.length : i + 1, 0, s); saveProject(); }
   function addScenarioBlank() { const s = newScenario({ fase: 'Cenário', nome: 'Cenário ' + (state.scenarios.length + 1) }); insertAfterCurrent(s); selectScenario(s.id); }
-  function duplicateCurrent() { const s = cur(); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados: s.destacados.map(d => Object.assign({}, d, { id: uid() })), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
+  function duplicateCurrent() { const s = cur(); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), marcas: (s.marcas || []).map(m => Object.assign({}, m, { id: uid() })), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados: s.destacados.map(d => Object.assign({}, d, { id: uid() })), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
   async function deleteScenario(id) { if (state.scenarios.length <= 1) { toast('É preciso ter ao menos um cenário'); return; } const i = state.scenarios.findIndex(s => s.id === id); if (i < 0) return; if (!isPristine(state.scenarios[i]) && !await askConfirm('Excluir o cenário "' + (state.scenarios[i].nome || '') + '"?')) return; state.scenarios.splice(i, 1); if (state.currentId === id) state.currentId = state.scenarios[Math.max(0, i - 1)].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
   function reorder(dragIdV, targetId, before) { const from = state.scenarios.findIndex(s => s.id === dragIdV); if (from < 0) return; const [m] = state.scenarios.splice(from, 1); let to = state.scenarios.findIndex(s => s.id === targetId); if (to < 0) state.scenarios.push(m); else state.scenarios.splice(before ? to : to + 1, 0, m); renderRail(); saveProject(); }
   function seedStandard() { const key = e => (e.nome || '') + '|' + (e.condicao || ''); if (state.scenarios.length === 1 && isPristine(state.scenarios[0])) state.scenarios = []; const have = new Set(state.scenarios.map(key)); CFG.fasesPadrao.forEach(f => { if (!have.has(key(f))) state.scenarios.push(newScenario({ fase: f.fase, nome: f.nome, condicao: f.condicao })); }); state.currentId = state.scenarios[0].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
@@ -338,8 +387,8 @@
   function updateMini() { const s = cur(); if (s) miniName.textContent = (curIndex() + 1) + '. ' + (s.nome || 'Cenário') + (s.condicao ? ' · ' + s.condicao : ''); }
 
   // ---- apresentação ----
-  function enterPresent() { state.present = true; document.body.classList.add('present'); presentBtn.style.display = 'none'; exitBtn.style.display = ''; hidePopover(); toggleObjPanel(false); setTool('select'); renderDrawings(); renderObjectives(); renderTokens(); updatePresentUI(); try { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); } catch (e) {} setTimeout(fit, 60); }
-  function exitPresent() { state.present = false; document.body.classList.remove('present'); presentBtn.style.display = ''; exitBtn.style.display = 'none'; renderDrawings(); renderObjectives(); renderTokens(); try { document.fullscreenElement && document.exitFullscreen(); } catch (e) {} setTimeout(fit, 60); }
+  function enterPresent() { state.present = true; document.body.classList.add('present'); presentBtn.style.display = 'none'; exitBtn.style.display = ''; hidePopover(); toggleObjPanel(false); setTool('select'); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); updatePresentUI(); try { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); } catch (e) {} setTimeout(fit, 60); }
+  function exitPresent() { state.present = false; document.body.classList.remove('present'); presentBtn.style.display = ''; exitBtn.style.display = 'none'; renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); try { document.fullscreenElement && document.exitFullscreen(); } catch (e) {} setTimeout(fit, 60); }
   function updatePresentUI() { const s = cur(); if (!s) return; const i = curIndex(), n = state.scenarios.length; pbTitle.textContent = s.nome || 'Cenário'; if (s.condicao) { pbCond.hidden = false; pbCond.textContent = s.condicao; } else pbCond.hidden = true; pbProg.textContent = (i + 1) + ' / ' + n; pnPhase.textContent = s.fase || s.nome || 'Fase'; if (s.condicao) { pnBadge.hidden = false; pnBadge.textContent = s.condicao; } else pnBadge.hidden = true; const nota = (s.nota || '').trim(); pnText.textContent = nota || 'Sem nota neste cenário.'; pnText.classList.toggle('empty', !nota); prevBtn.disabled = i <= 0; nextBtn.disabled = i >= n - 1; }
   function go(delta) { const j = curIndex() + delta; if (j < 0 || j >= state.scenarios.length) return; selectScenario(state.scenarios[j].id); }
 
@@ -441,7 +490,7 @@
     stage.on('mousedown touchstart', e => { if (DRAW.includes(state.tool) && !state.present) { e.evt && e.evt.preventDefault && e.evt.preventDefault(); beginDraw(); } });
     stage.on('mousemove touchmove', moveDraw);
     stage.on('mouseup touchend', endDraw);
-    stage.on('click tap', e => { if (state.tool === 'select' && (e.target === stage || e.target === bgImage)) hidePopover(); });
+    stage.on('click tap', e => { if (state.tool === 'marca' && !state.present) { placeMark(); return; } if (state.tool === 'select' && (e.target === stage || e.target === bgImage)) hidePopover(); });
 
     drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
     dtWidth.addEventListener('click', () => { const i = (CFG.drawWidths.indexOf(state.drawWidth) + 1) % CFG.drawWidths.length; state.drawWidth = CFG.drawWidths[i]; dtWidth.textContent = ['▁', '▬', '█'][i] || '▬'; });
@@ -477,7 +526,7 @@
       if (typing) return;
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); e.shiftKey ? doRedo() : doUndo(); return; }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') { e.preventDefault(); doRedo(); return; }
-      const map = { v: 'select', a: 'seta', l: 'linha', d: 'livre', r: 'retangulo' }; if (map[e.key.toLowerCase()]) setTool(map[e.key.toLowerCase()]);
+      const map = { v: 'select', a: 'seta', l: 'linha', d: 'livre', r: 'retangulo', i: 'marca' }; if (map[e.key.toLowerCase()]) setTool(map[e.key.toLowerCase()]);
     });
     document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && state.present) exitPresent(); });
 
@@ -502,6 +551,6 @@
   // ---- persistência ----
   function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal })); } catch (e) {} }
   function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
-  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => ({ pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) })) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => ({ id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
+  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => ({ pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) })) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => ({ id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
