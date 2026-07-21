@@ -134,6 +134,37 @@
     .dgo{flex:none;color:#9aa0f7;font-family:var(--disp);font-size:1.4rem;transition:transform .18s ease;}
     @media(hover:hover){a.discord:hover .dgo{transform:translateX(3px);}}
 
+    /* ---------- Ferramentas ---------- */
+    .tools-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.24em;
+      text-transform:uppercase;color:var(--muted);text-align:center;margin:30px 0 12px;
+      display:flex;align-items:center;gap:11px;justify-content:center;}
+    .tools-lbl::before,.tools-lbl::after{content:"";height:1px;flex:1;max-width:60px;
+      background:linear-gradient(90deg,transparent,var(--line-soft),transparent);}
+    .tools{display:flex;flex-direction:column;gap:11px;}
+    a.tool{position:relative;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);
+      background:linear-gradient(180deg,rgba(217,164,65,.08),rgba(217,164,65,.02));
+      border:1px solid var(--line);border-radius:14px;padding:13px 15px;overflow:hidden;
+      transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;}
+    a.tool:active{transform:scale(.99);}
+    @media(hover:hover){a.tool:hover{transform:translateY(-2px);
+      border-color:color-mix(in srgb,var(--gold) 60%,transparent);
+      box-shadow:0 14px 32px -22px var(--gold);}}
+    .tico{flex:none;width:44px;height:44px;border-radius:11px;display:grid;place-items:center;
+      font-size:22px;line-height:1;
+      background:radial-gradient(120% 120% at 30% 20%,rgba(217,164,65,.18),transparent 70%),#0b0e15;
+      border:1px solid color-mix(in srgb,var(--gold) 38%,transparent);
+      box-shadow:inset 0 0 16px -8px color-mix(in srgb,var(--gold) 70%,transparent);}
+    .tmeta{flex:1;min-width:0;display:flex;flex-direction:column;}
+    .tkick{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-weight:600;
+      font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+    .tchip{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
+      color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:2px 7px;border-radius:999px;}
+    .tname{font-family:var(--disp);font-weight:600;font-size:1.14rem;letter-spacing:.01em;line-height:1.1;}
+    .tdesc{color:var(--muted);font-size:.82rem;margin-top:3px;line-height:1.36;}
+    .tgo{flex:none;color:var(--muted);font-size:1.4rem;line-height:1;font-family:var(--disp);
+      transition:transform .18s ease,color .18s ease;}
+    @media(hover:hover){a.tool:hover .tgo{transform:translateX(3px);color:var(--gold);}}
+
     footer{margin-top:26px;text-align:center;font-family:var(--disp);font-weight:500;
       font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#5c6474;}
   </style>
@@ -223,6 +254,19 @@
       </span>
       <span class="dgo" aria-hidden="true">›</span>
     </a>
+
+    <div class="tools-lbl">Ferramentas</div>
+    <div class="tools">
+      <a class="tool" href="./estrategia/">
+        <span class="tico" aria-hidden="true">🗺️</span>
+        <span class="tmeta">
+          <span class="tkick">Ferramenta <span class="tchip">Beta</span></span>
+          <span class="tname">Mapa de Estratégia</span>
+          <span class="tdesc">Monte o plano do GvG por fase — PTs, objetivos e modo apresentação.</span>
+        </span>
+        <span class="tgo" aria-hidden="true">›</span>
+      </a>
+    </div>
 
     <footer>Zhi Guides · Wanted GvG</footer>
   </div>
