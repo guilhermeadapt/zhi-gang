@@ -37,15 +37,20 @@ const WWM = {
     },
   },
 
-  // buffs ativáveis por objetivo (torre / ganso). Mostram um selo no ícone.
+  // buffs ativáveis por objetivo (torre / ganso / árvore). Mostram um selo no ícone.
+  //  escudo 🛡️ = City Protection (invulnerável) ; espada 🗡️ = buff de dano.
   objBuffs: {
     tower: [
       { id: 'cityprot', icon: '🛡️', label: 'City Protection' },
-      { id: 'ygap',     icon: '💥', label: 'You Got a Problem' },
+      { id: 'ygap',     icon: '🗡️', label: 'You Got a Problem' },
     ],
     goose: [
       { id: 'cityprot', icon: '🛡️', label: 'City Protection' },
-      { id: 'hairpull', icon: '✊', label: 'Hair Pulling' },
+      { id: 'hairpull', icon: '🗡️', label: 'Hair Pulling' },
+    ],
+    tree: [
+      { id: 'sprint',    icon: '💨', label: 'Sprint' },
+      { id: 'relentless', icon: '🐗', label: 'Relentless' },
     ],
   },
 
@@ -88,8 +93,9 @@ const WWM = {
     { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.222, y: 0.509, movel: true, flip: true },
     { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.793, y: 0.503, movel: true },
     // árvore nasce no MESMO ponto do ganso e caminha até o portão inimigo (333m) — MÓVEL
-    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.195, y: 0.511, movel: true, flip: true, caminho: { a: [0.195, 0.511], b: [0.831, 0.511] } },
-    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.831, y: 0.511, movel: true, caminho: { a: [0.831, 0.511], b: [0.195, 0.511] } },
+    // a árvore anda do seu ponto até o PORTÃO inimigo (um pouco à frente do ganso inimigo) — 333m.
+    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.195, y: 0.511, movel: true, flip: true, caminho: { a: [0.195, 0.511], b: [0.81, 0.505] } },
+    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.831, y: 0.511, movel: true, caminho: { a: [0.831, 0.511], b: [0.205, 0.507] } },
     // boss / nirvana nas 2 PONTAS (norte e sul) — FIXO
     { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.438, y: 0.136 },
     { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.594, y: 0.869 },

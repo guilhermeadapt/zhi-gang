@@ -203,6 +203,12 @@
     .icon-menu .im-buff{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;padding:7px 9px;cursor:pointer;text-align:left;transition:.14s}
     .icon-menu .im-buff:hover{color:var(--text);border-color:var(--line)}
     .icon-menu .im-buff.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .icon-menu .im-carry{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px}
+    .icon-menu .im-cchip{display:inline-flex;align-items:center;gap:4px;font-family:var(--disp);font-weight:600;font-size:10.5px;color:var(--gold-2);background:rgba(217,164,65,.1);border:1px solid color-mix(in srgb,var(--gold) 32%,transparent);border-radius:7px;padding:3px 4px 3px 8px}
+    .icon-menu .im-cchip button{width:16px;height:16px;border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:11px;border-radius:4px}
+    .icon-menu .im-cchip button:hover{color:var(--crimson)}
+    .icon-menu .im-cadd{font-family:var(--disp);font-weight:600;font-size:10.5px;color:var(--muted);background:rgba(255,255,255,.03);border:1px dashed var(--line-soft);border-radius:7px;padding:5px 10px;cursor:pointer}
+    .icon-menu .im-cadd:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
     .icon-menu .im-note{width:100%;resize:vertical;min-height:56px;background:#0b0e15;border:1px solid var(--line-soft);border-radius:8px;color:var(--text);font-family:var(--body);font-size:12.5px;line-height:1.35;padding:8px 10px;margin-bottom:9px}
     .icon-menu .im-note:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
     body.linking #stageWrap{cursor:crosshair}
@@ -373,9 +379,15 @@
     .view-toggle button{font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:transparent;border:0;padding:6px 11px;cursor:pointer}
     .view-toggle button.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold))}
     /* montador visual (board) — tela grande, jogadores em linhas, ícones de classe */
-    #rosterModal.board-mode .modal{width:min(1400px,98vw);max-height:94vh}
+    #rosterModal.board-mode .modal{width:min(1400px,98vw);max-height:96vh;height:96vh}
     #rosterModal.board-mode .paste-col{display:none}
     #rosterModal.board-mode .modal-body{grid-template-columns:1fr}
+    /* board-mode: enxuga o topo pra caber as 6 PTs */
+    #rosterModal.board-mode .bd-legend{display:none}
+    #rosterModal.board-mode .modal > header{padding:9px 16px}
+    #rosterModal.board-mode .modal > header .msub{display:none}
+    #rosterModal.board-mode .grid-head{padding:7px 16px}
+    #rosterModal.board-mode .board-tools{padding:7px 16px}
     .board-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line-soft)}
     .board-tools[hidden]{display:none}
     .bd-legend{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;min-width:200px}
@@ -417,8 +429,20 @@
     .bd-obs:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
     .bd-sub{font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#6b7385;margin-top:2px}
     .bd-sub.res{color:#5f7488}
-    .bd-pt-card .bd-zone{padding:6px 7px;border-radius:9px}
+    .bd-pt-card{padding:9px 10px;gap:6px}
+    .bd-pt-card .bd-zone{padding:5px 6px;border-radius:9px}
     .bd-ptres{background:rgba(137,171,197,.04)}
+    .bd-ptres .bd-zh.mini{margin-bottom:0;font-size:8.5px;color:#5f7488}
+    .bd-ptres.slim{padding:3px 8px;opacity:.7}
+    .bd-ptres.slim .bd-zh.mini{margin:0}
+    /* observações escondidas atrás do lápis */
+    .bd-obs-btn{margin-left:6px;flex:none;width:22px;height:22px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);border-radius:6px;cursor:pointer;font-size:12px;line-height:1}
+    .bd-obs-btn:hover{color:var(--gold);border-color:var(--line)}
+    .bd-obs-btn.has{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 40%,transparent);background:rgba(217,164,65,.08)}
+    .bd-obs-line{font-size:11.5px;color:var(--gold-2);line-height:1.3;cursor:text;padding:1px 2px}
+    .bd-obs{display:none}
+    .bd-pt-card.obs-edit .bd-obs{display:block}
+    .bd-pt-card.obs-edit .bd-obs-line{display:none}
     /* chips agora são LINHAS de largura total */
     .bd-chips{display:flex;flex-direction:column;gap:5px;min-height:30px}
     .bd-empty{font-size:11px;color:#5c6474;font-style:italic;padding:5px 4px}
@@ -794,7 +818,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=26"></script>
-  <script src="./app.js?v=26"></script>
+  <script src="./config.js?v=27"></script>
+  <script src="./app.js?v=27"></script>
 </body>
 </html>
