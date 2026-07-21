@@ -800,9 +800,10 @@
       const enc = await encodeShare(projectData());
       const url = location.origin + location.pathname + '#p=' + enc;
       try { history.replaceState(null, '', '#p=' + enc); } catch (e) {}
+      { const tp = $('shareTitleP'); if (tp) tp.textContent = t('shareTitle'); }
       shareUrl.value = url; shareModal.hidden = false; shareUrl.focus(); shareUrl.select();
       let copied = false; try { await navigator.clipboard.writeText(url); copied = true; } catch (e) {}
-      if (copied) toast('Link copiado ✓');
+      if (copied) toast('Link copiado ✓'); else toast('Selecione o link e copie (Ctrl+C)');
     } catch (e) { toast('Não consegui gerar o link'); }
   }
   // dump curto (só coordenadas) — robusto para colar num chat sem corromper
@@ -810,9 +811,11 @@
     const r = v => Math.round(v * 1e4) / 1e4;
     const glob = {}; Object.keys(state.objetivoPosGlobal || {}).forEach(k => { const p = state.objetivoPosGlobal[k]; glob[k] = [r(p.x), r(p.y)]; });
     const mov = {}; const cp = cur() && cur().objetivoPos ? cur().objetivoPos : {}; Object.keys(cp).forEach(k => { mov[k] = [r(cp[k].x), r(cp[k].y)]; });
-    const s = JSON.stringify({ fixos: glob, moveis: mov });
+    const gts = {}; Object.keys(state.gates || {}).forEach(k => { const p = state.gates[k]; gts[k] = [r(p.x), r(p.y)]; });
+    const s = JSON.stringify({ fixos: glob, moveis: mov, portoes: gts });
+    { const tp = $('shareTitleP'); if (tp) tp.textContent = 'Posições (inclui o portão da árvore) — copie tudo e me mande:'; }
     shareUrl.value = s; shareModal.hidden = false; shareUrl.focus(); shareUrl.select();
-    (async () => { try { await navigator.clipboard.writeText(s); toast('Posições copiadas ✓'); } catch (e) {} })();
+    (async () => { let ok = false; try { await navigator.clipboard.writeText(s); ok = true; } catch (e) {} if (!ok) { try { ok = document.execCommand('copy'); } catch (e) {} } toast(ok ? 'Posições copiadas ✓' : 'Selecione o texto e copie (Ctrl+C)'); })();
   }
   async function maybeLoadShared() { const m = /[#&]p=([^&]+)/.exec(location.hash); if (!m) return; let d; try { d = await decodeShare(decodeURIComponent(m[1])); } catch (e) { toast('Link de plano inválido'); return; } if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Este link abre um plano compartilhado. Abrir substitui o rascunho atual. Continuar?')) return; if (applyImported(d)) toast('Plano do link carregado ✓'); }
   let toastT = null; function toast(msg) { toastEl.innerHTML = msg.replace(/✓/g, '<b>✓</b>'); toastEl.hidden = false; requestAnimationFrame(() => toastEl.classList.add('show')); clearTimeout(toastT); toastT = setTimeout(() => { toastEl.classList.remove('show'); setTimeout(() => toastEl.hidden = true, 220); }, 2600); }
