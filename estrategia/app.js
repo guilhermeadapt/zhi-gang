@@ -27,7 +27,7 @@
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
       shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
       menu:'Menú', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartir', present:'Presentar', exit:'Salir',
@@ -39,7 +39,7 @@
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
       shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
       menu:'Menu', phases:'Phases', objectives:'Objectives', roster:'Roster', share:'Share', present:'Present', exit:'Exit',
@@ -51,7 +51,7 @@
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
       shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move',
-      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
+      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
   function t(k) { return (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.pt[k] != null ? I18N.pt[k] : k); }
@@ -78,7 +78,8 @@
   const rosterSave = $('rosterSave'), rosterClear2 = $('rosterClear2'), saveMsg = $('saveMsg');
   const exportBtn = $('exportBtn'), importBtn = $('importBtn'), importFile = $('importFile'), shareBtn = $('shareBtn'), resetBtn = $('resetBtn'), toastEl = $('toast');
   const shareModal = $('shareModal'), shareUrl = $('shareUrl'), shareCopy = $('shareCopy'), shareClose = $('shareClose');
-  const drawTools = $('drawTools'), dtColors = $('dtColors'), dtWidth = $('dtWidth'), undoBtn = $('undoBtn'), redoBtn = $('redoBtn'), clearDraw = $('clearDraw');
+  const drawTools = $('drawTools'), dtColors = $('dtColors'), undoBtn = $('undoBtn'), redoBtn = $('redoBtn'), clearDraw = $('clearDraw');
+  const dtColorBtn = $('dtColorBtn'), dtCurColor = $('dtCurColor'), dtColorPop = $('dtColorPop'), dtWidthBtn = $('dtWidthBtn'), dtWidthPop = $('dtWidthPop'), dtWidthOpts = $('dtWidthOpts'), dtHex = $('dtHex'), dtHexApply = $('dtHexApply');
   const markPicker = $('markPicker'), markGrid = $('markGrid');
   const objBtn = $('objBtn'), objPanel = $('objPanel'), objClose = $('objClose'), objGroups = $('objGroups');
   const fasesBtn = $('fasesBtn'), dockCollapse = $('dockCollapse'), dockMini = $('dockMini'), dockExpand = $('dockExpand'), miniName = $('miniName'), miniPrev = $('miniPrev'), miniNext = $('miniNext');
@@ -100,7 +101,8 @@
   const objLayer = new Konva.Layer();
   const markLayer = new Konva.Layer();
   const tokenLayer = new Konva.Layer();
-  stage.add(bgLayer, drawLayer, objLayer, markLayer, tokenLayer);
+  const noteLayer = new Konva.Layer();
+  stage.add(bgLayer, drawLayer, objLayer, markLayer, tokenLayer, noteLayer);
   const bgImage = new Konva.Image({ x: 0, y: 0 });
   bgLayer.add(bgImage);
   let W = 10, H = 10, R = 20;
@@ -110,8 +112,8 @@
   function uid() { return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function cur() { return state.scenarios.find(s => s.id === state.currentId) || state.scenarios[0]; }
   function curIndex() { return state.scenarios.findIndex(s => s.id === state.currentId); }
-  function newScenario(o) { return Object.assign({ id: uid(), fase: 'Cenário', nome: 'Novo cenário', condicao: null, tokens: [], desenhos: [], marcas: [], objetivos: {}, objetivoPos: {}, destacados: [], links: [], objHp: {}, nota: '' }, o || {}); }
-  function isPristine(s) { return s && !(s.tokens || []).length && !(s.desenhos || []).length && !(s.marcas || []).length && !(s.nota || '').trim() && !Object.keys(s.objetivos || {}).length && !(s.destacados || []).length && !(s.links || []).length && !Object.keys(s.objHp || {}).length; }
+  function newScenario(o) { return Object.assign({ id: uid(), fase: 'Cenário', nome: 'Novo cenário', condicao: null, tokens: [], desenhos: [], marcas: [], objetivos: {}, objetivoPos: {}, destacados: [], links: [], objHp: {}, notas: [], nota: '' }, o || {}); }
+  function isPristine(s) { return s && !(s.tokens || []).length && !(s.desenhos || []).length && !(s.marcas || []).length && !(s.nota || '').trim() && !Object.keys(s.objetivos || {}).length && !(s.destacados || []).length && !(s.links || []).length && !Object.keys(s.objHp || {}).length && !(s.notas || []).length; }
   function clamp01(n) { n = Number(n); return isNaN(n) ? 0 : Math.max(0, Math.min(1, n)); }
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
   function roleColor(f) { return CFG.roleColors[f] || CFG.roleColors.DPS; }
@@ -164,9 +166,9 @@
   function frac() { const p = stage.getPointerPosition(); if (!p) return null; const s = stage.scaleX() || 1; return { xf: clamp01((p.x - stage.x()) / s / W), yf: clamp01((p.y - stage.y()) / s / H) }; }
 
   // ---- undo (cenário inteiro: tokens, desenhos, objetivos, posições, destacados) ----
-  function snap() { const s = cur(); return JSON.stringify({ tokens: s.tokens, desenhos: s.desenhos, marcas: s.marcas || [], objetivos: s.objetivos, objetivoPos: s.objetivoPos, destacados: s.destacados, links: s.links || [], objHp: s.objHp || {}, nota: s.nota }); }
+  function snap() { const s = cur(); return JSON.stringify({ tokens: s.tokens, desenhos: s.desenhos, marcas: s.marcas || [], objetivos: s.objetivos, objetivoPos: s.objetivoPos, destacados: s.destacados, links: s.links || [], objHp: s.objHp || {}, notas: s.notas || [], nota: s.nota }); }
   function pushUndo() { const id = cur().id; const st = (undoStacks[id] = undoStacks[id] || []); st.push(snap()); if (st.length > 60) st.shift(); redoStacks[id] = []; }
-  function applySnap(json) { const s = cur(), d = JSON.parse(json); s.tokens = d.tokens; s.desenhos = d.desenhos; s.marcas = d.marcas || []; s.objetivos = d.objetivos; s.objetivoPos = d.objetivoPos; s.destacados = d.destacados; s.links = d.links || []; s.objHp = d.objHp || {}; s.nota = d.nota; loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); if (!objPanel.hidden) renderObjPanel(); saveProject(); }
+  function applySnap(json) { const s = cur(), d = JSON.parse(json); s.tokens = d.tokens; s.desenhos = d.desenhos; s.marcas = d.marcas || []; s.objetivos = d.objetivos; s.objetivoPos = d.objetivoPos; s.destacados = d.destacados; s.links = d.links || []; s.objHp = d.objHp || {}; s.notas = d.notas || []; s.nota = d.nota; loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); if (!objPanel.hidden) renderObjPanel(); saveProject(); }
   function doUndo() { const id = cur().id, u = undoStacks[id]; if (!u || !u.length) return; (redoStacks[id] = redoStacks[id] || []).push(snap()); applySnap(u.pop()); }
   function doRedo() { const id = cur().id, r = redoStacks[id]; if (!r || !r.length) return; (undoStacks[id] = undoStacks[id] || []).push(snap()); applySnap(r.pop()); }
 
@@ -480,8 +482,11 @@
   function toggleObjPanel(force) { const show = force != null ? force : objPanel.hidden; if (show) { renderObjPanel(); objPanel.hidden = false; objBtn.classList.add('on'); } else { objPanel.hidden = true; objBtn.classList.remove('on'); } renderObjectives(); }
 
   // ---- desenho ----
-  function toolCursor() { return (DRAW.includes(state.tool) || state.tool === 'marca') ? 'crosshair' : 'default'; }
-  function buildColorSwatches() { dtColors.innerHTML = ''; CFG.drawColors.forEach(c => { const sw = document.createElement('div'); sw.className = 'sw' + (c === state.drawColor ? ' active' : ''); sw.style.background = c; sw.title = c; sw.dataset.c = c; sw.addEventListener('click', () => { state.drawColor = c; dtColors.querySelectorAll('.sw').forEach(s => s.classList.toggle('active', s.dataset.c === c)); }); dtColors.appendChild(sw); }); }
+  function toolCursor() { return (DRAW.includes(state.tool) || state.tool === 'marca' || state.tool === 'nota') ? 'crosshair' : 'default'; }
+  function selectDrawColor(c) { state.drawColor = c; if (dtCurColor) dtCurColor.style.background = c; dtColors.querySelectorAll('.sw').forEach(s => s.classList.toggle('active', s.dataset.c && s.dataset.c.toLowerCase() === c.toLowerCase())); }
+  function buildColorSwatches() { dtColors.innerHTML = ''; CFG.drawColors.forEach(c => { const sw = document.createElement('div'); sw.className = 'sw' + (c === state.drawColor ? ' active' : ''); sw.style.background = c; sw.title = c; sw.dataset.c = c; sw.addEventListener('click', () => { selectDrawColor(c); }); dtColors.appendChild(sw); }); if (dtCurColor) dtCurColor.style.background = state.drawColor; }
+  function buildWidthOpts() { if (!dtWidthOpts) return; dtWidthOpts.innerHTML = ''; CFG.drawWidths.forEach(w => { const b = document.createElement('button'); b.className = (w === state.drawWidth ? 'active' : ''); b.dataset.w = w; b.innerHTML = '<span class="wbar" style="height:' + w + 'px"></span><span style="font-size:10px;font-family:var(--disp);font-weight:700">' + w + '</span>'; b.addEventListener('click', () => { state.drawWidth = w; dtWidthOpts.querySelectorAll('button').forEach(x => x.classList.toggle('active', +x.dataset.w === w)); if (dtWidthBtn) dtWidthBtn.textContent = w <= 2 ? '▁' : w <= 3 ? '▬' : w <= 5 ? '▬' : '█'; dtWidthPop.hidden = true; }); dtWidthOpts.appendChild(b); }); }
+  function positionDtPop(pop, btn) { pop.style.top = (btn.offsetTop) + 'px'; }
   function buildMarkPicker() {
     if (!markGrid) return; const M = CFG.markIcons || { assets: [], emojis: [] };
     const cell = (kind, val, inner, title) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'mk' + (markSel.kind === kind && markSel.val === val ? ' active' : ''); b.dataset.kind = kind; b.dataset.val = val; b.title = title || val; b.innerHTML = inner; b.addEventListener('click', () => { markSel = { kind, val }; markGrid.querySelectorAll('.mk').forEach(x => x.classList.toggle('active', x.dataset.kind === kind && x.dataset.val === val)); if (state.tool !== 'marca') setTool('marca'); }); return b; };
@@ -495,7 +500,7 @@
     (M.emojis || []).forEach(em => gE.appendChild(cell('emoji', em, '<span class="mk-em">' + em + '</span>', em)));
     markGrid.appendChild(gE);
   }
-  function setTool(t) { if (linkTempFrom) { cancelLink(); renderTokens(); } state.tool = t; drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t)); const noHit = DRAW.includes(t) || t === 'marca'; tokenLayer.listening(!noHit); objLayer.listening(!noHit); stage.container().style.cursor = toolCursor(); if (noHit) { hidePopover(); closeIconMenu(); } if (markPicker) markPicker.hidden = (t !== 'marca'); renderMarks(); updateStageDrag(); }
+  function setTool(t) { if (linkTempFrom) { cancelLink(); renderTokens(); } state.tool = t; drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t)); const noHit = DRAW.includes(t) || t === 'marca'; tokenLayer.listening(!noHit); objLayer.listening(!noHit); noteLayer.listening(t !== 'nota' && !DRAW.includes(t)); stage.container().style.cursor = toolCursor(); if (noHit || t === 'nota') { hidePopover(); closeIconMenu(); } if (markPicker) markPicker.hidden = (t !== 'marca'); renderMarks(); updateStageDrag(); }
   function pxPts(pts) { const a = []; pts.forEach(p => { a.push(p[0] * W, p[1] * H); }); return a; }
   function shapeFromDesenho(d) {
     const stroke = d.cor || '#FFC21A', sw = d.largura || 3;
@@ -538,12 +543,56 @@
       markLayer.add(g);
     });
     markLayer.batchDraw();
+    renderNotes();
   }
   function placeMark() {
     if (state.present) return; const f = frac(); if (!f) return;
     pushUndo(); cur().marcas = cur().marcas || [];
     cur().marcas.push({ id: uid(), x: f.xf, y: f.yf, kind: markSel.kind, val: markSel.val });
     hintDismissed = true; renderMarks(); saveProject();
+  }
+
+  // ---- anotações / post-its no mapa ----
+  function renderNotes() {
+    noteLayer.destroyChildren();
+    const list = (cur() ? cur().notas : []) || [], fs = Math.max(11, W * 0.016);
+    list.forEach(n => {
+      const canDrag = !state.present && state.tool === 'select';
+      const g = new Konva.Group({ x: n.x * W, y: n.y * H, draggable: canDrag, name: 'note-' + n.id });
+      const label = new Konva.Label();
+      label.add(new Konva.Tag({ fill: 'rgba(24,20,8,.92)', stroke: '#f0c66b', strokeWidth: 1, cornerRadius: 5, shadowColor: '#000', shadowBlur: 8, shadowOpacity: 0.5, shadowOffsetY: 2 }));
+      label.add(new Konva.Text({ text: n.text || '…', fontFamily: 'Barlow, sans-serif', fontStyle: '600', fontSize: fs, fill: '#f7e6bf', padding: Math.max(5, fs * 0.5), width: Math.min(W * 0.32, Math.max(fs * 6, fs * (String(n.text || '').length > 26 ? 12 : 8))), lineHeight: 1.25 }));
+      g.add(label);
+      g.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; g.moveToTop(); noteLayer.batchDraw(); if (!state.present) openNoteEditor(n, g.x(), g.y()); });
+      if (canDrag) {
+        g.dragBoundFunc(clampToStage);
+        g.on('dragstart', () => { pushUndo(); g.moveToTop(); });
+        g.on('dragend', () => { const nn = (cur().notas || []).find(x => x.id === n.id); if (nn) { nn.x = clamp01(g.x() / W); nn.y = clamp01(g.y() / H); saveProject(); } });
+        g.on('dblclick dbltap', e => { e.cancelBubble = true; pushUndo(); cur().notas = (cur().notas || []).filter(x => x.id !== n.id); renderNotes(); saveProject(); });
+        g.on('mouseenter', () => stage.container().style.cursor = 'grab');
+        g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
+      }
+      noteLayer.add(g);
+    });
+    noteLayer.batchDraw();
+  }
+  function placeNote() {
+    if (state.present) return; const f = frac(); if (!f) return;
+    pushUndo(); cur().notas = cur().notas || [];
+    const n = { id: uid(), x: f.xf, y: f.yf, text: '' };
+    cur().notas.push(n); hintDismissed = true; setTool('select'); renderNotes(); saveProject();
+    const g = noteLayer.findOne('.note-' + n.id); openNoteEditor(n, g ? g.x() : f.xf * W, g ? g.y() : f.yf * H);
+  }
+  function openNoteEditor(n, x, y) {
+    if (!iconMenu || state.present) return; hidePopover();
+    iconMenu.innerHTML = '<div class="im-hd"><span class="im-dot" style="background:#f0c66b"></span><b>' + t('noteTitle') + '</b><button class="im-x" data-act="close">✕</button></div>'
+      + '<textarea class="im-note" rows="3" placeholder="' + t('notePh') + '">' + esc(n.text || '') + '</textarea>'
+      + '<div class="im-actions"><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
+    iconMenu.hidden = false; placeIconMenu(x, y);
+    const ta = iconMenu.querySelector('.im-note'); ta.focus();
+    ta.addEventListener('input', () => { n.text = ta.value; renderNotes(); saveProject(); });
+    iconMenu.querySelector('[data-act="remove"]').addEventListener('click', () => { pushUndo(); cur().notas = (cur().notas || []).filter(x => x.id !== n.id); closeIconMenu(); renderNotes(); saveProject(); });
+    iconMenu.querySelector('[data-act="close"]').addEventListener('click', closeIconMenu);
   }
 
   // ---- cenários ----
@@ -567,7 +616,7 @@
   function loadScenarioIntoUI() { const s = cur(); if (!s) return; nameInput.value = s.nome || ''; condInput.value = s.condicao || ''; noteInput.value = s.nota || ''; updateMini(); }
   function insertAfterCurrent(s) { const i = curIndex(); state.scenarios.splice(i < 0 ? state.scenarios.length : i + 1, 0, s); saveProject(); }
   function addScenarioBlank() { const s = newScenario({ fase: 'Cenário', nome: 'Cenário ' + (state.scenarios.length + 1) }); insertAfterCurrent(s); selectScenario(s.id); }
-  function duplicateCurrent() { const s = cur(); const memMap = {}; const destacados = s.destacados.map(d => { const nid = uid(); memMap[d.id] = nid; return Object.assign({}, d, { id: nid }); }); const remap = ref => { if (typeof ref === 'string' && ref.indexOf('mem:') === 0) { const ni = memMap[ref.slice(4)]; return ni ? 'mem:' + ni : null; } return ref; }; const links = (s.links || []).map(l => { const a = remap(l.a), b = remap(l.b); return (a && b) ? { id: uid(), a, b } : null; }).filter(Boolean); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), marcas: (s.marcas || []).map(m => Object.assign({}, m, { id: uid() })), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados, links, objHp: Object.assign({}, s.objHp || {}), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
+  function duplicateCurrent() { const s = cur(); const memMap = {}; const destacados = s.destacados.map(d => { const nid = uid(); memMap[d.id] = nid; return Object.assign({}, d, { id: nid }); }); const remap = ref => { if (typeof ref === 'string' && ref.indexOf('mem:') === 0) { const ni = memMap[ref.slice(4)]; return ni ? 'mem:' + ni : null; } return ref; }; const links = (s.links || []).map(l => { const a = remap(l.a), b = remap(l.b); return (a && b) ? { id: uid(), a, b } : null; }).filter(Boolean); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), marcas: (s.marcas || []).map(m => Object.assign({}, m, { id: uid() })), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados, links, objHp: Object.assign({}, s.objHp || {}), notas: (s.notas || []).map(n => Object.assign({}, n, { id: uid() })), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
   async function deleteScenario(id) { if (state.scenarios.length <= 1) { toast('É preciso ter ao menos um cenário'); return; } const i = state.scenarios.findIndex(s => s.id === id); if (i < 0) return; if (!isPristine(state.scenarios[i]) && !await askConfirm('Excluir o cenário "' + (state.scenarios[i].nome || '') + '"?')) return; state.scenarios.splice(i, 1); if (state.currentId === id) state.currentId = state.scenarios[Math.max(0, i - 1)].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
   function reorder(dragIdV, targetId, before) { const from = state.scenarios.findIndex(s => s.id === dragIdV); if (from < 0) return; const [m] = state.scenarios.splice(from, 1); let to = state.scenarios.findIndex(s => s.id === targetId); if (to < 0) state.scenarios.push(m); else state.scenarios.splice(before ? to : to + 1, 0, m); renderRail(); saveProject(); }
   function seedStandard() { const key = e => (e.nome || '') + '|' + (e.condicao || ''); if (state.scenarios.length === 1 && isPristine(state.scenarios[0])) state.scenarios = []; const have = new Set(state.scenarios.map(key)); CFG.fasesPadrao.forEach(f => { if (!have.has(key(f))) state.scenarios.push(newScenario({ fase: f.fase, nome: f.nome, condicao: f.condicao })); }); state.currentId = state.scenarios[0].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
@@ -793,10 +842,16 @@
     stage.on('mousemove touchmove', moveDraw);
     stage.on('mousemove touchmove', () => { if (linkTempFrom) { updateLinkTemp(); tokenLayer.batchDraw(); } });
     stage.on('mouseup touchend', endDraw);
-    stage.on('click tap', e => { if (linkTempFrom) { if (e.target === stage || e.target === bgImage) { cancelLink(); renderTokens(); } return; } if (state.tool === 'marca' && !state.present) { placeMark(); return; } if (state.tool === 'select' && (e.target === stage || e.target === bgImage)) { hidePopover(); closeIconMenu(); } });
+    stage.on('click tap', e => { if (linkTempFrom) { if (e.target === stage || e.target === bgImage) { cancelLink(); renderTokens(); } return; } if (state.tool === 'marca' && !state.present) { placeMark(); return; } if (state.tool === 'nota' && !state.present) { placeNote(); return; } if (state.tool === 'select' && (e.target === stage || e.target === bgImage)) { hidePopover(); closeIconMenu(); } });
 
     drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
-    dtWidth.addEventListener('click', () => { const i = (CFG.drawWidths.indexOf(state.drawWidth) + 1) % CFG.drawWidths.length; state.drawWidth = CFG.drawWidths[i]; dtWidth.textContent = ['▁', '▬', '█'][i] || '▬'; });
+    // flyouts de cor e espessura (só aparecem ao apertar)
+    buildWidthOpts();
+    if (dtColorBtn) dtColorBtn.addEventListener('click', e => { e.stopPropagation(); const show = dtColorPop.hidden; dtWidthPop.hidden = true; if (show) { positionDtPop(dtColorPop, dtColorBtn); } dtColorPop.hidden = !show; });
+    if (dtWidthBtn) dtWidthBtn.addEventListener('click', e => { e.stopPropagation(); const show = dtWidthPop.hidden; dtColorPop.hidden = true; if (show) { positionDtPop(dtWidthPop, dtWidthBtn); } dtWidthPop.hidden = !show; });
+    if (dtHexApply) dtHexApply.addEventListener('click', () => { let v = (dtHex.value || '').trim(); if (v && v[0] !== '#') v = '#' + v; if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v)) { selectDrawColor(v); dtHex.value = ''; } else { dtHex.style.borderColor = 'var(--crimson)'; setTimeout(() => dtHex.style.borderColor = '', 900); } });
+    if (dtHex) dtHex.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); dtHexApply.click(); } });
+    document.addEventListener('click', e => { if (!e.target.closest('#dtColorPop') && !e.target.closest('#dtColorBtn')) dtColorPop.hidden = true; if (!e.target.closest('#dtWidthPop') && !e.target.closest('#dtWidthBtn')) dtWidthPop.hidden = true; });
     undoBtn.addEventListener('click', doUndo); redoBtn.addEventListener('click', doRedo); clearDraw.addEventListener('click', clearDrawings);
     { const nt = $('namesTgl'); if (nt) { nt.classList.toggle('on', state.showNames); nt.addEventListener('click', () => { state.showNames = !state.showNames; nt.classList.toggle('on', state.showNames); renderTokens(); saveProject(); }); } }
     objBtn.addEventListener('click', () => toggleObjPanel()); objClose.addEventListener('click', () => toggleObjPanel(false));
@@ -880,6 +935,6 @@
   // ---- persistência ----
   function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, showNames: state.showNames })); } catch (e) {} }
   function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
-  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
+  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240) })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tag2: (CFG.secondaryTags || []).includes(p.tag2) ? p.tag2 : null, flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], replace: !!p.replace, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();

@@ -141,8 +141,8 @@ const WWM = {
   ],
 
   // paleta das ferramentas de desenho — cores fortes (boa leitura sobre o mapa)
-  drawColors: ['#FFC21A', '#FF3B30', '#2E7DFF', '#17C964', '#FFFFFF', '#0A0A0A'],
-  drawWidths: [2, 3, 5],
+  drawColors: ['#FFC21A', '#FF8A1E', '#FF3B30', '#E84393', '#B06BFF', '#2E7DFF', '#22C1E8', '#17C964', '#00B894', '#8A6D3B', '#FFFFFF', '#0A0A0A'],
+  drawWidths: [2, 3, 5, 8],
 
   /* --- comportamento default --------------------------------------------- */
   defaults: {
