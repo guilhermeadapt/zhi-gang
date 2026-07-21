@@ -66,7 +66,8 @@
     @media(max-width:720px){.wrap{grid-template-columns:1fr}}
 
     /* ---------- clock card ---------- */
-    .clock-card{grid-column:1;background:linear-gradient(180deg,var(--ink-2),#0e1118);
+    .main-left{display:flex;flex-direction:column;gap:14px}
+    .clock-card{background:linear-gradient(180deg,var(--ink-2),#0e1118);
       border:1px solid var(--line-soft);border-radius:20px;padding:clamp(20px,4vw,28px);position:relative;overflow:hidden}
     .clock-card::after{content:"";position:absolute;inset:0;border-radius:20px;pointer-events:none;
       box-shadow:inset 0 0 60px -30px var(--gold);opacity:0;transition:opacity .2s}
@@ -118,8 +119,7 @@
     .next.done-all .n-cd{display:none}
 
     /* ---------- timeline ---------- */
-    .side{grid-column:2;display:flex;flex-direction:column;gap:14px}
-    @media(max-width:720px){.side{grid-column:1}.clock-card{grid-column:1}}
+    .side{display:flex;flex-direction:column;gap:14px}
     .panel{background:linear-gradient(180deg,var(--ink-2),#0e1118);border:1px solid var(--line-soft);border-radius:16px;overflow:hidden}
     .panel > header{display:flex;align-items:center;gap:8px;padding:13px 15px 11px;border-bottom:1px solid var(--line-soft)}
     .panel > header b{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
@@ -177,7 +177,6 @@
     .step b{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;min-width:42px;text-align:center}
 
     /* cooldowns do inimigo */
-    .cds-panel{grid-column:1}
     .cd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:10px;padding:14px}
     .cd-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 10px;border-radius:13px;
       border:1px solid var(--line-soft);background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.005));
@@ -224,6 +223,7 @@
   </div>
 
   <div class="wrap">
+    <div class="main-left">
     <!-- relógio -->
     <section class="clock-card">
       <div class="cc-lbl" id="ccLbl">Guerra</div>
@@ -256,8 +256,9 @@
     <section class="panel cds-panel">
       <header><b>Cooldowns do inimigo</b></header>
       <div class="cd-grid" id="cdGrid"></div>
-      <div class="ev-note">Aperte assim que o inimigo <b>usar</b> — conta o cooldown até ele poder usar de novo (Sprint/Relentless 2:00, City Protection 5:00*). Aperte de novo pra reiniciar.</div>
+      <div class="ev-note">Aperte assim que o inimigo <b>usar</b> — conta o cooldown até ele poder usar de novo (Sprint/Relentless 2:00, City Protection 3:00). Aperte de novo pra reiniciar.</div>
     </section>
+    </div><!-- /main-left -->
 
     <!-- lateral: marcos + config -->
     <div class="side">
@@ -333,7 +334,7 @@
     ];
 
     var state = { startAt: null, events: [], sound: true, lead: 30, notif: false,
-      cds: [ { id:'sprint', nome:'Sprint', cd:120, at:null, rdy:false }, { id:'relentless', nome:'Relentless', cd:120, at:null, rdy:false }, { id:'city', nome:'City Protection', cd:300, at:null, rdy:false } ] };
+      cds: [ { id:'sprint', nome:'Sprint', cd:120, at:null, rdy:false }, { id:'relentless', nome:'Relentless', cd:120, at:null, rdy:false }, { id:'city', nome:'City Protection', cd:180, at:null, rdy:false } ] };
 
     // ---------- persistência ----------
     function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome,win:e.win};}), sound: state.sound, lead: state.lead, notif: state.notif, cds: state.cds.map(function(c){return {id:c.id,at:c.at};}) })); }catch(e){} }
