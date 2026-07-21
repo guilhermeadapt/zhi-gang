@@ -32,7 +32,21 @@ const WWM = {
       tank:       '../assets/vendor-ref/tank.png',
       dps:        '../assets/vendor-ref/dps.png',
       healer:     '../assets/vendor-ref/healer.png',
+      // Outpost (estrutura ao lado do Boss) — arte própria da guild.
+      outpost:    '../assets/vendor-ref/outpost.png',
     },
+  },
+
+  // buffs ativáveis por objetivo (torre / ganso). Mostram um selo no ícone.
+  objBuffs: {
+    tower: [
+      { id: 'cityprot', icon: '🛡️', label: 'City Protection' },
+      { id: 'ygap',     icon: '💥', label: 'You Got a Problem' },
+    ],
+    goose: [
+      { id: 'cityprot', icon: '🛡️', label: 'City Protection' },
+      { id: 'hairpull', icon: '✊', label: 'Hair Pulling' },
+    ],
   },
 
   // ícone de classe por função (tokens de membro destacado)
@@ -40,6 +54,8 @@ const WWM = {
 
   // galeria de ícones para as PTs (emoji) — o estrategista escolhe no editor
   ptIcons: ['⚔️', '🛡️', '🏹', '💥', '🎯', '🌳', '🦢', '👑', '🔥', '❄️', '⚡', '🩸', '🚩', '🐉', '💀', '⭐'],
+  // ícones de PT usando os assets do jogo (chaves de assets.icons): Tank, DPS, Healer, Boss, Ganso, Árvore, JG, Outpost
+  ptIconAssets: ['tank', 'dps', 'healer', 'boss', 'goose_blue', 'tree_blue', 'jungle', 'outpost'],
 
   // paleta de ícones "carimbáveis" no mapa (ferramenta Ícone):
   //  assets = arte do jogo (chaves de assets.icons); emojis = símbolos livres
@@ -107,7 +123,7 @@ const WWM = {
   // 3 dps (até 4). O resto vira reserva.
   ptComp: { Healer: { alvo: 1, max: 2 }, Tank: { alvo: 1, max: 2 }, DPS: { alvo: 3, max: 4 } },
   // tarja secundária (2ª função) que alguns players têm
-  secondaryTags: ['Carry', 'Twin', 'Box', 'Strategic'],
+  secondaryTags: ['Tank', 'Carry', 'Twin', 'Box', 'Strategic'],
   // características especiais (um player pode ter mais de uma)
   specialFlags: [
     { id: 'commander', label: 'Commander', icon: '👑' },

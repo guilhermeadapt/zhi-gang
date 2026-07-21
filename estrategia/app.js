@@ -27,7 +27,7 @@
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
       shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
       menu:'Menú', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartir', present:'Presentar', exit:'Salir',
@@ -39,7 +39,7 @@
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
       shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
       menu:'Menu', phases:'Phases', objectives:'Objectives', roster:'Roster', share:'Share', present:'Present', exit:'Exit',
@@ -51,7 +51,7 @@
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
       shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move',
-      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
+      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
   function t(k) { return (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.pt[k] != null ? I18N.pt[k] : k); }
@@ -112,8 +112,8 @@
   function uid() { return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function cur() { return state.scenarios.find(s => s.id === state.currentId) || state.scenarios[0]; }
   function curIndex() { return state.scenarios.findIndex(s => s.id === state.currentId); }
-  function newScenario(o) { return Object.assign({ id: uid(), fase: 'Cenário', nome: 'Novo cenário', condicao: null, tokens: [], desenhos: [], marcas: [], objetivos: {}, objetivoPos: {}, destacados: [], links: [], objHp: {}, notas: [], nota: '' }, o || {}); }
-  function isPristine(s) { return s && !(s.tokens || []).length && !(s.desenhos || []).length && !(s.marcas || []).length && !(s.nota || '').trim() && !Object.keys(s.objetivos || {}).length && !(s.destacados || []).length && !(s.links || []).length && !Object.keys(s.objHp || {}).length && !(s.notas || []).length; }
+  function newScenario(o) { return Object.assign({ id: uid(), fase: 'Cenário', nome: 'Novo cenário', condicao: null, tokens: [], desenhos: [], marcas: [], objetivos: {}, objetivoPos: {}, destacados: [], links: [], objHp: {}, objBuffs: {}, notas: [], nota: '' }, o || {}); }
+  function isPristine(s) { return s && !(s.tokens || []).length && !(s.desenhos || []).length && !(s.marcas || []).length && !(s.nota || '').trim() && !Object.keys(s.objetivos || {}).length && !(s.destacados || []).length && !(s.links || []).length && !Object.keys(s.objHp || {}).length && !(s.notas || []).length && !Object.keys(s.objBuffs || {}).length; }
   function clamp01(n) { n = Number(n); return isNaN(n) ? 0 : Math.max(0, Math.min(1, n)); }
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
   function roleColor(f) { return CFG.roleColors[f] || CFG.roleColors.DPS; }
@@ -166,9 +166,9 @@
   function frac() { const p = stage.getPointerPosition(); if (!p) return null; const s = stage.scaleX() || 1; return { xf: clamp01((p.x - stage.x()) / s / W), yf: clamp01((p.y - stage.y()) / s / H) }; }
 
   // ---- undo (cenário inteiro: tokens, desenhos, objetivos, posições, destacados) ----
-  function snap() { const s = cur(); return JSON.stringify({ tokens: s.tokens, desenhos: s.desenhos, marcas: s.marcas || [], objetivos: s.objetivos, objetivoPos: s.objetivoPos, destacados: s.destacados, links: s.links || [], objHp: s.objHp || {}, notas: s.notas || [], nota: s.nota }); }
+  function snap() { const s = cur(); return JSON.stringify({ tokens: s.tokens, desenhos: s.desenhos, marcas: s.marcas || [], objetivos: s.objetivos, objetivoPos: s.objetivoPos, destacados: s.destacados, links: s.links || [], objHp: s.objHp || {}, objBuffs: s.objBuffs || {}, notas: s.notas || [], nota: s.nota }); }
   function pushUndo() { const id = cur().id; const st = (undoStacks[id] = undoStacks[id] || []); st.push(snap()); if (st.length > 60) st.shift(); redoStacks[id] = []; }
-  function applySnap(json) { const s = cur(), d = JSON.parse(json); s.tokens = d.tokens; s.desenhos = d.desenhos; s.marcas = d.marcas || []; s.objetivos = d.objetivos; s.objetivoPos = d.objetivoPos; s.destacados = d.destacados; s.links = d.links || []; s.objHp = d.objHp || {}; s.notas = d.notas || []; s.nota = d.nota; loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); if (!objPanel.hidden) renderObjPanel(); saveProject(); }
+  function applySnap(json) { const s = cur(), d = JSON.parse(json); s.tokens = d.tokens; s.desenhos = d.desenhos; s.marcas = d.marcas || []; s.objetivos = d.objetivos; s.objetivoPos = d.objetivoPos; s.destacados = d.destacados; s.links = d.links || []; s.objHp = d.objHp || {}; s.objBuffs = d.objBuffs || {}; s.notas = d.notas || []; s.nota = d.nota; loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); if (!objPanel.hidden) renderObjPanel(); saveProject(); }
   function doUndo() { const id = cur().id, u = undoStacks[id]; if (!u || !u.length) return; (redoStacks[id] = redoStacks[id] || []).push(snap()); applySnap(u.pop()); }
   function doRedo() { const id = cur().id, r = redoStacks[id]; if (!r || !r.length) return; (undoStacks[id] = undoStacks[id] || []).push(snap()); applySnap(r.pop()); }
 
@@ -194,7 +194,7 @@
         chip.setAttribute('draggable', 'true'); chip.dataset.pt = pid;
         const desc = state.ptDesc[pid], ic = state.ptIcon[pid];
         const isPl = placed.includes(pid);
-        chip.innerHTML = '<span class="dot">' + pid.replace('PT', '') + '</span><span class="lbl"><b>' + (ic ? ic + ' ' : '') + pid + '</b>' + (desc ? '<span class="pt-desc-line">' + esc(desc) + '</span>' : '') + '<span class="comp' + (total ? '' : ' vazia') + '">' + compHtml + '</span></span><span class="status">' + (isPl ? t('onMap') : (isMobile() ? t('tapShort') : t('dragShort'))) + '</span>';
+        chip.innerHTML = '<span class="dot">' + pid.replace('PT', '') + '</span><span class="lbl"><b>' + (ic ? ptIconHTML(ic) + ' ' : '') + pid + '</b>' + (desc ? '<span class="pt-desc-line">' + esc(desc) + '</span>' : '') + '<span class="comp' + (total ? '' : ' vazia') + '">' + compHtml + '</span></span><span class="status">' + (isPl ? t('onMap') : (isMobile() ? t('tapShort') : t('dragShort'))) + '</span>';
         chip.addEventListener('dragstart', ev => { if (state.present) { ev.preventDefault(); return; } ev.dataTransfer.setData('text/plain', pid); ev.dataTransfer.effectAllowed = 'copy'; });
         chip.addEventListener('click', () => { if (isMobile() && !cur().tokens.some(x => x.pt === pid)) { placeTokenCenter(pid); document.body.classList.remove('mob-roster'); toast(pid + ' ✓'); } else openPtEditor(pid); });
         ptList.appendChild(chip);
@@ -215,7 +215,9 @@
     g.add(new Konva.Text({ text: t.pt, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(R * 0.72), fill: p.cor, align: 'center', verticalAlign: 'middle', width: R * 2.4, height: R * 1.4, offsetX: R * 1.2, offsetY: R * 0.7 }));
     const n = membersOf(t.pt, false).length;
     if (n) { const b = new Konva.Label({ x: R * 0.7, y: R * 0.7 }); b.add(new Konva.Tag({ fill: p.cor, cornerRadius: R * 0.5 })); b.add(new Konva.Text({ text: String(n), fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(R * 0.55), fill: '#0a0c11', padding: Math.max(1.5, R * 0.16) })); g.add(b); }
-    if (state.ptIcon[t.pt]) g.add(new Konva.Text({ text: state.ptIcon[t.pt], fontSize: R, align: 'center', verticalAlign: 'middle', width: R * 3, height: R * 1.4, offsetX: R * 1.5, offsetY: R * 0.7, y: -R * 0.9 }));
+    const pIc = state.ptIcon[t.pt];
+    if (pIc && pIc.indexOf('asset:') === 0) { const im = iconImgs[pIc.slice(6)]; if (im && im.width) { const s = R * 1.5, h = s * (im.height / im.width); g.add(new Konva.Image({ image: im, width: s, height: h, offsetX: s / 2, offsetY: h / 2, y: -R * 1.05, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); } }
+    else if (pIc) g.add(new Konva.Text({ text: pIc, fontSize: R, align: 'center', verticalAlign: 'middle', width: R * 3, height: R * 1.4, offsetX: R * 1.5, offsetY: R * 0.7, y: -R * 0.9 }));
     g.position({ x: t.xf * W, y: t.yf * H });
     // barra de HP da PT (quando < 100)
     if (t.hp != null && t.hp < 100) hpBar(g, t.hp, R + 4, R * 2.1);
@@ -342,8 +344,11 @@
     h += '<div class="im-sec">' + t('menuHp') + '</div>';
     h += '<div class="im-hp"><input type="range" class="im-range" min="0" max="100" step="5" value="' + cur_hp + '"><span class="im-hpv">' + cur_hp + '%</span></div>';
     h += '<div class="im-quick">' + [100, 75, 50, 25, 0].map(v => '<button data-hp="' + v + '"' + (cur_hp === v ? ' class="on"' : '') + '>' + v + '</button>').join('') + '</div>';
+    const buffs = objBuffsFor(o);
+    if (buffs.length) { const act = (cur().objBuffs || {})[o.id] || []; h += '<div class="im-sec">' + t('buffs') + '</div><div class="im-buffs">'; buffs.forEach(bf => { h += '<button class="im-buff' + (act.includes(bf.id) ? ' on' : '') + '" data-buff="' + bf.id + '">' + bf.icon + ' ' + esc(bf.label) + '</button>'; }); h += '</div>'; }
     h += '<div class="im-actions"><button class="im-link" data-act="link">' + t('menuLink') + '</button><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
     iconMenu.innerHTML = h; iconMenu.hidden = false; placeIconMenu(x, y);
+    iconMenu.querySelectorAll('.im-buff').forEach(bt => bt.addEventListener('click', () => { pushUndo(); cur().objBuffs = cur().objBuffs || {}; const arr = cur().objBuffs[o.id] = cur().objBuffs[o.id] || []; const id = bt.dataset.buff, i = arr.indexOf(id); if (i >= 0) arr.splice(i, 1); else arr.push(id); if (!arr.length) delete cur().objBuffs[o.id]; bt.classList.toggle('on', ((cur().objBuffs[o.id] || []).indexOf(id) >= 0)); renderObjectives(); saveProject(); }));
     const setHp = v => { v = Math.max(0, Math.min(100, Math.round(v / 5) * 5)); cur().objHp = cur().objHp || {}; if (v === 100) delete cur().objHp[o.id]; else cur().objHp[o.id] = v; iconMenu.querySelector('.im-range').value = v; iconMenu.querySelector('.im-hpv').textContent = v + '%'; iconMenu.querySelectorAll('.im-quick button').forEach(b => b.classList.toggle('on', +b.dataset.hp === v)); renderObjectives(); saveProject(); };
     let hpUndoPushed = false;
     iconMenu.querySelector('.im-range').addEventListener('input', e => { if (!hpUndoPushed) { pushUndo(); hpUndoPushed = true; } setHp(+e.target.value); });
@@ -383,7 +388,7 @@
     closeIconMenu();
     if (popoverPt === pt && !ptPopover.hidden) { hidePopover(); return; }
     const p = partyById.get(pt), tit = membersOf(pt, false), res = membersOf(pt, true);
-    let html = '<h4><span class="pd" style="background:' + p.cor + '"></span>' + (state.ptIcon[pt] ? state.ptIcon[pt] + ' ' : '') + pt + (state.present ? '' : '<button class="po-edit">editar</button>') + '</h4>';
+    let html = '<h4><span class="pd" style="background:' + p.cor + '"></span>' + (state.ptIcon[pt] ? ptIconHTML(state.ptIcon[pt]) + ' ' : '') + pt + (state.present ? '' : '<button class="po-edit">editar</button>') + '</h4>';
     if (state.ptDesc[pt]) html += '<div class="po-desc">' + esc(state.ptDesc[pt]) + '</div>';
     const tk = (cur().tokens || []).find(x => x.pt === pt);
     if (tk && !state.present) { const chp = tk.hp == null ? 100 : tk.hp; html += '<div class="po-hp"><span class="po-hp-l">' + t('menuHp') + ' <b>' + chp + '%</b></span><input type="range" class="po-range" min="0" max="100" step="5" value="' + chp + '"></div>'; }
@@ -413,6 +418,7 @@
   function objPos(o) { if (o.movel) { const p = cur().objetivoPos && cur().objetivoPos[o.id]; if (p) return { x: p.x, y: p.y }; } else { const g = state.objetivoPosGlobal[o.id]; if (g) return { x: g.x, y: g.y }; } return { x: o.x, y: o.y }; }
   const OBJ_STYLE = { tower_blue: { c: '#6aa8e0', t: 'T' }, tower_red: { c: '#e0685a', t: 'T' }, goose_blue: { c: '#5ec8d8', t: 'G' }, goose_red: { c: '#e0685a', t: 'G' }, tree_blue: { c: '#5bc98a', t: 'A' }, tree_red: { c: '#e0685a', t: 'A' }, boss: { c: '#f0c66b', t: 'B' }, outpost: { c: '#b98be0', t: '🚩', emoji: true }, jungle: { c: '#8fc06a', t: 'JG' } };
   function objStyle(o) { return OBJ_STYLE[o.icone] || { c: '#9aa2b4', t: '?' }; }
+  function objBuffsFor(o) { if (!o || !o.icone || !CFG.objBuffs) return []; if (o.icone.indexOf('tower') === 0) return CFG.objBuffs.tower || []; if (o.icone.indexOf('goose') === 0) return CFG.objBuffs.goose || []; return []; }
   function treeMeters(o, xf, yf) { const a = o.caminho.a, b = o.caminho.b, ax = b[0] - a[0], ay = b[1] - a[1]; const t = ((xf - a[0]) * ax + (yf - a[1]) * ay) / (ax * ax + ay * ay || 1); return Math.round(Math.max(0, Math.min(1, t)) * CFG.treeMeters); }
   function renderObjectives() {
     objLayer.destroyChildren();
@@ -433,6 +439,9 @@
       // barra de HP (quando < 100%) — árvore mostra em cima pra não bater no medidor de metros
       const hp = (cur().objHp || {})[o.id];
       if (hp != null && hp < 100) { const bw = Math.max(osz * 0.98, os * 0.92), bh = Math.max(4, os * 0.16), by = o.caminho ? (-iconH / 2 - bh - Math.max(9, os * 0.28)) : (iconH / 2 + Math.max(2, os * 0.12)); const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52'; g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.92)', stroke: 'rgba(255,255,255,.3)', strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.7, shadowOffsetY: 1 })); g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, shadowColor: hc, shadowBlur: 4, shadowOpacity: 0.5 })); g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.28), fill: hc, align: 'center', width: bw + os * 2, offsetX: (bw + os * 2) / 2, y: by + bh + 1, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.9 })); }
+      // selos de buff ativos (City Protection / You Got a Problem / Hair Pulling) acima do ícone
+      const abuffs = (cur().objBuffs || {})[o.id] || [];
+      if (abuffs.length) { const defs = objBuffsFor(o); const shown = abuffs.map(id => defs.find(d => d.id === id)).filter(Boolean); const bs = Math.max(11, os * 0.7); const tot = shown.length * bs; shown.forEach((def, i) => { g.add(new Konva.Text({ text: def.icon, fontSize: bs, x: -tot / 2 + i * bs, y: -iconH / 2 - bs - Math.max(2, os * 0.1), width: bs, align: 'center', shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.85 })); }); }
       g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); objLayer.batchDraw(); iconClicked('obj:' + o.id, () => openObjMenu(o, g.x(), g.y())); });
       if (canDrag) {
         g.dragBoundFunc(clampToStage);
@@ -616,7 +625,7 @@
   function loadScenarioIntoUI() { const s = cur(); if (!s) return; nameInput.value = s.nome || ''; condInput.value = s.condicao || ''; noteInput.value = s.nota || ''; updateMini(); }
   function insertAfterCurrent(s) { const i = curIndex(); state.scenarios.splice(i < 0 ? state.scenarios.length : i + 1, 0, s); saveProject(); }
   function addScenarioBlank() { const s = newScenario({ fase: 'Cenário', nome: 'Cenário ' + (state.scenarios.length + 1) }); insertAfterCurrent(s); selectScenario(s.id); }
-  function duplicateCurrent() { const s = cur(); const memMap = {}; const destacados = s.destacados.map(d => { const nid = uid(); memMap[d.id] = nid; return Object.assign({}, d, { id: nid }); }); const remap = ref => { if (typeof ref === 'string' && ref.indexOf('mem:') === 0) { const ni = memMap[ref.slice(4)]; return ni ? 'mem:' + ni : null; } return ref; }; const links = (s.links || []).map(l => { const a = remap(l.a), b = remap(l.b); return (a && b) ? { id: uid(), a, b } : null; }).filter(Boolean); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), marcas: (s.marcas || []).map(m => Object.assign({}, m, { id: uid() })), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados, links, objHp: Object.assign({}, s.objHp || {}), notas: (s.notas || []).map(n => Object.assign({}, n, { id: uid() })), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
+  function duplicateCurrent() { const s = cur(); const memMap = {}; const destacados = s.destacados.map(d => { const nid = uid(); memMap[d.id] = nid; return Object.assign({}, d, { id: nid }); }); const remap = ref => { if (typeof ref === 'string' && ref.indexOf('mem:') === 0) { const ni = memMap[ref.slice(4)]; return ni ? 'mem:' + ni : null; } return ref; }; const links = (s.links || []).map(l => { const a = remap(l.a), b = remap(l.b); return (a && b) ? { id: uid(), a, b } : null; }).filter(Boolean); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), marcas: (s.marcas || []).map(m => Object.assign({}, m, { id: uid() })), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados, links, objHp: Object.assign({}, s.objHp || {}), objBuffs: JSON.parse(JSON.stringify(s.objBuffs || {})), notas: (s.notas || []).map(n => Object.assign({}, n, { id: uid() })), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
   async function deleteScenario(id) { if (state.scenarios.length <= 1) { toast('É preciso ter ao menos um cenário'); return; } const i = state.scenarios.findIndex(s => s.id === id); if (i < 0) return; if (!isPristine(state.scenarios[i]) && !await askConfirm('Excluir o cenário "' + (state.scenarios[i].nome || '') + '"?')) return; state.scenarios.splice(i, 1); if (state.currentId === id) state.currentId = state.scenarios[Math.max(0, i - 1)].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
   function reorder(dragIdV, targetId, before) { const from = state.scenarios.findIndex(s => s.id === dragIdV); if (from < 0) return; const [m] = state.scenarios.splice(from, 1); let to = state.scenarios.findIndex(s => s.id === targetId); if (to < 0) state.scenarios.push(m); else state.scenarios.splice(before ? to : to + 1, 0, m); renderRail(); saveProject(); }
   function seedStandard() { const key = e => (e.nome || '') + '|' + (e.condicao || ''); if (state.scenarios.length === 1 && isPristine(state.scenarios[0])) state.scenarios = []; const have = new Set(state.scenarios.map(key)); CFG.fasesPadrao.forEach(f => { if (!have.has(key(f))) state.scenarios.push(newScenario({ fase: f.fase, nome: f.nome, condicao: f.condicao })); }); state.currentId = state.scenarios[0].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
@@ -686,12 +695,14 @@
   function classIcoHTML(funcao, sm) { const key = (CFG.classIcons || {})[funcao]; const src = key && CFG.assets && CFG.assets.icons ? CFG.assets.icons[key] : ''; const cls = 'c-ico' + (sm ? ' sm' : ''); return src ? '<span class="' + cls + '" style="--rc:' + roleColor(funcao) + '"><img src="' + src + '" alt="' + funcao + '"></span>' : '<span class="' + cls + ' dotonly" style="--rc:' + roleColor(funcao) + '"></span>'; }
   function byRole(arr) { return arr.slice().sort((a, b) => (CFG.roleOrder.indexOf(a.funcao) - CFG.roleOrder.indexOf(b.funcao)) || a.nome.localeCompare(b.nome)); }
   function bdChip(p) {
-    const tag2 = p.tag2 ? '<span class="c-tag2">' + esc(p.tag2) + '</span>' : '';
+    const tag2 = p.tag2 ? '<span class="c-tag2" title="' + esc(p.tag2) + '">' + esc(p.tag2) + '</span>' : '';
     const rep = p.replace ? '<span class="c-rep" title="Replace">⇄</span>' : '';
+    // tarja secundária fica DISCRETA à esquerda do nome; a função (classe) sempre à direita
     return '<div class="bd-chip" draggable="true" data-id="' + p.id + '" style="--rc:' + roleColor(p.funcao) + '">'
-      + '<span class="c-grip">⋮⋮</span>' + classIcoHTML(p.funcao)
-      + '<span class="c-name">' + esc(p.nome) + '</span><span class="c-role">' + p.funcao + '</span>'
-      + '<span class="c-tags">' + rep + tag2 + bdFlagsHTML(p) + '</span></div>';
+      + '<span class="c-grip">⋮⋮</span>' + classIcoHTML(p.funcao) + tag2
+      + '<span class="c-name">' + esc(p.nome) + '</span>'
+      + '<span class="c-tags">' + rep + bdFlagsHTML(p) + '</span>'
+      + '<span class="c-role">' + p.funcao + '</span></div>';
   }
   function bdZone(zoneId, label, chips, cls, extra) {
     return '<div class="bd-zone ' + (cls || '') + '" data-zone="' + zoneId + '"><div class="bd-zh">' + label + (extra || '') + '</div>'
@@ -714,7 +725,7 @@
       const tit = byRole(active.filter(x => x.pt === pid && !x.reserva));
       const ptres = byRole(active.filter(x => x.pt === pid && x.reserva));
       const c = { Tank: 0, Healer: 0, DPS: 0 }; tit.forEach(m => c[m.funcao]++);
-      const head = '<span class="dot" style="background:' + party.cor + '"></span><b>' + (state.ptIcon[pid] ? state.ptIcon[pid] + ' ' : '') + pid + '</b>'
+      const head = '<span class="dot" style="background:' + party.cor + '"></span><b>' + (state.ptIcon[pid] ? ptIconHTML(state.ptIcon[pid]) + ' ' : '') + pid + '</b>'
         + '<span class="bd-comp">' + c.Tank + 'T · ' + c.Healer + 'H · ' + c.DPS + 'D</span>'
         + '<span class="bd-n' + (tit.length > CFG.ptSize ? ' over' : '') + '">' + tit.length + '/' + CFG.ptSize + '</span>';
       const obs = state.ptDesc[pid] || '';
@@ -800,16 +811,18 @@
   function openPtEditor(pt) {
     if (state.present || !partyById.has(pt)) return;
     editingPt = pt; const p = partyById.get(pt);
-    peDot.style.background = p.cor; peTitle.textContent = (state.ptIcon[pt] ? state.ptIcon[pt] + ' ' : '') + pt;
+    peDot.style.background = p.cor; peTitle.innerHTML = (state.ptIcon[pt] ? ptIconHTML(state.ptIcon[pt]) + ' ' : '') + pt;
     peDesc.value = state.ptDesc[pt] || '';
     renderPtIcons(); renderPtEditor(); ptModal.hidden = false; peDesc.focus();
   }
+  function ptIconHTML(v, px) { if (!v) return ''; if (v.indexOf('asset:') === 0) { const key = v.slice(6), src = (CFG.assets && CFG.assets.icons) ? CFG.assets.icons[key] : ''; return src ? '<img class="pt-ic-img" src="' + src + '" alt="" style="width:' + (px || 15) + 'px;height:' + (px || 15) + 'px;object-fit:contain;vertical-align:-3px">' : ''; } return v; }
   function renderPtIcons() {
     const cur = state.ptIcon[editingPt] || '';
     let html = '<button class="none' + (cur ? '' : ' sel') + '" data-i="">sem</button>';
     html += CFG.ptIcons.map(ic => '<button' + (ic === cur ? ' class="sel"' : '') + ' data-i="' + ic + '">' + ic + '</button>').join('');
+    html += (CFG.ptIconAssets || []).map(key => { const v = 'asset:' + key; return '<button class="ico-asset' + (v === cur ? ' sel' : '') + '" data-i="' + v + '">' + ptIconHTML(v, 18) + '</button>'; }).join('');
     peIcons.innerHTML = html;
-    peIcons.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { const v = b.dataset.i; if (v) state.ptIcon[editingPt] = v; else delete state.ptIcon[editingPt]; peTitle.textContent = (v ? v + ' ' : '') + editingPt; renderPtIcons(); renderSidebar(); renderTokens(); saveProject(); }));
+    peIcons.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { const v = b.dataset.i; if (v) state.ptIcon[editingPt] = v; else delete state.ptIcon[editingPt]; peTitle.innerHTML = ptIconHTML(v) + ' ' + editingPt; renderPtIcons(); renderSidebar(); renderTokens(); saveProject(); }));
   }
   function renderPtEditor() {
     const pt = editingPt; const tit = membersOf(pt, false), res = membersOf(pt, true);
@@ -935,6 +948,6 @@
   // ---- persistência ----
   function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, showNames: state.showNames })); } catch (e) {} }
   function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
-  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240) })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
+  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, objBuffs: (s.objBuffs && typeof s.objBuffs === 'object') ? Object.fromEntries(Object.entries(s.objBuffs).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string')])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240) })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tag2: (CFG.secondaryTags || []).includes(p.tag2) ? p.tag2 : null, flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], replace: !!p.replace, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
