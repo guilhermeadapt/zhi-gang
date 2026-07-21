@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#0a0c11" />
-  <meta name="description" content="War Timer — cronômetro de GvG da guild Wanted: acompanha os marcos de tempo (JG, Ganso, Boss/Nirvana, Colapso) e avisa na hora. Uso interno." />
+  <meta name="description" content="War Timer — cronômetro regressivo de GvG da guild Wanted: agenda o início, acompanha os marcos (JG a cada 5m, Ganso, Boss/Nirvana, Colapso) e avisa na hora. Uso interno." />
   <title>War Timer · Zhi Guides</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -65,42 +65,54 @@
 
     /* ---------- clock card ---------- */
     .clock-card{grid-column:1;background:linear-gradient(180deg,var(--ink-2),#0e1118);
-      border:1px solid var(--line-soft);border-radius:20px;padding:clamp(20px,4vw,30px);position:relative;overflow:hidden}
+      border:1px solid var(--line-soft);border-radius:20px;padding:clamp(20px,4vw,28px);position:relative;overflow:hidden}
     .clock-card::after{content:"";position:absolute;inset:0;border-radius:20px;pointer-events:none;
       box-shadow:inset 0 0 60px -30px var(--gold);opacity:0;transition:opacity .2s}
     body.flash .clock-card::after{opacity:1}
     .cc-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);text-align:center}
+    body.phase-prep .cc-lbl{color:var(--board)}
+    body.phase-war  .cc-lbl{color:var(--gold)}
     .clock{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;
-      font-size:clamp(58px,15vw,92px);line-height:1;letter-spacing:.02em;text-align:center;margin:10px 0 4px;
+      font-size:clamp(58px,15vw,90px);line-height:1;letter-spacing:.02em;text-align:center;margin:8px 0 2px;
       color:var(--text);text-shadow:0 0 40px rgba(217,164,65,.14)}
-    body.running .clock{color:var(--gold-2)}
-    .clock small{font-size:.42em;color:var(--muted);font-weight:600}
+    body.phase-war .clock{color:var(--gold-2)}
+    body.phase-prep .clock{color:var(--board)}
+    body.phase-end .clock{color:var(--muted)}
     .phase-now{text-align:center;font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.06em;
       text-transform:uppercase;color:var(--gold);min-height:18px}
-    .controls{display:flex;gap:10px;margin-top:20px;justify-content:center;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--disp);font-weight:600;
-      font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:12px 22px;border-radius:11px;
-      border:1px solid var(--line-soft);background:rgba(255,255,255,.02);color:var(--text);transition:.15s}
+    .sub-line{text-align:center;color:var(--muted);font-size:.84rem;min-height:19px;margin-top:3px}
+    .sub-line b{color:var(--text);font-variant-numeric:tabular-nums}
+
+    /* agendar */
+    .sched{margin-top:18px;border:1px solid var(--line-soft);border-radius:13px;padding:13px;background:rgba(255,255,255,.015)}
+    .sched-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;display:block}
+    .sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .sched input[type=time]{background:#0b0e15;border:1px solid var(--line-soft);border-radius:9px;color:var(--text);
+      padding:9px 11px;font-family:var(--disp);font-weight:600;font-size:1rem;font-variant-numeric:tabular-nums;color-scheme:dark}
+    .sched .btn{flex:none}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:var(--disp);font-weight:600;
+      font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:10px 15px;border-radius:10px;
+      border:1px solid var(--line-soft);background:rgba(255,255,255,.02);color:var(--text);transition:.15s;white-space:nowrap}
     .btn:hover{border-color:var(--line)}
     .btn:active{transform:scale(.98)}
-    .btn.primary{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold);min-width:150px}
+    .btn.primary{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     .btn.primary:hover{filter:brightness(1.06)}
     .btn.ghost{color:var(--muted)}
-    .btn svg{width:15px;height:15px;fill:currentColor}
+    .btn svg{width:14px;height:14px;fill:currentColor}
+    .sched-hint{color:var(--muted);font-size:.76rem;margin-top:9px;line-height:1.4}
 
     /* next event ribbon */
-    .next{margin-top:20px;border:1px solid var(--line);border-radius:13px;padding:13px 15px;
+    .next{margin-top:16px;border:1px solid var(--line);border-radius:13px;padding:13px 15px;
       background:linear-gradient(180deg,rgba(217,164,65,.08),rgba(217,164,65,.02));display:flex;align-items:center;gap:13px}
     .next.warn{border-color:color-mix(in srgb,var(--crimson) 60%,transparent);
       background:linear-gradient(180deg,rgba(226,91,82,.14),rgba(226,91,82,.03));animation:pulse 1s ease-in-out infinite}
     @keyframes pulse{50%{border-color:var(--crimson)}}
-    .next .n-em{font-size:26px;line-height:1;flex:none}
+    .next .n-em{font-size:26px;line-height:1;flex:none;width:30px;text-align:center}
     .next .n-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
     .next .n-k{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
     .next .n-name{font-family:var(--disp);font-weight:600;font-size:1.05rem;line-height:1.1}
     .next .n-cd{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;font-size:1.5rem;color:var(--gold-2);flex:none}
     .next.warn .n-cd{color:var(--crimson)}
-    .next.done-all{opacity:.6}
     .next.done-all .n-cd{display:none}
 
     /* ---------- timeline ---------- */
@@ -115,20 +127,19 @@
     .mini:hover{color:var(--gold);border-color:var(--line)}
     .mini.on{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(217,164,65,.08)}
 
-    .events{list-style:none;display:flex;flex-direction:column}
-    .ev{display:flex;align-items:center;gap:12px;padding:11px 15px;border-bottom:1px solid var(--line-soft);position:relative;transition:.15s}
+    .events{list-style:none;display:flex;flex-direction:column;max-height:60vh;overflow-y:auto}
+    .ev{display:flex;align-items:center;gap:12px;padding:10px 15px;border-bottom:1px solid var(--line-soft);position:relative;transition:.15s}
     .ev:last-child{border-bottom:0}
     .ev .e-em{font-size:20px;line-height:1;flex:none;width:26px;text-align:center}
-    .ev .e-time{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;font-size:1.05rem;color:var(--text);flex:none;width:58px}
-    .ev .e-name{flex:1;min-width:0;font-size:.92rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ev .e-time{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;font-size:1.02rem;color:var(--text);flex:none;width:52px}
+    .ev .e-name{flex:1;min-width:0;font-size:.9rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .ev .e-st{flex:none;width:9px;height:9px;border-radius:50%;background:#2a2f3a}
     .ev.next-ev{background:rgba(217,164,65,.06)}
     .ev.next-ev::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--gold)}
     .ev.next-ev .e-st{background:var(--gold);box-shadow:0 0 10px var(--gold)}
-    .ev.done{opacity:.44}
+    .ev.done{opacity:.42}
     .ev.done .e-st{background:var(--jade)}
     .ev.done .e-time{color:var(--muted)}
-    /* edit mode */
     .ev .e-del{flex:none;width:24px;height:24px;border-radius:6px;border:1px solid var(--line-soft);background:transparent;
       color:var(--muted);font-size:14px;line-height:1;display:none}
     .ev .e-del:hover{color:var(--crimson);border-color:color-mix(in srgb,var(--crimson) 50%,transparent)}
@@ -138,12 +149,13 @@
     body.editing .ev .e-time:hover,body.editing .ev .e-name:hover{border-bottom-color:var(--line)}
     .add-row{display:flex;gap:8px;padding:12px 15px;border-top:1px solid var(--line-soft)}
     .add-row input{background:#0b0e15;border:1px solid var(--line-soft);border-radius:8px;color:var(--text);padding:8px 10px;font-size:.9rem}
-    .add-row .ai-time{width:74px;text-align:center;font-variant-numeric:tabular-nums}
+    .add-row .ai-time{width:70px;text-align:center;font-variant-numeric:tabular-nums}
     .add-row .ai-name{flex:1;min-width:0}
-    .add-row .ai-em{width:52px;text-align:center;font-size:1rem}
+    .add-row .ai-em{width:50px;text-align:center;font-size:1rem}
     .add-row button{flex:none;padding:0 14px;border-radius:8px;border:1px solid var(--gold);
       background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#241a06;font-family:var(--disp);font-weight:700;font-size:13px}
     .add-row[hidden]{display:none}
+    .ev-note{padding:9px 15px;color:var(--muted);font-size:.74rem;border-top:1px solid var(--line-soft);line-height:1.4}
 
     /* settings panel */
     .set-row{display:flex;align-items:center;gap:12px;padding:11px 15px;border-bottom:1px solid var(--line-soft)}
@@ -161,6 +173,11 @@
 
     .hint{grid-column:1 / -1;text-align:center;color:var(--muted);font-size:.82rem;margin-top:2px}
     .hint b{color:var(--gold)}
+
+    /* ícones de arte (imagem) reusados dos assets do Game Plan */
+    .e-em img.ico-img,.n-em img.ico-img,.t-em img.ico-img,.phase-now img.ico-img{
+      width:1.2em;height:1.2em;object-fit:contain;vertical-align:-0.24em;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+    .n-em img.ico-img{width:1.15em;height:1.15em}
 
     /* toast */
     .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);z-index:60;opacity:0;
@@ -185,18 +202,20 @@
   <div class="wrap">
     <!-- relógio -->
     <section class="clock-card">
-      <div class="cc-lbl">Tempo de guerra</div>
-      <div class="clock" id="clock">00:00</div>
-      <div class="phase-now" id="phaseNow">Pronto para começar</div>
-      <div class="controls">
-        <button class="btn primary" id="startBtn">
-          <svg viewBox="0 0 24 24" id="startIco"><path d="M8 5v14l11-7z"/></svg>
-          <span id="startTxt">Iniciar</span>
-        </button>
-        <button class="btn ghost" id="resetBtn">
-          <svg viewBox="0 0 24 24"><path d="M12 5V2L7 7l5 5V8a5 5 0 1 1-5 5H5a7 7 0 1 0 7-8z"/></svg>
-          Zerar
-        </button>
+      <div class="cc-lbl" id="ccLbl">Guerra</div>
+      <div class="clock" id="clock">30:00</div>
+      <div class="phase-now" id="phaseNow">Defina o horário de início</div>
+      <div class="sub-line" id="subLine"></div>
+
+      <div class="sched">
+        <span class="sched-lbl">Início da guerra</span>
+        <div class="sched-row">
+          <input type="time" id="startTime" />
+          <button class="btn primary" id="schedBtn">Agendar</button>
+          <button class="btn" id="nowBtn">Começar agora</button>
+          <button class="btn ghost" id="resetBtn">Zerar</button>
+        </div>
+        <div class="sched-hint" id="schedHint">Defina a hora em que o cronômetro de <b>30&nbsp;min</b> começa. Os <b>5&nbsp;min de preparação</b> aparecem antes disso — assim fica sincronizado com o relógio real, sem depender do carregamento.</div>
       </div>
 
       <div class="next" id="nextBox">
@@ -220,10 +239,11 @@
         <ul class="events" id="events"></ul>
         <div class="add-row" id="addRow" hidden>
           <input class="ai-em" id="aiEm" maxlength="2" placeholder="🎯" />
-          <input class="ai-time" id="aiTime" placeholder="05:00" />
+          <input class="ai-time" id="aiTime" placeholder="25:00" />
           <input class="ai-name" id="aiName" placeholder="Nome do marco" />
           <button id="aiAdd">+</button>
         </div>
+        <div class="ev-note" id="evNote">Tempos em <b>tempo restante</b> de guerra (30:00 → 00:00). No modo Editar dá pra ajustar tudo — salvo neste navegador.</div>
       </div>
 
       <div class="panel">
@@ -245,7 +265,7 @@
       </div>
     </div>
 
-    <p class="hint">O relógio conta o tempo de jogo. No modo <b>Editar</b> dá pra clicar no tempo/nome pra mudar, remover ou adicionar marcos — tudo salvo neste navegador.</p>
+    <p class="hint">Regressivo de <b>30:00</b> · JG a cada 5&nbsp;min · <b>5:00</b> de preparação antes. Agende pelo relógio e o timer se mantém certo mesmo se a aba abrir depois.</p>
   </div>
 
   <div class="toast" id="toast"><span class="t-em" id="toastEm">🎯</span><span id="toastTxt"></span></div>
@@ -253,103 +273,136 @@
   <script>
   (function(){
     var $ = function(id){ return document.getElementById(id); };
-    var LS = 'zhi_wartimer_v1';
+    var LS = 'zhi_wartimer_v2';
+    var PREP = 300;      // preparação (s) antes da guerra
+    var WAR  = 1800;     // duração da guerra (s) = 30 min
 
-    // marcos padrão (tempos EDITÁVEIS — a guild ajusta os valores reais)
+    // ícones da arte do jogo (mesmos assets do Game Plan)
+    var ICON = {
+      funcoin: '../assets/icons/funcoin.png',
+      goose:   '../assets/vendor-ref/goose_red.png',
+      tree:    '../assets/vendor-ref/tree_red.png',
+      boss:    '../assets/vendor-ref/boss.png'
+    };
+    function ico(e){ return (e.img && ICON[e.img]) ? '<img class="ico-img" src="'+ICON[e.img]+'" alt="">' : '<span class="ico-em">'+(e.em||'🎯')+'</span>'; }
+
+    // marcos padrão — em TEMPO RESTANTE (s). JG a cada 5 min (30,25,20,15,10,5).
+    // (*) tempos de Ganso/Boss/Colapso são estimativas — a guild ajusta no Editar.
     var DEFAULT = [
-      { t: 30,   em: '🚩', nome: 'Início / posicionamento' },
-      { t: 300,  em: '🥷', nome: 'Jungle (JG) nasce' },
-      { t: 600,  em: '🦢', nome: 'Ganso' },
-      { t: 900,  em: '⚖️', nome: 'Halftime' },
-      { t: 1200, em: '🐉', nome: 'Boss / Nirvana' },
-      { t: 1500, em: '🌳', nome: 'Colapso de Árvores' }
+      { rem: 1800, img: 'funcoin', nome: 'Jungle (JG)' },
+      { rem: 1500, img: 'funcoin', nome: 'Jungle (JG)' },
+      { rem: 1500, img: 'goose',   nome: 'Ganso *' },
+      { rem: 1200, img: 'funcoin', nome: 'Jungle (JG)' },
+      { rem: 900,  img: 'funcoin', nome: 'Jungle (JG)' },
+      { rem: 900,  em: '⚖️',       nome: 'Halftime' },
+      { rem: 600,  img: 'funcoin', nome: 'Jungle (JG)' },
+      { rem: 600,  img: 'boss',    nome: 'Boss / Nirvana *' },
+      { rem: 300,  img: 'funcoin', nome: 'Jungle (JG)' },
+      { rem: 120,  img: 'tree',    nome: 'Colapso de Árvores *' }
     ];
 
-    var state = {
-      running: false, elapsed: 0, t0: 0,
-      events: [], sound: true, lead: 30, notif: false
-    };
+    var state = { startAt: null, events: [], sound: true, lead: 30, notif: false };
 
     // ---------- persistência ----------
-    function save(){
-      try{ localStorage.setItem(LS, JSON.stringify({ events: state.events, sound: state.sound, lead: state.lead, notif: state.notif })); }catch(e){}
-    }
+    function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome};}), sound: state.sound, lead: state.lead, notif: state.notif })); }catch(e){} }
     function load(){
-      var d = null; try{ d = JSON.parse(localStorage.getItem(LS)); }catch(e){}
+      var d=null; try{ d=JSON.parse(localStorage.getItem(LS)); }catch(e){}
       if(d && Array.isArray(d.events) && d.events.length){ state.events = d.events; }
-      else { state.events = DEFAULT.map(function(e){ return { t:e.t, em:e.em, nome:e.nome }; }); }
-      if(d){ if(typeof d.sound==='boolean') state.sound=d.sound; if(typeof d.lead==='number') state.lead=d.lead; if(typeof d.notif==='boolean') state.notif=d.notif; }
-      state.events.forEach(function(e){ e.fired=false; e.pre=false; });
-      state.events.sort(function(a,b){ return a.t-b.t; });
+      else { state.events = DEFAULT.map(function(e){ return { rem:e.rem, em:e.em, img:e.img, nome:e.nome }; }); }
+      if(d){ if(typeof d.startAt==='number') state.startAt=d.startAt; if(typeof d.sound==='boolean') state.sound=d.sound; if(typeof d.lead==='number') state.lead=d.lead; if(typeof d.notif==='boolean') state.notif=d.notif; }
+      sortEvents(); seedFired();
     }
+    function sortEvents(){ state.events.forEach(function(e){ if(e.fired===undefined){e.fired=false;e.pre=false;} }); state.events.sort(function(a,b){ return b.rem-a.rem; }); } // 30m no topo
 
     // ---------- tempo ----------
-    function now(){ return (window.performance && performance.now) ? performance.now() : Date.now(); }
-    function elapsedMs(){ return state.running ? (now() - state.t0) : state.elapsed; }
-    function fmt(sec){ sec = Math.max(0, Math.floor(sec)); var m = Math.floor(sec/60), s = sec%60; return (m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+    function now(){ return Date.now(); }
+    function warEnd(){ return state.startAt + WAR*1000; }
+    function warRemaining(){ return state.startAt==null ? WAR : (warEnd() - now())/1000; } // s restantes de guerra (pode ser > WAR antes de começar)
+    function fmt(sec){ var neg = sec<0; sec=Math.abs(Math.floor(sec)); var m=Math.floor(sec/60), s=sec%60; return (neg?'-':'')+(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
 
-    // ---------- som (WebAudio, sem asset) ----------
-    var actx = null;
+    // marca como "já disparado" tudo que está no passado (evita disparar em lote ao abrir no meio)
+    function seedFired(){
+      var wr = warRemaining();
+      state.events.forEach(function(e){ var passed = state.startAt!=null && wr < e.rem - 0.4; e.fired = passed; e.pre = passed; });
+    }
+
+    // ---------- som ----------
+    var actx=null;
     function beep(kind){
       if(!state.sound) return;
       try{
         actx = actx || new (window.AudioContext||window.webkitAudioContext)();
         if(actx.state==='suspended') actx.resume();
         var seq = kind==='pre' ? [[660,0]] : [[880,0],[1320,.13]];
-        seq.forEach(function(step){
-          var o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime + step[1];
+        seq.forEach(function(step){ var o=actx.createOscillator(), g=actx.createGain(), t=actx.currentTime+step[1];
           o.type='triangle'; o.frequency.value=step[0];
           g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.32,t+.02); g.gain.exponentialRampToValueAtTime(0.0001,t+.28);
-          o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t+.3);
-        });
+          o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t+.3); });
       }catch(e){}
     }
     function notify(ev){
       if(!state.notif || !('Notification' in window) || Notification.permission!=='granted') return;
-      try{ new Notification(ev.em+'  '+ev.nome, { body:'Marco de '+fmt(ev.t)+' de jogo', silent:false }); }catch(e){}
+      try{ new Notification((ev.em?ev.em+'  ':'')+ev.nome, { body:'A '+fmt(ev.rem)+' do fim', silent:false }); }catch(e){}
     }
 
     // ---------- alerta visual ----------
-    var toastT = null;
-    function showToast(em, txt, warn){
-      $('toastEm').textContent = em; $('toastTxt').textContent = txt;
-      var el = $('toast'); el.style.borderColor = warn ? 'var(--crimson)' : ''; el.classList.add('show');
-      clearTimeout(toastT); toastT = setTimeout(function(){ el.classList.remove('show'); }, 3200);
+    var toastT=null;
+    function showToast(em, txt, warn){ $('toastEm').innerHTML=em; $('toastTxt').textContent=txt; var el=$('toast'); el.style.borderColor = warn?'var(--crimson)':''; el.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove('show'); },3200); }
+    function flash(){ document.body.classList.add('flash'); setTimeout(function(){ document.body.classList.remove('flash'); },260); }
+
+    // ---------- fase ----------
+    // retorna {ph:'idle|wait|prep|war|end', big:sec, label, sub}
+    function phase(){
+      if(state.startAt==null) return { ph:'idle', big:WAR, label:'Guerra', sub:'' };
+      var n=now(), ws=state.startAt, ps=ws-PREP*1000, we=warEnd();
+      if(n < ps){ return { ph:'wait', big:WAR, label:'Aguardando', sub:'Preparação em <b>'+fmt((ps-n)/1000)+'</b> · guerra às '+hhmm(ws) }; }
+      if(n < ws){ return { ph:'prep', big:(ws-n)/1000, label:'Preparação', sub:'Guerra começa em <b>'+fmt((ws-n)/1000)+'</b>' }; }
+      if(n < we){ return { ph:'war', big:(we-n)/1000, label:'Guerra', sub:'Início às '+hhmm(ws)+' · fim '+hhmm(we) }; }
+      return { ph:'end', big:0, label:'Encerrada', sub:'Guerra encerrada' };
     }
-    function flash(){ document.body.classList.add('flash'); setTimeout(function(){ document.body.classList.remove('flash'); }, 260); }
+    function hhmm(ep){ var d=new Date(ep); return (d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes(); }
 
     // ---------- render ----------
     function render(){
-      var ev = elapsedMs()/1000;
-      $('clock').innerHTML = fmt(ev);
-      document.body.classList.toggle('running', state.running);
-      // próximo marco
-      var next = null;
-      for(var i=0;i<state.events.length;i++){ if(state.events[i].t > ev - 0.4){ next = state.events[i]; break; } }
-      var box = $('nextBox');
-      if(next){
-        var rem = next.t - ev;
-        $('nextEm').textContent = next.em; $('nextName').textContent = next.nome; $('nextCd').textContent = fmt(rem);
+      var p = phase();
+      $('clock').textContent = fmt(p.big);
+      $('ccLbl').textContent = p.label;
+      $('subLine').innerHTML = p.sub;
+      document.body.classList.remove('phase-prep','phase-war','phase-end');
+      if(p.ph==='prep') document.body.classList.add('phase-prep');
+      else if(p.ph==='war') document.body.classList.add('phase-war');
+      else if(p.ph==='end') document.body.classList.add('phase-end');
+
+      var wr = warRemaining();
+      // próximo marco = maior rem que ainda não passou (rem <= wr), lista já ordenada desc
+      var next=null;
+      for(var i=0;i<state.events.length;i++){ if(state.events[i].rem <= wr + 0.4){ next=state.events[i]; break; } }
+      var box=$('nextBox');
+      if(state.startAt!=null && next){
+        var untilNext = wr - next.rem; // s até o próximo marco
+        $('nextEm').innerHTML=ico(next); $('nextName').textContent=next.nome; $('nextCd').textContent=fmt(untilNext);
         box.classList.remove('done-all');
-        box.classList.toggle('warn', state.running && rem <= state.lead && rem > 0);
+        box.classList.toggle('warn', p.ph!=='end' && untilNext <= state.lead && untilNext > -1);
+      } else if(state.startAt!=null){
+        $('nextEm').innerHTML='🏁'; $('nextName').textContent='Todos os marcos passaram'; box.classList.add('done-all'); box.classList.remove('warn');
       } else {
-        $('nextEm').textContent = '🏁'; $('nextName').textContent = 'Todos os marcos passaram'; box.classList.add('done-all'); box.classList.remove('warn');
+        $('nextEm').innerHTML='⏱️'; $('nextName').textContent='Agende o início'; $('nextCd').textContent='--:--'; box.classList.remove('warn'); box.classList.remove('done-all');
       }
-      // fase atual (último marco que passou)
-      var cur = null;
-      for(var j=state.events.length-1;j>=0;j--){ if(ev >= state.events[j].t){ cur = state.events[j]; break; } }
-      $('phaseNow').textContent = state.running ? (cur ? cur.em+'  '+cur.nome : 'Abertura') : (ev>0?'Pausado':'Pronto para começar');
-      // lista
-      renderList(ev, next);
+      $('phaseNow').innerHTML = p.ph==='idle' ? 'Defina o horário de início'
+        : p.ph==='wait' ? 'Aguardando início'
+        : p.ph==='prep' ? '⚙️ Preparação'
+        : p.ph==='war'  ? (next? ico(next)+' Próximo: '+escapeHtml(next.nome) : 'Reta final')
+        : 'Encerrada';
+      renderList(wr, next);
     }
-    function renderList(ev, next){
-      var ul = $('events'); ul.innerHTML = '';
+    function renderList(wr, next){
+      var ul=$('events'); ul.innerHTML='';
       state.events.forEach(function(e, idx){
-        var li = document.createElement('li'); li.className = 'ev';
-        if(e === next) li.className += ' next-ev';
-        else if(ev >= e.t) li.className += ' done';
-        li.innerHTML = '<span class="e-em">'+e.em+'</span>'
-          + '<span class="e-time" data-i="'+idx+'" data-f="t">'+fmt(e.t)+'</span>'
+        var li=document.createElement('li'); li.className='ev';
+        if(e===next) li.className+=' next-ev';
+        else if(state.startAt!=null && wr < e.rem - 0.4) li.className+=' done';
+        li.innerHTML = '<span class="e-em">'+ico(e)+'</span>'
+          + '<span class="e-time" data-i="'+idx+'" data-f="rem">'+fmt(e.rem)+'</span>'
           + '<span class="e-name" data-i="'+idx+'" data-f="nome">'+escapeHtml(e.nome)+'</span>'
           + '<span class="e-st"></span>'
           + '<button class="e-del" data-i="'+idx+'" title="Remover">✕</button>';
@@ -360,11 +413,11 @@
 
     // ---------- loop ----------
     function tick(){
-      if(state.running){
-        var ev = elapsedMs()/1000;
+      if(state.startAt!=null){
+        var wr = warRemaining();
         state.events.forEach(function(e){
-          if(!e.pre && state.lead>0 && ev >= e.t - state.lead && ev < e.t){ e.pre = true; beep('pre'); showToast(e.em, e.nome+' em '+Math.round(e.t-ev)+'s', true); }
-          if(!e.fired && ev >= e.t){ e.fired = true; e.pre = true; beep('hit'); flash(); showToast(e.em, e.nome, false); notify(e); }
+          if(!e.pre && state.lead>0 && wr <= e.rem + state.lead && wr > e.rem){ e.pre=true; beep('pre'); showToast(ico(e), e.nome+' em '+Math.round(wr-e.rem)+'s', true); }
+          if(!e.fired && wr <= e.rem){ e.fired=true; e.pre=true; beep('hit'); flash(); showToast(ico(e), e.nome, false); notify(e); }
         });
       }
       render();
@@ -372,75 +425,61 @@
     }
 
     // ---------- controles ----------
-    function start(){
-      if(state.running){ // pausar
-        state.elapsed = elapsedMs(); state.running = false;
-      } else {
-        state.t0 = now() - state.elapsed; state.running = true;
-        try{ if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); }catch(e){}
-      }
-      syncStartBtn();
+    function scheduleAt(ep){
+      state.startAt = ep;
+      seedFired();
+      try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); }catch(e){}
+      save(); render();
     }
-    function reset(){
-      state.running = false; state.elapsed = 0;
-      state.events.forEach(function(e){ e.fired=false; e.pre=false; });
-      syncStartBtn(); render();
+    function schedule(){
+      var v=$('startTime').value; if(!v){ showToast('⚠️','Escolha um horário', true); return; }
+      var parts=v.split(':'), d=new Date(); d.setHours(+parts[0], +parts[1], 0, 0);
+      if(d.getTime() < now()-60000) d.setDate(d.getDate()+1); // se já passou hoje, assume amanhã
+      scheduleAt(d.getTime());
     }
-    function syncStartBtn(){
-      var on = state.running;
-      $('startTxt').textContent = on ? 'Pausar' : (state.elapsed>0 ? 'Continuar' : 'Iniciar');
-      $('startIco').innerHTML = on ? '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
-    }
+    function startNow(){ scheduleAt(now()); }
+    function reset(){ state.startAt=null; state.events.forEach(function(e){ e.fired=false; e.pre=false; }); save(); render(); }
 
     // ---------- edição ----------
-    var editing = false;
-    function toggleEdit(){
-      editing = !editing; document.body.classList.toggle('editing', editing);
-      $('editBtn').classList.toggle('on', editing); $('editBtn').textContent = editing ? 'Concluir' : 'Editar';
-      $('addRow').hidden = !editing;
-    }
-    function parseTime(str){
-      str = String(str).trim();
-      if(/^\d{1,3}:\d{1,2}$/.test(str)){ var p=str.split(':'); return (+p[0])*60 + (+p[1]); }
-      if(/^\d+$/.test(str)){ return +str; } // segundos puros
-      return null;
-    }
+    var editing=false;
+    function toggleEdit(){ editing=!editing; document.body.classList.toggle('editing',editing); $('editBtn').classList.toggle('on',editing); $('editBtn').textContent=editing?'Concluir':'Editar'; $('addRow').hidden=!editing; }
+    function parseTime(str){ str=String(str).trim(); if(/^\d{1,3}:\d{1,2}$/.test(str)){ var p=str.split(':'); return (+p[0])*60+(+p[1]); } if(/^\d+$/.test(str)) return +str; return null; }
     function addEvent(){
-      var t = parseTime($('aiTime').value), nome = $('aiName').value.trim(), em = $('aiEm').value.trim() || '🎯';
-      if(t==null){ showToast('⚠️','Tempo inválido (use MM:SS)', true); return; }
+      var rem=parseTime($('aiTime').value), nome=$('aiName').value.trim(), em=$('aiEm').value.trim()||'🎯';
+      if(rem==null){ showToast('⚠️','Tempo inválido (MM:SS restante)', true); return; }
       if(!nome){ showToast('⚠️','Dê um nome ao marco', true); return; }
-      state.events.push({ t:t, em:em, nome:nome, fired:false, pre:false });
-      state.events.sort(function(a,b){ return a.t-b.t; });
+      state.events.push({ rem:rem, em:em, nome:nome, fired:false, pre:false });
+      sortEvents(); seedFired();
       $('aiTime').value=''; $('aiName').value=''; $('aiEm').value='';
       save(); render();
     }
     function onListClick(e){
-      var del = e.target.closest('.e-del'); if(del){ state.events.splice(+del.dataset.i,1); save(); render(); return; }
+      var del=e.target.closest('.e-del'); if(del){ state.events.splice(+del.dataset.i,1); save(); render(); return; }
       if(!editing) return;
-      var cell = e.target.closest('[data-f]'); if(!cell) return;
-      var i = +cell.dataset.i, f = cell.dataset.f, ev = state.events[i];
-      if(f==='t'){ var v = prompt('Tempo do marco (MM:SS):', fmt(ev.t)); if(v==null) return; var t=parseTime(v); if(t==null){ showToast('⚠️','Tempo inválido', true); return; } ev.t=t; state.events.sort(function(a,b){return a.t-b.t;}); }
-      else { var n = prompt('Nome do marco:', ev.nome); if(n==null) return; ev.nome = n.trim()||ev.nome; }
+      var cell=e.target.closest('[data-f]'); if(!cell) return;
+      var i=+cell.dataset.i, f=cell.dataset.f, ev=state.events[i];
+      if(f==='rem'){ var v=prompt('Tempo RESTANTE do marco (MM:SS):', fmt(ev.rem)); if(v==null) return; var t=parseTime(v); if(t==null){ showToast('⚠️','Tempo inválido', true); return; } ev.rem=t; sortEvents(); seedFired(); }
+      else { var n=prompt('Nome do marco:', ev.nome); if(n==null) return; ev.nome=n.trim()||ev.nome; }
       save(); render();
     }
 
-    // ---------- avisos / config ----------
-    function setSound(on){ state.sound=on; $('swSound').classList.toggle('on',on); $('soundBtn').classList.toggle('on',on); $('soundBtn').textContent = (on?'🔔':'🔕')+' Som'; save(); }
+    // ---------- avisos ----------
+    function setSound(on){ state.sound=on; $('swSound').classList.toggle('on',on); $('soundBtn').classList.toggle('on',on); $('soundBtn').textContent=(on?'🔔':'🔕')+' Som'; save(); }
     function setNotif(on){
-      if(on && 'Notification' in window && Notification.permission!=='granted'){
-        Notification.requestPermission().then(function(p){ var ok = p==='granted'; state.notif=ok; $('swNotif').classList.toggle('on',ok); if(!ok) showToast('⚠️','Permissão negada', true); save(); });
-        return;
-      }
+      if(on && 'Notification' in window && Notification.permission!=='granted'){ Notification.requestPermission().then(function(p){ var ok=p==='granted'; state.notif=ok; $('swNotif').classList.toggle('on',ok); if(!ok) showToast('⚠️','Permissão negada', true); save(); }); return; }
       state.notif=on; $('swNotif').classList.toggle('on',on); save();
     }
-    function setLead(v){ state.lead = Math.max(0, Math.min(120, v)); $('leadVal').textContent = state.lead+'s'; save(); }
+    function setLead(v){ state.lead=Math.max(0,Math.min(120,v)); $('leadVal').textContent=state.lead+'s'; save(); }
 
     // ---------- init ----------
     load();
     setSound(state.sound); setLead(state.lead); $('swNotif').classList.toggle('on', state.notif);
-    syncStartBtn(); render();
+    // pré-preenche o input com um horário sugerido (agora arredondado) se vazio
+    (function(){ var d=new Date(); $('startTime').value=(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes(); })();
+    render();
 
-    $('startBtn').addEventListener('click', start);
+    $('schedBtn').addEventListener('click', schedule);
+    $('nowBtn').addEventListener('click', startNow);
     $('resetBtn').addEventListener('click', reset);
     $('editBtn').addEventListener('click', toggleEdit);
     $('aiAdd').addEventListener('click', addEvent);
@@ -451,11 +490,6 @@
     $('swNotif').addEventListener('click', function(){ setNotif(!state.notif); });
     $('leadMinus').addEventListener('click', function(){ setLead(state.lead-10); });
     $('leadPlus').addEventListener('click', function(){ setLead(state.lead+10); });
-    document.addEventListener('keydown', function(e){
-      if(e.target.tagName==='INPUT') return;
-      if(e.code==='Space'){ e.preventDefault(); start(); }
-      if(e.key==='r'||e.key==='R'){ reset(); }
-    });
 
     requestAnimationFrame(tick);
   })();

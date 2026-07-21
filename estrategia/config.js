@@ -27,6 +27,8 @@ const WWM = {
       tree_blue:  '../assets/vendor-ref/tree_blue.png',
       tree_red:   '../assets/vendor-ref/tree_red.png',
       boss:       '../assets/vendor-ref/boss.png',
+      // Jungle = ícone da Fun Coin (arte própria da guild, recorte redondo).
+      jungle:     '../assets/icons/funcoin.png',
       tank:       '../assets/vendor-ref/tank.png',
       dps:        '../assets/vendor-ref/dps.png',
       healer:     '../assets/vendor-ref/healer.png',
