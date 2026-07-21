@@ -223,7 +223,7 @@
 
   // ---- objetivos ----
   function objPos(o) { if (o.movel) { const p = cur().objetivoPos && cur().objetivoPos[o.id]; if (p) return { x: p.x, y: p.y }; } else { const g = state.objetivoPosGlobal[o.id]; if (g) return { x: g.x, y: g.y }; } return { x: o.x, y: o.y }; }
-  const OBJ_STYLE = { tower_blue: { c: '#6aa8e0', t: 'T' }, tower_red: { c: '#e0685a', t: 'T' }, goose_blue: { c: '#5ec8d8', t: 'G' }, goose_red: { c: '#e0685a', t: 'G' }, tree_blue: { c: '#5bc98a', t: 'A' }, tree_red: { c: '#e0685a', t: 'A' }, boss: { c: '#f0c66b', t: 'B' }, outpost: { c: '#b98be0', t: 'O' }, jungle: { c: '#8fc06a', t: 'JG' } };
+  const OBJ_STYLE = { tower_blue: { c: '#6aa8e0', t: 'T' }, tower_red: { c: '#e0685a', t: 'T' }, goose_blue: { c: '#5ec8d8', t: 'G' }, goose_red: { c: '#e0685a', t: 'G' }, tree_blue: { c: '#5bc98a', t: 'A' }, tree_red: { c: '#e0685a', t: 'A' }, boss: { c: '#f0c66b', t: 'B' }, outpost: { c: '#b98be0', t: '🚩', emoji: true }, jungle: { c: '#8fc06a', t: 'JG' } };
   function objStyle(o) { return OBJ_STYLE[o.icone] || { c: '#9aa2b4', t: '?' }; }
   function treeMeters(o, xf, yf) { const a = o.caminho.a, b = o.caminho.b, ax = b[0] - a[0], ay = b[1] - a[1]; const t = ((xf - a[0]) * ax + (yf - a[1]) * ay) / (ax * ax + ay * ay || 1); return Math.round(Math.max(0, Math.min(1, t)) * CFG.treeMeters); }
   function renderObjectives() {
@@ -239,7 +239,7 @@
       // escala por tipo de ícone: torres 1.25x, boss 1.5x (o restante 1x)
       const osz = os * (o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : o.icone === 'boss' ? 1.5 : 1);
       if (img && img.width) { const h = osz * (img.height / img.width); g.add(new Konva.Image({ image: img, width: osz, height: h, offsetX: osz / 2, offsetY: h / 2, scaleX: o.flip ? -1 : 1, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 })); }
-      else { const st = objStyle(o); g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.92)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08) })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.t.length > 1 ? 0.3 : 0.42), fill: st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
+      else { const st = objStyle(o); g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.92)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08) })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.emoji ? 0.5 : st.t.length > 1 ? 0.3 : 0.42), fill: st.emoji ? undefined : st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
       if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.52 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.26), fill: '#f0c66b', padding: 3 })); ml.offsetX(ml.getClientRect({ skipTransform: true }).width / 2); g.add(ml); }
       g.on('dblclick dbltap', e => { e.cancelBubble = true; pushUndo(); delete cur().objetivos[o.id]; if (cur().objetivoPos) delete cur().objetivoPos[o.id]; renderObjectives(); if (!objPanel.hidden) renderObjPanel(); saveProject(); });
       if (canDrag) {
