@@ -236,7 +236,9 @@
       const canDrag = !state.present && state.tool === 'select';
       const g = new Konva.Group({ x: pos.x * W, y: pos.y * H, draggable: canDrag });
       const img = iconImgs[o.icone];
-      if (img && img.width) { const h = os * (img.height / img.width); g.add(new Konva.Image({ image: img, width: os, height: h, offsetX: os / 2, offsetY: h / 2, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 })); }
+      // escala por tipo de ícone: torres 1.25x, boss 1.5x (o restante 1x)
+      const osz = os * (o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : o.icone === 'boss' ? 1.5 : 1);
+      if (img && img.width) { const h = osz * (img.height / img.width); g.add(new Konva.Image({ image: img, width: osz, height: h, offsetX: osz / 2, offsetY: h / 2, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 })); }
       else { const st = objStyle(o); g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.92)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08) })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.t.length > 1 ? 0.3 : 0.42), fill: st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
       if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.52 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.26), fill: '#f0c66b', padding: 3 })); ml.offsetX(ml.getClientRect({ skipTransform: true }).width / 2); g.add(ml); }
       g.on('dblclick dbltap', e => { e.cancelBubble = true; pushUndo(); delete cur().objetivos[o.id]; if (cur().objetivoPos) delete cur().objetivoPos[o.id]; renderObjectives(); if (!objPanel.hidden) renderObjPanel(); saveProject(); });
@@ -381,6 +383,15 @@
       if (copied) toast('Link copiado ✓');
     } catch (e) { toast('Não consegui gerar o link'); }
   }
+  // dump curto (só coordenadas) — robusto para colar num chat sem corromper
+  function dumpPositions() {
+    const r = v => Math.round(v * 1e4) / 1e4;
+    const glob = {}; Object.keys(state.objetivoPosGlobal || {}).forEach(k => { const p = state.objetivoPosGlobal[k]; glob[k] = [r(p.x), r(p.y)]; });
+    const mov = {}; const cp = cur() && cur().objetivoPos ? cur().objetivoPos : {}; Object.keys(cp).forEach(k => { mov[k] = [r(cp[k].x), r(cp[k].y)]; });
+    const s = JSON.stringify({ fixos: glob, moveis: mov });
+    shareUrl.value = s; shareModal.hidden = false; shareUrl.focus(); shareUrl.select();
+    (async () => { try { await navigator.clipboard.writeText(s); toast('Posições copiadas ✓'); } catch (e) {} })();
+  }
   async function maybeLoadShared() { const m = /[#&]p=([^&]+)/.exec(location.hash); if (!m) return; let d; try { d = await decodeShare(decodeURIComponent(m[1])); } catch (e) { toast('Link de plano inválido'); return; } if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Este link abre um plano compartilhado. Abrir substitui o rascunho atual. Continuar?')) return; if (applyImported(d)) toast('Plano do link carregado ✓'); }
   let toastT = null; function toast(msg) { toastEl.innerHTML = msg.replace(/✓/g, '<b>✓</b>'); toastEl.hidden = false; requestAnimationFrame(() => toastEl.classList.add('show')); clearTimeout(toastT); toastT = setTimeout(() => { toastEl.classList.remove('show'); setTimeout(() => toastEl.hidden = true, 220); }, 2600); }
   // confirm próprio (o confirm() nativo é bloqueado no iframe do preview)
@@ -448,6 +459,7 @@
     shareClose.addEventListener('click', () => shareModal.hidden = true);
     shareModal.addEventListener('click', e => { if (e.target === shareModal) shareModal.hidden = true; });
     shareCopy.addEventListener('click', async () => { shareUrl.focus(); shareUrl.select(); let ok = false; try { await navigator.clipboard.writeText(shareUrl.value); ok = true; } catch (e) {} if (!ok) { try { ok = document.execCommand('copy'); } catch (e) {} } toast(ok ? 'Link copiado ✓' : 'Selecione tudo e copie (Ctrl+C)'); });
+    { const od = $('objDump'); if (od) od.addEventListener('click', dumpPositions); }
     $('zoomIn').addEventListener('click', () => zoomBy(1.25)); $('zoomOut').addEventListener('click', () => zoomBy(0.8)); $('zoomReset').addEventListener('click', zoomReset);
     presentBtn.addEventListener('click', enterPresent); exitBtn.addEventListener('click', exitPresent);
     prevBtn.addEventListener('click', () => go(-1)); nextBtn.addEventListener('click', () => go(1));
