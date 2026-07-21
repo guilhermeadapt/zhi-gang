@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#0a0c11" />
   <meta name="description" content="Mapa interativo de estratégia GvG da guild Wanted — montar e apresentar o plano por fase. Uso interno." />
@@ -127,6 +129,9 @@
     .pt-popover li .detach{margin-left:auto;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);
       border-radius:6px;font-size:10px;padding:2px 7px;cursor:pointer;font-family:var(--disp);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;transition:.12s}
     .pt-popover li .detach:hover{color:var(--gold);border-color:var(--line)}
+    .pt-popover h4 .po-edit{margin-left:auto;font-family:var(--disp);font-weight:600;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;
+      color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border:0;border-radius:6px;padding:3px 9px;cursor:pointer}
+    .pt-popover h4 .po-edit:hover{filter:brightness(1.06)}
     .pt-popover .po-desc{font-size:11.5px;color:var(--gold-2);margin:-2px 0 8px;line-height:1.35}
     .pt-popover .empty{font-size:12px;color:var(--muted);font-style:italic}
     .pt-popover .phint{margin-top:8px;font-size:10px;color:#5f6672;line-height:1.35}
@@ -141,8 +146,14 @@
     .obj-panel > header .x{margin-left:auto;width:26px;height:26px;border:1px solid var(--line-soft);background:transparent;color:var(--muted);border-radius:7px;cursor:pointer}
     .obj-panel > header .x:hover{color:var(--text);border-color:var(--line)}
     .obj-groups{padding:8px 12px 12px}
-    .obj-g{margin-top:8px}
-    .obj-g .gh{font-family:var(--disp);font-weight:600;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:4px 2px 5px}
+    .obj-master{display:flex;align-items:center;gap:9px;padding:8px 8px;border:1px solid var(--line-soft);border-radius:8px;cursor:pointer;margin-bottom:4px}
+    .obj-master input{accent-color:var(--gold);width:15px;height:15px}
+    .obj-master .mtxt{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text)}
+    .obj-master .gcount{margin-left:auto;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .obj-g{margin-top:5px}
+    .obj-gh .chev{color:var(--muted);font-size:11px;transition:transform .12s;display:inline-block}
+    .obj-gh.open .chev{transform:rotate(90deg);color:var(--gold)}
+    .obj-rows{padding:2px 0 4px 4px}
     .obj-row{display:flex;align-items:center;gap:9px;padding:5px 7px;border-radius:8px;cursor:pointer;transition:background .12s}
     .obj-row:hover{background:rgba(255,255,255,.03)}
     .obj-row input{accent-color:var(--gold);width:15px;height:15px;flex:none}
@@ -542,6 +553,15 @@
     </div>
   </div>
 
+  <!-- compartilhar: mostra o link copiável -->
+  <div class="modal-backdrop" id="shareModal" hidden>
+    <div class="confirm-box">
+      <p style="margin-bottom:10px">Link do plano — copie e mande no Discord:</p>
+      <input id="shareUrl" class="pe-desc" readonly style="width:100%;font-size:11px;font-family:ui-monospace,monospace" />
+      <div class="confirm-actions" style="margin-top:14px"><button class="rbtn" id="shareClose">Fechar</button><button class="rbtn gold" id="shareCopy">Copiar</button></div>
+    </div>
+  </div>
+
   <!-- editor de PT -->
   <div class="modal-backdrop" id="ptModal" hidden>
     <div class="pt-editor">
@@ -565,7 +585,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js"></script>
-  <script src="./app.js"></script>
+  <script src="./config.js?v=12"></script>
+  <script src="./app.js?v=12"></script>
 </body>
 </html>

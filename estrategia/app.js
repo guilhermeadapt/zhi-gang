@@ -27,6 +27,7 @@
   const rosterGrid = $('rosterGrid'), gEsc = $('gEsc'), gRes = $('gRes'), gAus = $('gAus'), gComp = $('gComp');
   const rosterSave = $('rosterSave'), rosterClear2 = $('rosterClear2'), saveMsg = $('saveMsg');
   const exportBtn = $('exportBtn'), importBtn = $('importBtn'), importFile = $('importFile'), shareBtn = $('shareBtn'), resetBtn = $('resetBtn'), toastEl = $('toast');
+  const shareModal = $('shareModal'), shareUrl = $('shareUrl'), shareCopy = $('shareCopy'), shareClose = $('shareClose');
   const drawTools = $('drawTools'), dtColors = $('dtColors'), dtWidth = $('dtWidth'), undoBtn = $('undoBtn'), redoBtn = $('redoBtn'), clearDraw = $('clearDraw');
   const objBtn = $('objBtn'), objPanel = $('objPanel'), objClose = $('objClose'), objGroups = $('objGroups');
   const fasesBtn = $('fasesBtn'), dockCollapse = $('dockCollapse'), dockMini = $('dockMini'), dockExpand = $('dockExpand'), miniName = $('miniName'), miniPrev = $('miniPrev'), miniNext = $('miniNext');
@@ -35,6 +36,7 @@
 
   const state = { scenarios: [], currentId: null, roster: [], ptDesc: {}, ptIcon: {}, objetivoPosGlobal: {}, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false };
   let hintDismissed = false, editingPt = null;
+  const objGroupOpen = {};   // grupos do painel de objetivos começam colapsados
   const partyById = new Map(CFG.parties.map(p => [p.id, p]));
   const objById = new Map(CFG.objetivos.map(o => [o.id, o]));
   let popoverPt = null, rosterDraft = [];
@@ -198,7 +200,7 @@
   function togglePopover(pt, x, y) {
     if (popoverPt === pt && !ptPopover.hidden) { hidePopover(); return; }
     const p = partyById.get(pt), tit = membersOf(pt, false), res = membersOf(pt, true);
-    let html = '<h4><span class="pd" style="background:' + p.cor + '"></span>' + (state.ptIcon[pt] ? state.ptIcon[pt] + ' ' : '') + pt + '</h4>';
+    let html = '<h4><span class="pd" style="background:' + p.cor + '"></span>' + (state.ptIcon[pt] ? state.ptIcon[pt] + ' ' : '') + pt + (state.present ? '' : '<button class="po-edit">editar</button>') + '</h4>';
     if (state.ptDesc[pt]) html += '<div class="po-desc">' + esc(state.ptDesc[pt]) + '</div>';
     if (!tit.length && !res.length) html += '<div class="empty">Sem membros. Defina no roster.</div>';
     else {
@@ -210,6 +212,7 @@
     }
     ptPopover.innerHTML = html; ptPopover.hidden = false;
     ptPopover.querySelectorAll('li.mem[draggable]').forEach(li => li.addEventListener('dragstart', ev => { ev.dataTransfer.setData('text/member', JSON.stringify({ pt, nome: li.dataset.nome, funcao: li.dataset.fn })); ev.dataTransfer.effectAllowed = 'copy'; }));
+    const eb = ptPopover.querySelector('.po-edit'); if (eb) eb.addEventListener('click', () => { hidePopover(); openPtEditor(pt); });
     const s = stage.scaleX() || 1, vx = stage.x() + x * s, vy = stage.y() + y * s;
     const px = stageWrap.offsetLeft + vx + R * s + 8, py = stageWrap.offsetTop + vy - 10;
     ptPopover.style.left = Math.max(8, Math.min(px, mapPanel.clientWidth - ptPopover.offsetWidth - 8)) + 'px';
@@ -252,21 +255,33 @@
   function setObjUp(id, on) { const c = cur().objetivos; if (on) c[id] = true; else { delete c[id]; if (cur().objetivoPos) delete cur().objetivoPos[id]; } }
   function renderObjPanel() {
     const up = cur() ? (cur().objetivos || {}) : {}; objGroups.innerHTML = '';
+    const totalN = CFG.objetivos.length, upAll = CFG.objetivos.filter(o => up[o.id]).length;
+    const master = document.createElement('label'); master.className = 'obj-master';
+    master.innerHTML = '<input type="checkbox"' + (upAll === totalN ? ' checked' : '') + '><span class="mtxt">Adicionar todos</span><span class="gcount">' + upAll + '/' + totalN + '</span>';
+    const mcb = master.querySelector('input'); mcb.indeterminate = upAll > 0 && upAll < totalN;
+    mcb.addEventListener('change', () => { pushUndo(); CFG.objetivos.forEach(o => setObjUp(o.id, mcb.checked)); renderObjectives(); renderObjPanel(); saveProject(); });
+    objGroups.appendChild(master);
     CFG.objetivosGrupos.forEach(grp => {
       const list = CFG.objetivos.filter(o => o.grupo === grp); if (!list.length) return;
-      const nUp = list.filter(o => up[o.id]).length, allUp = nUp === list.length;
+      const nUp = list.filter(o => up[o.id]).length, allUp = nUp === list.length, open = !!objGroupOpen[grp];
       const box = document.createElement('div'); box.className = 'obj-g';
-      const gh = document.createElement('label'); gh.className = 'obj-gh' + (nUp ? ' any' : '');
-      gh.innerHTML = '<input type="checkbox"' + (allUp ? ' checked' : '') + '><span class="gname">' + grp + '</span><span class="gcount">' + nUp + '/' + list.length + '</span>';
+      const gh = document.createElement('div'); gh.className = 'obj-gh' + (nUp ? ' any' : '') + (open ? ' open' : '');
+      gh.innerHTML = '<input type="checkbox"' + (allUp ? ' checked' : '') + '><span class="chev">▸</span><span class="gname">' + grp + '</span><span class="gcount">' + nUp + '/' + list.length + '</span>';
       const gcb = gh.querySelector('input'); gcb.indeterminate = nUp > 0 && !allUp;
+      gcb.addEventListener('click', e => e.stopPropagation());
       gcb.addEventListener('change', () => { pushUndo(); list.forEach(o => setObjUp(o.id, gcb.checked)); renderObjectives(); renderObjPanel(); saveProject(); });
+      gh.addEventListener('click', e => { if (e.target === gcb) return; objGroupOpen[grp] = !objGroupOpen[grp]; renderObjPanel(); });
       box.appendChild(gh);
-      list.forEach(o => {
-        const row = document.createElement('label'); row.className = 'obj-row' + (up[o.id] ? ' up' : '');
-        row.innerHTML = '<input type="checkbox"' + (up[o.id] ? ' checked' : '') + '><span class="on"></span><span class="nm">' + esc(o.rotulo) + '</span>';
-        row.querySelector('input').addEventListener('change', e => { pushUndo(); setObjUp(o.id, e.target.checked); row.classList.toggle('up', e.target.checked); renderObjectives(); renderObjPanel(); saveProject(); });
-        box.appendChild(row);
-      });
+      if (open) {
+        const rows = document.createElement('div'); rows.className = 'obj-rows';
+        list.forEach(o => {
+          const row = document.createElement('label'); row.className = 'obj-row' + (up[o.id] ? ' up' : '');
+          row.innerHTML = '<input type="checkbox"' + (up[o.id] ? ' checked' : '') + '><span class="on"></span><span class="nm">' + esc(o.rotulo) + '</span>';
+          row.querySelector('input').addEventListener('change', e => { pushUndo(); setObjUp(o.id, e.target.checked); renderObjectives(); renderObjPanel(); saveProject(); });
+          rows.appendChild(row);
+        });
+        box.appendChild(rows);
+      }
       objGroups.appendChild(box);
     });
   }
@@ -356,7 +371,16 @@
   function bytesFromB64url(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); const bin = atob(s); const a = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return a; }
   async function encodeShare(obj) { const bytes = new TextEncoder().encode(JSON.stringify(obj)); if (window.CompressionStream) { const st = new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip')); return 'g' + b64urlFromBytes(new Uint8Array(await new Response(st).arrayBuffer())); } return 'r' + b64urlFromBytes(bytes); }
   async function decodeShare(str) { const flag = str[0]; let bytes = bytesFromB64url(str.slice(1)); if (flag === 'g' && window.DecompressionStream) { const st = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')); bytes = new Uint8Array(await new Response(st).arrayBuffer()); } return JSON.parse(new TextDecoder().decode(bytes)); }
-  async function shareLink() { try { const enc = await encodeShare(projectData()); const url = location.origin + location.pathname + '#p=' + enc; history.replaceState(null, '', '#p=' + enc); let copied = false; try { await navigator.clipboard.writeText(url); copied = true; } catch (e) {} toast(copied ? 'Link copiado ✓ — cole no Discord' : 'Link gerado — copie da barra de endereço'); } catch (e) { toast('Não consegui gerar o link'); } }
+  async function shareLink() {
+    try {
+      const enc = await encodeShare(projectData());
+      const url = location.origin + location.pathname + '#p=' + enc;
+      try { history.replaceState(null, '', '#p=' + enc); } catch (e) {}
+      shareUrl.value = url; shareModal.hidden = false; shareUrl.focus(); shareUrl.select();
+      let copied = false; try { await navigator.clipboard.writeText(url); copied = true; } catch (e) {}
+      if (copied) toast('Link copiado ✓');
+    } catch (e) { toast('Não consegui gerar o link'); }
+  }
   async function maybeLoadShared() { const m = /[#&]p=([^&]+)/.exec(location.hash); if (!m) return; let d; try { d = await decodeShare(decodeURIComponent(m[1])); } catch (e) { toast('Link de plano inválido'); return; } if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Este link abre um plano compartilhado. Abrir substitui o rascunho atual. Continuar?')) return; if (applyImported(d)) toast('Plano do link carregado ✓'); }
   let toastT = null; function toast(msg) { toastEl.innerHTML = msg.replace(/✓/g, '<b>✓</b>'); toastEl.hidden = false; requestAnimationFrame(() => toastEl.classList.add('show')); clearTimeout(toastT); toastT = setTimeout(() => { toastEl.classList.remove('show'); setTimeout(() => toastEl.hidden = true, 220); }, 2600); }
   // confirm próprio (o confirm() nativo é bloqueado no iframe do preview)
@@ -421,6 +445,9 @@
     exportBtn.addEventListener('click', exportProject); importBtn.addEventListener('click', () => importFile.click());
     importFile.addEventListener('change', e => { const f = e.target.files[0]; if (f) importProjectFile(f); e.target.value = ''; });
     shareBtn.addEventListener('click', shareLink); resetBtn.addEventListener('click', resetAll);
+    shareClose.addEventListener('click', () => shareModal.hidden = true);
+    shareModal.addEventListener('click', e => { if (e.target === shareModal) shareModal.hidden = true; });
+    shareCopy.addEventListener('click', async () => { shareUrl.focus(); shareUrl.select(); let ok = false; try { await navigator.clipboard.writeText(shareUrl.value); ok = true; } catch (e) {} if (!ok) { try { ok = document.execCommand('copy'); } catch (e) {} } toast(ok ? 'Link copiado ✓' : 'Selecione tudo e copie (Ctrl+C)'); });
     $('zoomIn').addEventListener('click', () => zoomBy(1.25)); $('zoomOut').addEventListener('click', () => zoomBy(0.8)); $('zoomReset').addEventListener('click', zoomReset);
     presentBtn.addEventListener('click', enterPresent); exitBtn.addEventListener('click', exitPresent);
     prevBtn.addEventListener('click', () => go(-1)); nextBtn.addEventListener('click', () => go(1));
