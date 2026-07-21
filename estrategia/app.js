@@ -21,7 +21,7 @@
       menu:'Menu', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartilhar', present:'Apresentar', exit:'Sair',
       objUp:'Objetivos up', objInScene:'neste cenário', objAll:'Adicionar todos', objFoot:'Marque o que está "up" nesta fase. No mapa, arraste cada ícone para posicioná-lo (vale para todos os cenários).', copyPos:'Copiar posições',
       dragHint:'Arraste uma PT da lista para o mapa', dragHint2:'Cada cenário é uma "foto": posições, desenhos e objetivos up. Crie fases e navegue embaixo.',
-      pts:'PTs', editRoster:'Editar roster', scaled:'escalados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defesa', drag:'ARRASTE', noMembers:'sem membros', onMap:'No mapa', dragShort:'Arraste',
+      pts:'PTs', editRoster:'Editar roster', scaled:'escalados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defesa', drag:'ARRASTE', noMembers:'sem membros', onMap:'No mapa', dragShort:'Arraste', tapShort:'Tocar',
       rosterTitle:'Roster', rosterSub:'Cole a montagem do Board e ajuste PT / reservas', discordMontage:'Montagem do Discord', process:'Processar', autoMount:'⚙ Auto-montar PTs', clearAll:'Limpar tudo', saveRoster:'Salvar roster',
       tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', bdLegend:'Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.',
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
@@ -33,7 +33,7 @@
       menu:'Menú', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartir', present:'Presentar', exit:'Salir',
       objUp:'Objetivos activos', objInScene:'en esta escena', objAll:'Añadir todos', objFoot:'Marca lo que está "activo" en esta fase. En el mapa, arrastra cada icono para posicionarlo (vale para todas las escenas).', copyPos:'Copiar posiciones',
       dragHint:'Arrastra una PT de la lista al mapa', dragHint2:'Cada escena es una "foto": posiciones, dibujos y objetivos activos. Crea fases y navega abajo.',
-      pts:'PTs', editRoster:'Editar roster', scaled:'convocados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defensa', drag:'ARRASTRA', noMembers:'sin miembros', onMap:'En el mapa', dragShort:'Arrastra',
+      pts:'PTs', editRoster:'Editar roster', scaled:'convocados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defensa', drag:'ARRASTRA', noMembers:'sin miembros', onMap:'En el mapa', dragShort:'Arrastra', tapShort:'Tocar',
       rosterTitle:'Roster', rosterSub:'Pega la formación del Board y ajusta PT / reservas', discordMontage:'Formación del Discord', process:'Procesar', autoMount:'⚙ Auto-armar PTs', clearAll:'Limpiar todo', saveRoster:'Guardar roster',
       tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', bdLegend:'Objetivo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · el resto va a reserva. Arrastra a los jugadores; haz clic en uno para tarja/flags.',
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
@@ -45,7 +45,7 @@
       menu:'Menu', phases:'Phases', objectives:'Objectives', roster:'Roster', share:'Share', present:'Present', exit:'Exit',
       objUp:'Objectives up', objInScene:'this scene', objAll:'Add all', objFoot:'Mark what is "up" in this phase. On the map, drag each icon to position it (applies to all scenes).', copyPos:'Copy positions',
       dragHint:'Drag a PT from the list onto the map', dragHint2:'Each scene is a "snapshot": positions, drawings and objectives up. Create phases and navigate below.',
-      pts:'PTs', editRoster:'Edit roster', scaled:'assigned', reserves:'reserves', absent:'absent', atk:'Attack', def:'Defense', drag:'DRAG', noMembers:'no members', onMap:'On map', dragShort:'Drag',
+      pts:'PTs', editRoster:'Edit roster', scaled:'assigned', reserves:'reserves', absent:'absent', atk:'Attack', def:'Defense', drag:'DRAG', noMembers:'no members', onMap:'On map', dragShort:'Drag', tapShort:'Tap',
       rosterTitle:'Roster', rosterSub:'Paste the Board sign-up and adjust PT / reserves', discordMontage:'Discord sign-up', process:'Process', autoMount:'⚙ Auto-build PTs', clearAll:'Clear all', saveRoster:'Save roster',
       tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', bdLegend:'Target per PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · the rest go to reserves. Drag players; click one for tag/flags.',
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
@@ -191,9 +191,10 @@
         const chip = document.createElement('div'); chip.className = 'pt-chip' + (placed.includes(pid) ? ' placed' : ''); chip.style.setProperty('--accent', p.cor);
         chip.setAttribute('draggable', 'true'); chip.dataset.pt = pid;
         const desc = state.ptDesc[pid], ic = state.ptIcon[pid];
-        chip.innerHTML = '<span class="dot">' + pid.replace('PT', '') + '</span><span class="lbl"><b>' + (ic ? ic + ' ' : '') + pid + '</b>' + (desc ? '<span class="pt-desc-line">' + esc(desc) + '</span>' : '') + '<span class="comp' + (total ? '' : ' vazia') + '">' + compHtml + '</span></span><span class="status">' + (placed.includes(pid) ? t('onMap') : t('dragShort')) + '</span>';
+        const isPl = placed.includes(pid);
+        chip.innerHTML = '<span class="dot">' + pid.replace('PT', '') + '</span><span class="lbl"><b>' + (ic ? ic + ' ' : '') + pid + '</b>' + (desc ? '<span class="pt-desc-line">' + esc(desc) + '</span>' : '') + '<span class="comp' + (total ? '' : ' vazia') + '">' + compHtml + '</span></span><span class="status">' + (isPl ? t('onMap') : (isMobile() ? t('tapShort') : t('dragShort'))) + '</span>';
         chip.addEventListener('dragstart', ev => { if (state.present) { ev.preventDefault(); return; } ev.dataTransfer.setData('text/plain', pid); ev.dataTransfer.effectAllowed = 'copy'; });
-        chip.addEventListener('click', () => openPtEditor(pid));
+        chip.addEventListener('click', () => { if (isMobile() && !cur().tokens.some(x => x.pt === pid)) { placeTokenCenter(pid); document.body.classList.remove('mob-roster'); toast(pid + ' ✓'); } else openPtEditor(pid); });
         ptList.appendChild(chip);
       });
     });
@@ -350,6 +351,8 @@
     iconMenu.querySelector('[data-act="close"]').addEventListener('click', closeIconMenu);
   }
   function placeToken(pt, xf, yf) { if (!partyById.has(pt) || state.present) return; hintDismissed = true; pushUndo(); const toks = cur().tokens, ex = toks.find(t => t.pt === pt); if (ex) { ex.xf = clamp01(xf); ex.yf = clamp01(yf); } else toks.push({ pt, xf: clamp01(xf), yf: clamp01(yf) }); renderTokens(); saveProject(); }
+  function isMobile() { return window.matchMedia('(max-width:860px)').matches; }
+  function placeTokenCenter(pt) { const s = stage.scaleX() || 1; const xf = clamp01(((W / 2) - stage.x()) / s / W), yf = clamp01(((H / 2) - stage.y()) / s / H); placeToken(pt, xf, yf); }
   function removeToken(pt) { pushUndo(); const s = cur(); const memIds = s.destacados.filter(d => d.pt === pt).map(d => 'mem:' + d.id); s.tokens = s.tokens.filter(t => t.pt !== pt); s.destacados = s.destacados.filter(d => d.pt !== pt); const drop = new Set(['pt:' + pt].concat(memIds)); if (s.links) s.links = s.links.filter(l => !drop.has(l.a) && !drop.has(l.b)); hidePopover(); renderTokens(); saveProject(); }
   function detachMember(pt, nome, funcao, xf, yf) { if (!ptPos(pt)) return; pushUndo(); const id = uid(); cur().destacados.push({ id, pt, nome, funcao, xf: clamp01(xf), yf: clamp01(yf) }); cur().links = cur().links || []; cur().links.push({ id: uid(), a: 'pt:' + pt, b: 'mem:' + id }); hidePopover(); renderTokens(); saveProject(); }
 
@@ -784,7 +787,8 @@
     });
     document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && state.present) exitPresent(); });
 
-    rosterBtn.addEventListener('click', openRoster); editRosterBtn.addEventListener('click', openRoster); rosterClose.addEventListener('click', closeRoster);
+    rosterBtn.addEventListener('click', () => { if (isMobile()) document.body.classList.toggle('mob-roster'); else openRoster(); }); editRosterBtn.addEventListener('click', openRoster); rosterClose.addEventListener('click', closeRoster);
+    { const rmc = $('rosterMClose'); if (rmc) rmc.addEventListener('click', () => document.body.classList.remove('mob-roster')); }
     rosterModal.addEventListener('click', e => { if (e.target === rosterModal) closeRoster(); });
     parseBtn.addEventListener('click', () => { const parsed = parseRoster(rosterPaste.value); if (!parsed.length) { parseMsg.className = 'parse-msg err'; parseMsg.textContent = 'Não reconheci jogadores. Confira o formato.'; return; } rosterDraft = parsed; parseMsg.className = 'parse-msg ok'; parseMsg.textContent = parsed.length + ' jogadores reconhecidos.'; renderGrid(); });
     autoBtn.addEventListener('click', autoAssign);

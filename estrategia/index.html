@@ -452,29 +452,46 @@
 
     /* ---------- MOBILE ---------- */
     .mobile-note{display:none}
+    /* ---------- mobile EDITÁVEL (não é só visualização) ---------- */
     @media (max-width:860px){
       :root{--dock-h:0px;--topbar-h:52px}
-      .roster,.dock,.draw-tools,.obj-panel{display:none}
       .workspace{grid-template-columns:1fr;grid-template-rows:1fr}
-      .top-actions #seedBtn,.top-actions #rosterBtn,.top-actions #objBtn,.top-actions #exportBtn,.top-actions #importBtn,.top-actions #shareBtn{display:none}
-      body:not(.present) .present-note{display:flex}
-      body:not(.present) .map-hint{display:none}
-      .present-bar{display:flex}.top-actions{display:none}.back{display:inline-flex}
       .modal-body{grid-template-columns:1fr}
-      /* topbar compacta no mobile (não quebra linha) */
-      .topbar{gap:9px;padding:0 10px}
-      .brand{gap:8px}
-      .brand .glyph{width:34px;height:34px;font-size:21px;border-radius:9px}
+      .mobile-note{display:none}
+      body:not(.present) .map-hint{display:none}
+      /* topbar compacta com AÇÕES essenciais (edição no toque) */
+      .topbar{gap:7px;padding:0 9px}
+      .brand .glyph{width:32px;height:32px;font-size:20px;border-radius:9px}
+      .brand .txt{display:none}
       .brand .kicker{display:none}
-      .brand h1{font-size:15px}
-      .back{font-size:11px;padding:6px 10px 6px 8px}
+      .back{font-size:0;padding:7px 9px}
+      .back .ar{font-size:17px;margin:0}
+      .lang-sel{flex:none}
+      .lang-sel button{padding:6px 7px;font-size:10px}
+      .present-bar{display:none}
+      .top-actions{display:flex;gap:6px}
+      .top-actions #seedBtn,.top-actions #exportBtn,.top-actions #importBtn,.top-actions #resetBtn,.top-actions #shareBtn,.top-actions #fasesBtn{display:none}
+      .top-actions .tbtn > span[data-i18n]{display:none}
+      .top-actions .tbtn{padding:7px 9px}
+      /* ferramentas de desenho: barra flutuante à esquerda */
+      .draw-tools{display:flex;left:8px;top:8px;z-index:16}
+      /* painel de objetivos vira folha inferior */
+      .obj-panel{display:block;left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:54vh}
+      /* roster (lista de PTs pra posicionar) vira gaveta lateral */
+      .roster{position:fixed;top:var(--topbar-h);right:0;bottom:0;width:min(320px,87vw);z-index:46;
+        transform:translateX(103%);transition:transform .22s ease;border-left:1px solid var(--line);display:flex}
+      body.mob-roster .roster{transform:none;box-shadow:-24px 0 70px -22px #000}
+      .roster-mclose{display:grid}
+      /* dock de fases vira folha inferior quando aberto */
+      .dock{left:8px;right:8px;top:auto;bottom:8px;max-height:58vh}
       .map-panel{padding:6px}
       #stageWrap{border-radius:12px}
-      .lang-sel{flex:none}
-      .lang-sel button{padding:6px 8px;font-size:10px}
-      body:not(.present) .present-bar{display:none}
-      .present-bar .pb-title{max-width:34vw}
+      body:not(.present) .present-note{display:none}
+      /* menus/popover cabem melhor */
+      .pt-popover,.icon-menu{max-width:min(260px,90vw)}
     }
+    .roster-mclose{display:none;position:absolute;top:10px;right:12px;width:28px;height:28px;place-items:center;
+      border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);border-radius:7px;cursor:pointer;z-index:2}
   </style>
 </head>
 <body>
@@ -582,6 +599,7 @@
     </div>
 
     <aside class="roster">
+      <button class="roster-mclose" id="rosterMClose" aria-label="Fechar">✕</button>
       <div class="roster-head"><span class="h" data-i18n="pts">PTs</span><button class="edit" id="editRosterBtn" data-i18n="editRoster">Editar roster</button></div>
       <div class="roster-sum" id="rosterSum">
         <span class="st"><b id="sumEsc">0</b> <span data-i18n="scaled">escalados</span></span>
@@ -707,7 +725,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=20"></script>
-  <script src="./app.js?v=20"></script>
+  <script src="./config.js?v=21"></script>
+  <script src="./app.js?v=21"></script>
 </body>
 </html>
