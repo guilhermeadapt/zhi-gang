@@ -185,6 +185,12 @@
     .cd-btn:active{transform:scale(.98)}
     .cd-edit{position:absolute;top:6px;right:9px;font-size:12px;line-height:1;color:var(--muted);opacity:.55;transition:.14s}
     .cd-edit:hover{color:var(--gold);opacity:1}
+    .cd-key{position:absolute;top:5px;left:9px;font-family:var(--disp);font-weight:700;font-size:10px;line-height:1;color:var(--muted);opacity:.5}
+    .cd-btn.running .cd-key,.cd-btn.ready .cd-key{opacity:.9}
+    .cd-bg{border-top:1px solid var(--line-soft);padding:12px 15px}
+    .cd-bg-row{display:flex;align-items:center;gap:12px}
+    .cd-bg-hint{margin-top:9px;font-size:.77rem;color:var(--muted);line-height:1.55}
+    .cd-bg-hint code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0b0e15;border:1px solid var(--line-soft);border-radius:5px;padding:1px 6px;color:var(--gold-2);font-size:.86em}
     .cd-nome{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
     .cd-val{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;font-size:1.9rem;line-height:1;color:var(--text)}
     .cd-sub{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);min-height:11px}
@@ -258,7 +264,14 @@
     <section class="panel cds-panel">
       <header><b>Cooldowns do inimigo</b></header>
       <div class="cd-grid" id="cdGrid"></div>
-      <div class="ev-note">Aperte assim que o inimigo <b>usar</b> — conta o cooldown (mostrado em cada botão) até ele poder usar de novo. Toque no <b>✎</b> pra ajustar o tempo. Aperte de novo pra reiniciar.</div>
+      <div class="ev-note">Aperte assim que o inimigo <b>usar</b> — conta o cooldown até ele poder usar de novo. Atalhos de teclado <b>1/2/3</b> (aba focada), <b>✎</b> ajusta o tempo, aperte de novo pra reiniciar.</div>
+      <div class="cd-bg">
+        <div class="cd-bg-row">
+          <span class="s-name">Tecla de mídia (2º plano) <small>⏯/⏭ reinicia o City Protection mesmo com a aba minimizada</small></span>
+          <div class="switch" id="swMediaKey" role="switch"></div>
+        </div>
+        <div class="cd-bg-hint" id="mediaHint" hidden>Ativado ✓ Use a tecla <b>⏭/⏯</b> do teclado. Pra acionar pelo <b>F5</b> do jogo, mapeie no AutoHotkey: <code>F5::Send {Media_Next}</code></div>
+      </div>
     </section>
     </div><!-- /main-left -->
 
@@ -457,9 +470,10 @@
     // ---------- cooldowns do inimigo ----------
     function buildCds(){
       var g=$('cdGrid'); g.innerHTML='';
-      state.cds.forEach(function(c){
+      state.cds.forEach(function(c, i){
         var b=document.createElement('button'); b.className='cd-btn'; b.dataset.cd=c.id;
-        b.innerHTML='<span class="cd-edit" title="Definir tempo do cooldown">✎</span>'
+        b.innerHTML='<span class="cd-key" title="Atalho de teclado">'+(i+1)+'</span>'
+          +'<span class="cd-edit" title="Definir tempo do cooldown">✎</span>'
           +'<span class="cd-nome">'+escapeHtml(c.nome)+'</span><span class="cd-val">Usar</span><span class="cd-sub">CD '+fmt(c.cd)+'</span>';
         g.appendChild(b);
       });
@@ -476,17 +490,51 @@
           if(!c.rdy){ c.rdy=true; beep('hit'); showToast('⚔️', c.nome+' pronto (inimigo pode usar)', false); } }
       });
     }
-    function pressCd(id){
+    function pressCd(id, announce){
       var c=state.cds.filter(function(x){return x.id===id;})[0]; if(!c) return;
       c.at=now(); c.rdy=false;
       try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); }catch(e){}
       save(); updateCds();
+      if(announce){ beep('pre'); showToast('⏱️', c.nome+' reiniciado ('+fmt(c.cd)+')', false); }
     }
     function editCd(id){
       var c=state.cds.filter(function(x){return x.id===id;})[0]; if(!c) return;
       var v=prompt('Cooldown de '+c.nome+' (MM:SS ou segundos):', fmt(c.cd)); if(v==null) return;
       var t=parseTime(v); if(t==null || t<=0){ showToast('⚠️','Tempo inválido', true); return; }
       c.cd=t; save(); updateCds();
+    }
+
+    // ---- atalho em 2º plano via tecla de mídia (MediaSession) ----
+    var silentAudio=null, mediaOn=false;
+    function makeSilentWav(){
+      var sr=8000, n=Math.floor(sr*0.3), buf=new ArrayBuffer(44+n), dv=new DataView(buf);
+      function ws(o,s){ for(var i=0;i<s.length;i++) dv.setUint8(o+i,s.charCodeAt(i)); }
+      ws(0,'RIFF'); dv.setUint32(4,36+n,true); ws(8,'WAVE'); ws(12,'fmt '); dv.setUint32(16,16,true);
+      dv.setUint16(20,1,true); dv.setUint16(22,1,true); dv.setUint32(24,sr,true); dv.setUint32(28,sr,true);
+      dv.setUint16(32,1,true); dv.setUint16(34,8,true); ws(36,'data'); dv.setUint32(40,n,true);
+      for(var i=0;i<n;i++) dv.setUint8(44+i,128);
+      var by=new Uint8Array(buf), bin=''; for(var j=0;j<by.length;j++) bin+=String.fromCharCode(by[j]);
+      return 'data:audio/wav;base64,'+btoa(bin);
+    }
+    function enableMediaKey(on){
+      mediaOn=on; $('swMediaKey').classList.toggle('on',on); $('mediaHint').hidden=!on;
+      if(on){
+        try{
+          if(!silentAudio){ silentAudio=new Audio(makeSilentWav()); silentAudio.loop=true; }
+          silentAudio.play().catch(function(){ showToast('⚠️','Não consegui ativar (permita áudio)', true); });
+          if('mediaSession' in navigator){
+            try{ navigator.mediaSession.metadata=new MediaMetadata({ title:'War Timer — City Protection', artist:'Wanted GvG' }); }catch(e){}
+            try{ navigator.mediaSession.playbackState='playing'; }catch(e){}
+            ['play','pause','nexttrack','previoustrack','stop'].forEach(function(a){
+              try{ navigator.mediaSession.setActionHandler(a, function(){ if(silentAudio) silentAudio.play().catch(function(){}); try{ navigator.mediaSession.playbackState='playing'; }catch(e){} pressCd('city', true); }); }catch(e){}
+            });
+          }
+          showToast('⏭️','Atalho de mídia ativo — City Protection', false);
+        }catch(e){ showToast('⚠️','Não suportado neste navegador', true); mediaOn=false; $('swMediaKey').classList.remove('on'); $('mediaHint').hidden=true; }
+      } else {
+        if(silentAudio){ try{ silentAudio.pause(); }catch(e){} }
+        if('mediaSession' in navigator){ ['play','pause','nexttrack','previoustrack','stop'].forEach(function(a){ try{ navigator.mediaSession.setActionHandler(a,null); }catch(e){} }); }
+      }
     }
 
     // ---------- loop ----------
@@ -574,6 +622,11 @@
     $('lead2Minus').addEventListener('click', function(){ setLead2(state.lead2-5); });
     $('lead2Plus').addEventListener('click', function(){ setLead2(state.lead2+5); });
     $('cdGrid').addEventListener('click', function(e){ var ed=e.target.closest('.cd-edit'); if(ed){ e.stopPropagation(); var eb=ed.closest('[data-cd]'); if(eb) editCd(eb.dataset.cd); return; } var b=e.target.closest('[data-cd]'); if(b) pressCd(b.dataset.cd); });
+    $('swMediaKey').addEventListener('click', function(){ enableMediaKey(!mediaOn); });
+    document.addEventListener('keydown', function(e){
+      if(e.target && (e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')) return;
+      if(e.key==='1'){ pressCd('sprint', true); } else if(e.key==='2'){ pressCd('relentless', true); } else if(e.key==='3'){ pressCd('city', true); }
+    });
 
     requestAnimationFrame(tick);
   })();
