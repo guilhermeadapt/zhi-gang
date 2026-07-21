@@ -312,6 +312,53 @@
     .grid-head .gt{font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
     .grid-head .gt b{color:var(--text)}
     .roster-grid{overflow-y:auto;flex:1 1 auto;padding:6px 10px}
+    /* alternador de visão tabela/board */
+    .view-toggle{display:inline-flex;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
+    .view-toggle button{font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:transparent;border:0;padding:6px 11px;cursor:pointer}
+    .view-toggle button.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold))}
+    /* montador visual (board) */
+    .board-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line-soft)}
+    .board-tools[hidden]{display:none}
+    .bd-legend{font-size:11px;color:var(--muted);line-height:1.4;flex:1;min-width:160px}
+    .roster-board{overflow-y:auto;flex:1 1 auto;padding:12px 14px;display:flex;flex-direction:column;gap:12px}
+    .roster-board[hidden]{display:none}
+    .bd-zone{border:1px solid var(--line-soft);border-radius:11px;background:rgba(255,255,255,.015);padding:9px 10px;transition:.12s}
+    .bd-zone.over{border-color:var(--gold);background:rgba(217,164,65,.08);box-shadow:inset 0 0 0 1px var(--gold)}
+    .bd-zh{display:flex;align-items:center;gap:7px;font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+    .bd-c{font-variant-numeric:tabular-nums}
+    .bd-pool{background:rgba(217,164,65,.05);border-color:var(--line)}
+    .bd-res{background:rgba(137,171,197,.05)}
+    .bd-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .bd-pt-h{display:flex;align-items:center;gap:7px;margin-bottom:7px;font-family:var(--disp)}
+    .bd-pt-h .dot{width:10px;height:10px;border-radius:50%;flex:none}
+    .bd-pt-h b{font-weight:700;font-size:12px;letter-spacing:.08em}
+    .bd-pt-h .bd-comp{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .bd-pt-h .bd-n{margin-left:auto;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .bd-pt-h .bd-n.over{color:var(--crimson)}
+    .bd-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:30px}
+    .bd-empty{font-size:11px;color:#5c6474;font-style:italic;align-self:center}
+    .bd-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:8px;cursor:grab;
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));border:1px solid var(--line-soft);
+      font-size:12.5px;color:var(--text);user-select:none;max-width:100%}
+    .bd-chip:hover{border-color:color-mix(in srgb,var(--rc) 55%,transparent)}
+    .bd-chip.dragging{opacity:.4}
+    .bd-chip .c-role{width:8px;height:8px;border-radius:50%;background:var(--rc);flex:none}
+    .bd-chip .c-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+    .bd-chip .c-tags{display:inline-flex;align-items:center;gap:3px}
+    .bd-chip .c-tag2{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 4px}
+    .bd-chip .c-flag{font-size:12px;line-height:1}
+    /* popover de tarja/flags */
+    .bd-pop{position:fixed;z-index:80;width:230px;background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:11px;padding:11px;box-shadow:0 20px 50px -20px #000;backdrop-filter:blur(4px)}
+    .bd-pop[hidden]{display:none}
+    .bd-pop .bp-nm{font-family:var(--disp);font-weight:700;font-size:12px;color:var(--text);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bd-pop .bp-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:8px 0 5px}
+    .bd-pop .bp-row{display:flex;flex-wrap:wrap;gap:5px}
+    .bd-pop .bp-t,.bd-pop .bp-f{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 8px;cursor:pointer}
+    .bd-pop .bp-t:hover,.bd-pop .bp-f:hover{color:var(--text);border-color:var(--line)}
+    .bd-pop .bp-t.active,.bd-pop .bp-f.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    /* badges de tarja/flag nas listas de membros (popover/editor) */
+    .mb-tag{font-family:var(--disp);font-weight:600;font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 4px;margin-left:5px;vertical-align:1px}
+    .mb-flag{font-size:12px;margin-left:3px;vertical-align:-1px}
     .rrow{display:grid;grid-template-columns:1.6fr .9fr .9fr .6fr auto;gap:7px;align-items:center;padding:5px 5px;border-bottom:1px solid rgba(255,255,255,.04)}
     .rrow.head{position:sticky;top:0;background:var(--ink-3);border-bottom:1px solid var(--line-soft);z-index:1}
     .rrow.head span{font-family:var(--disp);font-weight:600;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -562,8 +609,15 @@
             <span class="gt"><b id="gAus">0</b> ausentes</span>
             <span class="top-spacer"></span>
             <span class="gt" id="gComp"></span>
+            <div class="view-toggle" id="viewToggle"><button type="button" data-view="grid" class="active">Tabela</button><button type="button" data-view="board">Board</button></div>
           </div>
           <div class="roster-grid" id="rosterGrid"><div class="rrow head"><span>Jogador</span><span>Função</span><span>PT</span><span>Res.</span><span></span></div></div>
+          <div class="board-tools" id="boardTools" hidden>
+            <button class="rbtn gold" id="bdAuto" style="padding:8px 12px">⚙ Auto-preencher</button>
+            <button class="rbtn" id="bdClearPt" style="padding:8px 12px">Esvaziar PTs</button>
+            <span class="bd-legend">Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.</span>
+          </div>
+          <div class="roster-board" id="rosterBoard" hidden></div>
         </div>
       </div>
       <footer>
@@ -573,6 +627,7 @@
         <button class="rbtn gold" id="rosterSave">Salvar roster</button>
       </footer>
     </div>
+    <div class="bd-pop" id="bdPop" hidden></div>
   </div>
 
   <!-- confirm próprio (funciona no iframe do preview) -->
@@ -618,7 +673,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=17"></script>
-  <script src="./app.js?v=17"></script>
+  <script src="./config.js?v=18"></script>
+  <script src="./app.js?v=18"></script>
 </body>
 </html>

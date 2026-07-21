@@ -102,6 +102,19 @@ const WWM = {
   roleOrder: ['Tank', 'Healer', 'DPS'],
   ptSize: 5,   // tamanho alvo de cada PT (usado no auto-montar)
 
+  /* --- montador de PTs -------------------------------------------------- */
+  // composição alvo por PT no auto-preencher: 1 healer (até 2), 1 tank (até 2),
+  // 3 dps (até 4). O resto vira reserva.
+  ptComp: { Healer: { alvo: 1, max: 2 }, Tank: { alvo: 1, max: 2 }, DPS: { alvo: 3, max: 4 } },
+  // tarja secundária (2ª função) que alguns players têm
+  secondaryTags: ['Carry', 'Twin', 'Box', 'Strategic'],
+  // características especiais (um player pode ter mais de uma)
+  specialFlags: [
+    { id: 'commander', label: 'Commander', icon: '👑' },
+    { id: 'caller',    label: 'Caller',    icon: '📣' },
+    { id: 'chicken',   label: 'Chicken',   icon: '🐔' },
+  ],
+
   /* mapeia as classes do raid-helper (Discord) para as nossas funções.
      Support não existe como função própria — entra como DPS. */
   classMap: {

@@ -24,6 +24,7 @@
   const sumEsc = $('sumEsc'), sumRes = $('sumRes'), sumAus = $('sumAus');
   const rosterBtn = $('rosterBtn'), editRosterBtn = $('editRosterBtn'), rosterModal = $('rosterModal'), rosterClose = $('rosterClose');
   const rosterPaste = $('rosterPaste'), parseBtn = $('parseBtn'), parseMsg = $('parseMsg'), autoBtn = $('autoBtn');
+  const rosterBoard = $('rosterBoard'), boardTools = $('boardTools'), viewToggle = $('viewToggle'), bdPop = $('bdPop'), bdAuto = $('bdAuto'), bdClearPt = $('bdClearPt');
   const rosterGrid = $('rosterGrid'), gEsc = $('gEsc'), gRes = $('gRes'), gAus = $('gAus'), gComp = $('gComp');
   const rosterSave = $('rosterSave'), rosterClear2 = $('rosterClear2'), saveMsg = $('saveMsg');
   const exportBtn = $('exportBtn'), importBtn = $('importBtn'), importFile = $('importFile'), shareBtn = $('shareBtn'), resetBtn = $('resetBtn'), toastEl = $('toast');
@@ -64,6 +65,7 @@
   function clamp01(n) { n = Number(n); return isNaN(n) ? 0 : Math.max(0, Math.min(1, n)); }
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
   function roleColor(f) { return CFG.roleColors[f] || CFG.roleColors.DPS; }
+  function memBadges(m) { let s = ''; if (m.tag2) s += '<span class="mb-tag">' + esc(m.tag2) + '</span>'; (m.flags || []).forEach(fid => { const f = (CFG.specialFlags || []).find(x => x.id === fid); if (f) s += '<span class="mb-flag" title="' + esc(f.label) + '">' + f.icon + '</span>'; }); return s; }
   function hexA(hex, a) { const m = /^#?([0-9a-f]{6})$/i.exec(hex); if (!m) return hex; const n = parseInt(m[1], 16); return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')'; }
 
   // ---- boot ----
@@ -207,7 +209,7 @@
     if (!tit.length && !res.length) html += '<div class="empty">Sem membros. Defina no roster.</div>';
     else {
       html += '<ul>';
-      tit.forEach(m => html += '<li class="mem"' + (state.present ? '' : ' draggable="true"') + ' data-nome="' + esc(m.nome) + '" data-fn="' + m.funcao + '"><span class="rl" style="background:' + roleColor(m.funcao) + '"></span>' + esc(m.nome) + '<span class="tag">' + esc(m.funcao) + '</span></li>');
+      tit.forEach(m => html += '<li class="mem"' + (state.present ? '' : ' draggable="true"') + ' data-nome="' + esc(m.nome) + '" data-fn="' + m.funcao + '"><span class="rl" style="background:' + roleColor(m.funcao) + '"></span>' + esc(m.nome) + memBadges(m) + '<span class="tag">' + esc(m.funcao) + '</span></li>');
       res.forEach(m => html += '<li class="res"><span class="rl" style="background:' + roleColor(m.funcao) + ';opacity:.5"></span>' + esc(m.nome) + '<span class="tag">reserva</span></li>');
       html += '</ul>';
       if (!state.present) html += '<div class="phint">Arraste um membro para fora → ele sai ligado à PT por um traço.</div>';
@@ -398,7 +400,7 @@
   function parseRoster(text) { text = (text || '').trim(); if (!text) return []; if (text[0] === '{' || text[0] === '[') { try { const d = JSON.parse(text); const arr = Array.isArray(d) ? d : d.signUps; if (Array.isArray(arr)) return parseRaidHelper(arr); } catch (e) {} } return parseLines(text); }
   function parseRaidHelper(signUps) { const out = []; signUps.forEach(s => { const cls = s.className || s.cClassName || ''; let status = 'primary', ausente = false, reserva = false, classe = cls, funcao = 'DPS'; if (/^absence$/i.test(cls)) { status = 'absence'; ausente = true; classe = 'Absence'; } else if (/^bench$/i.test(cls)) { status = 'bench'; reserva = true; classe = s.specName || s.cSpecName || '—'; funcao = mapClass(classe); } else if (/^late$/i.test(cls)) { status = 'late'; classe = s.specName || s.cSpecName || '—'; funcao = mapClass(classe); } else if (/^tentative$/i.test(cls)) { status = 'tentative'; reserva = true; classe = s.specName || s.cSpecName || '—'; funcao = mapClass(classe); } else { classe = cls; funcao = mapClass(cls); } out.push({ id: uid(), nome: s.name || '—', classe, funcao, status, ausente, reserva, pt: null, nota: s.note || '' }); }); const rank = p => (p.ausente ? 3 : p.reserva ? 2 : 1), fo = f => ({ Tank: 0, Healer: 1, DPS: 2 }[f] ?? 3); out.sort((a, b) => rank(a) - rank(b) || fo(a.funcao) - fo(b.funcao) || a.nome.localeCompare(b.nome)); return out; }
   function parseLines(text) { const out = []; text.split(/\n+/).forEach(line => { const m = line.match(/^\s*(PT\s?\d+|reservas?|bench|banco|sem\s?pt)\s*[—:\-–]\s*(.+)$/i); if (!m) return; const reserva = /reserv|bench|banco/i.test(m[1]), ptm = m[1].match(/PT\s?(\d+)/i), pt = ptm ? 'PT' + ptm[1] : null; m[2].split(/[,;]+/).forEach(part => { part = part.trim(); if (!part) return; const mm = part.match(/^(.+?)\s*\(([^)]+)\)\s*$/); const nome = (mm ? mm[1] : part).trim(); const funcao = normalizeRole(mm ? mm[2] : ''); if (nome) out.push({ id: uid(), nome, classe: funcao, funcao, status: reserva ? 'bench' : 'primary', ausente: false, reserva, pt: pt && PT_IDS.includes(pt) ? pt : null, nota: '' }); }); }); return out; }
-  function openRoster() { rosterDraft = state.roster.map(p => Object.assign({}, p)); rosterPaste.value = ''; parseMsg.textContent = ''; parseMsg.className = 'parse-msg'; saveMsg.textContent = ''; renderGrid(); rosterModal.hidden = false; }
+  function openRoster() { rosterDraft = state.roster.map(p => Object.assign({}, p, { flags: (p.flags || []).slice() })); rosterPaste.value = ''; parseMsg.textContent = ''; parseMsg.className = 'parse-msg'; saveMsg.textContent = ''; renderGrid(); setRosterView('grid'); rosterModal.hidden = false; }
   function closeRoster() { rosterModal.hidden = true; }
   function renderGrid() {
     gAus.textContent = rosterDraft.filter(p => p.ausente).length; gRes.textContent = rosterDraft.filter(p => p.reserva && !p.ausente).length; gEsc.textContent = rosterDraft.filter(p => !p.ausente && !p.reserva).length;
@@ -408,7 +410,95 @@
     rosterDraft.forEach((p, i) => { const opts = ['Tank', 'DPS', 'Healer'].map(f => '<option value="' + f + '"' + (p.funcao === f ? ' selected' : '') + '>' + f + '</option>').join(''); const ptopts = '<option value="">—</option>' + PT_IDS.map(id => '<option value="' + id + '"' + (p.pt === id ? ' selected' : '') + '>' + id + '</option>').join(''); html += '<div class="rrow' + (p.ausente ? ' absence' : '') + '" data-i="' + i + '"><div class="rn"><span class="rl" style="background:' + roleColor(p.funcao) + (p.ausente ? ';opacity:.4' : '') + '"></span><span class="nm">' + esc(p.nome) + '</span><span class="cl">' + esc(p.ausente ? 'ausente' : p.classe) + '</span></div><select class="f-fn"' + (p.ausente ? ' disabled' : '') + '>' + opts + '</select><select class="f-pt"' + (p.ausente ? ' disabled' : '') + '>' + ptopts + '</select><div class="res"><input type="checkbox" class="f-res"' + (p.reserva ? ' checked' : '') + (p.ausente ? ' disabled' : '') + '></div><button class="rdel" title="Remover">✕</button></div>'; });
     rosterGrid.innerHTML = html;
   }
-  function autoAssign() { const avail = rosterDraft.filter(p => !p.ausente && !p.reserva); avail.forEach(p => p.pt = null); if (!avail.length) { renderGrid(); return; } const nPT = Math.max(1, Math.min(CFG.parties.length, Math.ceil(avail.length / CFG.ptSize))); const buckets = Array.from({ length: nPT }, () => []); let bi = 0; const deal = list => { list.forEach(p => { buckets[bi % nPT].push(p); bi++; }); }; bi = 0; deal(avail.filter(p => p.funcao === 'Tank')); bi = 0; deal(avail.filter(p => p.funcao === 'Healer')); bi = 0; deal(avail.filter(p => p.funcao === 'DPS')); buckets.forEach((b, k) => b.forEach(p => p.pt = PT_IDS[k])); renderGrid(); }
+  // Auto-preenche as PTs seguindo a composição alvo (1 heal/1 tank/3 dps, com
+  // margens) e joga o excedente nas reservas.
+  function autoAssign() {
+    const players = rosterDraft.filter(p => !p.ausente);
+    players.forEach(p => { p.pt = null; p.reserva = false; });
+    if (!players.length) { refreshRoster(); return; }
+    const heal = players.filter(p => p.funcao === 'Healer');
+    const tank = players.filter(p => p.funcao === 'Tank');
+    const dps = players.filter(p => p.funcao === 'DPS');
+    const nPT = Math.max(1, Math.min(PT_IDS.length, Math.ceil(players.length / CFG.ptSize)));
+    const comp = CFG.ptComp || { Healer: { alvo: 1, max: 2 }, Tank: { alvo: 1, max: 2 }, DPS: { alvo: 3, max: 4 } };
+    const pts = PT_IDS.slice(0, nPT).map(id => ({ id: id, Healer: 0, Tank: 0, DPS: 0, n: 0 }));
+    const cap = CFG.ptSize;
+    let hi = 0, ti = 0, di = 0;
+    // round 1: alvo por PT (1 heal, 1 tank, 3 dps)
+    pts.forEach(pt => { for (let k = 0; k < comp.Healer.alvo && heal[hi]; k++) { heal[hi].pt = pt.id; pt.Healer++; pt.n++; hi++; } });
+    pts.forEach(pt => { for (let k = 0; k < comp.Tank.alvo && tank[ti]; k++) { tank[ti].pt = pt.id; pt.Tank++; pt.n++; ti++; } });
+    pts.forEach(pt => { for (let k = 0; k < comp.DPS.alvo && dps[di] && pt.n < cap; k++) { dps[di].pt = pt.id; pt.DPS++; pt.n++; di++; } });
+    // round 2: distribui excedentes respeitando o max por função e o tamanho da PT
+    const spread = (list, idx, role) => { for (; idx < list.length; idx++) { let placed = false; for (const pt of pts) { if (pt[role] < comp[role].max && pt.n < cap) { list[idx].pt = pt.id; pt[role]++; pt.n++; placed = true; break; } } if (!placed) break; } return idx; };
+    hi = spread(heal, hi, 'Healer'); ti = spread(tank, ti, 'Tank'); di = spread(dps, di, 'DPS');
+    // sobra -> reservas
+    heal.slice(hi).concat(tank.slice(ti), dps.slice(di)).forEach(p => { p.reserva = true; });
+    refreshRoster();
+  }
+
+  // ---- montador visual de PTs (board drag & drop) ----
+  let rosterView = 'grid', bdDragId = null, bdPopId = null;
+  function refreshRoster() { renderGrid(); if (rosterView === 'board') renderBoard(); }
+  function setRosterView(v) {
+    rosterView = v; if (viewToggle) viewToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+    const board = v === 'board';
+    rosterGrid.hidden = board; boardTools.hidden = !board; rosterBoard.hidden = !board;
+    if (bdPop) bdPop.hidden = true;
+    if (board) renderBoard();
+  }
+  function bdFlagsHTML(p) { return (p.flags || []).map(fid => { const f = (CFG.specialFlags || []).find(x => x.id === fid); return f ? '<span class="c-flag" title="' + esc(f.label) + '">' + f.icon + '</span>' : ''; }).join(''); }
+  function bdChip(p) {
+    const tag2 = p.tag2 ? '<span class="c-tag2">' + esc(p.tag2) + '</span>' : '';
+    return '<div class="bd-chip" draggable="true" data-id="' + p.id + '" style="--rc:' + roleColor(p.funcao) + '">'
+      + '<span class="c-role" title="' + p.funcao + '"></span><span class="c-name">' + esc(p.nome) + '</span>'
+      + '<span class="c-tags">' + tag2 + bdFlagsHTML(p) + '</span></div>';
+  }
+  function bdZone(zoneId, label, chips, cls, extra) {
+    return '<div class="bd-zone ' + (cls || '') + '" data-zone="' + zoneId + '"><div class="bd-zh">' + label + (extra || '') + '</div>'
+      + '<div class="bd-chips">' + (chips.length ? chips.map(bdChip).join('') : '<span class="bd-empty">—</span>') + '</div></div>';
+  }
+  function renderBoard() {
+    if (!rosterBoard) return;
+    const active = rosterDraft.filter(p => !p.ausente);
+    const pool = active.filter(p => !p.pt && !p.reserva);
+    const res = active.filter(p => p.reserva);
+    let html = bdZone('pool', 'Disponíveis', pool, 'bd-pool', ' <span class="bd-c">' + pool.length + '</span>');
+    html += '<div class="bd-grid">';
+    PT_IDS.forEach(pid => {
+      const party = partyById.get(pid), mem = active.filter(x => x.pt === pid);
+      const c = { Tank: 0, Healer: 0, DPS: 0 }; mem.forEach(m => c[m.funcao]++);
+      const head = '<span class="dot" style="background:' + party.cor + '"></span><b>' + pid + '</b>'
+        + '<span class="bd-comp">' + c.Tank + 'T · ' + c.Healer + 'H · ' + c.DPS + 'D</span>'
+        + '<span class="bd-n' + (mem.length > CFG.ptSize ? ' over' : '') + '">' + mem.length + '/' + CFG.ptSize + '</span>';
+      html += '<div class="bd-zone bd-pt" data-zone="' + pid + '"><div class="bd-pt-h">' + head + '</div>'
+        + '<div class="bd-chips">' + (mem.length ? mem.map(bdChip).join('') : '<span class="bd-empty">solte jogadores aqui</span>') + '</div></div>';
+    });
+    html += '</div>';
+    html += bdZone('res', 'Reservas', res, 'bd-res', ' <span class="bd-c">' + res.length + '</span>');
+    rosterBoard.innerHTML = html;
+  }
+  function bdMove(id, zone) {
+    const p = rosterDraft.find(x => x.id === id); if (!p) return;
+    if (zone === 'pool') { p.pt = null; p.reserva = false; }
+    else if (zone === 'res') { p.pt = null; p.reserva = true; }
+    else if (PT_IDS.includes(zone)) { p.pt = zone; p.reserva = false; }
+    refreshRoster();
+  }
+  function openBdPop(id, anchor) {
+    const p = rosterDraft.find(x => x.id === id); if (!p || !bdPop) return; bdPopId = id;
+    let html = '<div class="bp-nm">' + esc(p.nome) + '</div><div class="bp-sec">Tarja secundária</div><div class="bp-row">';
+    html += '<button class="bp-t' + (!p.tag2 ? ' active' : '') + '" data-tag="">nenhuma</button>';
+    (CFG.secondaryTags || []).forEach(t => { html += '<button class="bp-t' + (p.tag2 === t ? ' active' : '') + '" data-tag="' + t + '">' + esc(t) + '</button>'; });
+    html += '</div><div class="bp-sec">Especial</div><div class="bp-row">';
+    (CFG.specialFlags || []).forEach(f => { html += '<button class="bp-f' + ((p.flags || []).includes(f.id) ? ' active' : '') + '" data-flag="' + f.id + '">' + f.icon + ' ' + esc(f.label) + '</button>'; });
+    html += '</div>';
+    bdPop.innerHTML = html; bdPop.hidden = false;
+    bdPop.style.left = '0px'; bdPop.style.top = '0px';
+    const ar = anchor.getBoundingClientRect(), pr = bdPop.getBoundingClientRect();
+    let left = Math.max(10, Math.min(ar.left, window.innerWidth - pr.width - 10));
+    let top = ar.bottom + 6; if (top + pr.height > window.innerHeight - 10) top = Math.max(10, ar.top - pr.height - 6);
+    bdPop.style.left = left + 'px'; bdPop.style.top = top + 'px';
+  }
 
   // ---- export / import / compartilhar / reset ----
   function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, cenarios: state.scenarios }; }
@@ -466,7 +556,7 @@
     peCount.textContent = tit.length + (res.length ? ' + ' + res.length + ' res' : '');
     let html = '';
     if (!tit.length && !res.length) html += '<div class="pe-empty">Sem membros nesta PT. Adicione abaixo.</div>';
-    tit.concat(res).forEach(m => html += '<div class="pe-mem' + (m.reserva ? ' res' : '') + '"><span class="rl" style="background:' + roleColor(m.funcao) + '"></span><span class="nm">' + esc(m.nome) + '</span><span class="cl">' + m.funcao + (m.reserva ? ' · res' : '') + '</span><button class="rm" data-id="' + m.id + '" title="Tirar da PT">✕</button></div>');
+    tit.concat(res).forEach(m => html += '<div class="pe-mem' + (m.reserva ? ' res' : '') + '"><span class="rl" style="background:' + roleColor(m.funcao) + '"></span><span class="nm">' + esc(m.nome) + memBadges(m) + '</span><span class="cl">' + m.funcao + (m.reserva ? ' · res' : '') + '</span><button class="rm" data-id="' + m.id + '" title="Tirar da PT">✕</button></div>');
     peMembers.innerHTML = html;
     peMembers.querySelectorAll('.rm').forEach(b => b.addEventListener('click', () => { const pl = state.roster.find(x => x.id === b.dataset.id); if (pl) { pl.pt = null; saveProject(); renderSidebar(); renderTokens(); renderPtEditor(); fillAddSel(); } }));
     fillAddSel();
@@ -534,6 +624,21 @@
     rosterModal.addEventListener('click', e => { if (e.target === rosterModal) closeRoster(); });
     parseBtn.addEventListener('click', () => { const parsed = parseRoster(rosterPaste.value); if (!parsed.length) { parseMsg.className = 'parse-msg err'; parseMsg.textContent = 'Não reconheci jogadores. Confira o formato.'; return; } rosterDraft = parsed; parseMsg.className = 'parse-msg ok'; parseMsg.textContent = parsed.length + ' jogadores reconhecidos.'; renderGrid(); });
     autoBtn.addEventListener('click', autoAssign);
+    bdAuto.addEventListener('click', autoAssign);
+    bdClearPt.addEventListener('click', () => { rosterDraft.forEach(p => { p.pt = null; p.reserva = false; }); refreshRoster(); });
+    viewToggle.addEventListener('click', e => { const b = e.target.closest('button[data-view]'); if (b) setRosterView(b.dataset.view); });
+    rosterBoard.addEventListener('dragstart', e => { const c = e.target.closest('.bd-chip'); if (c) { bdDragId = c.dataset.id; c.classList.add('dragging'); try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', c.dataset.id); } catch (_) {} if (bdPop) bdPop.hidden = true; } });
+    rosterBoard.addEventListener('dragend', () => { rosterBoard.querySelectorAll('.dragging').forEach(x => x.classList.remove('dragging')); rosterBoard.querySelectorAll('.bd-zone.over').forEach(z => z.classList.remove('over')); });
+    rosterBoard.addEventListener('dragover', e => { const z = e.target.closest('.bd-zone'); if (z) { e.preventDefault(); try { e.dataTransfer.dropEffect = 'move'; } catch (_) {} rosterBoard.querySelectorAll('.bd-zone.over').forEach(x => { if (x !== z) x.classList.remove('over'); }); z.classList.add('over'); } });
+    rosterBoard.addEventListener('drop', e => { const z = e.target.closest('.bd-zone'); if (z && bdDragId) { e.preventDefault(); bdMove(bdDragId, z.dataset.zone); } bdDragId = null; });
+    rosterBoard.addEventListener('click', e => { const c = e.target.closest('.bd-chip'); if (c) openBdPop(c.dataset.id, c); });
+    bdPop.addEventListener('click', e => {
+      const p = rosterDraft.find(x => x.id === bdPopId); if (!p) return;
+      const t = e.target.closest('.bp-t'), f = e.target.closest('.bp-f');
+      if (t) { p.tag2 = t.dataset.tag || null; bdPop.querySelectorAll('.bp-t').forEach(x => x.classList.toggle('active', (x.dataset.tag || '') === (p.tag2 || ''))); refreshRoster(); }
+      else if (f) { const id = f.dataset.flag; p.flags = p.flags || []; const i = p.flags.indexOf(id); if (i >= 0) p.flags.splice(i, 1); else p.flags.push(id); f.classList.toggle('active', p.flags.indexOf(id) >= 0); refreshRoster(); }
+    });
+    document.addEventListener('click', e => { if (bdPop && !bdPop.hidden && !e.target.closest('#bdPop') && !e.target.closest('.bd-chip')) bdPop.hidden = true; });
     rosterClear2.addEventListener('click', async () => { if (await askConfirm('Limpar todos os jogadores?')) { rosterDraft = []; renderGrid(); } });
     // editor de PT
     peClose.addEventListener('click', closePtEditor);
@@ -552,5 +657,5 @@
   function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal })); } catch (e) {} }
   function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
   function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => ({ pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) })) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => ({ id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
-  function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, nota: typeof p.nota === 'string' ? p.nota : '' }; }
+  function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tag2: (CFG.secondaryTags || []).includes(p.tag2) ? p.tag2 : null, flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
