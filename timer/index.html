@@ -297,6 +297,46 @@
       box-shadow:0 20px 50px -20px #000;display:flex;align-items:center;gap:11px}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
     .toast .t-em{font-size:22px}
+
+    /* ---------- mobile: layout justo, sem colisão, sem seções desktop-only ---------- */
+    @media(max-width:560px){
+      :root{--topbar-h:52px}
+      /* topbar cabe sem sobrepor: seta só (Menu), nome sem glifo decorativo */
+      .topbar{gap:8px;padding:0 10px}
+      .back{padding:7px 8px}
+      .back span[data-i18n]{display:none}
+      .back .ar{font-size:17px;margin-top:0}
+      .brand{gap:0;min-width:0}
+      .brand .glyph{display:none}
+      .brand h1{font-size:15px;white-space:nowrap}
+      #soundBtn{padding:7px 10px}
+
+      /* espaçamento geral mais apertado */
+      .wrap{padding:14px 12px 44px;gap:13px}
+      .main-left{gap:11px}.side{gap:11px}
+      .clock-card{padding:17px 15px;border-radius:16px}
+      .clock{margin:4px 0 0}
+      .sched{padding:11px}
+      .next{padding:11px 13px;margin-top:13px}
+
+      /* cooldowns compactos (2 col) */
+      .cd-grid{grid-template-columns:1fr 1fr;gap:8px;padding:11px}
+      .cd-btn{padding:10px 8px;gap:3px}
+      .cd-val{font-size:1.5rem}
+      .cd-ico{height:18px}
+      /* teclas de mídia + AutoHotkey são só desktop → não ocupam espaço no celular */
+      .cd-bg{display:none}
+
+      /* painéis / settings mais baixos */
+      .panel > header{padding:11px 13px 9px}
+      .set-row{padding:9px 13px;gap:10px}
+      .ev{padding:8px 13px}
+      .events{max-height:none}
+
+      /* textos auxiliares menores */
+      .sched-hint,.ev-note,.hint{font-size:.72rem}
+      .hint{margin-top:0}
+    }
   </style>
 </head>
 <body>
