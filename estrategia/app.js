@@ -80,7 +80,7 @@
     const availW = mapPanel.clientWidth - 20, availH = mapPanel.clientHeight - 20;
     if (availW <= 0 || availH <= 0) return;
     let w = availW, h = w / AR; if (h > availH) { h = availH; w = h * AR; }
-    W = Math.round(w); H = Math.round(h); R = Math.max(11, Math.round(W * 0.018));
+    W = Math.round(w); H = Math.round(h); R = Math.max(8, Math.round(W * 0.0125));
     stage.scale({ x: 1, y: 1 }); stage.position({ x: 0, y: 0 });
     stage.size({ width: W, height: H });
     stageWrap.style.width = W + 'px'; stageWrap.style.height = H + 'px';
@@ -225,18 +225,17 @@
   function treeMeters(o, xf, yf) { const a = o.caminho.a, b = o.caminho.b, ax = b[0] - a[0], ay = b[1] - a[1]; const t = ((xf - a[0]) * ax + (yf - a[1]) * ay) / (ax * ax + ay * ay || 1); return Math.round(Math.max(0, Math.min(1, t)) * CFG.treeMeters); }
   function renderObjectives() {
     objLayer.destroyChildren();
-    const up = cur() ? (cur().objetivos || {}) : {}, os = Math.max(19, W * 0.034);
+    const up = cur() ? (cur().objetivos || {}) : {}, os = Math.max(22, W * 0.042);
     CFG.objetivos.forEach(o => {
       if (!up[o.id]) return;
       const pos = objPos(o);
-      if (o.caminho) objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, o.caminho.b[0] * W, o.caminho.b[1] * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.05), dash: [4, 6], listening: false }));
-      const calib = !objPanel.hidden, canDrag = !state.present && (!!o.movel || calib);
+      if (o.caminho) objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, o.caminho.b[0] * W, o.caminho.b[1] * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.06), dash: [4, 6], listening: false }));
+      const canDrag = !state.present && state.tool === 'select';
       const g = new Konva.Group({ x: pos.x * W, y: pos.y * H, draggable: canDrag });
-      const st = objStyle(o);
-      if (calib && !o.movel) g.add(new Konva.Circle({ radius: os * 0.64, stroke: '#D9A441', strokeWidth: 1.5, dash: [3, 3], opacity: 0.85 }));   // sinaliza calibração
-      g.add(new Konva.Circle({ radius: os * 0.5, fill: 'rgba(12,15,22,.92)', stroke: st.c, strokeWidth: Math.max(2, os * 0.085), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 }));
-      g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.t.length > 1 ? 0.34 : 0.46), fill: st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 }));
-      if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.58 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.3), fill: '#f0c66b', padding: 3 })); ml.offsetX(ml.getClientRect({ skipTransform: true }).width / 2); g.add(ml); }
+      const img = iconImgs[o.icone];
+      if (img && img.width) { const h = os * (img.height / img.width); g.add(new Konva.Image({ image: img, width: os, height: h, offsetX: os / 2, offsetY: h / 2, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 })); }
+      else { const st = objStyle(o); g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.92)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08) })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.t.length > 1 ? 0.3 : 0.42), fill: st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
+      if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.52 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.26), fill: '#f0c66b', padding: 3 })); ml.offsetX(ml.getClientRect({ skipTransform: true }).width / 2); g.add(ml); }
       g.on('dblclick dbltap', e => { e.cancelBubble = true; pushUndo(); delete cur().objetivos[o.id]; if (cur().objetivoPos) delete cur().objetivoPos[o.id]; renderObjectives(); if (!objPanel.hidden) renderObjPanel(); saveProject(); });
       if (canDrag) {
         g.dragBoundFunc(clampToStage);
@@ -245,10 +244,7 @@
         g.on('dragend', () => { const p = { x: clamp01(g.x() / W), y: clamp01(g.y() / H) }; if (o.movel) { cur().objetivoPos = cur().objetivoPos || {}; cur().objetivoPos[o.id] = p; } else { state.objetivoPosGlobal[o.id] = p; } saveProject(); });
         g.on('mouseenter', () => stage.container().style.cursor = 'grab');
         g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
-      } else {
-        g.on('mouseenter', () => { if (!state.present) stage.container().style.cursor = 'pointer'; });
-        g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
-      }
+      } else { g.on('mouseenter', () => { if (!state.present) stage.container().style.cursor = 'pointer'; }); g.on('mouseleave', () => stage.container().style.cursor = toolCursor()); }
       objLayer.add(g);
     });
     objLayer.batchDraw();

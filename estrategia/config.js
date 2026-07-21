@@ -18,11 +18,18 @@ const WWM = {
     // Mapa base (limpo, grama até a borda, cortado) — gerado pela guild (v2).
     map: '../assets/map/board.jpg',
 
-    // Ícones de classe (para os tokens de membro destacado).
+    // Ícones dos objetivos (torre/ganso/árvore/boss) + classe (tank/dps/healer).
     icons: {
-      tank:   '../assets/vendor-ref/tank.png',
-      dps:    '../assets/vendor-ref/dps.png',
-      healer: '../assets/vendor-ref/healer.png',
+      tower_blue: '../assets/vendor-ref/tower_blue.png',
+      tower_red:  '../assets/vendor-ref/tower_red.png',
+      goose_blue: '../assets/vendor-ref/goose_blue.png',
+      goose_red:  '../assets/vendor-ref/goose_red.png',
+      tree_blue:  '../assets/vendor-ref/tree_blue.png',
+      tree_red:   '../assets/vendor-ref/tree_red.png',
+      boss:       '../assets/vendor-ref/boss.png',
+      tank:       '../assets/vendor-ref/tank.png',
+      dps:        '../assets/vendor-ref/dps.png',
+      healer:     '../assets/vendor-ref/healer.png',
     },
   },
 
