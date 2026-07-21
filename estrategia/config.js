@@ -48,35 +48,38 @@ const WWM = {
   // Posições calibradas sobre o mapa base. `movel:true` = arrastável (árvore/ganso);
   // os demais são FIXOS (torres, boss, outpost, jungle não se movem).
   // TODO: refinar posições no mapa novo que a guild vai gerar.
+  // Posições calibradas pela guild (dump "Copiar posições"). As torres do lado
+  // Leste (vermelho) são o espelho horizontal das do Oeste (base = torre azul),
+  // em torno do eixo de simetria do mapa (x≈0.506), mantendo a mesma altura.
   objetivos: [
     // 3 torres por lado (top / mid / bot) — FIXAS
-    { id: 'torre_top_o', grupo: 'Torres', rotulo: 'Torre Top (O)', icone: 'tower_blue', x: 0.392, y: 0.322 },
-    { id: 'torre_mid_o', grupo: 'Torres', rotulo: 'Torre Mid (O)', icone: 'tower_blue', x: 0.392, y: 0.521 },
-    { id: 'torre_bot_o', grupo: 'Torres', rotulo: 'Torre Bot (O)', icone: 'tower_blue', x: 0.392, y: 0.721 },
-    { id: 'torre_top_l', grupo: 'Torres', rotulo: 'Torre Top (L)', icone: 'tower_red',  x: 0.627, y: 0.322 },
-    { id: 'torre_mid_l', grupo: 'Torres', rotulo: 'Torre Mid (L)', icone: 'tower_red',  x: 0.627, y: 0.521 },
-    { id: 'torre_bot_l', grupo: 'Torres', rotulo: 'Torre Bot (L)', icone: 'tower_red',  x: 0.627, y: 0.721 },
-    // ganso nos 2 lados (nasce no portão) — MÓVEL
-    { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.195, y: 0.521, movel: true },
-    { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.829, y: 0.521, movel: true },
+    { id: 'torre_top_o', grupo: 'Torres', rotulo: 'Torre Top (O)', icone: 'tower_blue', x: 0.390, y: 0.330 },
+    { id: 'torre_mid_o', grupo: 'Torres', rotulo: 'Torre Mid (O)', icone: 'tower_blue', x: 0.384, y: 0.505 },
+    { id: 'torre_bot_o', grupo: 'Torres', rotulo: 'Torre Bot (O)', icone: 'tower_blue', x: 0.388, y: 0.686 },
+    { id: 'torre_top_l', grupo: 'Torres', rotulo: 'Torre Top (L)', icone: 'tower_red',  x: 0.622, y: 0.330 },
+    { id: 'torre_mid_l', grupo: 'Torres', rotulo: 'Torre Mid (L)', icone: 'tower_red',  x: 0.628, y: 0.505 },
+    { id: 'torre_bot_l', grupo: 'Torres', rotulo: 'Torre Bot (L)', icone: 'tower_red',  x: 0.624, y: 0.686 },
+    // ganso nos 2 lados (nasce no portão) — MÓVEL. flip: espelha a arte do lado O.
+    { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.222, y: 0.509, movel: true, flip: true },
+    { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.793, y: 0.503, movel: true },
     // árvore nasce no MESMO ponto do ganso e caminha até o portão inimigo (333m) — MÓVEL
-    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.195, y: 0.521, movel: true, caminho: { a: [0.195, 0.521], b: [0.829, 0.521] } },
-    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.829, y: 0.521, movel: true, caminho: { a: [0.829, 0.521], b: [0.195, 0.521] } },
+    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.195, y: 0.511, movel: true, flip: true, caminho: { a: [0.195, 0.511], b: [0.831, 0.511] } },
+    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.831, y: 0.511, movel: true, caminho: { a: [0.831, 0.511], b: [0.195, 0.511] } },
     // boss / nirvana nas 2 PONTAS (norte e sul) — FIXO
-    { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.421, y: 0.122 },
-    { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.580, y: 0.900 },
+    { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.438, y: 0.136 },
+    { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.594, y: 0.869 },
     // outpost — nasce quase ao lado do boss (FIXO). Marcador.
-    { id: 'outpost_n', grupo: 'Outpost', rotulo: 'Outpost (N)', icone: 'outpost', x: 0.576, y: 0.138 },
-    { id: 'outpost_s', grupo: 'Outpost', rotulo: 'Outpost (S)', icone: 'outpost', x: 0.444, y: 0.885 },
+    { id: 'outpost_n', grupo: 'Outpost', rotulo: 'Outpost (N)', icone: 'outpost', x: 0.593, y: 0.146 },
+    { id: 'outpost_s', grupo: 'Outpost', rotulo: 'Outpost (S)', icone: 'outpost', x: 0.432, y: 0.871 },
     // jungle (mini-ninjas) — 8 camps FIXOS
-    { id: 'jg_1', grupo: 'Jungle', rotulo: 'Jungle 1', icone: 'jungle', x: 0.407, y: 0.434 },
-    { id: 'jg_2', grupo: 'Jungle', rotulo: 'Jungle 2', icone: 'jungle', x: 0.482, y: 0.414 },
-    { id: 'jg_3', grupo: 'Jungle', rotulo: 'Jungle 3', icone: 'jungle', x: 0.557, y: 0.414 },
-    { id: 'jg_4', grupo: 'Jungle', rotulo: 'Jungle 4', icone: 'jungle', x: 0.613, y: 0.434 },
-    { id: 'jg_5', grupo: 'Jungle', rotulo: 'Jungle 5', icone: 'jungle', x: 0.407, y: 0.619 },
-    { id: 'jg_6', grupo: 'Jungle', rotulo: 'Jungle 6', icone: 'jungle', x: 0.482, y: 0.639 },
-    { id: 'jg_7', grupo: 'Jungle', rotulo: 'Jungle 7', icone: 'jungle', x: 0.557, y: 0.639 },
-    { id: 'jg_8', grupo: 'Jungle', rotulo: 'Jungle 8', icone: 'jungle', x: 0.613, y: 0.619 },
+    { id: 'jg_1', grupo: 'Jungle', rotulo: 'Jungle 1', icone: 'jungle', x: 0.375, y: 0.424 },
+    { id: 'jg_2', grupo: 'Jungle', rotulo: 'Jungle 2', icone: 'jungle', x: 0.459, y: 0.430 },
+    { id: 'jg_3', grupo: 'Jungle', rotulo: 'Jungle 3', icone: 'jungle', x: 0.571, y: 0.402 },
+    { id: 'jg_4', grupo: 'Jungle', rotulo: 'Jungle 4', icone: 'jungle', x: 0.649, y: 0.424 },
+    { id: 'jg_5', grupo: 'Jungle', rotulo: 'Jungle 5', icone: 'jungle', x: 0.374, y: 0.588 },
+    { id: 'jg_6', grupo: 'Jungle', rotulo: 'Jungle 6', icone: 'jungle', x: 0.447, y: 0.625 },
+    { id: 'jg_7', grupo: 'Jungle', rotulo: 'Jungle 7', icone: 'jungle', x: 0.568, y: 0.574 },
+    { id: 'jg_8', grupo: 'Jungle', rotulo: 'Jungle 8', icone: 'jungle', x: 0.645, y: 0.580 },
   ],
   objetivosGrupos: ['Torres', 'Ganso', 'Árvore', 'Boss', 'Outpost', 'Jungle'],
   treeMeters: 333,   // distância total do caminho da árvore (base -> portão inimigo)
