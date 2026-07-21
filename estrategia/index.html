@@ -368,6 +368,20 @@
     .bd-res{background:rgba(137,171,197,.05)}
     /* pool e reservas gerais: chips em colunas responsivas (compacto) */
     .bd-pool .bd-chips,.bd-res .bd-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
+    /* board com 6 PTs de uma vez: coluna esquerda (arrastar) + grade 3x2 */
+    .bd-layout{display:flex;gap:14px;align-items:flex-start}
+    .bd-side{width:246px;flex:none;display:flex;flex-direction:column;gap:12px;position:sticky;top:0}
+    .bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:1fr}
+    #rosterModal.board-mode .bd-grid{flex:1;min-width:0;grid-template-columns:repeat(3,1fr)}
+    .bd-zh .bd-allres{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:6px;padding:3px 7px;cursor:pointer;margin-left:auto}
+    .bd-zh .bd-allres:hover{color:var(--gold);border-color:var(--line)}
+    .bd-pool .bd-zh .bd-c{margin-left:6px}
+    .bd-chip .c-rep{font-size:12.5px;color:#f0c66b;font-weight:700;line-height:1}
+    .bd-pop .bp-p{font-family:var(--disp);font-weight:700;font-size:10.5px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 9px;cursor:pointer}
+    .bd-pop .bp-p:hover{color:var(--text);border-color:var(--line)}
+    .bd-pop .bp-p.active{color:#0b0e15;background:var(--rc,#D9A441);border-color:var(--rc,#D9A441)}
+    .bd-pop .bp-rep.active{color:#241a06;background:linear-gradient(180deg,#f0c66b,#D9A441);border-color:var(--gold)}
+    @media(max-width:860px){.bd-layout{flex-direction:column}.bd-side{width:auto;position:static}#rosterModal.board-mode .bd-grid{grid-template-columns:1fr}.bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
     /* grade de PTs */
     .bd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
     .bd-pt-card{border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.022),rgba(255,255,255,.005));padding:11px 12px;display:flex;flex-direction:column;gap:8px}
@@ -756,7 +770,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=23"></script>
-  <script src="./app.js?v=23"></script>
+  <script src="./config.js?v=24"></script>
+  <script src="./app.js?v=24"></script>
 </body>
 </html>
