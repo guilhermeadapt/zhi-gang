@@ -114,6 +114,15 @@
     .chev{flex:none;color:var(--muted);font-size:1.5rem;line-height:1;font-family:var(--disp);
       transition:transform .18s ease,color .18s ease;}
     @media(hover:hover){a.card:hover .chev{transform:translateX(3px);color:var(--accent);}}
+    /* 3 guias de função na mesma linha (Playbook fica sozinho acima) */
+    .roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}
+    .roles a.card{flex-direction:column;align-items:flex-start;gap:9px;padding:14px 13px;}
+    .roles .glyph{width:44px;height:44px;font-size:23px;border-radius:11px;}
+    .roles .meta{width:100%;}
+    .roles .role{margin-bottom:2px;}
+    .roles .name{font-size:1.12rem;}
+    .roles .desc,.roles .chev{display:none;}
+    @media(max-width:380px){.roles{grid-template-columns:1fr;}.roles a.card{flex-direction:row;align-items:center;gap:14px;}.roles .desc{display:block;}}
 
     /* ---------- Discord ---------- */
     .join-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.24em;
@@ -134,6 +143,36 @@
     .dgo{flex:none;color:#9aa0f7;font-family:var(--disp);font-size:1.4rem;transition:transform .18s ease;}
     @media(hover:hover){a.discord:hover .dgo{transform:translateX(3px);}}
 
+    /* ---------- Ferramentas ---------- */
+    .tools-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.24em;
+      text-transform:uppercase;color:var(--muted);text-align:center;margin:30px 0 12px;
+      display:flex;align-items:center;gap:11px;justify-content:center;}
+    .tools-lbl::before,.tools-lbl::after{content:"";height:1px;flex:1;max-width:60px;
+      background:linear-gradient(90deg,transparent,var(--line-soft),transparent);}
+    .tools{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media(max-width:400px){.tools{grid-template-columns:1fr;}}
+    a.tool{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-decoration:none;color:var(--text);
+      background:linear-gradient(180deg,rgba(217,164,65,.08),rgba(217,164,65,.02));
+      border:1px solid var(--line);border-radius:14px;padding:15px 15px 16px;overflow:hidden;
+      transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;}
+    a.tool:active{transform:scale(.99);}
+    @media(hover:hover){a.tool:hover{transform:translateY(-2px);
+      border-color:color-mix(in srgb,var(--gold) 60%,transparent);
+      box-shadow:0 14px 32px -22px var(--gold);}}
+    .tico{flex:none;width:42px;height:42px;border-radius:11px;display:grid;place-items:center;
+      font-size:21px;line-height:1;
+      background:radial-gradient(120% 120% at 30% 20%,rgba(217,164,65,.18),transparent 70%),#0b0e15;
+      border:1px solid color-mix(in srgb,var(--gold) 38%,transparent);
+      box-shadow:inset 0 0 16px -8px color-mix(in srgb,var(--gold) 70%,transparent);}
+    .tmeta{flex:1;min-width:0;display:flex;flex-direction:column;}
+    .tkick{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-weight:600;
+      font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+    .tchip{font-family:var(--disp);font-weight:600;font-size:8px;letter-spacing:.1em;text-transform:uppercase;
+      color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:2px 6px;border-radius:999px;}
+    .tname{font-family:var(--disp);font-weight:600;font-size:1.1rem;letter-spacing:.01em;line-height:1.08;}
+    .tdesc{color:var(--muted);font-size:.79rem;margin-top:3px;line-height:1.34;}
+    .tgo{display:none;}
+
     footer{margin-top:26px;text-align:center;font-family:var(--disp);font-weight:500;
       font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#5c6474;}
   </style>
@@ -144,7 +183,7 @@
       <div class="watermark" aria-hidden="true">軍</div>
       <div class="kicker">Zhi Guides · GvG</div>
       <h1>Wanted</h1>
-      <p class="sub">Playbook e guias de função — escolha o seu.</p>
+      <p class="sub">Playbook, guias de função e ferramentas do GvG.</p>
 
     </header>
 
@@ -181,36 +220,60 @@
         <span class="chev" aria-hidden="true">›</span>
       </a>
 
-      <a class="card tank" href="./tank/">
-        <span class="glyph" aria-hidden="true">盾</span>
-        <span class="meta">
-          <span class="role">Tank</span>
-          <span class="name">Guia do Tank</span>
-          <span class="desc">Build, frontline, controle e resistência</span>
-        </span>
-        <span class="chev" aria-hidden="true">›</span>
-      </a>
+      <div class="roles">
+        <a class="card tank" href="./tank/">
+          <span class="glyph" aria-hidden="true">盾</span>
+          <span class="meta">
+            <span class="role">Guia</span>
+            <span class="name">Tank</span>
+            <span class="desc">Build, frontline, controle e resistência</span>
+          </span>
+          <span class="chev" aria-hidden="true">›</span>
+        </a>
 
-      <a class="card dps" href="./dps/">
-        <span class="glyph" aria-hidden="true">戰</span>
-        <span class="meta">
-          <span class="role">DPS</span>
-          <span class="name">Guia do DPS</span>
-          <span class="desc">Build, kit, decisão e dano no GvG</span>
-        </span>
-        <span class="chev" aria-hidden="true">›</span>
-      </a>
+        <a class="card dps" href="./dps/">
+          <span class="glyph" aria-hidden="true">戰</span>
+          <span class="meta">
+            <span class="role">Guia</span>
+            <span class="name">DPS</span>
+            <span class="desc">Build, kit, decisão e dano no GvG</span>
+          </span>
+          <span class="chev" aria-hidden="true">›</span>
+        </a>
 
-      <a class="card heal" href="./healer/">
-        <span class="glyph" aria-hidden="true">護</span>
-        <span class="meta">
-          <span class="role">Healer</span>
-          <span class="name">Guia do Healer</span>
-          <span class="desc">Build, posicionamento, kit e sobrevivência</span>
-        </span>
-        <span class="chev" aria-hidden="true">›</span>
-      </a>
+        <a class="card heal" href="./healer/">
+          <span class="glyph" aria-hidden="true">護</span>
+          <span class="meta">
+            <span class="role">Guia</span>
+            <span class="name">Healer</span>
+            <span class="desc">Build, posicionamento, kit e sobrevivência</span>
+          </span>
+          <span class="chev" aria-hidden="true">›</span>
+        </a>
+      </div>
     </nav>
+
+    <div class="tools-lbl">Ferramentas</div>
+    <div class="tools">
+      <a class="tool" href="./estrategia/">
+        <span class="tico" aria-hidden="true">🗺️</span>
+        <span class="tmeta">
+          <span class="tkick">Ferramenta <span class="tchip">Beta</span></span>
+          <span class="tname">Game Plan</span>
+          <span class="tdesc">Plano do GvG por fase — PTs, objetivos e apresentação.</span>
+        </span>
+        <span class="tgo" aria-hidden="true">›</span>
+      </a>
+      <a class="tool" href="./timer/">
+        <span class="tico" aria-hidden="true">⏱️</span>
+        <span class="tmeta">
+          <span class="tkick">Ferramenta <span class="tchip">Beta</span></span>
+          <span class="tname">War Timer</span>
+          <span class="tdesc">Marcos de tempo do GvG (JG, Boss…) com avisos.</span>
+        </span>
+        <span class="tgo" aria-hidden="true">›</span>
+      </a>
+    </div>
 
     <div class="join-lbl">Comunidade</div>
     <a class="discord" href="https://discord.gg/wantedd" target="_blank" rel="noopener">
@@ -219,7 +282,7 @@
       </span>
       <span class="dmeta">
         <span class="dt">Entrar no Discord da Wanted</span>
-        <span class="ds">Curtiu os guias? Vem fazer parte da guild.</span>
+        <span class="ds">Curtiu o conteúdo? Vem fazer parte da guild.</span>
       </span>
       <span class="dgo" aria-hidden="true">›</span>
     </a>
