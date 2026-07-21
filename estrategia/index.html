@@ -155,6 +155,30 @@
     .pt-popover .po-desc{font-size:11.5px;color:var(--gold-2);margin:-2px 0 8px;line-height:1.35}
     .pt-popover .empty{font-size:12px;color:var(--muted);font-style:italic}
     .pt-popover .phint{margin-top:8px;font-size:10px;color:#5f6672;line-height:1.35}
+    .pt-popover .po-link{margin:2px 0 8px;width:100%;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-2);background:rgba(217,164,65,.08);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:7px;padding:7px;cursor:pointer;transition:.14s}
+    .pt-popover .po-link:hover{background:rgba(217,164,65,.16)}
+    /* menu de ícone (objetivo / membro) — HP, vincular, remover */
+    .icon-menu{position:absolute;z-index:15;min-width:190px;max-width:240px;padding:11px 12px;background:rgba(12,15,22,.98);border:1px solid var(--line);border-radius:13px;box-shadow:0 24px 60px -24px #000,inset 0 1px 0 rgba(255,255,255,.04)}
+    .icon-menu .im-hd{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+    .icon-menu .im-hd b{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .icon-menu .im-dot{width:11px;height:11px;border-radius:50%;flex:none}
+    .icon-menu .im-x{flex:none;width:24px;height:24px;border:1px solid var(--line-soft);background:transparent;color:var(--muted);border-radius:6px;cursor:pointer;font-size:12px}
+    .icon-menu .im-x:hover{color:var(--text);border-color:var(--line)}
+    .icon-menu .im-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .icon-menu .im-hp{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+    .icon-menu .im-range{flex:1;min-width:0;accent-color:var(--gold);height:4px}
+    .icon-menu .im-hpv{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;font-size:13px;color:var(--gold-2);min-width:38px;text-align:right}
+    .icon-menu .im-quick{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:11px}
+    .icon-menu .im-quick button{font-family:var(--disp);font-weight:700;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:6px 0;cursor:pointer;transition:.12s}
+    .icon-menu .im-quick button:hover{color:var(--text);border-color:var(--line)}
+    .icon-menu .im-quick button.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .icon-menu .im-actions{display:flex;gap:7px}
+    .icon-menu .im-link{flex:1;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-2);background:rgba(217,164,65,.08);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:7px;padding:8px;cursor:pointer;transition:.14s}
+    .icon-menu .im-link:hover{background:rgba(217,164,65,.16)}
+    .icon-menu .im-del{flex:none;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line-soft);border-radius:7px;padding:8px 12px;cursor:pointer;transition:.14s}
+    .icon-menu .im-del:hover{color:var(--crimson);border-color:color-mix(in srgb,var(--crimson) 50%,transparent)}
+    body.linking #stageWrap{cursor:crosshair}
+    body.linking #stage{cursor:crosshair}
 
     /* painel de objetivos */
     .obj-panel{position:absolute;right:14px;top:12px;z-index:40;width:250px;max-height:calc(100vh - 90px);overflow-y:auto;
@@ -530,6 +554,7 @@
       </div>
 
       <div class="pt-popover" id="ptPopover" hidden></div>
+      <div class="icon-menu" id="iconMenu" hidden></div>
 
       <div class="obj-panel" id="objPanel" hidden>
         <header><b data-i18n="objUp">Objetivos up</b><span data-i18n="objInScene">neste cenário</span><button class="x" id="objClose" aria-label="Fechar">✕</button></header>
@@ -682,7 +707,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=19"></script>
-  <script src="./app.js?v=19"></script>
+  <script src="./config.js?v=20"></script>
+  <script src="./app.js?v=20"></script>
 </body>
 </html>
