@@ -93,9 +93,9 @@ const WWM = {
     { id: 'ganso_o', grupo: 'Ganso', rotulo: 'Ganso (Oeste)', icone: 'goose_blue', x: 0.222, y: 0.509, movel: true, flip: true },
     { id: 'ganso_l', grupo: 'Ganso', rotulo: 'Ganso (Leste)', icone: 'goose_red',  x: 0.793, y: 0.503, movel: true },
     // árvore nasce no MESMO ponto do ganso e caminha até o portão inimigo (333m) — MÓVEL
-    // a árvore anda do seu ponto até o PORTÃO inimigo (um pouco à frente do ganso inimigo) — 333m.
-    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.195, y: 0.511, movel: true, flip: true, caminho: { a: [0.195, 0.511], b: [0.81, 0.505] } },
-    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.831, y: 0.511, movel: true, caminho: { a: [0.831, 0.511], b: [0.205, 0.507] } },
+    // a árvore anda do seu ponto até o PORTÃO inimigo — 333m. Portão calibrado pela guild.
+    { id: 'arvore_o', grupo: 'Árvore', rotulo: 'Árvore (Oeste)', icone: 'tree_blue', x: 0.195, y: 0.511, movel: true, flip: true, caminho: { a: [0.195, 0.511], b: [0.7628, 0.5069] } },
+    { id: 'arvore_l', grupo: 'Árvore', rotulo: 'Árvore (Leste)', icone: 'tree_red',  x: 0.831, y: 0.511, movel: true, caminho: { a: [0.831, 0.511], b: [0.2542, 0.5069] } },
     // boss / nirvana nas 2 PONTAS (norte e sul) — FIXO
     { id: 'boss_n', grupo: 'Boss', rotulo: 'Boss / Nirvana (N)', icone: 'boss', x: 0.438, y: 0.136 },
     { id: 'boss_s', grupo: 'Boss', rotulo: 'Boss / Nirvana (S)', icone: 'boss', x: 0.594, y: 0.869 },
@@ -129,7 +129,7 @@ const WWM = {
   // 3 dps (até 4). O resto vira reserva.
   ptComp: { Healer: { alvo: 1, max: 2 }, Tank: { alvo: 1, max: 2 }, DPS: { alvo: 3, max: 4 } },
   // tarja secundária (2ª função) que alguns players têm
-  secondaryTags: ['Tank', 'Carry', 'Twin', 'Box', 'Strategic'],
+  secondaryTags: ['Tank', 'Healer', 'DPS', 'Fan', 'Carry', 'Twin', 'Box', 'Strategic'],
   // características especiais (um player pode ter mais de uma)
   specialFlags: [
     { id: 'commander', label: 'Commander', icon: '👑' },
