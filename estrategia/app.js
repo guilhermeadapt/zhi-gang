@@ -455,7 +455,15 @@
       if (hp != null && hp < 100) { const bw = Math.max(osz * 0.98, os * 0.92), bh = Math.max(4, os * 0.16), by = o.caminho ? (-iconH / 2 - bh - Math.max(9, os * 0.28)) : (iconH / 2 + Math.max(2, os * 0.12)); const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52'; g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.92)', stroke: 'rgba(255,255,255,.3)', strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.7, shadowOffsetY: 1 })); g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, shadowColor: hc, shadowBlur: 4, shadowOpacity: 0.5 })); g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.28), fill: hc, align: 'center', width: bw + os * 2, offsetX: (bw + os * 2) / 2, y: by + bh + 1, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.9 })); }
       // selos de buff ativos (City Protection / You Got a Problem / Hair Pulling) acima do ícone
       const abuffs = (cur().objBuffs || {})[o.id] || [];
-      if (abuffs.length) { const defs = objBuffsFor(o); const shown = abuffs.map(id => defs.find(d => d.id === id)).filter(Boolean); const bs = Math.max(11, os * 0.7); const tot = shown.length * bs; shown.forEach((def, i) => { g.add(new Konva.Text({ text: def.icon, fontSize: bs, x: -tot / 2 + i * bs, y: -iconH / 2 - bs - Math.max(2, os * 0.1), width: bs, align: 'center', shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.85 })); }); }
+      if (abuffs.length) {
+        const defs = objBuffsFor(o), shown = abuffs.map(id => defs.find(d => d.id === id)).filter(Boolean);
+        const br = Math.max(9, os * 0.5), gap = br * 2 + Math.max(2, os * 0.14), tot = (shown.length - 1) * gap, by = -iconH / 2 - br - Math.max(3, os * 0.22);
+        shown.forEach((def, i) => {
+          const bx = -tot / 2 + i * gap;
+          g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: 'rgba(10,12,17,.92)', stroke: '#f0c66b', strokeWidth: Math.max(1, os * 0.06), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.6 }));
+          g.add(new Konva.Text({ text: def.icon, fontFamily: '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji","Twemoji Mozilla",sans-serif', fontSize: br * 1.28, x: bx - br, y: by - br, width: br * 2, height: br * 2, align: 'center', verticalAlign: 'middle' }));
+        });
+      }
       g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); objLayer.batchDraw(); iconClicked('obj:' + o.id, () => openObjMenu(o, g.x(), g.y())); });
       if (canDrag) {
         g.dragBoundFunc(clampToStage);
