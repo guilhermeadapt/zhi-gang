@@ -446,6 +446,10 @@
       .back{font-size:11px;padding:6px 10px 6px 8px}
       .map-panel{padding:6px}
       #stageWrap{border-radius:12px}
+      .lang-sel{flex:none}
+      .lang-sel button{padding:6px 8px;font-size:10px}
+      body:not(.present) .present-bar{display:none}
+      .present-bar .pb-title{max-width:34vw}
     }
   </style>
 </head>
@@ -463,6 +467,7 @@
       <span class="pb-prog" id="pbProg">1 / 1</span>
     </div>
     <div class="top-spacer"></div>
+    <div class="lang-sel" id="langSel"><button type="button" data-lang="pt">PT</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button></div>
     <div class="top-actions">
       <button class="tbtn" id="fasesBtn" title="Mostrar / ocultar as fases (embaixo)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="4" height="6" rx="1"/><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="6" width="4" height="14" rx="1"/></svg>
@@ -484,7 +489,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
         <span data-i18n="share">Compartilhar</span>
       </button>
-      <div class="lang-sel" id="langSel"><button type="button" data-lang="pt">PT</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button></div>
       <button class="tbtn primary" id="presentBtn" title="Apresentar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20v12H2z"/><path d="M8 20h8M12 16v4"/></svg>
         <span data-i18n="present">Apresentar</span>
