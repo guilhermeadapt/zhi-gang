@@ -378,7 +378,7 @@
     /* ---------- MOBILE ---------- */
     .mobile-note{display:none}
     @media (max-width:860px){
-      :root{--dock-h:0px}
+      :root{--dock-h:0px;--topbar-h:52px}
       .roster,.dock,.draw-tools,.obj-panel{display:none}
       .workspace{grid-template-columns:1fr;grid-template-rows:1fr}
       .top-actions #seedBtn,.top-actions #rosterBtn,.top-actions #objBtn,.top-actions #exportBtn,.top-actions #importBtn,.top-actions #shareBtn{display:none}
@@ -386,6 +386,15 @@
       body:not(.present) .map-hint{display:none}
       .present-bar{display:flex}.top-actions{display:none}.back{display:inline-flex}
       .modal-body{grid-template-columns:1fr}
+      /* topbar compacta no mobile (não quebra linha) */
+      .topbar{gap:9px;padding:0 10px}
+      .brand{gap:8px}
+      .brand .glyph{width:34px;height:34px;font-size:21px;border-radius:9px}
+      .brand .kicker{display:none}
+      .brand h1{font-size:15px}
+      .back{font-size:11px;padding:6px 10px 6px 8px}
+      .map-panel{padding:6px}
+      #stageWrap{border-radius:12px}
     }
   </style>
 </head>

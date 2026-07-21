@@ -117,13 +117,20 @@
       transition:transform .18s ease,color .18s ease;}
     @media(hover:hover){a.card:hover .chev{transform:translateX(3px);color:var(--accent);}}
     /* 3 guias de função na mesma linha (Playbook fica sozinho acima) */
-    .roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}
-    .roles a.card{gap:12px;padding:14px 13px;}
+    .roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+    .roles a.card{gap:11px;padding:14px 13px;min-width:0;}
     .roles .glyph{width:46px;height:46px;font-size:24px;border-radius:11px;}
     .roles .role{margin-bottom:2px;}
-    .roles .name{font-size:1.1rem;}
+    .roles .name{font-size:1.1rem;overflow:hidden;text-overflow:ellipsis;}
     .roles .desc,.roles .chev{display:none;}
-    @media(max-width:380px){.roles{grid-template-columns:1fr;}.roles .desc{display:block;}}
+    /* mobile: cards de guia empilhados na vertical (cabem 3 na linha sem cortar) */
+    @media(max-width:470px){
+      .roles{gap:8px;}
+      .roles a.card{flex-direction:column;align-items:center;text-align:center;gap:8px;padding:13px 6px;}
+      .roles .glyph{width:42px;height:42px;font-size:22px;}
+      .roles .meta{align-items:center;width:100%;}
+      .roles .name{font-size:1rem;}
+    }
 
     /* ---------- Discord ---------- */
     .join-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.24em;
