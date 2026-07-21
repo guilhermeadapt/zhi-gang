@@ -88,6 +88,8 @@
 
     /* agendar */
     .sched{margin-top:18px;border:1px solid var(--line-soft);border-radius:13px;padding:13px;background:rgba(255,255,255,.015)}
+    .sched.sched-top{margin-top:0}
+    .clock-card .cc-lbl{margin-top:16px}
     .sched-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;display:block}
     .sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .sched input[type=time]{background:#0b0e15;border:1px solid var(--line-soft);border-radius:9px;color:var(--text);
@@ -213,6 +215,48 @@
       width:1.2em;height:1.2em;object-fit:contain;vertical-align:-0.24em;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
     .n-em img.ico-img{width:1.15em;height:1.15em}
 
+    /* cooldown: ícone + botão novo */
+    .cd-ico{height:20px;display:flex;align-items:center;justify-content:center;margin-bottom:1px;font-size:17px;line-height:1}
+    .cd-ico img.ico-img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+    .cd-ico .ico-em{font-size:17px;line-height:1}
+    .cd-add{border-style:dashed;color:var(--muted);justify-content:center;gap:2px}
+    .cd-add:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .cd-add-plus{font-size:20px;line-height:1;font-weight:400}
+    .cd-add-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+    /* modal do cooldown */
+    .cd-modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(6,8,12,.72);backdrop-filter:blur(3px)}
+    .cd-modal[hidden]{display:none}
+    .cd-modal-box{width:100%;max-width:440px;max-height:calc(100dvh - 40px);overflow-y:auto;background:linear-gradient(180deg,var(--ink-2),#0e1118);border:1px solid var(--line);border-radius:16px;box-shadow:0 30px 80px -30px #000}
+    .cd-modal-box > header{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line-soft)}
+    .cd-modal-box > header b{font-family:var(--disp);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);flex:1}
+    .cdm-x{width:28px;height:28px;border:1px solid var(--line-soft);background:transparent;color:var(--muted);border-radius:7px;cursor:pointer}
+    .cdm-x:hover{color:var(--text);border-color:var(--line)}
+    .cdm-body{padding:14px 16px;display:flex;flex-direction:column;gap:13px}
+    .cdm-f{display:flex;flex-direction:column;gap:6px}
+    .cdm-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .cdm-f input{background:#0b0e15;border:1px solid var(--line-soft);border-radius:9px;color:var(--text);padding:10px 12px;font-size:1rem}
+    .cdm-f input:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 50%,transparent)}
+    .cdm-keys{display:flex;flex-wrap:wrap;gap:6px}
+    .cdm-key{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-radius:8px;padding:7px 10px;cursor:pointer}
+    .cdm-key:hover{color:var(--text);border-color:var(--line)}
+    .cdm-key.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .cdm-icons{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;max-height:150px;overflow-y:auto;padding:2px}
+    .mk{display:grid;place-items:center;height:32px;border:1px solid var(--line-soft);border-radius:8px;background:rgba(255,255,255,.02);cursor:pointer;padding:3px}
+    .mk:hover{border-color:var(--line);background:rgba(217,164,65,.08)}
+    .mk.active{border-color:var(--gold);background:rgba(217,164,65,.16);box-shadow:inset 0 0 0 1px var(--gold)}
+    .mk img{max-width:100%;max-height:100%;object-fit:contain}
+    .mk-em{font-size:16px;line-height:1}
+    .cdm-actions{display:flex;align-items:center;gap:8px;padding:13px 16px;border-top:1px solid var(--line-soft)}
+    .cdm-sp{flex:1}
+
+    /* efeito de tela (alerta iminente) */
+    .fx{position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;transition:opacity .3s;
+      box-shadow:inset 0 0 130px -18px rgba(226,91,82,.55);
+      background:radial-gradient(120% 85% at 50% 50%,transparent 52%,rgba(226,91,82,.14))}
+    body.near .fx{opacity:1;animation:fxpulse 1s ease-in-out infinite}
+    @keyframes fxpulse{50%{opacity:.45}}
+    body.hitfx .fx{opacity:1;box-shadow:inset 0 0 170px -8px rgba(226,91,82,.85);animation:none;transition:opacity .05s}
+
     /* toast */
     .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);z-index:60;opacity:0;
       pointer-events:none;transition:.24s;background:rgba(10,12,17,.94);border:1px solid var(--line);border-radius:12px;
@@ -237,12 +281,7 @@
     <div class="main-left">
     <!-- relógio -->
     <section class="clock-card">
-      <div class="cc-lbl" id="ccLbl">Guerra</div>
-      <div class="clock" id="clock">30:00</div>
-      <div class="phase-now" id="phaseNow">Defina o horário de início</div>
-      <div class="sub-line" id="subLine"></div>
-
-      <div class="sched">
+      <div class="sched sched-top">
         <span class="sched-lbl">Início da guerra</span>
         <div class="sched-row">
           <input type="time" id="startTime" />
@@ -252,6 +291,11 @@
         </div>
         <div class="sched-hint" id="schedHint">Defina a hora em que o cronômetro de <b>30&nbsp;min</b> começa. Os <b>5&nbsp;min de preparação</b> aparecem antes disso — assim fica sincronizado com o relógio real, sem depender do carregamento.</div>
       </div>
+
+      <div class="cc-lbl" id="ccLbl">Guerra</div>
+      <div class="clock" id="clock">30:00</div>
+      <div class="phase-now" id="phaseNow">Defina o horário de início</div>
+      <div class="sub-line" id="subLine"></div>
 
       <div class="next" id="nextBox">
         <span class="n-em" id="nextEm">⏱️</span>
@@ -271,10 +315,10 @@
       <div class="ev-note">Aperte assim que o inimigo <b>usar</b> — conta o cooldown até ele poder usar de novo. Atalhos de teclado <b>1/2/3</b> (aba focada), <b>✎</b> ajusta o tempo, aperte de novo pra reiniciar.</div>
       <div class="cd-bg">
         <div class="cd-bg-row">
-          <span class="s-name">Teclas de mídia (2º plano) <small>reiniciam os cooldowns mesmo com a aba minimizada — ⏭ City · ⏮ Sprint · ⏯ Relentless</small></span>
+          <span class="s-name">Teclas de mídia (2º plano) <small>reiniciam os cooldowns mesmo minimizado — a tecla de cada um é definida no ✎</small></span>
           <div class="switch" id="swMediaKey" role="switch"></div>
         </div>
-        <div class="cd-bg-hint" id="mediaHint" hidden>Ativado ✓ Nenhum navegador captura tecla comum (F5) fora de foco — só teclas de mídia. Pra acionar pelo teclado do jogo, mapeie no AutoHotkey:<br><code>F5::Send {Media_Next}</code> City · <code>F6::Send {Media_Prev}</code> Sprint · <code>F7::Send {Media_Play_Pause}</code> Relentless</div>
+        <div class="cd-bg-hint" id="mediaHint" hidden>Ativado ✓ Nenhum navegador captura tecla comum (F5) fora de foco — só teclas de mídia. Pra acionar pelo teclado do jogo, mapeie no AutoHotkey:<br><code>F5::Send {Media_Next}</code> · <code>F6::Send {Media_Prev}</code> · <code>F7::Send {Media_Play_Pause}</code></div>
       </div>
     </section>
     </div><!-- /main-left -->
@@ -320,6 +364,10 @@
           <div class="switch" id="swVoice" role="switch"></div>
         </div>
         <div class="set-row">
+          <span class="s-name">Vibrar no alerta <small>celular vibra ao chegar perto (a tela também pisca em vermelho)</small></span>
+          <div class="switch" id="swVibrate" role="switch"></div>
+        </div>
+        <div class="set-row">
           <span class="s-name">Notificação do navegador <small>funciona com a aba em segundo plano</small></span>
           <div class="switch" id="swNotif" role="switch"></div>
         </div>
@@ -329,7 +377,22 @@
     <p class="hint">Regressivo de <b>30:00</b> · JG a cada 5&nbsp;min · <b>5:00</b> de preparação antes. Agende pelo relógio e o timer se mantém certo mesmo se a aba abrir depois.</p>
   </div>
 
+  <div class="fx" id="fx" aria-hidden="true"></div>
   <div class="toast" id="toast"><span class="t-em" id="toastEm">🎯</span><span id="toastTxt"></span></div>
+
+  <!-- editor de cooldown -->
+  <div class="cd-modal" id="cdModal" hidden>
+    <div class="cd-modal-box">
+      <header><b id="cdmTitle">Editar cooldown</b><button class="cdm-x" id="cdmClose" aria-label="Fechar">✕</button></header>
+      <div class="cdm-body">
+        <label class="cdm-f"><span class="cdm-lbl">Nome</span><input id="cdmNome" type="text" maxlength="24" placeholder="Ex.: Clamp e Revive" /></label>
+        <label class="cdm-f"><span class="cdm-lbl">Cooldown (MM:SS ou segundos)</span><input id="cdmCd" type="text" placeholder="01:00" /></label>
+        <div class="cdm-f"><span class="cdm-lbl">Tecla de mídia (2º plano)</span><div class="cdm-keys" id="cdmKeys"></div></div>
+        <div class="cdm-f"><span class="cdm-lbl">Ícone</span><div class="cdm-icons" id="cdmIcons"></div></div>
+      </div>
+      <div class="cdm-actions"><button class="btn ghost" id="cdmDelete">Excluir</button><span class="cdm-sp"></span><button class="btn" id="cdmCancel">Cancelar</button><button class="btn primary" id="cdmSave">Salvar</button></div>
+    </div>
+  </div>
 
   <script>
   (function(){
@@ -341,11 +404,21 @@
     // ícones da arte do jogo (mesmos assets do Game Plan)
     var ICON = {
       funcoin: '../assets/icons/funcoin.png',
+      boss:    '../assets/vendor-ref/boss.png',
       goose:   '../assets/vendor-ref/goose_red.png',
+      goose_blue:'../assets/vendor-ref/goose_blue.png',
       tree:    '../assets/vendor-ref/tree_red.png',
-      boss:    '../assets/vendor-ref/boss.png'
+      tree_blue:'../assets/vendor-ref/tree_blue.png',
+      tower_blue:'../assets/vendor-ref/tower_blue.png',
+      tower_red:'../assets/vendor-ref/tower_red.png',
+      tank:'../assets/vendor-ref/tank.png',
+      dps:'../assets/vendor-ref/dps.png',
+      healer:'../assets/vendor-ref/healer.png'
     };
+    var ASSET_KEYS=['funcoin','boss','goose','goose_blue','tree','tree_blue','tower_blue','tower_red','tank','dps','healer'];
+    var CD_EMOJIS=['🏃','💢','🛡️','⚰️','⚔️','🏹','🎯','🔥','💥','💀','🐉','🩸','🚩','👑','⭐','⚡','❄️','🌀','🧪','⏱️','🔔','🟢','🔵','🔴'];
     function ico(e){ return (e.img && ICON[e.img]) ? '<img class="ico-img" src="'+ICON[e.img]+'" alt="">' : '<span class="ico-em">'+(e.em||'🎯')+'</span>'; }
+    function iconHTML(kind,val){ return (kind==='asset' && ICON[val]) ? '<img class="ico-img" src="'+ICON[val]+'" alt="">' : '<span class="ico-em">'+(val||'⏱️')+'</span>'; }
 
     // marcos padrão — em TEMPO RESTANTE (s).
     // JG a cada 5 min (30,25,20,15,10,5). Bosses têm JANELA de spawn (win = 2m):
@@ -362,17 +435,24 @@
       { rem: 300,  img: 'funcoin', nome: 'Jungle (JG)' }
     ];
 
-    var state = { startAt: null, events: [], sound: true, lead: 30, lead2: 15, notif: false, voice: false,
-      cds: [ { id:'sprint', nome:'Sprint', cd:120, at:null, rdy:false }, { id:'relentless', nome:'Relentless', cd:120, at:null, rdy:false }, { id:'city', nome:'City Protection', cd:180, at:null, rdy:false } ] };
+    var state = { startAt: null, events: [], sound: true, lead: 30, lead2: 15, notif: false, voice: false, vibrate: false,
+      cds: [
+        { id:'sprint',     nome:'Sprint',          cd:120, kind:'emoji', val:'🏃', mediaKey:'previoustrack', at:null, rdy:false },
+        { id:'relentless', nome:'Relentless',      cd:120, kind:'emoji', val:'💢', mediaKey:'play',          at:null, rdy:false },
+        { id:'city',       nome:'City Protection',  cd:180, kind:'emoji', val:'🛡️', mediaKey:'nexttrack',     at:null, rdy:false },
+        { id:'clamp',      nome:'Clamp e Revive',   cd:60,  kind:'emoji', val:'⚰️', mediaKey:'',              at:null, rdy:false }
+      ] };
+    var MEDIA_KEYS = [ { k:'', lbl:'Nenhuma' }, { k:'nexttrack', lbl:'⏭ Próxima' }, { k:'previoustrack', lbl:'⏮ Anterior' }, { k:'play', lbl:'⏯ Play/Pause' }, { k:'stop', lbl:'⏹ Stop' } ];
 
     // ---------- persistência ----------
-    function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome,win:e.win};}), sound: state.sound, lead: state.lead, lead2: state.lead2, notif: state.notif, voice: state.voice, cds: state.cds.map(function(c){return {id:c.id,at:c.at,cd:c.cd};}) })); }catch(e){} }
+    function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome,win:e.win};}), sound: state.sound, lead: state.lead, lead2: state.lead2, notif: state.notif, voice: state.voice, vibrate: state.vibrate, cds: state.cds.map(function(c){return {id:c.id,nome:c.nome,cd:c.cd,kind:c.kind,val:c.val,mediaKey:c.mediaKey,at:c.at};}) })); }catch(e){} }
+    function sanitizeCd(c){ return { id:String(c.id||('cd'+now().toString(36)+Math.random().toString(36).slice(2,5))), nome:String(c.nome||'Cooldown').slice(0,24), cd:(typeof c.cd==='number'&&c.cd>0)?c.cd:60, kind:c.kind==='asset'?'asset':'emoji', val:String(c.val||'⏱️').slice(0,8), mediaKey:['nexttrack','previoustrack','play','stop'].indexOf(c.mediaKey)>=0?c.mediaKey:'', at:(typeof c.at==='number')?c.at:null, rdy:false, pre:false, pre2:false }; }
     function load(){
       var d=null; try{ d=JSON.parse(localStorage.getItem(LS)); }catch(e){}
       if(d && Array.isArray(d.events) && d.events.length){ state.events = d.events; }
       else { state.events = DEFAULT.map(function(e){ return { rem:e.rem, em:e.em, img:e.img, nome:e.nome, win:e.win }; }); }
-      if(d){ if(typeof d.startAt==='number') state.startAt=d.startAt; if(typeof d.sound==='boolean') state.sound=d.sound; if(typeof d.lead==='number') state.lead=d.lead; if(typeof d.lead2==='number') state.lead2=d.lead2; if(typeof d.notif==='boolean') state.notif=d.notif; if(typeof d.voice==='boolean') state.voice=d.voice;
-        if(Array.isArray(d.cds)) d.cds.forEach(function(sc){ var c=state.cds.filter(function(x){return x.id===sc.id;})[0]; if(c){ if(typeof sc.cd==='number' && sc.cd>0) c.cd=sc.cd; if(typeof sc.at==='number'){ c.at=sc.at; c.rdy = (now()-sc.at)/1000 >= c.cd; } } }); }
+      if(d){ if(typeof d.startAt==='number') state.startAt=d.startAt; if(typeof d.sound==='boolean') state.sound=d.sound; if(typeof d.lead==='number') state.lead=d.lead; if(typeof d.lead2==='number') state.lead2=d.lead2; if(typeof d.notif==='boolean') state.notif=d.notif; if(typeof d.voice==='boolean') state.voice=d.voice; if(typeof d.vibrate==='boolean') state.vibrate=d.vibrate;
+        if(Array.isArray(d.cds) && d.cds.length){ state.cds = d.cds.map(sanitizeCd); state.cds.forEach(function(c){ if(c.at!=null) c.rdy=(now()-c.at)/1000 >= c.cd; }); } }
       sortEvents(); seedFired();
     }
     function sortEvents(){ state.events.forEach(function(e){ if(e.fired===undefined){e.fired=false;e.pre=false;e.pre2=false;} }); state.events.sort(function(a,b){ return b.rem-a.rem; }); } // 30m no topo
@@ -419,7 +499,9 @@
     // ---------- alerta visual ----------
     var toastT=null;
     function showToast(em, txt, warn){ $('toastEm').innerHTML=em; $('toastTxt').textContent=txt; var el=$('toast'); el.style.borderColor = warn?'var(--crimson)':''; el.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(function(){ el.classList.remove('show'); },3200); }
-    function flash(){ document.body.classList.add('flash'); setTimeout(function(){ document.body.classList.remove('flash'); },260); }
+    function flash(){ document.body.classList.add('flash','hitfx'); setTimeout(function(){ document.body.classList.remove('flash'); },260); setTimeout(function(){ document.body.classList.remove('hitfx'); },420); }
+    function buzz(pattern){ if(state.vibrate && navigator.vibrate){ try{ navigator.vibrate(pattern); }catch(e){} } }
+    function nearThreshold(){ return state.lead2>0 ? state.lead2 : 15; }
 
     // ---------- fase ----------
     // retorna {ph:'idle|wait|prep|war|end', big:sec, label, sub}
@@ -465,6 +547,11 @@
         : p.ph==='war'  ? (next? ico(next)+' Próximo: '+escapeHtml(next.nome) : 'Reta final')
         : 'Encerrada';
       renderList(wr, next);
+      // efeito de tela quando algo está iminente (marco ou cooldown)
+      var nt=nearThreshold(), nearAny=false;
+      if(state.startAt!=null && next && p.ph!=='end'){ var un=wr-next.rem; if(un>0 && un<=nt) nearAny=true; }
+      state.cds.forEach(function(c){ if(c.at!=null){ var r=c.cd-(now()-c.at)/1000; if(r>0 && r<=nt) nearAny=true; } });
+      document.body.classList.toggle('near', nearAny);
     }
     function renderList(wr, next){
       var ul=$('events'); ul.innerHTML='';
@@ -488,11 +575,15 @@
       var g=$('cdGrid'); g.innerHTML='';
       state.cds.forEach(function(c, i){
         var b=document.createElement('button'); b.className='cd-btn'; b.dataset.cd=c.id;
-        b.innerHTML='<span class="cd-key" title="Atalho de teclado">'+(i+1)+'</span>'
-          +'<span class="cd-edit" title="Definir tempo do cooldown">✎</span>'
+        b.innerHTML=(i<9?'<span class="cd-key" title="Atalho de teclado '+(i+1)+'">'+(i+1)+'</span>':'')
+          +'<span class="cd-edit" title="Editar cooldown">✎</span>'
+          +'<span class="cd-ico">'+iconHTML(c.kind,c.val)+'</span>'
           +'<span class="cd-nome">'+escapeHtml(c.nome)+'</span><span class="cd-val">Usar</span><span class="cd-sub">CD '+fmt(c.cd)+'</span>';
         g.appendChild(b);
       });
+      var add=document.createElement('button'); add.className='cd-btn cd-add'; add.type='button';
+      add.innerHTML='<span class="cd-add-plus">＋</span><span class="cd-add-lbl">Novo</span>';
+      g.appendChild(add);
     }
     function updateCds(){
       state.cds.forEach(function(c){
@@ -502,10 +593,10 @@
         if(c.at==null){ val.textContent='Usar'; sub.textContent='CD '+fmt(c.cd); return; }
         var rem = c.cd - (now()-c.at)/1000;
         if(rem>0){ b.classList.add('running'); val.textContent=fmt(rem); sub.textContent='cooldown'; c.rdy=false;
-          if(!c.pre && state.lead>0 && rem<=state.lead){ c.pre=true; beep('pre'); showToast('⏱️', c.nome+' volta em '+Math.round(rem)+'s', true); speak(sayName(c.nome)+' volta em '+Math.round(rem)+' segundos'); }
-          if(!c.pre2 && state.lead2>0 && rem<=state.lead2){ c.pre2=true; beep('pre2'); } }
+          if(!c.pre && state.lead>0 && rem<=state.lead){ c.pre=true; beep('pre'); buzz(70); showToast(iconHTML(c.kind,c.val), c.nome+' volta em '+Math.round(rem)+'s', true); speak(sayName(c.nome)+' volta em '+Math.round(rem)+' segundos'); }
+          if(!c.pre2 && state.lead2>0 && rem<=state.lead2){ c.pre2=true; beep('pre2'); buzz(50); } }
         else { b.classList.add('ready'); val.textContent='Pronto'; sub.textContent='pode usar';
-          if(!c.rdy){ c.rdy=true; beep('hit'); showToast('⚔️', c.nome+' pronto (inimigo pode usar)', false); speak(sayName(c.nome)+' pronto'); } }
+          if(!c.rdy){ c.rdy=true; beep('hit'); flash(); buzz([120,60,120]); showToast(iconHTML(c.kind,c.val), c.nome+' pronto (inimigo pode usar)', false); speak(sayName(c.nome)+' pronto'); } }
       });
     }
     function pressCd(id, announce){
@@ -515,12 +606,32 @@
       save(); updateCds();
       if(announce){ beep('pre'); showToast('⏱️', c.nome+' reiniciado ('+fmt(c.cd)+')', false); }
     }
-    function editCd(id){
-      var c=state.cds.filter(function(x){return x.id===id;})[0]; if(!c) return;
-      var v=prompt('Cooldown de '+c.nome+' (MM:SS ou segundos):', fmt(c.cd)); if(v==null) return;
-      var t=parseTime(v); if(t==null || t<=0){ showToast('⚠️','Tempo inválido', true); return; }
-      c.cd=t; save(); updateCds();
+    // ---- editor de cooldown (modal) ----
+    var cdEditing=null, cdEditIcon={kind:'emoji',val:'⏱️'}, cdEditKey='';
+    function openCdEditor(id){
+      var c = id==='new' ? {nome:'',cd:60,kind:'emoji',val:'⏱️',mediaKey:''} : state.cds.filter(function(x){return x.id===id;})[0];
+      if(!c) return; cdEditing=id;
+      $('cdmTitle').textContent = id==='new' ? 'Novo cooldown' : 'Editar cooldown';
+      $('cdmNome').value=c.nome; $('cdmCd').value=fmt(c.cd);
+      cdEditIcon={kind:c.kind,val:c.val}; cdEditKey=c.mediaKey||'';
+      $('cdmDelete').style.display = (id==='new'||state.cds.length<=1) ? 'none' : '';
+      buildCdmKeys(); buildCdmIcons(); $('cdModal').hidden=false; setTimeout(function(){ $('cdmNome').focus(); },30);
     }
+    function buildCdmKeys(){ var g=$('cdmKeys'); g.innerHTML=''; MEDIA_KEYS.forEach(function(m){ var b=document.createElement('button'); b.type='button'; b.className='cdm-key'+(cdEditKey===m.k?' active':''); b.textContent=m.lbl; b.addEventListener('click',function(){ cdEditKey=m.k; buildCdmKeys(); }); g.appendChild(b); }); }
+    function buildCdmIcons(){ var g=$('cdmIcons'); g.innerHTML='';
+      function mk(kind,val,inner){ var b=document.createElement('button'); b.type='button'; b.className='mk'+(cdEditIcon.kind===kind&&cdEditIcon.val===val?' active':''); b.innerHTML=inner; b.addEventListener('click',function(){ cdEditIcon={kind:kind,val:val}; buildCdmIcons(); }); return b; }
+      ASSET_KEYS.forEach(function(k){ g.appendChild(mk('asset',k,'<img src="'+ICON[k]+'" alt="">')); });
+      CD_EMOJIS.forEach(function(em){ g.appendChild(mk('emoji',em,'<span class="mk-em">'+em+'</span>')); });
+    }
+    function saveCdEditor(){
+      var nome=$('cdmNome').value.trim(), cd=parseTime($('cdmCd').value);
+      if(!nome){ showToast('⚠️','Dê um nome ao cooldown', true); return; }
+      if(cd==null||cd<=0){ showToast('⚠️','Tempo inválido (MM:SS)', true); return; }
+      if(cdEditing==='new'){ state.cds.push({ id:'cd'+now().toString(36)+Math.random().toString(36).slice(2,5), nome:nome, cd:cd, kind:cdEditIcon.kind, val:cdEditIcon.val, mediaKey:cdEditKey, at:null, rdy:false, pre:false, pre2:false }); }
+      else { var c=state.cds.filter(function(x){return x.id===cdEditing;})[0]; if(c){ c.nome=nome; c.cd=cd; c.kind=cdEditIcon.kind; c.val=cdEditIcon.val; c.mediaKey=cdEditKey; } }
+      $('cdModal').hidden=true; save(); buildCds(); updateCds(); if(mediaOn) refreshMediaHandlers();
+    }
+    function deleteCdEditor(){ if(cdEditing==='new'||state.cds.length<=1) return; state.cds=state.cds.filter(function(x){return x.id!==cdEditing;}); $('cdModal').hidden=true; save(); buildCds(); updateCds(); if(mediaOn) refreshMediaHandlers(); }
 
     // ---- atalho em 2º plano via tecla de mídia (MediaSession) ----
     var silentAudio=null, mediaOn=false;
@@ -540,15 +651,7 @@
         try{
           if(!silentAudio){ silentAudio=new Audio(makeSilentWav()); silentAudio.loop=true; }
           silentAudio.play().catch(function(){ showToast('⚠️','Não consegui ativar (permita áudio)', true); });
-          if('mediaSession' in navigator){
-            try{ navigator.mediaSession.metadata=new MediaMetadata({ title:'War Timer — Cooldowns', artist:'Wanted GvG' }); }catch(e){}
-            try{ navigator.mediaSession.playbackState='playing'; }catch(e){}
-            // cada tecla de mídia dispara um cooldown diferente
-            var actMap={ nexttrack:'city', previoustrack:'sprint', play:'relentless', pause:'relentless', stop:'city' };
-            Object.keys(actMap).forEach(function(a){
-              try{ navigator.mediaSession.setActionHandler(a, function(){ if(silentAudio) silentAudio.play().catch(function(){}); try{ navigator.mediaSession.playbackState='playing'; }catch(e){} pressCd(actMap[a], true); }); }catch(e){}
-            });
-          }
+          refreshMediaHandlers();
           showToast('⏭️','Atalho de mídia ativo', false);
         }catch(e){ showToast('⚠️','Não suportado neste navegador', true); mediaOn=false; $('swMediaKey').classList.remove('on'); $('mediaHint').hidden=true; }
       } else {
@@ -556,15 +659,25 @@
         if('mediaSession' in navigator){ ['play','pause','nexttrack','previoustrack','stop'].forEach(function(a){ try{ navigator.mediaSession.setActionHandler(a,null); }catch(e){} }); }
       }
     }
+    function refreshMediaHandlers(){
+      if(!('mediaSession' in navigator)) return;
+      try{ navigator.mediaSession.metadata=new MediaMetadata({ title:'War Timer — Cooldowns', artist:'Wanted GvG' }); }catch(e){}
+      try{ navigator.mediaSession.playbackState='playing'; }catch(e){}
+      var actMap={};
+      state.cds.forEach(function(c){ if(c.mediaKey){ (actMap[c.mediaKey]=actMap[c.mediaKey]||[]).push(c.id); if(c.mediaKey==='play'){ (actMap['pause']=actMap['pause']||[]).push(c.id); } } });
+      ['nexttrack','previoustrack','play','pause','stop'].forEach(function(a){
+        try{ navigator.mediaSession.setActionHandler(a, actMap[a] ? function(){ if(silentAudio) silentAudio.play().catch(function(){}); try{ navigator.mediaSession.playbackState='playing'; }catch(e){} actMap[a].forEach(function(id){ pressCd(id,true); }); } : null); }catch(e){}
+      });
+    }
 
     // ---------- loop ----------
     function tick(){
       if(state.startAt!=null){
         var wr = warRemaining();
         state.events.forEach(function(e){
-          if(!e.pre && state.lead>0 && wr <= e.rem + state.lead && wr > e.rem){ e.pre=true; beep('pre'); showToast(ico(e), e.nome+' em '+Math.round(wr-e.rem)+'s', true); speak(sayName(e.nome)+' em '+Math.round(wr-e.rem)+' segundos'); }
-          if(!e.pre2 && state.lead2>0 && wr <= e.rem + state.lead2 && wr > e.rem){ e.pre2=true; beep('pre2'); }
-          if(!e.fired && wr <= e.rem){ e.fired=true; e.pre=true; e.pre2=true; beep('hit'); flash(); showToast(ico(e), e.nome+(e.win?' · pode nascer':''), false); notify(e); speak(sayName(e.nome)+(e.win?', pode nascer':', agora')); }
+          if(!e.pre && state.lead>0 && wr <= e.rem + state.lead && wr > e.rem){ e.pre=true; beep('pre'); buzz(70); showToast(ico(e), e.nome+' em '+Math.round(wr-e.rem)+'s', true); speak(sayName(e.nome)+' em '+Math.round(wr-e.rem)+' segundos'); }
+          if(!e.pre2 && state.lead2>0 && wr <= e.rem + state.lead2 && wr > e.rem){ e.pre2=true; beep('pre2'); buzz(50); }
+          if(!e.fired && wr <= e.rem){ e.fired=true; e.pre=true; e.pre2=true; beep('hit'); flash(); buzz([120,60,120]); showToast(ico(e), e.nome+(e.win?' · pode nascer':''), false); notify(e); speak(sayName(e.nome)+(e.win?', pode nascer':', agora')); }
         });
       }
       render();
@@ -629,10 +742,11 @@
     function setLead(v){ state.lead=Math.max(0,Math.min(120,v)); $('leadVal').textContent=state.lead+'s'; save(); }
     function setLead2(v){ state.lead2=Math.max(0,Math.min(120,v)); $('lead2Val').textContent=state.lead2>0?state.lead2+'s':'off'; save(); }
     function setVoice(on){ state.voice=on; $('swVoice').classList.toggle('on',on); if(on){ pickVoice(); speak('Narração ativada'); } else if('speechSynthesis' in window){ try{ speechSynthesis.cancel(); }catch(e){} } save(); }
+    function setVibrate(on){ state.vibrate=on; $('swVibrate').classList.toggle('on',on); if(on) buzz(60); save(); }
 
     // ---------- init ----------
     load();
-    setSound(state.sound); setLead(state.lead); setLead2(state.lead2); $('swNotif').classList.toggle('on', state.notif); $('swVoice').classList.toggle('on', state.voice);
+    setSound(state.sound); setLead(state.lead); setLead2(state.lead2); $('swNotif').classList.toggle('on', state.notif); $('swVoice').classList.toggle('on', state.voice); $('swVibrate').classList.toggle('on', state.vibrate);
     if('speechSynthesis' in window){ try{ speechSynthesis.onvoiceschanged=pickVoice; }catch(e){} pickVoice(); }
     // pré-preenche o input com um horário sugerido (agora arredondado) se vazio
     (function(){ var d=new Date(); $('startTime').value=(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes(); })();
@@ -643,6 +757,7 @@
     $('resetBtn').addEventListener('click', reset);
     $('skipBtn').addEventListener('click', skipToNext);
     $('swVoice').addEventListener('click', function(){ setVoice(!state.voice); });
+    $('swVibrate').addEventListener('click', function(){ setVibrate(!state.vibrate); });
     $('editBtn').addEventListener('click', toggleEdit);
     $('aiAdd').addEventListener('click', addEvent);
     $('aiName').addEventListener('keydown', function(e){ if(e.key==='Enter') addEvent(); });
@@ -654,11 +769,22 @@
     $('leadPlus').addEventListener('click', function(){ setLead(state.lead+10); });
     $('lead2Minus').addEventListener('click', function(){ setLead2(state.lead2-5); });
     $('lead2Plus').addEventListener('click', function(){ setLead2(state.lead2+5); });
-    $('cdGrid').addEventListener('click', function(e){ var ed=e.target.closest('.cd-edit'); if(ed){ e.stopPropagation(); var eb=ed.closest('[data-cd]'); if(eb) editCd(eb.dataset.cd); return; } var b=e.target.closest('[data-cd]'); if(b) pressCd(b.dataset.cd); });
+    $('cdGrid').addEventListener('click', function(e){
+      if(e.target.closest('.cd-add')){ openCdEditor('new'); return; }
+      var ed=e.target.closest('.cd-edit'); if(ed){ e.stopPropagation(); var eb=ed.closest('[data-cd]'); if(eb) openCdEditor(eb.dataset.cd); return; }
+      var b=e.target.closest('[data-cd]'); if(b) pressCd(b.dataset.cd);
+    });
+    $('cdmClose').addEventListener('click', function(){ $('cdModal').hidden=true; });
+    $('cdmCancel').addEventListener('click', function(){ $('cdModal').hidden=true; });
+    $('cdmSave').addEventListener('click', saveCdEditor);
+    $('cdmDelete').addEventListener('click', deleteCdEditor);
+    $('cdModal').addEventListener('click', function(e){ if(e.target===$('cdModal')) $('cdModal').hidden=true; });
+    $('cdmNome').addEventListener('keydown', function(e){ if(e.key==='Enter') saveCdEditor(); });
     $('swMediaKey').addEventListener('click', function(){ enableMediaKey(!mediaOn); });
     document.addEventListener('keydown', function(e){
       if(e.target && (e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')) return;
-      if(e.key==='1'){ pressCd('sprint', true); } else if(e.key==='2'){ pressCd('relentless', true); } else if(e.key==='3'){ pressCd('city', true); }
+      if(!$('cdModal').hidden){ if(e.key==='Escape') $('cdModal').hidden=true; return; }
+      if(/^[1-9]$/.test(e.key)){ var idx=+e.key-1; if(state.cds[idx]) pressCd(state.cds[idx].id, true); }
     });
 
     requestAnimationFrame(tick);
