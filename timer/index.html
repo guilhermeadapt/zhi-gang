@@ -183,6 +183,8 @@
       color:var(--text);transition:.14s;position:relative;overflow:hidden}
     .cd-btn:hover{border-color:var(--line)}
     .cd-btn:active{transform:scale(.98)}
+    .cd-edit{position:absolute;top:6px;right:9px;font-size:12px;line-height:1;color:var(--muted);opacity:.55;transition:.14s}
+    .cd-edit:hover{color:var(--gold);opacity:1}
     .cd-nome{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
     .cd-val{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;font-size:1.9rem;line-height:1;color:var(--text)}
     .cd-sub{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);min-height:11px}
@@ -256,7 +258,7 @@
     <section class="panel cds-panel">
       <header><b>Cooldowns do inimigo</b></header>
       <div class="cd-grid" id="cdGrid"></div>
-      <div class="ev-note">Aperte assim que o inimigo <b>usar</b> — conta o cooldown até ele poder usar de novo (Sprint/Relentless 2:00, City Protection 3:00). Aperte de novo pra reiniciar.</div>
+      <div class="ev-note">Aperte assim que o inimigo <b>usar</b> — conta o cooldown (mostrado em cada botão) até ele poder usar de novo. Toque no <b>✎</b> pra ajustar o tempo. Aperte de novo pra reiniciar.</div>
     </section>
     </div><!-- /main-left -->
 
@@ -285,9 +287,15 @@
           <div class="switch on" id="swSound" role="switch"></div>
         </div>
         <div class="set-row">
-          <span class="s-name">Aviso antecipado <small>alerta X segundos antes do marco</small></span>
+          <span class="s-name">Aviso antecipado <small>alerta (som + tela) X segundos antes do marco</small></span>
           <div class="step">
             <button id="leadMinus">−</button><b id="leadVal">30s</b><button id="leadPlus">+</button>
+          </div>
+        </div>
+        <div class="set-row">
+          <span class="s-name">2º aviso — só som <small>bipe extra mais perto do marco (0 = desligado)</small></span>
+          <div class="step">
+            <button id="lead2Minus">−</button><b id="lead2Val">15s</b><button id="lead2Plus">+</button>
           </div>
         </div>
         <div class="set-row">
@@ -333,20 +341,20 @@
       { rem: 300,  img: 'funcoin', nome: 'Jungle (JG)' }
     ];
 
-    var state = { startAt: null, events: [], sound: true, lead: 30, notif: false,
+    var state = { startAt: null, events: [], sound: true, lead: 30, lead2: 15, notif: false,
       cds: [ { id:'sprint', nome:'Sprint', cd:120, at:null, rdy:false }, { id:'relentless', nome:'Relentless', cd:120, at:null, rdy:false }, { id:'city', nome:'City Protection', cd:180, at:null, rdy:false } ] };
 
     // ---------- persistência ----------
-    function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome,win:e.win};}), sound: state.sound, lead: state.lead, notif: state.notif, cds: state.cds.map(function(c){return {id:c.id,at:c.at};}) })); }catch(e){} }
+    function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome,win:e.win};}), sound: state.sound, lead: state.lead, lead2: state.lead2, notif: state.notif, cds: state.cds.map(function(c){return {id:c.id,at:c.at,cd:c.cd};}) })); }catch(e){} }
     function load(){
       var d=null; try{ d=JSON.parse(localStorage.getItem(LS)); }catch(e){}
       if(d && Array.isArray(d.events) && d.events.length){ state.events = d.events; }
       else { state.events = DEFAULT.map(function(e){ return { rem:e.rem, em:e.em, img:e.img, nome:e.nome, win:e.win }; }); }
-      if(d){ if(typeof d.startAt==='number') state.startAt=d.startAt; if(typeof d.sound==='boolean') state.sound=d.sound; if(typeof d.lead==='number') state.lead=d.lead; if(typeof d.notif==='boolean') state.notif=d.notif;
-        if(Array.isArray(d.cds)) d.cds.forEach(function(sc){ var c=state.cds.filter(function(x){return x.id===sc.id;})[0]; if(c && typeof sc.at==='number'){ c.at=sc.at; c.rdy = (now()-sc.at)/1000 >= c.cd; } }); }
+      if(d){ if(typeof d.startAt==='number') state.startAt=d.startAt; if(typeof d.sound==='boolean') state.sound=d.sound; if(typeof d.lead==='number') state.lead=d.lead; if(typeof d.lead2==='number') state.lead2=d.lead2; if(typeof d.notif==='boolean') state.notif=d.notif;
+        if(Array.isArray(d.cds)) d.cds.forEach(function(sc){ var c=state.cds.filter(function(x){return x.id===sc.id;})[0]; if(c){ if(typeof sc.cd==='number' && sc.cd>0) c.cd=sc.cd; if(typeof sc.at==='number'){ c.at=sc.at; c.rdy = (now()-sc.at)/1000 >= c.cd; } } }); }
       sortEvents(); seedFired();
     }
-    function sortEvents(){ state.events.forEach(function(e){ if(e.fired===undefined){e.fired=false;e.pre=false;} }); state.events.sort(function(a,b){ return b.rem-a.rem; }); } // 30m no topo
+    function sortEvents(){ state.events.forEach(function(e){ if(e.fired===undefined){e.fired=false;e.pre=false;e.pre2=false;} }); state.events.sort(function(a,b){ return b.rem-a.rem; }); } // 30m no topo
 
     // ---------- tempo ----------
     function now(){ return Date.now(); }
@@ -357,7 +365,7 @@
     // marca como "já disparado" tudo que está no passado (evita disparar em lote ao abrir no meio)
     function seedFired(){
       var wr = warRemaining();
-      state.events.forEach(function(e){ var passed = state.startAt!=null && wr < e.rem - 0.4; e.fired = passed; e.pre = passed; });
+      state.events.forEach(function(e){ var passed = state.startAt!=null && wr < e.rem - 0.4; e.fired = passed; e.pre = passed; e.pre2 = passed; });
     }
 
     // ---------- som ----------
@@ -367,7 +375,7 @@
       try{
         actx = actx || new (window.AudioContext||window.webkitAudioContext)();
         if(actx.state==='suspended') actx.resume();
-        var seq = kind==='pre' ? [[660,0]] : [[880,0],[1320,.13]];
+        var seq = kind==='pre' ? [[660,0]] : kind==='pre2' ? [[990,0],[990,.1]] : [[880,0],[1320,.13]];
         seq.forEach(function(step){ var o=actx.createOscillator(), g=actx.createGain(), t=actx.currentTime+step[1];
           o.type='triangle'; o.frequency.value=step[0];
           g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.32,t+.02); g.gain.exponentialRampToValueAtTime(0.0001,t+.28);
@@ -451,7 +459,8 @@
       var g=$('cdGrid'); g.innerHTML='';
       state.cds.forEach(function(c){
         var b=document.createElement('button'); b.className='cd-btn'; b.dataset.cd=c.id;
-        b.innerHTML='<span class="cd-nome">'+escapeHtml(c.nome)+'</span><span class="cd-val">Usar</span><span class="cd-sub">pronto</span>';
+        b.innerHTML='<span class="cd-edit" title="Definir tempo do cooldown">✎</span>'
+          +'<span class="cd-nome">'+escapeHtml(c.nome)+'</span><span class="cd-val">Usar</span><span class="cd-sub">CD '+fmt(c.cd)+'</span>';
         g.appendChild(b);
       });
     }
@@ -460,7 +469,7 @@
         var b=$('cdGrid').querySelector('[data-cd="'+c.id+'"]'); if(!b) return;
         var val=b.querySelector('.cd-val'), sub=b.querySelector('.cd-sub');
         b.classList.remove('running','ready');
-        if(c.at==null){ val.textContent='Usar'; sub.textContent='pronto'; return; }
+        if(c.at==null){ val.textContent='Usar'; sub.textContent='CD '+fmt(c.cd); return; }
         var rem = c.cd - (now()-c.at)/1000;
         if(rem>0){ b.classList.add('running'); val.textContent=fmt(rem); sub.textContent='cooldown'; c.rdy=false; }
         else { b.classList.add('ready'); val.textContent='Pronto'; sub.textContent='pode usar';
@@ -473,6 +482,12 @@
       try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); }catch(e){}
       save(); updateCds();
     }
+    function editCd(id){
+      var c=state.cds.filter(function(x){return x.id===id;})[0]; if(!c) return;
+      var v=prompt('Cooldown de '+c.nome+' (MM:SS ou segundos):', fmt(c.cd)); if(v==null) return;
+      var t=parseTime(v); if(t==null || t<=0){ showToast('⚠️','Tempo inválido', true); return; }
+      c.cd=t; save(); updateCds();
+    }
 
     // ---------- loop ----------
     function tick(){
@@ -480,7 +495,8 @@
         var wr = warRemaining();
         state.events.forEach(function(e){
           if(!e.pre && state.lead>0 && wr <= e.rem + state.lead && wr > e.rem){ e.pre=true; beep('pre'); showToast(ico(e), e.nome+' em '+Math.round(wr-e.rem)+'s', true); }
-          if(!e.fired && wr <= e.rem){ e.fired=true; e.pre=true; beep('hit'); flash(); showToast(ico(e), e.nome+(e.win?' · pode nascer':''), false); notify(e); }
+          if(!e.pre2 && state.lead2>0 && wr <= e.rem + state.lead2 && wr > e.rem){ e.pre2=true; beep('pre2'); }
+          if(!e.fired && wr <= e.rem){ e.fired=true; e.pre=true; e.pre2=true; beep('hit'); flash(); showToast(ico(e), e.nome+(e.win?' · pode nascer':''), false); notify(e); }
         });
       }
       render();
@@ -534,10 +550,11 @@
       state.notif=on; $('swNotif').classList.toggle('on',on); save();
     }
     function setLead(v){ state.lead=Math.max(0,Math.min(120,v)); $('leadVal').textContent=state.lead+'s'; save(); }
+    function setLead2(v){ state.lead2=Math.max(0,Math.min(120,v)); $('lead2Val').textContent=state.lead2>0?state.lead2+'s':'off'; save(); }
 
     // ---------- init ----------
     load();
-    setSound(state.sound); setLead(state.lead); $('swNotif').classList.toggle('on', state.notif);
+    setSound(state.sound); setLead(state.lead); setLead2(state.lead2); $('swNotif').classList.toggle('on', state.notif);
     // pré-preenche o input com um horário sugerido (agora arredondado) se vazio
     (function(){ var d=new Date(); $('startTime').value=(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes(); })();
     buildCds(); render();
@@ -554,7 +571,9 @@
     $('swNotif').addEventListener('click', function(){ setNotif(!state.notif); });
     $('leadMinus').addEventListener('click', function(){ setLead(state.lead-10); });
     $('leadPlus').addEventListener('click', function(){ setLead(state.lead+10); });
-    $('cdGrid').addEventListener('click', function(e){ var b=e.target.closest('[data-cd]'); if(b) pressCd(b.dataset.cd); });
+    $('lead2Minus').addEventListener('click', function(){ setLead2(state.lead2-5); });
+    $('lead2Plus').addEventListener('click', function(){ setLead2(state.lead2+5); });
+    $('cdGrid').addEventListener('click', function(e){ var ed=e.target.closest('.cd-edit'); if(ed){ e.stopPropagation(); var eb=ed.closest('[data-cd]'); if(eb) editCd(eb.dataset.cd); return; } var b=e.target.closest('[data-cd]'); if(b) pressCd(b.dataset.cd); });
 
     requestAnimationFrame(tick);
   })();
