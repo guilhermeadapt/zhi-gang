@@ -35,12 +35,14 @@
     }
     *{box-sizing:border-box;margin:0;padding:0;}
     html,body{height:100%;}
+    html{background:var(--ink);}
     body{
       font-family:var(--body);color:var(--text);
       background:
         radial-gradient(125% 62% at 50% -12%, rgba(217,164,65,.12), transparent 60%),
         radial-gradient(90% 50% at 50% 116%, rgba(137,171,197,.06), transparent 70%),
         var(--ink);
+      background-attachment:fixed;
       min-height:100dvh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;
     }
     .shell{width:100%;max-width:560px;margin:0 auto;flex:1;
@@ -116,13 +118,12 @@
     @media(hover:hover){a.card:hover .chev{transform:translateX(3px);color:var(--accent);}}
     /* 3 guias de função na mesma linha (Playbook fica sozinho acima) */
     .roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}
-    .roles a.card{flex-direction:column;align-items:flex-start;gap:9px;padding:14px 13px;}
-    .roles .glyph{width:44px;height:44px;font-size:23px;border-radius:11px;}
-    .roles .meta{width:100%;}
+    .roles a.card{gap:12px;padding:14px 13px;}
+    .roles .glyph{width:46px;height:46px;font-size:24px;border-radius:11px;}
     .roles .role{margin-bottom:2px;}
-    .roles .name{font-size:1.12rem;}
+    .roles .name{font-size:1.1rem;}
     .roles .desc,.roles .chev{display:none;}
-    @media(max-width:380px){.roles{grid-template-columns:1fr;}.roles a.card{flex-direction:row;align-items:center;gap:14px;}.roles .desc{display:block;}}
+    @media(max-width:380px){.roles{grid-template-columns:1fr;}.roles .desc{display:block;}}
 
     /* ---------- Discord ---------- */
     .join-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.24em;
