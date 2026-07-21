@@ -225,7 +225,7 @@
   function treeMeters(o, xf, yf) { const a = o.caminho.a, b = o.caminho.b, ax = b[0] - a[0], ay = b[1] - a[1]; const t = ((xf - a[0]) * ax + (yf - a[1]) * ay) / (ax * ax + ay * ay || 1); return Math.round(Math.max(0, Math.min(1, t)) * CFG.treeMeters); }
   function renderObjectives() {
     objLayer.destroyChildren();
-    const up = cur() ? (cur().objetivos || {}) : {}, os = Math.max(22, W * 0.042);
+    const up = cur() ? (cur().objetivos || {}) : {}, os = Math.max(13, W * 0.025);
     CFG.objetivos.forEach(o => {
       if (!up[o.id]) return;
       const pos = objPos(o);
