@@ -115,6 +115,9 @@
     .next .n-k{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
     .next .n-name{font-family:var(--disp);font-weight:600;font-size:1.05rem;line-height:1.1}
     .next .n-cd{font-family:var(--disp);font-weight:700;font-variant-numeric:tabular-nums;font-size:1.5rem;color:var(--gold-2);flex:none}
+    .skip-btn{flex:none;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line-soft);border-radius:9px;background:rgba(255,255,255,.03);color:var(--muted);cursor:pointer;transition:.14s}
+    .skip-btn:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(217,164,65,.08)}
+    .skip-btn svg{width:15px;height:15px}
     .next.warn .n-cd{color:var(--crimson)}
     .next.done-all .n-cd{display:none}
 
@@ -257,6 +260,7 @@
           <span class="n-name" id="nextName">—</span>
         </span>
         <span class="n-cd" id="nextCd">--:--</span>
+        <button class="skip-btn" id="skipBtn" title="Pular para o próximo marco (adianta o relógio)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5l9 7-9 7V5zm11 0h2v14h-2z"/></svg></button>
       </div>
     </section>
 
@@ -300,7 +304,7 @@
           <div class="switch on" id="swSound" role="switch"></div>
         </div>
         <div class="set-row">
-          <span class="s-name">Aviso antecipado <small>alerta (som + tela) X segundos antes do marco</small></span>
+          <span class="s-name">Aviso antecipado <small>X segundos antes do marco e do fim de cada cooldown</small></span>
           <div class="step">
             <button id="leadMinus">−</button><b id="leadVal">30s</b><button id="leadPlus">+</button>
           </div>
@@ -310,6 +314,10 @@
           <div class="step">
             <button id="lead2Minus">−</button><b id="lead2Val">15s</b><button id="lead2Plus">+</button>
           </div>
+        </div>
+        <div class="set-row">
+          <span class="s-name">Narração por voz <small>fala o marco em voz alta (ex.: "Jungle em 15 segundos")</small></span>
+          <div class="switch" id="swVoice" role="switch"></div>
         </div>
         <div class="set-row">
           <span class="s-name">Notificação do navegador <small>funciona com a aba em segundo plano</small></span>
@@ -354,16 +362,16 @@
       { rem: 300,  img: 'funcoin', nome: 'Jungle (JG)' }
     ];
 
-    var state = { startAt: null, events: [], sound: true, lead: 30, lead2: 15, notif: false,
+    var state = { startAt: null, events: [], sound: true, lead: 30, lead2: 15, notif: false, voice: false,
       cds: [ { id:'sprint', nome:'Sprint', cd:120, at:null, rdy:false }, { id:'relentless', nome:'Relentless', cd:120, at:null, rdy:false }, { id:'city', nome:'City Protection', cd:180, at:null, rdy:false } ] };
 
     // ---------- persistência ----------
-    function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome,win:e.win};}), sound: state.sound, lead: state.lead, lead2: state.lead2, notif: state.notif, cds: state.cds.map(function(c){return {id:c.id,at:c.at,cd:c.cd};}) })); }catch(e){} }
+    function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome,win:e.win};}), sound: state.sound, lead: state.lead, lead2: state.lead2, notif: state.notif, voice: state.voice, cds: state.cds.map(function(c){return {id:c.id,at:c.at,cd:c.cd};}) })); }catch(e){} }
     function load(){
       var d=null; try{ d=JSON.parse(localStorage.getItem(LS)); }catch(e){}
       if(d && Array.isArray(d.events) && d.events.length){ state.events = d.events; }
       else { state.events = DEFAULT.map(function(e){ return { rem:e.rem, em:e.em, img:e.img, nome:e.nome, win:e.win }; }); }
-      if(d){ if(typeof d.startAt==='number') state.startAt=d.startAt; if(typeof d.sound==='boolean') state.sound=d.sound; if(typeof d.lead==='number') state.lead=d.lead; if(typeof d.lead2==='number') state.lead2=d.lead2; if(typeof d.notif==='boolean') state.notif=d.notif;
+      if(d){ if(typeof d.startAt==='number') state.startAt=d.startAt; if(typeof d.sound==='boolean') state.sound=d.sound; if(typeof d.lead==='number') state.lead=d.lead; if(typeof d.lead2==='number') state.lead2=d.lead2; if(typeof d.notif==='boolean') state.notif=d.notif; if(typeof d.voice==='boolean') state.voice=d.voice;
         if(Array.isArray(d.cds)) d.cds.forEach(function(sc){ var c=state.cds.filter(function(x){return x.id===sc.id;})[0]; if(c){ if(typeof sc.cd==='number' && sc.cd>0) c.cd=sc.cd; if(typeof sc.at==='number'){ c.at=sc.at; c.rdy = (now()-sc.at)/1000 >= c.cd; } } }); }
       sortEvents(); seedFired();
     }
@@ -398,6 +406,14 @@
     function notify(ev){
       if(!state.notif || !('Notification' in window) || Notification.permission!=='granted') return;
       try{ new Notification((ev.em?ev.em+'  ':'')+ev.nome, { body:'A '+fmt(ev.rem)+' do fim', silent:false }); }catch(e){}
+    }
+    // narração por voz (Web Speech API)
+    var ttsVoice=null;
+    function pickVoice(){ try{ var vs=speechSynthesis.getVoices(); ttsVoice = vs.filter(function(v){return /pt.?BR/i.test(v.lang);})[0] || vs.filter(function(v){return /^pt/i.test(v.lang);})[0] || null; }catch(e){} }
+    function sayName(s){ return String(s||'').replace(/\(.*?\)/g,'').replace(/\*/g,'').trim(); }
+    function speak(text){
+      if(!state.voice || !('speechSynthesis' in window)) return;
+      try{ if(!ttsVoice) pickVoice(); var u=new SpeechSynthesisUtterance(text); if(ttsVoice) u.voice=ttsVoice; u.lang='pt-BR'; u.rate=1.06; u.pitch=1; speechSynthesis.cancel(); speechSynthesis.speak(u); }catch(e){}
     }
 
     // ---------- alerta visual ----------
@@ -485,14 +501,16 @@
         b.classList.remove('running','ready');
         if(c.at==null){ val.textContent='Usar'; sub.textContent='CD '+fmt(c.cd); return; }
         var rem = c.cd - (now()-c.at)/1000;
-        if(rem>0){ b.classList.add('running'); val.textContent=fmt(rem); sub.textContent='cooldown'; c.rdy=false; }
+        if(rem>0){ b.classList.add('running'); val.textContent=fmt(rem); sub.textContent='cooldown'; c.rdy=false;
+          if(!c.pre && state.lead>0 && rem<=state.lead){ c.pre=true; beep('pre'); showToast('⏱️', c.nome+' volta em '+Math.round(rem)+'s', true); speak(sayName(c.nome)+' volta em '+Math.round(rem)+' segundos'); }
+          if(!c.pre2 && state.lead2>0 && rem<=state.lead2){ c.pre2=true; beep('pre2'); } }
         else { b.classList.add('ready'); val.textContent='Pronto'; sub.textContent='pode usar';
-          if(!c.rdy){ c.rdy=true; beep('hit'); showToast('⚔️', c.nome+' pronto (inimigo pode usar)', false); } }
+          if(!c.rdy){ c.rdy=true; beep('hit'); showToast('⚔️', c.nome+' pronto (inimigo pode usar)', false); speak(sayName(c.nome)+' pronto'); } }
       });
     }
     function pressCd(id, announce){
       var c=state.cds.filter(function(x){return x.id===id;})[0]; if(!c) return;
-      c.at=now(); c.rdy=false;
+      c.at=now(); c.rdy=false; c.pre=false; c.pre2=false;
       try{ if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); }catch(e){}
       save(); updateCds();
       if(announce){ beep('pre'); showToast('⏱️', c.nome+' reiniciado ('+fmt(c.cd)+')', false); }
@@ -544,9 +562,9 @@
       if(state.startAt!=null){
         var wr = warRemaining();
         state.events.forEach(function(e){
-          if(!e.pre && state.lead>0 && wr <= e.rem + state.lead && wr > e.rem){ e.pre=true; beep('pre'); showToast(ico(e), e.nome+' em '+Math.round(wr-e.rem)+'s', true); }
+          if(!e.pre && state.lead>0 && wr <= e.rem + state.lead && wr > e.rem){ e.pre=true; beep('pre'); showToast(ico(e), e.nome+' em '+Math.round(wr-e.rem)+'s', true); speak(sayName(e.nome)+' em '+Math.round(wr-e.rem)+' segundos'); }
           if(!e.pre2 && state.lead2>0 && wr <= e.rem + state.lead2 && wr > e.rem){ e.pre2=true; beep('pre2'); }
-          if(!e.fired && wr <= e.rem){ e.fired=true; e.pre=true; e.pre2=true; beep('hit'); flash(); showToast(ico(e), e.nome+(e.win?' · pode nascer':''), false); notify(e); }
+          if(!e.fired && wr <= e.rem){ e.fired=true; e.pre=true; e.pre2=true; beep('hit'); flash(); showToast(ico(e), e.nome+(e.win?' · pode nascer':''), false); notify(e); speak(sayName(e.nome)+(e.win?', pode nascer':', agora')); }
         });
       }
       render();
@@ -568,7 +586,16 @@
       scheduleAt(d.getTime());
     }
     function startNow(){ scheduleAt(now()); }
-    function reset(){ state.startAt=null; state.events.forEach(function(e){ e.fired=false; e.pre=false; }); save(); render(); }
+    function reset(){ state.startAt=null; state.events.forEach(function(e){ e.fired=false; e.pre=false; e.pre2=false; }); save(); render(); }
+    function skipToNext(){
+      if(state.startAt==null){ showToast('⚠️','Agende ou comece a guerra primeiro', true); return; }
+      var wr=warRemaining(), target=null;
+      for(var i=0;i<state.events.length;i++){ if(state.events[i].rem <= wr - 0.4){ target=state.events[i]; break; } }
+      if(!target){ showToast('🏁','Não há próximo marco', false); return; }
+      state.startAt = now() + (target.rem + 2)*1000 - WAR*1000; // 2s antes do próximo marco
+      seedFired(); save(); render();
+      showToast(ico(target), 'Pulou para: '+target.nome, false);
+    }
 
     // ---------- edição ----------
     var editing=false;
@@ -601,10 +628,12 @@
     }
     function setLead(v){ state.lead=Math.max(0,Math.min(120,v)); $('leadVal').textContent=state.lead+'s'; save(); }
     function setLead2(v){ state.lead2=Math.max(0,Math.min(120,v)); $('lead2Val').textContent=state.lead2>0?state.lead2+'s':'off'; save(); }
+    function setVoice(on){ state.voice=on; $('swVoice').classList.toggle('on',on); if(on){ pickVoice(); speak('Narração ativada'); } else if('speechSynthesis' in window){ try{ speechSynthesis.cancel(); }catch(e){} } save(); }
 
     // ---------- init ----------
     load();
-    setSound(state.sound); setLead(state.lead); setLead2(state.lead2); $('swNotif').classList.toggle('on', state.notif);
+    setSound(state.sound); setLead(state.lead); setLead2(state.lead2); $('swNotif').classList.toggle('on', state.notif); $('swVoice').classList.toggle('on', state.voice);
+    if('speechSynthesis' in window){ try{ speechSynthesis.onvoiceschanged=pickVoice; }catch(e){} pickVoice(); }
     // pré-preenche o input com um horário sugerido (agora arredondado) se vazio
     (function(){ var d=new Date(); $('startTime').value=(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes(); })();
     buildCds(); render();
@@ -612,6 +641,8 @@
     $('schedBtn').addEventListener('click', schedule);
     $('nowBtn').addEventListener('click', startNow);
     $('resetBtn').addEventListener('click', reset);
+    $('skipBtn').addEventListener('click', skipToNext);
+    $('swVoice').addEventListener('click', function(){ setVoice(!state.voice); });
     $('editBtn').addEventListener('click', toggleEdit);
     $('aiAdd').addEventListener('click', addEvent);
     $('aiName').addEventListener('keydown', function(e){ if(e.key==='Enter') addEvent(); });
