@@ -157,6 +157,10 @@
     .pt-popover .phint{margin-top:8px;font-size:10px;color:#5f6672;line-height:1.35}
     .pt-popover .po-link{margin:2px 0 8px;width:100%;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-2);background:rgba(217,164,65,.08);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:7px;padding:7px;cursor:pointer;transition:.14s}
     .pt-popover .po-link:hover{background:rgba(217,164,65,.16)}
+    .pt-popover .po-hp{margin:2px 0 8px}
+    .pt-popover .po-hp-l{font-family:var(--disp);font-weight:600;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .pt-popover .po-hp-l b{color:var(--gold-2);font-size:11px}
+    .pt-popover .po-range,.icon-menu .im-range{width:100%;accent-color:var(--gold);height:4px;margin-top:5px}
     /* menu de ícone (objetivo / membro) — HP, vincular, remover */
     .icon-menu{position:absolute;z-index:15;min-width:190px;max-width:240px;padding:11px 12px;background:rgba(12,15,22,.98);border:1px solid var(--line);border-radius:13px;box-shadow:0 24px 60px -24px #000,inset 0 1px 0 rgba(255,255,255,.04)}
     .icon-menu .im-hd{display:flex;align-items:center;gap:8px;margin-bottom:9px}
@@ -177,6 +181,9 @@
     .icon-menu .im-link:hover{background:rgba(217,164,65,.16)}
     .icon-menu .im-del{flex:none;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line-soft);border-radius:7px;padding:8px 12px;cursor:pointer;transition:.14s}
     .icon-menu .im-del:hover{color:var(--crimson);border-color:color-mix(in srgb,var(--crimson) 50%,transparent)}
+    .icon-menu .im-dead{width:100%;margin-bottom:10px;font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;padding:8px;cursor:pointer;transition:.14s}
+    .icon-menu .im-dead:hover{color:var(--text);border-color:var(--line)}
+    .icon-menu .im-dead.on{color:#fff;background:linear-gradient(180deg,#c74440,#a5322e);border-color:#c74440}
     body.linking #stageWrap{cursor:crosshair}
     body.linking #stage{cursor:crosshair}
 
@@ -579,6 +586,8 @@
           <button class="dt" id="undoBtn" title="Desfazer (Ctrl+Z)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/></svg></button>
           <button class="dt" id="redoBtn" title="Refazer (Ctrl+Y)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h1"/></svg></button>
           <button class="dt" id="clearDraw" title="Limpar desenhos e ícones do cenário"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>
+          <div class="dt-sep"></div>
+          <button class="dt on" id="namesTgl" title="Mostrar / ocultar nomes dos players"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2M9 5v14M7 19h4"/><path d="M14 19l3-8 3 8M15 16h4"/></svg></button>
         </div>
 
         <div class="mark-picker" id="markPicker" hidden>
@@ -747,7 +756,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=22"></script>
-  <script src="./app.js?v=22"></script>
+  <script src="./config.js?v=23"></script>
+  <script src="./app.js?v=23"></script>
 </body>
 </html>

@@ -27,7 +27,7 @@
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
       shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
       menu:'Menú', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartir', present:'Presentar', exit:'Salir',
@@ -39,7 +39,7 @@
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
       shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
       menu:'Menu', phases:'Phases', objectives:'Objectives', roster:'Roster', share:'Share', present:'Present', exit:'Exit',
@@ -51,7 +51,7 @@
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
       shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move',
-      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
+      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
   function t(k) { return (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.pt[k] != null ? I18N.pt[k] : k); }
@@ -85,7 +85,7 @@
   const confirmModal = $('confirmModal'), confirmMsg = $('confirmMsg'), confirmYes = $('confirmYes'), confirmNo = $('confirmNo');
   const ptModal = $('ptModal'), peDot = $('peDot'), peTitle = $('peTitle'), peClose = $('peClose'), peDesc = $('peDesc'), peIcons = $('peIcons'), peMembers = $('peMembers'), peCount = $('peCount'), peAddSel = $('peAddSel'), peAddBtn = $('peAddBtn');
 
-  const state = { scenarios: [], currentId: null, roster: [], ptDesc: {}, ptIcon: {}, objetivoPosGlobal: {}, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false };
+  const state = { scenarios: [], currentId: null, roster: [], ptDesc: {}, ptIcon: {}, objetivoPosGlobal: {}, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false, showNames: true };
   let hintDismissed = false, editingPt = null;
   const objGroupOpen = {};   // grupos do painel de objetivos começam colapsados
   const partyById = new Map(CFG.parties.map(p => [p.id, p]));
@@ -215,7 +215,9 @@
     if (n) { const b = new Konva.Label({ x: R * 0.7, y: R * 0.7 }); b.add(new Konva.Tag({ fill: p.cor, cornerRadius: R * 0.5 })); b.add(new Konva.Text({ text: String(n), fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(R * 0.55), fill: '#0a0c11', padding: Math.max(1.5, R * 0.16) })); g.add(b); }
     if (state.ptIcon[t.pt]) g.add(new Konva.Text({ text: state.ptIcon[t.pt], fontSize: R, align: 'center', verticalAlign: 'middle', width: R * 3, height: R * 1.4, offsetX: R * 1.5, offsetY: R * 0.7, y: -R * 0.9 }));
     g.position({ x: t.xf * W, y: t.yf * H });
-    g.on('click tap', e => { e.cancelBubble = true; iconClicked('pt:' + t.pt, () => togglePopover(t.pt, g.x(), g.y())); });
+    // barra de HP da PT (quando < 100)
+    if (t.hp != null && t.hp < 100) hpBar(g, t.hp, R + 4, R * 2.1);
+    g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); tokenLayer.batchDraw(); iconClicked('pt:' + t.pt, () => togglePopover(t.pt, g.x(), g.y())); });
     if (!state.present) {
       g.dragBoundFunc(clampToStage);
       g.on('dragstart', () => { pushUndo(); hidePopover(); g.moveToTop(); });
@@ -227,22 +229,23 @@
     }
     return g;
   }
+  // barrinha de HP reutilizável (com sombra e bom contraste) — anexa ao grupo g
+  function hpBar(g, hp, topY, barW) { const bw = Math.max(barW, R), bh = Math.max(3.5, R * 0.2), by = topY + Math.max(2, R * 0.12); const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52'; g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.92)', stroke: 'rgba(255,255,255,.28)', strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.7, shadowOffsetY: 1 })); g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, shadowColor: hc, shadowBlur: 4, shadowOpacity: 0.5 })); g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, R * 0.4), fill: hc, align: 'center', width: bw + R * 2, offsetX: (bw + R * 2) / 2, y: by + bh + 1, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.9 })); }
   function makeMemberToken(d) {
-    const p = partyById.get(d.pt), rc = roleColor(d.funcao), rm = Math.max(8, R * 0.56);
-    const g = new Konva.Group({ draggable: !state.present, id: 'mem-' + d.id });
-    g.add(new Konva.Circle({ radius: rm, fill: '#0b0e15', stroke: rc, strokeWidth: Math.max(1.6, rm * 0.22), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4, shadowOffsetY: 1 }));
+    const p = partyById.get(d.pt), rc = roleColor(d.funcao), rm = Math.max(7, R * 0.5), dead = !!d.dead;
+    const g = new Konva.Group({ draggable: !state.present, id: 'mem-' + d.id, opacity: dead ? 0.5 : 1 });
+    g.add(new Konva.Circle({ radius: rm, fill: 'rgba(11,14,21,.66)', stroke: dead ? '#7a828f' : rc, strokeWidth: Math.max(1.3, rm * 0.16), shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.45, shadowOffsetY: 1 }));
     const ci = iconImgs[(CFG.classIcons || {})[d.funcao]];
-    if (ci && ci.width) { const s = rm * 1.5, h = s * (ci.height / ci.width); g.add(new Konva.Image({ image: ci, width: s, height: h, offsetX: s / 2, offsetY: h / 2 })); }
+    if (ci && ci.width) { const s = rm * 1.35, h = s * (ci.height / ci.width); g.add(new Konva.Image({ image: ci, width: s, height: h, offsetX: s / 2, offsetY: h / 2, opacity: dead ? 0.7 : 1 })); }
     else g.add(new Konva.Text({ text: d.funcao[0], fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: rm * 0.9, fill: rc, align: 'center', verticalAlign: 'middle', width: rm * 2, height: rm * 2, offsetX: rm, offsetY: rm }));
-    const lbl = new Konva.Label({ x: rm + 3, y: -rm * 0.55 });
-    lbl.add(new Konva.Tag({ fill: 'rgba(10,12,17,.78)', stroke: p.cor, strokeWidth: 0.8, cornerRadius: 3 }));
-    lbl.add(new Konva.Text({ text: d.nome, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: Math.max(8.5, R * 0.4), fill: '#EDEBE4', padding: 2 }));
-    g.add(lbl);
+    if (dead) g.add(new Konva.Text({ text: '✕', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: rm * 1.7, fill: '#E25B52', align: 'center', verticalAlign: 'middle', width: rm * 2, height: rm * 2, offsetX: rm, offsetY: rm, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.8 }));
+    if (state.showNames) { const lbl = new Konva.Label({ x: rm + 3, y: -rm * 0.55 }); lbl.add(new Konva.Tag({ fill: 'rgba(8,10,14,.72)', stroke: p.cor, strokeWidth: 0.8, cornerRadius: 3 })); lbl.add(new Konva.Text({ text: d.nome, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: Math.max(8, R * 0.36), fill: dead ? '#c9cdd4' : '#EDEBE4', padding: 2 })); g.add(lbl); }
     g.position({ x: d.xf * W, y: d.yf * H });
-    g.on('click tap', e => { e.cancelBubble = true; iconClicked('mem:' + d.id, () => openMemberMenu(d, g.x(), g.y())); });
+    if (d.hp != null && d.hp < 100 && !dead) hpBar(g, d.hp, rm, rm * 2.2);
+    g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); tokenLayer.batchDraw(); iconClicked('mem:' + d.id, () => openMemberMenu(d, g.x(), g.y())); });
     if (!state.present) {
       g.dragBoundFunc(clampToStage);
-      g.on('dragstart', pushUndo);
+      g.on('dragstart', () => { pushUndo(); g.moveToTop(); });
       g.on('dragmove', updateLinks);
       g.on('dragend', () => { const dd = cur().destacados.find(x => x.id === d.id); if (dd) { dd.xf = clamp01(g.x() / W); dd.yf = clamp01(g.y() / H); saveProject(); } });
       g.on('dblclick dbltap', () => { pushUndo(); cur().destacados = cur().destacados.filter(x => x.id !== d.id); pruneLinksFor('mem:' + d.id); renderTokens(); saveProject(); });
@@ -272,27 +275,29 @@
     return null;
   }
   function anchorColor(ref) { const i = (ref || '').indexOf(':'); if (i < 0) return '#D9A441'; const ty = ref.slice(0, i), id = ref.slice(i + 1); if (ty === 'pt') { const p = partyById.get(id); return p ? p.cor : '#D9A441'; } if (ty === 'mem') { const d = (cur().destacados || []).find(x => x.id === id); return d ? roleColor(d.funcao) : '#D9A441'; } if (ty === 'obj') { const o = objById.get(id); return o ? objStyle(o).c : '#D9A441'; } return '#D9A441'; }
+  // raio aproximado de cada ícone (pra seta parar na borda, não por cima)
+  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R + 5; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : (o && o.icone === 'boss' ? 1.5 : 1); return os * sc * 0.55; } return R; }
+  function linkPts(l) { const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (!a || !b) return null; const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, ra = anchorRadius(l.a), rb = anchorRadius(l.b); if (len <= ra + rb + 6) return [a.x, a.y, b.x, b.y]; return [a.x + ux * ra, a.y + uy * ra, b.x - ux * rb, b.y - uy * rb]; }
   function renderLinks() {
     (cur() ? cur().links : []).forEach(l => {
-      const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (!a || !b) return;
+      const pts = linkPts(l); if (!pts) return;
       const col = anchorColor(l.a);
-      const arr = new Konva.Arrow({ name: 'link-' + l.id, points: [a.x, a.y, b.x, b.y], stroke: col, fill: col, strokeWidth: Math.max(2.4, R * 0.17), pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), opacity: 0.92, dash: [Math.max(7, R * 0.5), Math.max(5, R * 0.34)], hitStrokeWidth: Math.max(16, R * 1.1), listening: !state.present });
+      const arr = new Konva.Arrow({ name: 'link-' + l.id, points: pts, stroke: col, fill: col, strokeWidth: Math.max(2.4, R * 0.17), pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), opacity: 0.95, dash: [Math.max(7, R * 0.5), Math.max(5, R * 0.34)], hitStrokeWidth: Math.max(16, R * 1.1), listening: !state.present, shadowColor: '#000', shadowBlur: Math.max(3, R * 0.28), shadowOpacity: 0.55, shadowOffsetY: 1 });
       if (!state.present) { arr.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; removeLink(l.id); }); arr.on('mouseenter', () => stage.container().style.cursor = 'pointer'); arr.on('mouseleave', () => stage.container().style.cursor = toolCursor()); }
       tokenLayer.add(arr);
     });
   }
-  function updateLinks() { (cur() ? cur().links : []).forEach(l => { const ln = tokenLayer.findOne('.link-' + l.id); if (!ln) return; const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (a && b) ln.points([a.x, a.y, b.x, b.y]); }); if (linkTempFrom) updateLinkTemp(); tokenLayer.batchDraw(); }
+  function updateLinks() { (cur() ? cur().links : []).forEach(l => { const ln = tokenLayer.findOne('.link-' + l.id); if (!ln) return; const pts = linkPts(l); if (pts) ln.points(pts); }); if (linkTempFrom) updateLinkTemp(); tokenLayer.batchDraw(); }
   function updateConnectors() { updateLinks(); }
   function removeLink(id) { pushUndo(); cur().links = (cur().links || []).filter(l => l.id !== id); renderTokens(); saveProject(); toast('Vínculo removido'); }
   function pruneLinksFor(ref) { const s = cur(); if (s.links) s.links = s.links.filter(l => l.a !== ref && l.b !== ref); }
   // clique em qualquer ícone: se estiver criando vínculo, fecha o vínculo; senão abre o menu
   function iconClicked(ref, openFn) { if (linkTempFrom) { finishLink(ref); return; } openFn(); }
+  function buildLinkTemp(ref) { if (linkTempArrow) { linkTempArrow.destroy(); } linkTempFrom = ref; const from = anchorLivePos(ref) || { x: W / 2, y: H / 2 }; linkTempArrow = new Konva.Arrow({ points: [from.x, from.y, from.x, from.y], stroke: '#f0c66b', fill: '#f0c66b', strokeWidth: Math.max(2.4, R * 0.17), pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), dash: [Math.max(6, R * 0.4), Math.max(4, R * 0.3)], opacity: 0.85, listening: false, shadowColor: '#000', shadowBlur: Math.max(3, R * 0.28), shadowOpacity: 0.5 }); }
   function startLink(ref) {
     if (state.present) return;
     hidePopover(); closeIconMenu();
-    linkTempFrom = ref;
-    const from = anchorLivePos(ref) || { x: W / 2, y: H / 2 };
-    linkTempArrow = new Konva.Arrow({ points: [from.x, from.y, from.x, from.y], stroke: '#f0c66b', fill: '#f0c66b', strokeWidth: Math.max(2.4, R * 0.17), pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), dash: [Math.max(6, R * 0.4), Math.max(4, R * 0.3)], opacity: 0.85, listening: false });
+    buildLinkTemp(ref);
     document.body.classList.add('linking');
     renderTokens();
     toast(t('linkPick'));
@@ -302,14 +307,19 @@
     const from = anchorLivePos(linkTempFrom); if (!from) return;
     const p = stage.getPointerPosition(); let ex = from.x, ey = from.y;
     if (p) { const s = stage.scaleX() || 1; ex = (p.x - stage.x()) / s; ey = (p.y - stage.y()) / s; }
-    linkTempArrow.points([from.x, from.y, ex, ey]);
+    const dx = ex - from.x, dy = ey - from.y, len = Math.hypot(dx, dy) || 1, ra = anchorRadius(linkTempFrom);
+    const sx = len > ra ? from.x + dx / len * ra : from.x, sy = len > ra ? from.y + dy / len * ra : from.y;
+    linkTempArrow.points([sx, sy, ex, ey]);
   }
   function finishLink(ref) {
-    const src = linkTempFrom; cancelLink();
-    if (!ref || !src || ref === src) { renderTokens(); return; }
+    const src = linkTempFrom;
+    if (!src) { return; }
+    if (!ref || ref === src) { return; }            // toque em vazio/origem: continua armado
     const s = cur(); s.links = s.links || [];
-    if (s.links.some(l => (l.a === src && l.b === ref) || (l.a === ref && l.b === src))) { toast(t('linkDup')); renderTokens(); return; }
-    pushUndo(); s.links.push({ id: uid(), a: src, b: ref }); saveProject(); renderTokens(); toast(t('linkDone'));
+    if (s.links.some(l => (l.a === src && l.b === ref) || (l.a === ref && l.b === src))) { toast(t('linkDup')); return; }
+    pushUndo(); s.links.push({ id: uid(), a: src, b: ref }); saveProject();
+    buildLinkTemp(src);                              // permanece armado na MESMA origem (encadear/leque)
+    renderTokens(); toast(t('linkDone'));
   }
   function cancelLink() { linkTempFrom = null; if (linkTempArrow) { linkTempArrow.destroy(); linkTempArrow = null; } document.body.classList.remove('linking'); }
 
@@ -343,9 +353,19 @@
   function openMemberMenu(d, x, y) {
     if (!iconMenu || state.present) return;
     hidePopover();
+    const chp = d.hp == null ? 100 : d.hp;
     let h = '<div class="im-hd"><span class="im-dot" style="background:' + roleColor(d.funcao) + '"></span><b>' + esc(d.nome) + '</b><button class="im-x" data-act="close">✕</button></div>';
+    h += '<button class="im-dead' + (d.dead ? ' on' : '') + '" data-act="dead">💀 ' + t('dead') + '</button>';
+    h += '<div class="im-sec">' + t('menuHp') + '</div>';
+    h += '<div class="im-hp"><input type="range" class="im-range" min="0" max="100" step="5" value="' + chp + '"' + (d.dead ? ' disabled' : '') + '><span class="im-hpv">' + chp + '%</span></div>';
+    h += '<div class="im-quick">' + [100, 75, 50, 25, 0].map(v => '<button data-hp="' + v + '"' + (chp === v ? ' class="on"' : '') + '>' + v + '</button>').join('') + '</div>';
     h += '<div class="im-actions"><button class="im-link" data-act="link">' + t('menuLink') + '</button><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
     iconMenu.innerHTML = h; iconMenu.hidden = false; placeIconMenu(x, y);
+    const setHp = v => { v = Math.max(0, Math.min(100, Math.round(v / 5) * 5)); if (v === 100) delete d.hp; else d.hp = v; iconMenu.querySelector('.im-range').value = v; iconMenu.querySelector('.im-hpv').textContent = v + '%'; iconMenu.querySelectorAll('.im-quick button').forEach(b => b.classList.toggle('on', +b.dataset.hp === v)); renderTokens(); saveProject(); };
+    let pushed = false;
+    iconMenu.querySelector('.im-range').addEventListener('input', e => { if (!pushed) { pushUndo(); pushed = true; } setHp(+e.target.value); });
+    iconMenu.querySelectorAll('.im-quick button').forEach(b => b.addEventListener('click', () => { pushUndo(); setHp(+b.dataset.hp); }));
+    iconMenu.querySelector('[data-act="dead"]').addEventListener('click', () => { pushUndo(); d.dead = !d.dead; closeIconMenu(); renderTokens(); saveProject(); });
     iconMenu.querySelector('[data-act="link"]').addEventListener('click', () => startLink('mem:' + d.id));
     iconMenu.querySelector('[data-act="remove"]').addEventListener('click', () => { pushUndo(); cur().destacados = cur().destacados.filter(x => x.id !== d.id); pruneLinksFor('mem:' + d.id); closeIconMenu(); renderTokens(); saveProject(); });
     iconMenu.querySelector('[data-act="close"]').addEventListener('click', closeIconMenu);
@@ -363,6 +383,8 @@
     const p = partyById.get(pt), tit = membersOf(pt, false), res = membersOf(pt, true);
     let html = '<h4><span class="pd" style="background:' + p.cor + '"></span>' + (state.ptIcon[pt] ? state.ptIcon[pt] + ' ' : '') + pt + (state.present ? '' : '<button class="po-edit">editar</button>') + '</h4>';
     if (state.ptDesc[pt]) html += '<div class="po-desc">' + esc(state.ptDesc[pt]) + '</div>';
+    const tk = (cur().tokens || []).find(x => x.pt === pt);
+    if (tk && !state.present) { const chp = tk.hp == null ? 100 : tk.hp; html += '<div class="po-hp"><span class="po-hp-l">' + t('menuHp') + ' <b>' + chp + '%</b></span><input type="range" class="po-range" min="0" max="100" step="5" value="' + chp + '"></div>'; }
     if (!state.present) html += '<button class="po-link" data-act="link">' + t('menuLink') + '</button>';
     if (!tit.length && !res.length) html += '<div class="empty">Sem membros. Defina no roster.</div>';
     else {
@@ -376,6 +398,7 @@
     ptPopover.querySelectorAll('li.mem[draggable]').forEach(li => li.addEventListener('dragstart', ev => { ev.dataTransfer.setData('text/member', JSON.stringify({ pt, nome: li.dataset.nome, funcao: li.dataset.fn })); ev.dataTransfer.effectAllowed = 'copy'; }));
     const eb = ptPopover.querySelector('.po-edit'); if (eb) eb.addEventListener('click', () => { hidePopover(); openPtEditor(pt); });
     const lb = ptPopover.querySelector('.po-link'); if (lb) lb.addEventListener('click', () => startLink('pt:' + pt));
+    const rg = ptPopover.querySelector('.po-range'); if (rg && tk) { let pushed = false; rg.addEventListener('input', e => { if (!pushed) { pushUndo(); pushed = true; } let v = Math.max(0, Math.min(100, Math.round(+e.target.value / 5) * 5)); if (v === 100) delete tk.hp; else tk.hp = v; const lbl = ptPopover.querySelector('.po-hp-l b'); if (lbl) lbl.textContent = v + '%'; renderTokens(); saveProject(); }); }
     const s = stage.scaleX() || 1, vx = stage.x() + x * s, vy = stage.y() + y * s;
     const px = stageWrap.offsetLeft + vx + R * s + 8, py = stageWrap.offsetTop + vy - 10;
     ptPopover.style.left = Math.max(8, Math.min(px, mapPanel.clientWidth - ptPopover.offsetWidth - 8)) + 'px';
@@ -403,15 +426,15 @@
       const osz = os * (o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : o.icone === 'boss' ? 1.5 : 1);
       let iconH = osz;
       if (img && img.width) { const h = osz * (img.height / img.width); iconH = h; g.add(new Konva.Image({ image: img, width: osz, height: h, offsetX: osz / 2, offsetY: h / 2, scaleX: o.flip ? -1 : 1, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 })); }
-      else { const st = objStyle(o); iconH = os * 0.88; g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.92)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08) })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.emoji ? 0.5 : st.t.length > 1 ? 0.3 : 0.42), fill: st.emoji ? undefined : st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
+      else { const st = objStyle(o); iconH = os * 0.88; g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.62)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.emoji ? 0.5 : st.t.length > 1 ? 0.3 : 0.42), fill: st.emoji ? undefined : st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
       if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.52 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.26), fill: '#f0c66b', padding: 3 })); ml.offsetX(ml.getClientRect({ skipTransform: true }).width / 2); g.add(ml); }
       // barra de HP (quando < 100%) — árvore mostra em cima pra não bater no medidor de metros
       const hp = (cur().objHp || {})[o.id];
-      if (hp != null && hp < 100) { const bw = Math.max(osz * 0.95, os * 0.9), bh = Math.max(3.5, os * 0.14), by = o.caminho ? (-iconH / 2 - bh - Math.max(9, os * 0.28)) : (iconH / 2 + Math.max(2, os * 0.12)); const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52'; g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(10,12,17,.9)', stroke: 'rgba(255,255,255,.18)', strokeWidth: 0.6 })); g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc })); g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(8.5, os * 0.26), fill: hc, align: 'center', width: bw + os, offsetX: (bw + os) / 2, y: by + bh + 1 })); }
-      g.on('click tap', e => { e.cancelBubble = true; iconClicked('obj:' + o.id, () => openObjMenu(o, g.x(), g.y())); });
+      if (hp != null && hp < 100) { const bw = Math.max(osz * 0.98, os * 0.92), bh = Math.max(4, os * 0.16), by = o.caminho ? (-iconH / 2 - bh - Math.max(9, os * 0.28)) : (iconH / 2 + Math.max(2, os * 0.12)); const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52'; g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.92)', stroke: 'rgba(255,255,255,.3)', strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.7, shadowOffsetY: 1 })); g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, shadowColor: hc, shadowBlur: 4, shadowOpacity: 0.5 })); g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.28), fill: hc, align: 'center', width: bw + os * 2, offsetX: (bw + os * 2) / 2, y: by + bh + 1, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.9 })); }
+      g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); objLayer.batchDraw(); iconClicked('obj:' + o.id, () => openObjMenu(o, g.x(), g.y())); });
       if (canDrag) {
         g.dragBoundFunc(clampToStage);
-        g.on('dragstart', () => { closeIconMenu(); if (o.movel) pushUndo(); });
+        g.on('dragstart', () => { closeIconMenu(); g.moveToTop(); if (o.movel) pushUndo(); });
         g.on('dragmove', () => { if (o.caminho) { const t = g.findOne('.tm'); if (t) { t.findOne('Text').text(treeMeters(o, g.x() / W, g.y() / H) + 'm'); t.offsetX(t.getClientRect({ skipTransform: true }).width / 2); } } objLayer.batchDraw(); updateLinks(); });
         g.on('dragend', () => { const p = { x: clamp01(g.x() / W), y: clamp01(g.y() / H) }; if (o.movel) { cur().objetivoPos = cur().objetivoPos || {}; cur().objetivoPos[o.id] = p; } else { state.objetivoPosGlobal[o.id] = p; } saveProject(); });
         g.on('mouseenter', () => stage.container().style.cursor = 'grab');
@@ -680,11 +703,11 @@
   }
 
   // ---- export / import / compartilhar / reset ----
-  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, cenarios: state.scenarios }; }
+  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, showNames: state.showNames, cenarios: state.scenarios }; }
   function sanitizeDesc(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => PT_IDS.includes(k) && typeof v === 'string' && v.trim()).map(([k, v]) => [k, String(v)])) : {}; }
   function sanitizePosMap(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}; }
   function exportProject() { const blob = new Blob([JSON.stringify(projectData(), null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob), d = new Date(), pad = n => String(n).padStart(2, '0'); const a = document.createElement('a'); a.href = url; a.download = 'estrategia-wanted-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
-  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste plano.'); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
+  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste plano.'); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
   function importProjectFile(file) { const reader = new FileReader(); reader.onload = async () => { let d; try { d = JSON.parse(reader.result); } catch (e) { toast('Arquivo inválido: não é um JSON'); return; } if (!Array.isArray(d.cenarios) && !Array.isArray(d.scenarios)) { toast('Não encontrei cenários neste arquivo'); return; } if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Importar vai substituir o plano atual. Continuar?')) return; applyImported(d); }; reader.readAsText(file); }
   async function resetAll() { if (!await askConfirm('Resetar tudo e começar um plano do zero? Isso apaga o plano atual (PTs, cenários, desenhos, roster).')) return; try { localStorage.removeItem(CFG.projectKey); } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; state.roster = []; state.ptDesc = {}; state.ptIcon = {}; state.objetivoPosGlobal = {}; toggleObjPanel(false); hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); toast('Plano resetado ✓'); }
   function b64urlFromBytes(bytes) { let bin = ''; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
@@ -766,6 +789,7 @@
     drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
     dtWidth.addEventListener('click', () => { const i = (CFG.drawWidths.indexOf(state.drawWidth) + 1) % CFG.drawWidths.length; state.drawWidth = CFG.drawWidths[i]; dtWidth.textContent = ['▁', '▬', '█'][i] || '▬'; });
     undoBtn.addEventListener('click', doUndo); redoBtn.addEventListener('click', doRedo); clearDraw.addEventListener('click', clearDrawings);
+    { const nt = $('namesTgl'); if (nt) { nt.classList.toggle('on', state.showNames); nt.addEventListener('click', () => { state.showNames = !state.showNames; nt.classList.toggle('on', state.showNames); renderTokens(); saveProject(); }); } }
     objBtn.addEventListener('click', () => toggleObjPanel()); objClose.addEventListener('click', () => toggleObjPanel(false));
 
     nameInput.addEventListener('input', () => { cur().nome = nameInput.value; syncCard(); saveProject(); });
@@ -840,8 +864,8 @@
   function setDock(open) { document.body.classList.toggle('fases-open', open); fasesBtn.classList.toggle('on', open); updateMini(); }
 
   // ---- persistência ----
-  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal })); } catch (e) {} }
-  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
-  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => ({ pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) })) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => ({ id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) })) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
+  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, showNames: state.showNames })); } catch (e) {} }
+  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
+  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tag2: (CFG.secondaryTags || []).includes(p.tag2) ? p.tag2 : null, flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
