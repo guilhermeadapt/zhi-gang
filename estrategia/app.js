@@ -1225,6 +1225,7 @@
     seedBtn.addEventListener('click', async () => { if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Adicionar os cenários das fases padrão ao projeto?')) return; seedStandard(); });
     exportBtn.addEventListener('click', exportProject); importBtn.addEventListener('click', () => importFile.click());
     { const pb = $('plansBtn'); if (pb) pb.addEventListener('click', e => { e.stopPropagation(); openPlansMenu(); }); document.addEventListener('click', e => { const m = $('plansMenu'); if (m && !m.hidden && !e.target.closest('.plans-wrap')) m.hidden = true; }); }
+    { const hb = $('helpBtn'), hm = $('helpModal'), hc = $('helpClose'); if (hb && hm) { hb.addEventListener('click', () => { hm.hidden = false; }); if (hc) hc.addEventListener('click', () => { hm.hidden = true; }); hm.addEventListener('click', e => { if (e.target === hm) hm.hidden = true; }); document.addEventListener('keydown', e => { if (e.key === 'Escape' && !hm.hidden) hm.hidden = true; }); } }
     importFile.addEventListener('change', e => { const f = e.target.files[0]; if (f) importProjectFile(f); e.target.value = ''; });
     shareBtn.addEventListener('click', shareLink); resetBtn.addEventListener('click', resetAll);
     shareClose.addEventListener('click', () => shareModal.hidden = true);
