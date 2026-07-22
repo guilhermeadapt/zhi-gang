@@ -27,7 +27,7 @@
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
       shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', nameToggle:'Nome no mapa', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', nameToggle:'Nome no mapa', unlockAction:'Destravar posição', lockAction:'Travar posição', unlockedHint:'Destravado — arraste para reposicionar', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
       menu:'Menú', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartir', present:'Presentar', exit:'Salir',
@@ -39,7 +39,7 @@
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
       shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', nameToggle:'Nombre en el mapa', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', nameToggle:'Nombre en el mapa', unlockAction:'Desbloquear posición', lockAction:'Bloquear posición', unlockedHint:'Desbloqueado — arrastra para reposicionar', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
       menu:'Menu', phases:'Phases', objectives:'Objectives', roster:'Roster', share:'Share', present:'Present', exit:'Exit',
@@ -51,7 +51,7 @@
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
       shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move',
-      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', nameToggle:'Name on map', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
+      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', nameToggle:'Name on map', unlockAction:'Unlock position', lockAction:'Lock position', unlockedHint:'Unlocked — drag to reposition', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
   function t(k) { return (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.pt[k] != null ? I18N.pt[k] : k); }
@@ -95,6 +95,7 @@
   let linkTempFrom = null, linkTempArrow = null;   // vínculo em criação (origem + seta-preview)
   let carryPickFor = null;                          // objId da árvore aguardando escolha de carry
   let lpTimer = null, lpAt = 0;                     // long-press (segurar) nos tokens de player
+  const unlockedObjs = new Set();                   // objetivos destravados p/ mover (sessão)
   const undoStacks = {}, redoStacks = {};
 
   const stage = new Konva.Stage({ container: 'stage', width: 10, height: 10 });
@@ -315,9 +316,15 @@
   function renderSide() {
     bgLayer.find('.side-ov').forEach(n => n.destroy());
     if (state.side) {
-      const west = state.side === 'blue';
-      bgLayer.add(new Konva.Rect({ name: 'side-ov', x: west ? 0 : W / 2, y: 0, width: W / 2, height: H, fill: west ? 'rgba(106,168,224,0.10)' : 'rgba(226,91,82,0.10)', listening: false }));
-      bgLayer.add(new Konva.Line({ name: 'side-ov', points: [W / 2, 0, W / 2, H], stroke: 'rgba(255,255,255,0.14)', strokeWidth: Math.max(1, R * 0.05), dash: [8, 8], listening: false }));
+      const west = state.side === 'blue', col = west ? '106,168,224' : '226,91,82';
+      const gw = W * 0.15, bw = Math.max(3, R * 0.22);   // brilho suave só na nossa borda (base)
+      if (west) {
+        bgLayer.add(new Konva.Rect({ name: 'side-ov', x: 0, y: 0, width: gw, height: H, listening: false, fillLinearGradientStartPoint: { x: 0, y: 0 }, fillLinearGradientEndPoint: { x: gw, y: 0 }, fillLinearGradientColorStops: [0, 'rgba(' + col + ',0.20)', 1, 'rgba(' + col + ',0)'] }));
+        bgLayer.add(new Konva.Rect({ name: 'side-ov', x: 0, y: 0, width: bw, height: H, fill: 'rgba(' + col + ',0.5)', listening: false }));
+      } else {
+        bgLayer.add(new Konva.Rect({ name: 'side-ov', x: W - gw, y: 0, width: gw, height: H, listening: false, fillLinearGradientStartPoint: { x: W - gw, y: 0 }, fillLinearGradientEndPoint: { x: W, y: 0 }, fillLinearGradientColorStops: [0, 'rgba(' + col + ',0)', 1, 'rgba(' + col + ',0.20)'] }));
+        bgLayer.add(new Konva.Rect({ name: 'side-ov', x: W - bw, y: 0, width: bw, height: H, fill: 'rgba(' + col + ',0.5)', listening: false }));
+      }
     }
     bgLayer.batchDraw();
     updateSideChip();
@@ -421,8 +428,11 @@
     if (buffs.length) { const act = (cur().objBuffs || {})[o.id] || []; h += '<div class="im-sec">' + t('buffs') + '</div><div class="im-buffs">'; buffs.forEach(bf => { h += '<button class="im-buff' + (act.includes(bf.id) ? ' on' : '') + '" data-buff="' + bf.id + '">' + bf.icon + ' ' + esc(bf.label) + '</button>'; }); h += '</div>'; }
     const isTree = o.icone && o.icone.indexOf('tree') === 0;
     if (isTree) { const carries = (cur().treeCarry || {})[o.id] || []; h += '<div class="im-sec">' + t('carryTitle') + '</div><div class="im-carry">'; carries.forEach(mid => { const d = (cur().destacados || []).find(x => x.id === mid); h += '<span class="im-cchip">' + esc(d ? d.nome : '—') + '<button data-carryrm="' + mid + '">✕</button></span>'; }); if (carries.length < 2) h += '<button class="im-cadd" data-act="carryadd">+ ' + t('carryAdd') + '</button>'; h += '</div>'; }
+    const unlk = unlockedObjs.has(o.id);
+    h += '<button class="im-lockbtn' + (unlk ? ' on' : '') + '" data-act="lock">' + (unlk ? '🔓 ' + t('lockAction') : '🔒 ' + t('unlockAction')) + '</button>';
     h += '<div class="im-actions"><button class="im-link" data-act="link">' + t('menuLink') + '</button><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
     iconMenu.innerHTML = h; iconMenu.hidden = false; placeIconMenu(x, y);
+    iconMenu.querySelector('[data-act="lock"]').addEventListener('click', () => { if (unlockedObjs.has(o.id)) { unlockedObjs.delete(o.id); renderObjectives(); openObjMenu(o, x, y); } else { unlockedObjs.add(o.id); closeIconMenu(); renderObjectives(); toast(t('unlockedHint')); } });
     if (isTree) { const ca = iconMenu.querySelector('[data-act="carryadd"]'); if (ca) ca.addEventListener('click', () => { carryPickFor = o.id; closeIconMenu(); document.body.classList.add('linking'); toast(t('carryPick')); }); iconMenu.querySelectorAll('[data-carryrm]').forEach(bt => bt.addEventListener('click', () => { removeTreeCarry(o.id, bt.dataset.carryrm); openObjMenu(o, x, y); })); }
     iconMenu.querySelectorAll('.im-buff').forEach(bt => bt.addEventListener('click', () => { pushUndo(); cur().objBuffs = cur().objBuffs || {}; const arr = cur().objBuffs[o.id] = cur().objBuffs[o.id] || []; const id = bt.dataset.buff, i = arr.indexOf(id); if (i >= 0) arr.splice(i, 1); else arr.push(id); if (!arr.length) delete cur().objBuffs[o.id]; bt.classList.toggle('on', ((cur().objBuffs[o.id] || []).indexOf(id) >= 0)); renderObjectives(); saveProject(); }));
     const setHp = v => { v = Math.max(0, Math.min(100, Math.round(v / 5) * 5)); cur().objHp = cur().objHp || {}; if (v === 100) delete cur().objHp[o.id]; else cur().objHp[o.id] = v; iconMenu.querySelector('.im-range').value = v; iconMenu.querySelector('.im-hpv').textContent = v + '%'; iconMenu.querySelectorAll('.im-quick button').forEach(b => b.classList.toggle('on', +b.dataset.hp === v)); renderObjectives(); saveProject(); };
@@ -506,9 +516,11 @@
     CFG.objetivos.forEach(o => {
       if (!up[o.id]) return;
       const pos = objPos(o);
-      if (o.caminho) { const gp = gatePos(o); objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, gp.x * W, gp.y * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.06), dash: [4, 6], listening: false, name: 'treepath-' + o.id })); if (!state.present && state.tool === 'select') { const gh = new Konva.Group({ x: gp.x * W, y: gp.y * H, draggable: true, name: 'gate-' + o.id }); gh.add(new Konva.Rect({ width: os * 0.5, height: os * 0.9, offsetX: os * 0.25, offsetY: os * 0.45, cornerRadius: 2, fill: 'rgba(240,198,107,.18)', stroke: '#f0c66b', strokeWidth: Math.max(1.4, os * 0.06), dash: [3, 3] })); gh.add(new Konva.Text({ text: '⛩', fontSize: os * 0.5, offsetX: os * 0.25, offsetY: os * 0.3, opacity: 0.9 })); gh.dragBoundFunc(clampToStage); gh.on('dragstart', () => { pushUndo(); }); gh.on('dragmove', () => { const t2 = objLayer.findOne('.treepath-' + o.id); if (t2) t2.points([o.caminho.a[0] * W, o.caminho.a[1] * H, gh.x(), gh.y()]); const on = objLayer.findOne('.obj-' + o.id); if (on) { const tm = on.findOne('.tm'); if (tm) { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; const op = objPos(o); tm.findOne('Text').text(treeMeters(o, op.x, op.y) + 'm'); tm.offsetX(tm.getClientRect({ skipTransform: true }).width / 2); } } objLayer.batchDraw(); }); gh.on('dragend', () => { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; renderObjectives(); saveProject(); }); gh.on('mouseenter', () => stage.container().style.cursor = 'grab'); gh.on('mouseleave', () => stage.container().style.cursor = toolCursor()); objLayer.add(gh); } }
-      const canDrag = !state.present && state.tool === 'select';
+      const unlocked = unlockedObjs.has(o.id);
+      if (o.caminho) { const gp = gatePos(o); objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, gp.x * W, gp.y * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.06), dash: [4, 6], listening: false, name: 'treepath-' + o.id })); if (!state.present && state.tool === 'select' && unlocked) { const gh = new Konva.Group({ x: gp.x * W, y: gp.y * H, draggable: true, name: 'gate-' + o.id }); gh.add(new Konva.Rect({ width: os * 0.5, height: os * 0.9, offsetX: os * 0.25, offsetY: os * 0.45, cornerRadius: 2, fill: 'rgba(240,198,107,.18)', stroke: '#f0c66b', strokeWidth: Math.max(1.4, os * 0.06), dash: [3, 3] })); gh.add(new Konva.Text({ text: '⛩', fontSize: os * 0.5, offsetX: os * 0.25, offsetY: os * 0.3, opacity: 0.9 })); gh.dragBoundFunc(clampToStage); gh.on('dragstart', () => { pushUndo(); }); gh.on('dragmove', () => { const t2 = objLayer.findOne('.treepath-' + o.id); if (t2) t2.points([o.caminho.a[0] * W, o.caminho.a[1] * H, gh.x(), gh.y()]); const on = objLayer.findOne('.obj-' + o.id); if (on) { const tm = on.findOne('.tm'); if (tm) { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; const op = objPos(o); tm.findOne('Text').text(treeMeters(o, op.x, op.y) + 'm'); tm.offsetX(tm.getClientRect({ skipTransform: true }).width / 2); } } objLayer.batchDraw(); }); gh.on('dragend', () => { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; renderObjectives(); saveProject(); }); gh.on('mouseenter', () => stage.container().style.cursor = 'grab'); gh.on('mouseleave', () => stage.container().style.cursor = toolCursor()); objLayer.add(gh); } }
+      const canDrag = !state.present && state.tool === 'select' && unlocked;
       const g = new Konva.Group({ x: pos.x * W, y: pos.y * H, draggable: canDrag, name: 'obj-' + o.id });
+      if (unlocked) g.add(new Konva.Circle({ radius: os * 0.7, stroke: '#f0c66b', strokeWidth: Math.max(1, os * 0.05), dash: [3, 3], opacity: 0.85, listening: false }));
       const img = iconImgs[o.icone];
       // escala por tipo de ícone: torres 1.25x, boss 1.5x (o restante 1x)
       const osz = os * (o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : o.icone === 'boss' ? 1.5 : 1);
