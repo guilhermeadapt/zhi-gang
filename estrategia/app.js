@@ -261,7 +261,7 @@
   function hpBar(g, hp, topY, barW) { const bw = Math.max(barW, R), bh = Math.max(3.5, R * 0.2), by = topY + Math.max(2, R * 0.12); const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52'; g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.92)', stroke: 'rgba(255,255,255,.28)', strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.7, shadowOffsetY: 1 })); g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, shadowColor: hc, shadowBlur: 4, shadowOpacity: 0.5 })); g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, R * 0.4), fill: hc, align: 'center', width: bw + R * 2, offsetX: (bw + R * 2) / 2, y: by + bh + 1, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.9 })); }
   function makeMemberToken(d) {
     const p = partyById.get(d.pt), rc = roleColor(d.funcao), rm = Math.max(7, R * 0.48), dead = !!d.dead;
-    const g = new Konva.Group({ draggable: !state.present, id: 'mem-' + d.id, opacity: dead ? 0.5 : 1 });
+    const g = new Konva.Group({ draggable: !state.present && !d.locked, id: 'mem-' + d.id, opacity: dead ? 0.5 : 1 });
     g.add(new Konva.Circle({ radius: rm, fill: 'rgba(11,14,21,.42)', stroke: dead ? '#7a828f' : rc, strokeWidth: Math.max(1.2, rm * 0.13), shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.4, shadowOffsetY: 1 }));
     const ci = iconImgs[(CFG.classIcons || {})[d.funcao]];
     if (ci && ci.width) { const s = rm * 1.92, h = s * (ci.height / ci.width); g.add(new Konva.Image({ image: ci, width: s, height: h, offsetX: s / 2, offsetY: h / 2, opacity: dead ? 0.7 : 1 })); }
@@ -273,9 +273,10 @@
     const carryTree = carryTreeOf(d.id);
     let pinned = false;
     if (carryTree) { const o = objById.get(carryTree); if (o && (cur().objetivos || {})[carryTree]) { const tp = objPos(o), arr = (cur().treeCarry[carryTree] || []), idx = arr.indexOf(d.id), off = (idx === 0 ? -1 : 1) * rm * 1.5; g.position({ x: tp.x * W + off, y: tp.y * H + rm * 1.4 }); g.draggable(false); pinned = true; } }
+    if (d.locked && !pinned) g.add(new Konva.Circle({ radius: rm + 2.5, stroke: '#8b93a1', strokeWidth: Math.max(1, rm * 0.1), dash: [2, 3], opacity: 0.7, listening: false }));
     if (d.hp != null && d.hp < 100 && !dead) hpBar(g, d.hp, rm, rm * 2.2);
     g.on('click tap', e => { e.cancelBubble = true; if (Date.now() - lpAt < 400) return; g.moveToTop(); tokenLayer.batchDraw(); iconClicked('mem:' + d.id, () => openMemberMenu(d, g.x(), g.y())); });
-    if (!state.present && !pinned) {
+    if (!state.present && !pinned && !d.locked) {
       g.dragBoundFunc(clampToStage);
       // SEGURAR (long-press) = mostra/oculta o nome deste player
       g.on('mousedown touchstart', () => { clearTimeout(lpTimer); if (linkTempFrom || carryPickFor) return; lpTimer = setTimeout(() => { const dd = cur().destacados.find(x => x.id === d.id); if (dd) { lpAt = Date.now(); pushUndo(); dd.hideName = !dd.hideName; saveProject(); renderTokens(); } }, 420); });
@@ -430,6 +431,27 @@
     iconMenu.style.left = Math.max(8, Math.min(px, mapPanel.clientWidth - iconMenu.offsetWidth - 8)) + 'px';
     iconMenu.style.top = Math.max(8, Math.min(py, mapPanel.clientHeight - iconMenu.offsetHeight - 8)) + 'px';
   }
+  // menu de edição arrastável pelo cabeçalho (.im-hd) — delegado no container, sobrevive ao rebuild do conteúdo
+  if (iconMenu) {
+    let mdrag = null;
+    iconMenu.addEventListener('pointerdown', e => {
+      const hd = e.target.closest('.im-hd'); if (!hd || e.target.closest('button')) return;
+      const r = iconMenu.getBoundingClientRect();
+      mdrag = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+      try { iconMenu.setPointerCapture(e.pointerId); } catch (_) {}
+      e.preventDefault();
+    });
+    iconMenu.addEventListener('pointermove', e => {
+      if (!mdrag) return;
+      const pr = mapPanel.getBoundingClientRect();
+      const nx = Math.max(8, Math.min(e.clientX - pr.left - mdrag.dx, mapPanel.clientWidth - iconMenu.offsetWidth - 8));
+      const ny = Math.max(8, Math.min(e.clientY - pr.top - mdrag.dy, mapPanel.clientHeight - iconMenu.offsetHeight - 8));
+      iconMenu.style.left = nx + 'px'; iconMenu.style.top = ny + 'px';
+    });
+    const endMdrag = e => { if (mdrag) { mdrag = null; try { iconMenu.releasePointerCapture(e.pointerId); } catch (_) {} } };
+    iconMenu.addEventListener('pointerup', endMdrag);
+    iconMenu.addEventListener('pointercancel', endMdrag);
+  }
   function openObjMenu(o, x, y) {
     if (!iconMenu || state.present) return;
     hidePopover();
@@ -470,9 +492,11 @@
     h += '<div class="im-hp"><input type="range" class="im-range" min="0" max="100" step="5" value="' + chp + '"' + (d.dead ? ' disabled' : '') + '><span class="im-hpv">' + chp + '%</span></div>';
     h += '<div class="im-quick">' + [100, 75, 50, 25, 0].map(v => '<button data-hp="' + v + '"' + (chp === v ? ' class="on"' : '') + '>' + v + '</button>').join('') + '</div>';
     h += '<button class="im-namebtn' + (d.hideName ? '' : ' on') + '" data-act="name">' + (d.hideName ? '🚫 ' : '👁 ') + t('nameToggle') + '</button>';
+    h += '<button class="im-namebtn' + (d.locked ? ' on' : '') + '" data-act="lock">' + (d.locked ? '🔒 ' : '🔓 ') + t(d.locked ? 'unlockAction' : 'lockAction') + '</button>';
     h += '<div class="im-actions"><button class="im-link" data-act="link">' + t('menuLink') + '</button><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
     iconMenu.innerHTML = h; iconMenu.hidden = false; placeIconMenu(x, y);
     iconMenu.querySelector('[data-act="name"]').addEventListener('click', () => { pushUndo(); d.hideName = !d.hideName; closeIconMenu(); renderTokens(); saveProject(); });
+    iconMenu.querySelector('[data-act="lock"]').addEventListener('click', () => { pushUndo(); d.locked = !d.locked; closeIconMenu(); renderTokens(); saveProject(); });
     const setHp = v => { v = Math.max(0, Math.min(100, Math.round(v / 5) * 5)); if (v === 100) delete d.hp; else d.hp = v; iconMenu.querySelector('.im-range').value = v; iconMenu.querySelector('.im-hpv').textContent = v + '%'; iconMenu.querySelectorAll('.im-quick button').forEach(b => b.classList.toggle('on', +b.dataset.hp === v)); renderTokens(); saveProject(); };
     let pushed = false;
     iconMenu.querySelector('.im-range').addEventListener('input', e => { if (!pushed) { pushUndo(); pushed = true; } setHp(+e.target.value); });
@@ -552,11 +576,12 @@
       const abuffs = (cur().objBuffs || {})[o.id] || [];
       if (abuffs.length) {
         const defs = objBuffsFor(o), shown = abuffs.map(id => defs.find(d => d.id === id)).filter(Boolean);
-        // só o ícone com sombra atrás (sem círculo), colado no topo do ícone
-        const bs = Math.max(11, os * 0.62), gap = bs * 0.92, tot = (shown.length - 1) * gap, by = -iconH / 2 - bs * 0.4;
+        // ícone com sombra suave atrás (halo escuro difuso, sem anel/disco duro), colado no topo
+        const bs = Math.max(12, os * 0.66), gap = bs * 0.98, tot = (shown.length - 1) * gap, by = -iconH / 2 - bs * 0.3;
         shown.forEach((def, i) => {
           const bx = -tot / 2 + i * gap;
-          g.add(new Konva.Text({ text: def.icon, fontFamily: '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji","Twemoji Mozilla",sans-serif', fontSize: bs, x: bx - bs / 2, y: by - bs / 2, width: bs, height: bs, align: 'center', verticalAlign: 'middle', shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.95, shadowOffsetY: 1 }));
+          g.add(new Konva.Circle({ x: bx, y: by, radius: bs * 0.66, fill: 'rgba(9,12,18,0.82)', stroke: 'rgba(255,255,255,0.14)', strokeWidth: Math.max(0.6, bs * 0.05), shadowColor: '#000', shadowBlur: bs * 0.5, shadowOpacity: 0.6 }));
+          g.add(new Konva.Text({ text: def.icon, fontFamily: '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji","Twemoji Mozilla",sans-serif', fontSize: bs, x: bx - bs / 2, y: by - bs / 2, width: bs, height: bs, align: 'center', verticalAlign: 'middle', shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.85 }));
         });
       }
       g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); objLayer.batchDraw(); iconClicked('obj:' + o.id, () => openObjMenu(o, g.x(), g.y())); });
