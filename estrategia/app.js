@@ -447,11 +447,19 @@
   // raio aproximado de cada ícone (pra seta parar na borda, não por cima)
   function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 0.94 : (o && o.icone === 'boss' ? 1.125 : 1); return os * sc * 0.55; } return R; }
   function linkPts(l) { const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (!a || !b) return null; const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, ra = anchorRadius(l.a), rb = anchorRadius(l.b); if (len <= ra + rb + 6) return [a.x, a.y, b.x, b.y]; return [a.x + ux * ra, a.y + uy * ra, b.x - ux * rb, b.y - uy * rb]; }
+  function isTether(l) { const ta = (l.a || '').split(':')[0], tb = (l.b || '').split(':')[0]; return (ta === 'pt' && tb === 'mem') || (ta === 'mem' && tb === 'pt'); }
   function renderLinks() {
     const dash = [Math.max(7, R * 0.5), Math.max(5, R * 0.34)], w = Math.max(2.8, R * 0.2);
+    const tdash = [Math.max(4, R * 0.3), Math.max(4, R * 0.3)], tw = Math.max(1.4, R * 0.1);
     (cur() ? cur().links : []).forEach(l => {
       const pts = linkPts(l); if (!pts) return;
       const col = anchorColor(l.a);
+      if (isTether(l)) {
+        // amarração PT↔membro: fina e discreta (só indica pertencimento, não é estratégica)
+        const arr = new Konva.Arrow({ name: 'link-' + l.id, points: pts, stroke: col, fill: col, strokeWidth: tw, pointerLength: Math.max(4, R * 0.3), pointerWidth: Math.max(4, R * 0.3), opacity: 0.5, dash: tdash, lineCap: 'round', hitStrokeWidth: Math.max(12, R * 0.9), listening: !state.present });
+        if (!state.present) { arr.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; removeLink(l.id); }); arr.on('mouseenter', () => stage.container().style.cursor = 'pointer'); arr.on('mouseleave', () => stage.container().style.cursor = toolCursor()); }
+        tokenLayer.add(arr); return;
+      }
       // sublinha escura (contorno) — faz a seta se destacar em qualquer terreno
       tokenLayer.add(new Konva.Arrow({ name: 'linkbg-' + l.id, points: pts, stroke: '#0a0c11', fill: '#0a0c11', strokeWidth: w + 2.6, pointerLength: Math.max(8, R * 0.56), pointerWidth: Math.max(8, R * 0.56), opacity: 0.8, dash, lineCap: 'round', listening: false }));
       const arr = new Konva.Arrow({ name: 'link-' + l.id, points: pts, stroke: col, fill: col, strokeWidth: w, pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), opacity: 1, dash, lineCap: 'round', hitStrokeWidth: Math.max(16, R * 1.1), listening: !state.present });
