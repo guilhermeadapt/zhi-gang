@@ -319,8 +319,8 @@
     const n = membersOf(t.pt, false).filter(m => !placed.has(m.nome)).length;
     if (n) { const b = new Konva.Label({ x: pr * 0.72, y: pr * 0.72 }); b.add(new Konva.Tag({ fill: p.cor, cornerRadius: pr * 0.5 })); b.add(new Konva.Text({ text: String(n), fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: Math.round(pr * 0.55), fill: '#0a0c11', padding: Math.max(1.5, pr * 0.16) })); g.add(b); }
     const pIc = state.ptIcon[t.pt];
-    if (pIc && pIc.indexOf('asset:') === 0) { const im = iconImgs[pIc.slice(6)]; if (im && im.width) { const s = pr * 1.5, h = s * (im.height / im.width); g.add(new Konva.Image({ image: im, width: s, height: h, offsetX: s / 2, offsetY: h / 2, y: -pr * 1.05, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); } }
-    else if (pIc) g.add(new Konva.Text({ text: pIc, fontSize: pr, align: 'center', verticalAlign: 'middle', width: pr * 3, height: pr * 1.4, offsetX: pr * 1.5, offsetY: pr * 0.7, y: -pr * 0.9 }));
+    if (pIc && pIc.indexOf('asset:') === 0) { const im = iconImgs[pIc.slice(6)]; if (im && im.width) { const s = pr * 1.1, h = s * (im.height / im.width); g.add(new Konva.Image({ image: im, width: s, height: h, offsetX: s / 2, offsetY: h / 2, y: -pr * 0.95, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); } }
+    else if (pIc) g.add(new Konva.Text({ text: pIc, fontSize: pr * 0.8, align: 'center', verticalAlign: 'middle', width: pr * 3, height: pr * 1.4, offsetX: pr * 1.5, offsetY: pr * 0.7, y: -pr * 0.82 }));
     g.position({ x: t.xf * W, y: t.yf * H });
     // barra de HP da PT (quando < 100)
     if (t.hp != null && t.hp < 100) hpBar(g, t.hp, pr + 4, pr * 2.1);
@@ -375,9 +375,9 @@
       // nome oculto (segurou pra esconder): bolinha no canto inferior direito com o nº da PT
       const num = (d.pt || '').replace(/\D/g, '');
       if (num) {
-        const br = Math.max(4, rm * 0.4), bx = rm * 0.78, by = rm * 0.78;
-        g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: p ? p.cor : '#D9A441', opacity: 0.9, shadowColor: '#000', shadowBlur: 1.5, shadowOpacity: 0.4 }));
-        g.add(new Konva.Text({ text: num, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: br * 1.25, fill: '#10131a', align: 'center', verticalAlign: 'middle', width: br * 2, height: br * 2, offsetX: br, offsetY: br, x: bx, y: by }));
+        const br = Math.max(3.2, rm * 0.32), bx = rm * 0.82, by = rm * 0.82;
+        g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: p ? p.cor : '#D9A441', opacity: 0.9, shadowColor: '#000', shadowBlur: 1.2, shadowOpacity: 0.4 }));
+        g.add(new Konva.Text({ text: num, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: Math.max(6.5, br * 1.3), fill: '#10131a', align: 'center', verticalAlign: 'middle', width: br * 2, height: br * 2, offsetX: br, offsetY: br, x: bx, y: by }));
       }
     }
     g.position({ x: d.xf * W, y: d.yf * H });
