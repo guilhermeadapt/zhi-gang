@@ -139,6 +139,10 @@
     .mark-picker > header{display:flex;align-items:baseline;gap:8px;padding:10px 12px 8px;border-bottom:1px solid var(--line-soft);position:sticky;top:0;background:rgba(12,15,22,.98)}
     .mark-picker > header b{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
     .mark-picker > header span{font-size:9.5px;color:var(--muted)}
+    .mark-picker > header .mk-x{margin-left:auto;flex:none;width:22px;height:22px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);border-radius:6px;cursor:pointer;font-size:11px;line-height:1}
+    .mark-picker > header .mk-x:hover{color:var(--text);border-color:var(--line)}
+    .dt-pop .dtpop-x{position:absolute;top:4px;right:4px;width:18px;height:18px;border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:11px;line-height:1;border-radius:5px;z-index:2}
+    .dt-pop .dtpop-x:hover{color:var(--text);background:rgba(255,255,255,.06)}
     .mk-grid{padding:6px 10px 12px}
     .mk-h{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:9px 2px 5px}
     .mk-row{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
@@ -755,12 +759,12 @@
           <button class="dt" id="clearDraw" title="Limpar desenhos e ícones do cenário"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg><span class="dt-lbl" data-i18n="tool_clear">Limpar</span></button>
           <div class="dt-sep"></div>
           <button class="dt on" id="namesTgl" title="Mostrar / ocultar nomes dos players"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2M9 5v14M7 19h4"/><path d="M14 19l3-8 3 8M15 16h4"/></svg><span class="dt-lbl" data-i18n="tool_names">Nomes</span></button>
-          <div class="dt-pop" id="dtColorPop" hidden><div class="dt-sw-grid" id="dtColors"></div><div class="dt-hex"><input id="dtHex" maxlength="7" placeholder="#hex" spellcheck="false" /><button id="dtHexApply" title="Aplicar">✓</button></div></div>
-          <div class="dt-pop dt-wpop" id="dtWidthPop" hidden><div id="dtWidthOpts"></div></div>
+          <div class="dt-pop" id="dtColorPop" hidden><button class="dtpop-x" id="dtColorX" title="Fechar" aria-label="Fechar">✕</button><div class="dt-sw-grid" id="dtColors"></div><div class="dt-hex"><input id="dtHex" maxlength="7" placeholder="#hex" spellcheck="false" /><button id="dtHexApply" title="Aplicar">✓</button></div></div>
+          <div class="dt-pop dt-wpop" id="dtWidthPop" hidden><button class="dtpop-x" id="dtWidthX" title="Fechar" aria-label="Fechar">✕</button><div id="dtWidthOpts"></div></div>
         </div>
 
         <div class="mark-picker" id="markPicker" hidden>
-          <header><b>Ícones</b><span>escolha e clique no mapa</span></header>
+          <header><b data-i18n="iconsTitle">Ícones</b><span data-i18n="iconsHint">escolha e clique no mapa</span><button class="mk-x" id="markClose" title="Fechar" aria-label="Fechar">✕</button></header>
           <div class="mk-grid" id="markGrid"></div>
         </div>
 
@@ -938,7 +942,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=61"></script>
-  <script src="./app.js?v=61"></script>
+  <script src="./config.js?v=62"></script>
+  <script src="./app.js?v=62"></script>
 </body>
 </html>
