@@ -113,6 +113,17 @@
   let W = 10, H = 10, R = 20;
   const mapImg = new Image(), iconImgs = {}, iconKeys = Object.keys(CFG.assets.icons);
 
+  // ---- selos de buff desenhados como SVG (emoji não renderiza no canvas) ----
+  const BUFF_ICONS = {
+    cityprot:  { color: '#2a9d8f', glyph: '<path d="M20 7l11 4v8.5c0 7.6-11 12.5-11 12.5S9 27.1 9 19.5V11z" fill="#fff"/><path d="M14.5 20l4 4 7.5-8.5" fill="none" stroke="#2a9d8f" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>' },
+    ygap:      { color: '#e0503f', glyph: '<path d="M20 6l3.2 3.4v13.4l-3.2 3-3.2-3V9.4z" fill="#fff"/><rect x="12.5" y="24.4" width="15" height="3.2" rx="1.6" fill="#fff"/><rect x="18.4" y="27.4" width="3.2" height="6" rx="1.6" fill="#fff"/>' },
+    hairpull:  { color: '#d94f8a', glyph: '<g fill="none" stroke="#fff" stroke-width="3.1" stroke-linecap="round"><path d="M14 11c1.4 6 1.9 12 .8 18"/><path d="M20 9c1.3 7 1.3 13 .2 20"/><path d="M26 11c-1.1 6-1.2 12-2.2 17"/></g>' },
+    sprint:    { color: '#38b6e9', glyph: '<g stroke="#fff" stroke-width="3.4" stroke-linecap="round"><path d="M8 20h9"/><path d="M9 14h6.5"/><path d="M9 26h6.5"/></g><path d="M18 12l9 8-9 8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>' },
+    relentless:{ color: '#e6a12e', glyph: '<circle cx="20" cy="25" r="6.6" fill="#fff"/><circle cx="12" cy="18.5" r="3" fill="#fff"/><circle cx="20" cy="14" r="3" fill="#fff"/><circle cx="28" cy="18.5" r="3" fill="#fff"/>' },
+  };
+  const buffImgs = {}, buffKeys = Object.keys(BUFF_ICONS);
+  buffKeys.forEach(k => { const b = BUFF_ICONS[k]; const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="' + b.color + '" stroke="#0c0f16" stroke-width="2.4"/>' + b.glyph + '</svg>'; const im = new Image(); buffImgs[k] = im; im.onload = () => { try { renderObjectives(); } catch (_) {} }; im.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); });
+
   // ---- helpers ----
   function uid() { return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function cur() { return state.scenarios.find(s => s.id === state.currentId) || state.scenarios[0]; }
@@ -576,12 +587,11 @@
       const abuffs = (cur().objBuffs || {})[o.id] || [];
       if (abuffs.length) {
         const defs = objBuffsFor(o), shown = abuffs.map(id => defs.find(d => d.id === id)).filter(Boolean);
-        // ícone com sombra suave atrás (halo escuro difuso, sem anel/disco duro), colado no topo
-        const bs = Math.max(12, os * 0.66), gap = bs * 0.98, tot = (shown.length - 1) * gap, by = -iconH / 2 - bs * 0.3;
+        // selos desenhados (SVG) — compactos, colados no topo do ícone
+        const bs = Math.max(15, os * 0.7), gap = bs * 0.92, tot = (shown.length - 1) * gap, by = -iconH / 2 - bs * 0.42;
         shown.forEach((def, i) => {
-          const bx = -tot / 2 + i * gap;
-          g.add(new Konva.Circle({ x: bx, y: by, radius: bs * 0.66, fill: 'rgba(9,12,18,0.82)', stroke: 'rgba(255,255,255,0.14)', strokeWidth: Math.max(0.6, bs * 0.05), shadowColor: '#000', shadowBlur: bs * 0.5, shadowOpacity: 0.6 }));
-          g.add(new Konva.Text({ text: def.icon, fontFamily: '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji","Twemoji Mozilla",sans-serif', fontSize: bs, x: bx - bs / 2, y: by - bs / 2, width: bs, height: bs, align: 'center', verticalAlign: 'middle', shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.85 }));
+          const bx = -tot / 2 + i * gap, bim = buffImgs[def.id];
+          if (bim && bim.width) g.add(new Konva.Image({ image: bim, width: bs, height: bs, x: bx - bs / 2, y: by - bs / 2, shadowColor: '#000', shadowBlur: bs * 0.28, shadowOpacity: 0.55, shadowOffsetY: 1 }));
         });
       }
       g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); objLayer.batchDraw(); iconClicked('obj:' + o.id, () => openObjMenu(o, g.x(), g.y())); });
