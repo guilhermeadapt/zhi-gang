@@ -303,20 +303,18 @@
     const carryUp = carryTree ? objById.get(carryTree) : null;
     const carryArr = (carryUp && (cur().objetivos || {})[carryTree]) ? (cur().treeCarry[carryTree] || []) : [];
     const carryIdx = carryArr.indexOf(d.id), isCarry = carryIdx >= 0;
+    const hasHp = d.hp != null && d.hp < 100 && !dead;
     if (state.showNames && !d.hideName) {
-      const fs = Math.max(7, R * 0.29);
-      const full = d.nome, short = full.length > 6 ? full.slice(0, 5) + '…' : full;
-      let lbl;
-      if (isCarry) { // carry: nome centralizado embaixo, fundo opaco (2 carries não borram um no outro)
-        lbl = new Konva.Label({ y: rm + 2 });
-        lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.9)', cornerRadius: 3, stroke: rc, strokeWidth: 0.8 }));
-      } else {
-        lbl = new Konva.Label({ x: rm + 3, y: -fs * 0.7 });
-        lbl.add(new Konva.Tag({ fill: 'rgba(8,10,14,.42)', cornerRadius: 3 }));
-      }
-      const nmTx = new Konva.Text({ text: short, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: fs, fill: dead ? '#c9cdd4' : '#EDEBE4', padding: 2.5, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.55 });
+      // chip de nome: sólido, alto contraste, SEMPRE centralizado embaixo (previsível,
+      // não colide na horizontal com vizinhos). Borda na cor da função.
+      const fs = Math.max(8, R * 0.3);
+      const full = d.nome, short = full.length > 7 ? full.slice(0, 6) + '…' : full;
+      const ny = rm + (hasHp ? rm * 1.9 : rm * 0.32);
+      const lbl = new Konva.Label({ y: ny });
+      lbl.add(new Konva.Tag({ fill: 'rgba(10,12,17,.92)', cornerRadius: 3, stroke: dead ? '#5b626d' : rc, strokeWidth: 1 }));
+      const nmTx = new Konva.Text({ text: short, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: fs, fill: dead ? '#c9cdd4' : '#F2EFE6', padding: 3, letterSpacing: 0.2, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.7 });
       lbl.add(nmTx); g.add(lbl);
-      const recenter = () => { if (isCarry) lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2); };
+      const recenter = () => lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2);
       recenter();
       if (full !== short) { // nome longo: mostra completo ao passar o mouse
         g.on('mouseenter.nm', () => { nmTx.text(full); recenter(); tokenLayer.batchDraw(); });
@@ -327,9 +325,10 @@
     // se é carry de uma árvore up, gruda embaixo dela (empilhado, seguindo a árvore)
     let pinned = false;
     if (isCarry) {
-      const tp = objPos(carryUp), os2 = Math.max(13, W * 0.025), treeHalf = os2 * 0.9;
-      const step = rm * 2.6 + Math.max(7, R * 0.29) * 1.6; // altura do token + nome
-      g.position({ x: tp.x * W, y: tp.y * H + treeHalf + rm + carryIdx * step });
+      // carries lado a lado, tucados logo abaixo da árvore (nomes embaixo não colidem)
+      const tp = objPos(carryUp), os2 = Math.max(13, W * 0.025), treeHalf = os2 * 0.72;
+      const off = (carryIdx === 0 ? -1 : 1) * (rm + Math.max(15, R * 1.05));
+      g.position({ x: tp.x * W + off, y: tp.y * H + treeHalf + rm });
       g.draggable(false); pinned = true;
     }
     if (d.locked && !pinned) g.add(new Konva.Circle({ radius: rm + 2.5, stroke: '#8b93a1', strokeWidth: Math.max(1, rm * 0.1), dash: [2, 3], opacity: 0.7, listening: false }));
@@ -409,8 +408,8 @@
     bgLayer.batchDraw();
     updateSideChip();
   }
-  function updateSideChip() { const c = $('sideChip'); if (!c) return; const west = state.side === 'blue'; c.className = 'side-chip' + (state.side ? (' on ' + state.side) : ''); c.innerHTML = state.side ? ('<b>' + t('usLbl') + '</b> ' + (west ? '🔵 ' + t('westLbl') : '🔴 ' + t('eastLbl'))) : t('sidePick'); }
-  function cycleSide() { state.side = state.side === 'blue' ? 'red' : (state.side === 'red' ? null : 'blue'); renderSide(); saveProject(); }
+  function updateSideChip() { const c = $('sideChip'); if (!c) return; c.querySelectorAll('.sc-seg').forEach(b => b.classList.toggle('on', state.side === b.dataset.side)); const lbl = $('scLbl'); if (lbl) lbl.textContent = t('usLbl').replace(/:$/, ''); }
+  function setSide(v) { state.side = (state.side === v ? null : v); renderSide(); saveProject(); }
   function clampToStage(pos) { return { x: Math.max(0, Math.min(W, pos.x)), y: Math.max(0, Math.min(H, pos.y)) }; }
   function ptPos(pt) { const t = (cur().tokens || []).find(x => x.pt === pt); return t ? { x: t.xf * W, y: t.yf * H } : null; }
   function renderTokens() {
@@ -434,18 +433,21 @@
   }
   function anchorColor(ref) { const i = (ref || '').indexOf(':'); if (i < 0) return '#D9A441'; const ty = ref.slice(0, i), id = ref.slice(i + 1); if (ty === 'pt') { const p = partyById.get(id); return p ? p.cor : '#D9A441'; } if (ty === 'mem') { const d = (cur().destacados || []).find(x => x.id === id); return d ? roleColor(d.funcao) : '#D9A441'; } if (ty === 'obj') { const o = objById.get(id); return o ? objStyle(o).c : '#D9A441'; } return '#D9A441'; }
   // raio aproximado de cada ícone (pra seta parar na borda, não por cima)
-  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 0.94 : (o && o.icone === 'boss' ? 1.5 : 1); return os * sc * 0.55; } return R; }
+  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 0.94 : (o && o.icone === 'boss' ? 1.125 : 1); return os * sc * 0.55; } return R; }
   function linkPts(l) { const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (!a || !b) return null; const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, ra = anchorRadius(l.a), rb = anchorRadius(l.b); if (len <= ra + rb + 6) return [a.x, a.y, b.x, b.y]; return [a.x + ux * ra, a.y + uy * ra, b.x - ux * rb, b.y - uy * rb]; }
   function renderLinks() {
+    const dash = [Math.max(7, R * 0.5), Math.max(5, R * 0.34)], w = Math.max(2.8, R * 0.2);
     (cur() ? cur().links : []).forEach(l => {
       const pts = linkPts(l); if (!pts) return;
       const col = anchorColor(l.a);
-      const arr = new Konva.Arrow({ name: 'link-' + l.id, points: pts, stroke: col, fill: col, strokeWidth: Math.max(2.4, R * 0.17), pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), opacity: 0.95, dash: [Math.max(7, R * 0.5), Math.max(5, R * 0.34)], hitStrokeWidth: Math.max(16, R * 1.1), listening: !state.present, shadowColor: '#000', shadowBlur: Math.max(3, R * 0.28), shadowOpacity: 0.55, shadowOffsetY: 1 });
+      // sublinha escura (contorno) — faz a seta se destacar em qualquer terreno
+      tokenLayer.add(new Konva.Arrow({ name: 'linkbg-' + l.id, points: pts, stroke: '#0a0c11', fill: '#0a0c11', strokeWidth: w + 2.6, pointerLength: Math.max(8, R * 0.56), pointerWidth: Math.max(8, R * 0.56), opacity: 0.8, dash, lineCap: 'round', listening: false }));
+      const arr = new Konva.Arrow({ name: 'link-' + l.id, points: pts, stroke: col, fill: col, strokeWidth: w, pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), opacity: 1, dash, lineCap: 'round', hitStrokeWidth: Math.max(16, R * 1.1), listening: !state.present });
       if (!state.present) { arr.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; removeLink(l.id); }); arr.on('mouseenter', () => stage.container().style.cursor = 'pointer'); arr.on('mouseleave', () => stage.container().style.cursor = toolCursor()); }
       tokenLayer.add(arr);
     });
   }
-  function updateLinks() { (cur() ? cur().links : []).forEach(l => { const ln = tokenLayer.findOne('.link-' + l.id); if (!ln) return; const pts = linkPts(l); if (pts) ln.points(pts); }); if (linkTempFrom) updateLinkTemp(); tokenLayer.batchDraw(); }
+  function updateLinks() { (cur() ? cur().links : []).forEach(l => { const pts = linkPts(l); if (!pts) return; const ln = tokenLayer.findOne('.link-' + l.id); if (ln) ln.points(pts); const bg = tokenLayer.findOne('.linkbg-' + l.id); if (bg) bg.points(pts); }); if (linkTempFrom) updateLinkTemp(); tokenLayer.batchDraw(); }
   function updateConnectors() { updateLinks(); }
   function removeLink(id) { pushUndo(); cur().links = (cur().links || []).filter(l => l.id !== id); renderTokens(); saveProject(); toast('Vínculo removido'); }
   function pruneLinksFor(ref) { const s = cur(); if (s.links) s.links = s.links.filter(l => l.a !== ref && l.b !== ref); }
@@ -627,7 +629,7 @@
       const img = iconImgs[o.icone];
       // escala por tipo de ícone: torres 1.25x, boss 1.5x (o restante 1x)
       const isTower = o.icone && o.icone.indexOf('tower') === 0;
-      const osz = os * (isTower ? 0.94 : o.icone === 'boss' ? 1.5 : 1);
+      const osz = os * (isTower ? 0.94 : o.icone === 'boss' ? 1.125 : 1);
       let iconH = osz;
       if (img && img.width) { const h = osz * (img.height / img.width); iconH = h; g.add(new Konva.Image({ image: img, width: osz, height: h, offsetX: osz / 2, offsetY: h / 2, scaleX: o.flip ? -1 : 1, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 })); }
       else { const st = objStyle(o); iconH = os * 0.88; g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.62)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.emoji ? 0.5 : st.t.length > 1 ? 0.3 : 0.42), fill: st.emoji ? undefined : st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
@@ -1096,7 +1098,7 @@
     document.addEventListener('click', e => { if (!e.target.closest('#dtColorPop') && !e.target.closest('#dtColorBtn')) dtColorPop.hidden = true; if (!e.target.closest('#dtWidthPop') && !e.target.closest('#dtWidthBtn')) dtWidthPop.hidden = true; });
     undoBtn.addEventListener('click', doUndo); redoBtn.addEventListener('click', doRedo); clearDraw.addEventListener('click', clearDrawings);
     { const nt = $('namesTgl'); if (nt) { nt.classList.toggle('on', state.showNames); nt.addEventListener('click', () => { state.showNames = !state.showNames; nt.classList.toggle('on', state.showNames); renderTokens(); saveProject(); }); } }
-    { const sc = $('sideChip'); if (sc) sc.addEventListener('click', cycleSide); }
+    { const sc = $('sideChip'); if (sc) sc.querySelectorAll('.sc-seg').forEach(b => b.addEventListener('click', () => setSide(b.dataset.side))); }
     { const rt = $('rosterTabs'); if (rt) rt.addEventListener('click', e => { const b = e.target.closest('button[data-rtab]'); if (b) { rosterSideView = b.dataset.rtab; renderSidebar(); } }); }
     objBtn.addEventListener('click', () => toggleObjPanel()); objClose.addEventListener('click', () => toggleObjPanel(false));
 
