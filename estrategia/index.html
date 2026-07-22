@@ -673,7 +673,9 @@
     .guide-sec.highlight h3{color:var(--gold-2)}
     .guide-sec p{margin:0 0 6px;font-size:13px;line-height:1.6;color:#cdd2da}
     .guide-sec ul{margin:4px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+    .guide-sec ol{margin:6px 0 8px;padding-left:20px;display:flex;flex-direction:column;gap:5px;list-style:decimal}
     .guide-sec li{font-size:13px;line-height:1.55;color:#cdd2da}
+    .guide-sec ol li::marker{color:var(--gold-2);font-weight:700}
     .guide-sec b{color:var(--text)}
     .guide-sec code{font-family:ui-monospace,monospace;font-size:12px;background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 5px;color:var(--gold-2)}
     .tagimp{font-family:var(--disp);font-weight:700;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:2px 7px;border-radius:999px}
@@ -862,7 +864,8 @@
         <div class="paste-col">
           <label for="rosterPaste" data-i18n="discordMontage">Montagem do Discord</label>
           <textarea id="rosterPaste" placeholder='Cole aqui o JSON do raid-helper (o bloco { "date":..., "signUps":[...] }) OU texto simples:&#10;PT1 — Fulano (Tank), Ciclano (DPS)&#10;PT2 — …&#10;Reservas — Sicrano (DPS)'></textarea>
-          <button class="rbtn gold" id="parseBtn" style="justify-content:center" data-i18n="process">Processar</button>
+          <button class="rbtn gold" id="parseBtn" style="justify-content:center" data-i18n="process">Processar (substitui)</button>
+          <button class="rbtn" id="mergeBtn" style="justify-content:center" data-i18n="merge" data-i18n-title="mergeHint" title="Mantém quem já está montado, adiciona os novos como reserva e tira quem não está no novo JSON.">Mesclar com atual</button>
           <div class="parse-msg" id="parseMsg"></div>
           <p class="hint">Detecta o JSON do raid-helper (Ranged/Melee → DPS; Absence → ausente; Bench → reserva). Depois ajuste na grade e distribua nas PTs.</p>
           <button class="rbtn" id="autoBtn" style="justify-content:center" title="Distribui os escalados nas PTs equilibrando funções" data-i18n="autoMount">⚙ Auto-montar PTs</button>
@@ -950,7 +953,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=64"></script>
-  <script src="./app.js?v=64"></script>
+  <script src="./config.js?v=65"></script>
+  <script src="./app.js?v=65"></script>
 </body>
 </html>
