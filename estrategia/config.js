@@ -54,6 +54,14 @@ const WWM = {
     ],
   },
 
+  // info de mecânica mostrada ao tocar no objetivo (por tipo de ícone)
+  objInfo: {
+    jungle: '💰 780 fun coins ao matar.',
+    tower:  '💰 Gera 200 fun coins a cada 30s enquanto viva.',
+    goose:  '🔓 Libera após cair 1 torre. Dá muito dano — cada torre levada reduz o dano e a resistência dele.',
+    tree:   '🔓 Libera após o Ganso morrer.',
+  },
+
   // ícone de classe por função (tokens de membro destacado)
   classIcons: { Tank: 'tank', DPS: 'dps', Healer: 'healer' },
 

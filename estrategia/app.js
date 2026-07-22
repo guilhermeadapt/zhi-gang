@@ -214,18 +214,19 @@
   // ---- tokens de PT + membros destacados + conectores ----
   function makePtToken(t) {
     const p = partyById.get(t.pt);
+    const pr = Math.max(7, R * 0.78);   // PTs menores que o raio base
     const g = new Konva.Group({ draggable: !state.present, name: 'pt-' + t.pt });
-    g.add(new Konva.Circle({ radius: R + 2, fill: p.cor, opacity: 0.14 }));
-    g.add(new Konva.Circle({ radius: R, fill: 'rgba(11,14,21,.55)', stroke: p.cor, strokeWidth: Math.max(1.6, R * 0.1), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.32, shadowOffsetY: 1 }));
-    g.add(new Konva.Text({ text: t.pt, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(R * 0.72), fill: p.cor, align: 'center', verticalAlign: 'middle', width: R * 2.4, height: R * 1.4, offsetX: R * 1.2, offsetY: R * 0.7, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.7 }));
+    g.add(new Konva.Circle({ radius: pr + 2, fill: p.cor, opacity: 0.14 }));
+    g.add(new Konva.Circle({ radius: pr, fill: 'rgba(11,14,21,.55)', stroke: p.cor, strokeWidth: Math.max(1.4, pr * 0.1), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.32, shadowOffsetY: 1 }));
+    g.add(new Konva.Text({ text: t.pt, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(pr * 0.72), fill: p.cor, align: 'center', verticalAlign: 'middle', width: pr * 2.4, height: pr * 1.4, offsetX: pr * 1.2, offsetY: pr * 0.7, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.7 }));
     const n = membersOf(t.pt, false).length;
-    if (n) { const b = new Konva.Label({ x: R * 0.7, y: R * 0.7 }); b.add(new Konva.Tag({ fill: p.cor, cornerRadius: R * 0.5 })); b.add(new Konva.Text({ text: String(n), fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(R * 0.55), fill: '#0a0c11', padding: Math.max(1.5, R * 0.16) })); g.add(b); }
+    if (n) { const b = new Konva.Label({ x: pr * 0.72, y: pr * 0.72 }); b.add(new Konva.Tag({ fill: p.cor, cornerRadius: pr * 0.5 })); b.add(new Konva.Text({ text: String(n), fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(pr * 0.55), fill: '#0a0c11', padding: Math.max(1.5, pr * 0.16) })); g.add(b); }
     const pIc = state.ptIcon[t.pt];
-    if (pIc && pIc.indexOf('asset:') === 0) { const im = iconImgs[pIc.slice(6)]; if (im && im.width) { const s = R * 1.5, h = s * (im.height / im.width); g.add(new Konva.Image({ image: im, width: s, height: h, offsetX: s / 2, offsetY: h / 2, y: -R * 1.05, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); } }
-    else if (pIc) g.add(new Konva.Text({ text: pIc, fontSize: R, align: 'center', verticalAlign: 'middle', width: R * 3, height: R * 1.4, offsetX: R * 1.5, offsetY: R * 0.7, y: -R * 0.9 }));
+    if (pIc && pIc.indexOf('asset:') === 0) { const im = iconImgs[pIc.slice(6)]; if (im && im.width) { const s = pr * 1.5, h = s * (im.height / im.width); g.add(new Konva.Image({ image: im, width: s, height: h, offsetX: s / 2, offsetY: h / 2, y: -pr * 1.05, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); } }
+    else if (pIc) g.add(new Konva.Text({ text: pIc, fontSize: pr, align: 'center', verticalAlign: 'middle', width: pr * 3, height: pr * 1.4, offsetX: pr * 1.5, offsetY: pr * 0.7, y: -pr * 0.9 }));
     g.position({ x: t.xf * W, y: t.yf * H });
     // barra de HP da PT (quando < 100)
-    if (t.hp != null && t.hp < 100) hpBar(g, t.hp, R + 4, R * 2.1);
+    if (t.hp != null && t.hp < 100) hpBar(g, t.hp, pr + 4, pr * 2.1);
     g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); tokenLayer.batchDraw(); iconClicked('pt:' + t.pt, () => togglePopover(t.pt, g.x(), g.y())); });
     if (!state.present) {
       g.dragBoundFunc(clampToStage);
@@ -346,7 +347,7 @@
   }
   function anchorColor(ref) { const i = (ref || '').indexOf(':'); if (i < 0) return '#D9A441'; const ty = ref.slice(0, i), id = ref.slice(i + 1); if (ty === 'pt') { const p = partyById.get(id); return p ? p.cor : '#D9A441'; } if (ty === 'mem') { const d = (cur().destacados || []).find(x => x.id === id); return d ? roleColor(d.funcao) : '#D9A441'; } if (ty === 'obj') { const o = objById.get(id); return o ? objStyle(o).c : '#D9A441'; } return '#D9A441'; }
   // raio aproximado de cada ícone (pra seta parar na borda, não por cima)
-  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R + 5; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : (o && o.icone === 'boss' ? 1.5 : 1); return os * sc * 0.55; } return R; }
+  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : (o && o.icone === 'boss' ? 1.5 : 1); return os * sc * 0.55; } return R; }
   function linkPts(l) { const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (!a || !b) return null; const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, ra = anchorRadius(l.a), rb = anchorRadius(l.b); if (len <= ra + rb + 6) return [a.x, a.y, b.x, b.y]; return [a.x + ux * ra, a.y + uy * ra, b.x - ux * rb, b.y - uy * rb]; }
   function renderLinks() {
     (cur() ? cur().links : []).forEach(l => {
@@ -411,6 +412,8 @@
     const st = objStyle(o), hp = (cur().objHp || {})[o.id];
     const cur_hp = hp == null ? 100 : hp;
     let h = '<div class="im-hd"><span class="im-dot" style="background:' + st.c + '"></span><b>' + esc(o.rotulo || o.id) + '</b><button class="im-x" data-act="close">✕</button></div>';
+    const info = objInfoFor(o);
+    if (info) h += '<div class="im-info">' + esc(info) + '</div>';
     h += '<div class="im-sec">' + t('menuHp') + '</div>';
     h += '<div class="im-hp"><input type="range" class="im-range" min="0" max="100" step="5" value="' + cur_hp + '"><span class="im-hpv">' + cur_hp + '%</span></div>';
     h += '<div class="im-quick">' + [100, 75, 50, 25, 0].map(v => '<button data-hp="' + v + '"' + (cur_hp === v ? ' class="on"' : '') + '>' + v + '</button>').join('') + '</div>';
@@ -494,6 +497,7 @@
   const OBJ_STYLE = { tower_blue: { c: '#6aa8e0', t: 'T' }, tower_red: { c: '#e0685a', t: 'T' }, goose_blue: { c: '#5ec8d8', t: 'G' }, goose_red: { c: '#e0685a', t: 'G' }, tree_blue: { c: '#5bc98a', t: 'A' }, tree_red: { c: '#e0685a', t: 'A' }, boss: { c: '#f0c66b', t: 'B' }, outpost: { c: '#b98be0', t: '🚩', emoji: true }, jungle: { c: '#8fc06a', t: 'JG' } };
   function objStyle(o) { return OBJ_STYLE[o.icone] || { c: '#9aa2b4', t: '?' }; }
   function objBuffsFor(o) { if (!o || !o.icone || !CFG.objBuffs) return []; if (o.icone.indexOf('tower') === 0) return CFG.objBuffs.tower || []; if (o.icone.indexOf('goose') === 0) return CFG.objBuffs.goose || []; if (o.icone.indexOf('tree') === 0) return CFG.objBuffs.tree || []; return []; }
+  function objInfoFor(o) { if (!o || !o.icone || !CFG.objInfo) return ''; const ic = o.icone; if (ic.indexOf('tower') === 0) return CFG.objInfo.tower || ''; if (ic.indexOf('goose') === 0) return CFG.objInfo.goose || ''; if (ic.indexOf('tree') === 0) return CFG.objInfo.tree || ''; if (ic === 'jungle') return CFG.objInfo.jungle || ''; return CFG.objInfo[ic] || ''; }
   function gatePos(o) { const g = state.gates && state.gates[o.id]; return g ? { x: g.x, y: g.y } : { x: o.caminho.b[0], y: o.caminho.b[1] }; }
   function treeMeters(o, xf, yf) { const a = o.caminho.a, b = gatePos(o), ax = b.x - a[0], ay = b.y - a[1]; const t = ((xf - a[0]) * ax + (yf - a[1]) * ay) / (ax * ax + ay * ay || 1); return Math.round(Math.max(0, Math.min(1, t)) * CFG.treeMeters); }
   function renderObjectives() {
