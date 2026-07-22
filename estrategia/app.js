@@ -324,6 +324,14 @@
         g.on('mouseenter.nm', () => { nmTx.text(full); recenter(); tokenLayer.batchDraw(); });
         g.on('mouseleave.nm', () => { nmTx.text(short); recenter(); tokenLayer.batchDraw(); });
       }
+    } else if (state.showNames && d.hideName) {
+      // nome oculto (segurou pra esconder): bolinha no canto inferior direito com o nº da PT
+      const num = (d.pt || '').replace(/\D/g, '');
+      if (num) {
+        const br = Math.max(6, rm * 0.6), bx = rm * 0.74, by = rm * 0.74;
+        g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: p ? p.cor : '#D9A441', stroke: '#0a0c11', strokeWidth: Math.max(1, br * 0.18), shadowColor: '#000', shadowBlur: 2.5, shadowOpacity: 0.55 }));
+        g.add(new Konva.Text({ text: num, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: br * 1.2, fill: '#10131a', align: 'center', verticalAlign: 'middle', width: br * 2, height: br * 2, offsetX: br, offsetY: br, x: bx, y: by }));
+      }
     }
     g.position({ x: d.xf * W, y: d.yf * H });
     // se é carry de uma árvore up, gruda embaixo dela (empilhado, seguindo a árvore)
