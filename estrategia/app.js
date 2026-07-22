@@ -311,12 +311,13 @@
     const carryArr = (carryUp && (cur().objetivos || {})[carryTree]) ? (cur().treeCarry[carryTree] || []) : [];
     const carryIdx = carryArr.indexOf(d.id), isCarry = carryIdx >= 0;
     const hasHp = d.hp != null && d.hp < 100 && !dead;
+    const mHpBh = Math.max(2.4, R * 0.15), mHpBy = rm + Math.max(1.5, R * 0.08);   // barrinha de vida compacta
     if (state.showNames && !d.hideName) {
       // chip de nome: sólido, alto contraste, SEMPRE centralizado embaixo (previsível,
       // não colide na horizontal com vizinhos). Borda na cor da função.
-      const fs = Math.max(8, R * 0.3);
+      const fs = Math.max(7, R * 0.26);
       const full = d.nome, short = full.length > 7 ? full.slice(0, 6) + '…' : full;
-      const ny = rm + (hasHp ? rm * 1.9 : rm * 0.32);
+      const ny = hasHp ? (mHpBy + mHpBh + Math.max(2, R * 0.13)) : (rm + rm * 0.32);
       const lbl = new Konva.Label({ y: ny });
       lbl.add(new Konva.Tag({ fill: 'rgba(10,12,17,.92)', cornerRadius: 3, stroke: dead ? '#5b626d' : rc, strokeWidth: 1 }));
       const nmTx = new Konva.Text({ text: short, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: dead ? '#c9cdd4' : '#F2EFE6', padding: 3, letterSpacing: 0.2, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.7 });
@@ -347,7 +348,11 @@
       g.draggable(false); pinned = true;
     }
     if (d.locked && !pinned) g.add(new Konva.Circle({ radius: rm + 2.5, stroke: '#8b93a1', strokeWidth: Math.max(1, rm * 0.1), dash: [2, 3], opacity: 0.7, listening: false }));
-    if (d.hp != null && d.hp < 100 && !dead) hpBar(g, d.hp, rm, rm * 2.2);
+    if (hasHp) { // vida do player: barrinha fina discreta (sem % grande empurrando o nome)
+      const hc = d.hp > 60 ? '#4CC9A4' : d.hp > 30 ? '#f0c66b' : '#E25B52', bw = rm * 1.9;
+      g.add(new Konva.Rect({ x: -bw / 2, y: mHpBy, width: bw, height: mHpBh, cornerRadius: mHpBh / 2, fill: 'rgba(6,8,12,.8)', stroke: 'rgba(255,255,255,.22)', strokeWidth: 0.6, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.5, listening: false }));
+      g.add(new Konva.Rect({ x: -bw / 2, y: mHpBy, width: Math.max(mHpBh, bw * d.hp / 100), height: mHpBh, cornerRadius: mHpBh / 2, fill: hc, listening: false }));
+    }
     g.on('click tap', e => { e.cancelBubble = true; if (Date.now() - lpAt < 400) return; g.moveToTop(); tokenLayer.batchDraw(); iconClicked('mem:' + d.id, () => openMemberMenu(d, g.x(), g.y())); });
     if (!state.present && !pinned && !d.locked) {
       g.dragBoundFunc(clampToStage);
@@ -666,15 +671,15 @@
       // barra de HP (quando < 100%) — árvore mostra em cima pra não bater no medidor de metros
       const hp = (cur().objHp || {})[o.id];
       if (hp != null && hp < 100) {
-        // HP unificado: selo compacto em TODOS os objetivos (não mais barra larga).
-        // árvore tem os metros embaixo -> selo vai em cima; demais ficam na base do ícone.
+        // HP discreto: barrinha fina + número pequeno com contorno (sem pill pesado).
+        // árvore mostra em cima (metros ficam embaixo); os demais na base do ícone.
         const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52';
-        const fs = Math.max(7, osz * 0.24), pad = Math.max(1, fs * 0.16);
-        const by = o.caminho ? (-iconH / 2 - fs * 0.9) : (iconH * 0.2);
-        const lbl = new Konva.Label({ y: by });
-        lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.86)', cornerRadius: fs * 0.55, stroke: hc, strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.6 }));
-        lbl.add(new Konva.Text({ text: hp + '%', fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, padding: pad, shadowColor: '#000', shadowBlur: 1.5, shadowOpacity: 0.85 }));
-        centerLabelX(lbl); g.add(lbl);
+        const fs = Math.max(7, osz * 0.22), bw = Math.max(osz * 0.72, 14), bh = Math.max(2.2, fs * 0.32);
+        const by = o.caminho ? (-iconH / 2 - fs - bh - 3) : (iconH * 0.16);
+        g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.72)', stroke: 'rgba(255,255,255,.2)', strokeWidth: 0.6, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.6, listening: false }));
+        g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, listening: false }));
+        const tx = new Konva.Text({ text: hp + '%', fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, stroke: '#0a0c11', strokeWidth: Math.max(0.7, fs * 0.1), fillAfterStrokeEnabled: true, y: by + bh + 1.5, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.85, listening: false });
+        tx.offsetX(tx.width() / 2); g.add(tx);
       }
       // selos de buff ativos (City Protection / You Got a Problem / Hair Pulling) acima do ícone
       const abuffs = (cur().objBuffs || {})[o.id] || [];
