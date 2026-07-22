@@ -291,7 +291,18 @@
     if (ci && ci.width) { const s = rm * 1.92, h = s * (ci.height / ci.width); g.add(new Konva.Image({ image: ci, width: s, height: h, offsetX: s / 2, offsetY: h / 2, opacity: dead ? 0.7 : 1 })); }
     else g.add(new Konva.Text({ text: d.funcao[0], fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: rm * 1.1, fill: rc, align: 'center', verticalAlign: 'middle', width: rm * 2, height: rm * 2, offsetX: rm, offsetY: rm }));
     if (dead) g.add(new Konva.Text({ text: '✕', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: rm * 1.7, fill: '#E25B52', align: 'center', verticalAlign: 'middle', width: rm * 2, height: rm * 2, offsetX: rm, offsetY: rm, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.8 }));
-    if (state.showNames && !d.hideName) { const fs = Math.max(8, R * 0.36); const lbl = new Konva.Label({ x: rm + 4, y: -fs * 0.72 }); lbl.add(new Konva.Tag({ fill: 'rgba(8,10,14,.7)', cornerRadius: 4 })); lbl.add(new Konva.Text({ text: d.nome, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: fs, fill: dead ? '#c9cdd4' : '#EDEBE4', padding: 3, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.6 })); g.add(lbl); }
+    if (state.showNames && !d.hideName) {
+      const fs = Math.max(7, R * 0.29);
+      const full = d.nome, short = full.length > 6 ? full.slice(0, 5) + '…' : full;
+      const lbl = new Konva.Label({ x: rm + 3, y: -fs * 0.7 });
+      lbl.add(new Konva.Tag({ fill: 'rgba(8,10,14,.42)', cornerRadius: 3 }));
+      const nmTx = new Konva.Text({ text: short, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: fs, fill: dead ? '#c9cdd4' : '#EDEBE4', padding: 2.5, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.55 });
+      lbl.add(nmTx); g.add(lbl);
+      if (full !== short) { // nome longo: mostra completo ao passar o mouse
+        g.on('mouseenter.nm', () => { nmTx.text(full); tokenLayer.batchDraw(); });
+        g.on('mouseleave.nm', () => { nmTx.text(short); tokenLayer.batchDraw(); });
+      }
+    }
     g.position({ x: d.xf * W, y: d.yf * H });
     // se é carry de uma árvore up, gruda na posição da árvore (segue ela)
     const carryTree = carryTreeOf(d.id);
@@ -396,7 +407,7 @@
   }
   function anchorColor(ref) { const i = (ref || '').indexOf(':'); if (i < 0) return '#D9A441'; const ty = ref.slice(0, i), id = ref.slice(i + 1); if (ty === 'pt') { const p = partyById.get(id); return p ? p.cor : '#D9A441'; } if (ty === 'mem') { const d = (cur().destacados || []).find(x => x.id === id); return d ? roleColor(d.funcao) : '#D9A441'; } if (ty === 'obj') { const o = objById.get(id); return o ? objStyle(o).c : '#D9A441'; } return '#D9A441'; }
   // raio aproximado de cada ícone (pra seta parar na borda, não por cima)
-  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : (o && o.icone === 'boss' ? 1.5 : 1); return os * sc * 0.55; } return R; }
+  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 0.94 : (o && o.icone === 'boss' ? 1.5 : 1); return os * sc * 0.55; } return R; }
   function linkPts(l) { const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (!a || !b) return null; const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, ra = anchorRadius(l.a), rb = anchorRadius(l.b); if (len <= ra + rb + 6) return [a.x, a.y, b.x, b.y]; return [a.x + ux * ra, a.y + uy * ra, b.x - ux * rb, b.y - uy * rb]; }
   function renderLinks() {
     (cur() ? cur().links : []).forEach(l => {
@@ -588,14 +599,29 @@
       if (unlocked) g.add(new Konva.Circle({ radius: os * 0.7, stroke: '#f0c66b', strokeWidth: Math.max(1, os * 0.05), dash: [3, 3], opacity: 0.85, listening: false }));
       const img = iconImgs[o.icone];
       // escala por tipo de ícone: torres 1.25x, boss 1.5x (o restante 1x)
-      const osz = os * (o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : o.icone === 'boss' ? 1.5 : 1);
+      const isTower = o.icone && o.icone.indexOf('tower') === 0;
+      const osz = os * (isTower ? 0.94 : o.icone === 'boss' ? 1.5 : 1);
       let iconH = osz;
       if (img && img.width) { const h = osz * (img.height / img.width); iconH = h; g.add(new Konva.Image({ image: img, width: osz, height: h, offsetX: osz / 2, offsetY: h / 2, scaleX: o.flip ? -1 : 1, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 })); }
       else { const st = objStyle(o); iconH = os * 0.88; g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.62)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.emoji ? 0.5 : st.t.length > 1 ? 0.3 : 0.42), fill: st.emoji ? undefined : st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
       if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.52 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.26), fill: '#f0c66b', padding: 3 })); ml.offsetX(ml.getClientRect({ skipTransform: true }).width / 2); g.add(ml); }
       // barra de HP (quando < 100%) — árvore mostra em cima pra não bater no medidor de metros
       const hp = (cur().objHp || {})[o.id];
-      if (hp != null && hp < 100) { const bw = Math.max(osz * 0.98, os * 0.92), bh = Math.max(4, os * 0.16), by = o.caminho ? (-iconH / 2 - bh - Math.max(9, os * 0.28)) : (iconH / 2 + Math.max(2, os * 0.12)); const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52'; g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.92)', stroke: 'rgba(255,255,255,.3)', strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.7, shadowOffsetY: 1 })); g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, shadowColor: hc, shadowBlur: 4, shadowOpacity: 0.5 })); g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.28), fill: hc, align: 'center', width: bw + os * 2, offsetX: (bw + os * 2) / 2, y: by + bh + 1, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.9 })); }
+      if (hp != null && hp < 100) {
+        const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52';
+        if (isTower) {
+          // torre: HP como selo compacto DENTRO do ícone (não ocupa espaço em volta)
+          const fs = Math.max(8, osz * 0.34), lbl = new Konva.Label({ y: iconH * 0.14 });
+          lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.85)', cornerRadius: fs, stroke: hc, strokeWidth: 1 }));
+          lbl.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, padding: Math.max(2, fs * 0.28), shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.8 }));
+          lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2); g.add(lbl);
+        } else {
+          const bw = Math.max(osz * 0.98, os * 0.92), bh = Math.max(4, os * 0.16), by = o.caminho ? (-iconH / 2 - bh - Math.max(9, os * 0.28)) : (iconH / 2 + Math.max(2, os * 0.12));
+          g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.92)', stroke: 'rgba(255,255,255,.3)', strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.7, shadowOffsetY: 1 }));
+          g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, shadowColor: hc, shadowBlur: 4, shadowOpacity: 0.5 }));
+          g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.28), fill: hc, align: 'center', width: bw + os * 2, offsetX: (bw + os * 2) / 2, y: by + bh + 1, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.9 }));
+        }
+      }
       // selos de buff ativos (City Protection / You Got a Problem / Hair Pulling) acima do ícone
       const abuffs = (cur().objBuffs || {})[o.id] || [];
       if (abuffs.length) {
