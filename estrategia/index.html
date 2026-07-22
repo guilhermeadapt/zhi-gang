@@ -607,8 +607,11 @@
       .top-actions #seedBtn,.top-actions #exportBtn,.top-actions #importBtn,.top-actions #resetBtn,.top-actions #shareBtn,.top-actions #fasesBtn{display:none}
       .top-actions .tbtn > span[data-i18n]{display:none}
       .top-actions .tbtn{padding:7px 9px}
-      /* ferramentas de desenho: barra flutuante à esquerda */
-      .draw-tools{display:flex;left:8px;top:8px;z-index:16}
+      /* ferramentas de desenho: barra flutuante à esquerda, compacta */
+      .draw-tools{display:flex;left:7px;top:7px;z-index:16;gap:2px;padding:4px;border-radius:11px}
+      .draw-tools .dt{width:30px;height:30px;border-radius:7px}
+      .draw-tools .dt svg{width:15px;height:15px}
+      .draw-tools .dt-sep{margin:2px 3px}
       /* painel de objetivos vira folha inferior */
       .obj-panel{display:block;left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:54vh}
       /* roster (lista de PTs pra posicionar) vira gaveta lateral */
@@ -867,7 +870,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=43"></script>
-  <script src="./app.js?v=43"></script>
+  <script src="./config.js?v=44"></script>
+  <script src="./app.js?v=44"></script>
 </body>
 </html>

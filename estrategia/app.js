@@ -26,7 +26,7 @@
       tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', groupClass:'⊟ Por classe', bdLegend:'Arraste cada jogador para a PT, para as <b>reservas da PT</b> ou reservas gerais. Clique num jogador para função, tarja e flags. Alvo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas da PT', genReserves:'Reservas gerais', obsPh:'Observações da PT…', roleLbl:'Função', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Jogar todos os disponíveis para reservas',
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
-      shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover',
+      shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover', zoomTipM:'Pinça = zoom · arraste = mover · toque = editar',
       menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', nameToggle:'Nome no mapa', unlockAction:'Destravar posição', lockAction:'Travar posição', unlockedHint:'Destravado — arraste para reposicionar', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
@@ -38,7 +38,7 @@
       tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', groupClass:'⊟ Por clase', bdLegend:'Arrastra cada jugador a la PT, a las <b>reservas de la PT</b> o reservas generales. Haz clic en un jugador para función, tarja y flags. Objetivo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas de la PT', genReserves:'Reservas generales', obsPh:'Observaciones de la PT…', roleLbl:'Función', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Enviar todos los disponibles a reservas',
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
-      shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover',
+      shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover', zoomTipM:'Pellizca = zoom · arrastra = mover · toca = editar',
       menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', nameToggle:'Nombre en el mapa', unlockAction:'Desbloquear posición', lockAction:'Bloquear posición', unlockedHint:'Desbloqueado — arrastra para reposicionar', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
@@ -50,7 +50,7 @@
       tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', groupClass:'⊟ By class', bdLegend:'Drag each player to the PT, to the <b>PT reserves</b> or general reserves. Click a player for role, tag and flags. Target: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Starters', ptReserves:'PT reserves', genReserves:'General reserves', obsPh:'PT notes…', roleLbl:'Role', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Send all available to reserves',
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
-      shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move',
+      shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move', zoomTipM:'Pinch = zoom · drag = move · tap = edit',
       menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', nameToggle:'Name on map', unlockAction:'Unlock position', lockAction:'Lock position', unlockedHint:'Unlocked — drag to reposition', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
@@ -134,8 +134,15 @@
     sprint:    { color: '#38b6e9', glyph: '<g stroke="#fff" stroke-width="3.4" stroke-linecap="round"><path d="M8 20h9"/><path d="M9 14h6.5"/><path d="M9 26h6.5"/></g><path d="M18 12l9 8-9 8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>' },
     relentless:{ color: '#e6a12e', glyph: '<circle cx="20" cy="25" r="6.6" fill="#fff"/><circle cx="12" cy="18.5" r="3" fill="#fff"/><circle cx="20" cy="14" r="3" fill="#fff"/><circle cx="28" cy="18.5" r="3" fill="#fff"/>' },
   };
+  // re-render agrupado: vários SVGs terminam de carregar quase juntos no boot;
+  // sem debounce isso dispara 6+ renders completos. Junta tudo num só rAF.
+  let _svgRenderQ = 0;
+  function svgLoaded() { if (_svgRenderQ) return; _svgRenderQ = 1; requestAnimationFrame(() => { _svgRenderQ = 0; try { renderObjectives(); renderTokens(); } catch (_) {} }); }
+  function svgImg(svg) { const im = new Image(); im.onload = svgLoaded; im.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); return im; }
   const buffImgs = {}, buffKeys = Object.keys(BUFF_ICONS);
-  buffKeys.forEach(k => { const b = BUFF_ICONS[k]; const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="' + b.color + '" stroke="#0c0f16" stroke-width="2.4"/>' + b.glyph + '</svg>'; const im = new Image(); buffImgs[k] = im; im.onload = () => { try { renderObjectives(); } catch (_) {} }; im.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); });
+  buffKeys.forEach(k => { const b = BUFF_ICONS[k]; buffImgs[k] = svgImg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="' + b.color + '" stroke="#0c0f16" stroke-width="2.4"/>' + b.glyph + '</svg>'); });
+  // ícone de inimigo defendendo: espadas cruzadas
+  const enemyImg = svgImg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><g stroke="#ffe6e2" stroke-width="3.3" stroke-linecap="round"><path d="M12 28L28 12"/><path d="M28 28L12 12"/></g><g stroke="#ffe6e2" stroke-width="2.6" stroke-linecap="round"><path d="M8.5 24.5l6.5 6.5"/><path d="M31.5 24.5l-6.5 6.5"/></g><circle cx="11" cy="29" r="2.3" fill="#ffe6e2"/><circle cx="29" cy="29" r="2.3" fill="#ffe6e2"/></svg>');
 
   // ---- helpers ----
   function uid() { return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
@@ -174,7 +181,7 @@
     dockMini.hidden = false;   // mini-nav sempre visível; painel de Fases começa fechado
     renderSidebar(); renderRail(); loadScenarioIntoUI(); fit(); wireEvents(); maybeLoadShared();
     setTimeout(() => { hintDismissed = true; mapHint.classList.add('hide'); }, 5000);   // aviso some em 5s (definitivo)
-    setTimeout(() => toast(t('zoomTip')), 900);
+    setTimeout(() => toast(t(isMobile() ? 'zoomTipM' : 'zoomTip')), 900);
   }
 
   // ---- layout + zoom ----
@@ -348,8 +355,11 @@
     const g = new Konva.Group({ draggable: !state.present, id: 'enemy-' + e.id, name: 'enemy-' + e.id });
     g.add(new Konva.Circle({ radius: er + 2, fill: '#E25B52', opacity: 0.14 }));
     g.add(new Konva.Circle({ radius: er, fill: 'rgba(46,14,14,.66)', stroke: '#E25B52', strokeWidth: Math.max(1.6, er * 0.13), shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.45, shadowOffsetY: 1 }));
-    const hasN = e.n > 0;
-    g.add(new Konva.Text({ text: hasN ? String(e.n) : '⚔', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: er * (hasN ? 1.05 : 1.1), fill: '#ffd9d5', align: 'center', verticalAlign: 'middle', width: er * 2, height: er * 2, offsetX: er, offsetY: er, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.75 }));
+    // espadas cruzadas (inimigo defendendo)
+    if (enemyImg && enemyImg.width) { const s = er * 1.5; g.add(new Konva.Image({ image: enemyImg, width: s, height: s, offsetX: s / 2, offsetY: s / 2 })); }
+    else g.add(new Konva.Text({ text: '⚔', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: er * 1.1, fill: '#ffd9d5', align: 'center', verticalAlign: 'middle', width: er * 2, height: er * 2, offsetX: er, offsetY: er }));
+    // contador (quando informado) — selo no canto inferior direito
+    if (e.n > 0) { const b = new Konva.Label({ x: er * 0.62, y: er * 0.62 }); b.add(new Konva.Tag({ fill: '#E25B52', cornerRadius: er * 0.5, stroke: '#2a0c0c', strokeWidth: 1 })); b.add(new Konva.Text({ text: String(e.n), fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, er * 0.72), fill: '#2a0c0c', padding: Math.max(1.5, er * 0.16) })); g.add(b); }
     g.position({ x: e.x * W, y: e.y * H });
     if (e.label && state.showNames) { const fs = Math.max(8, R * 0.36); const lbl = new Konva.Label({ x: er + 4, y: -fs * 0.72 }); lbl.add(new Konva.Tag({ fill: 'rgba(30,8,8,.78)', cornerRadius: 4 })); lbl.add(new Konva.Text({ text: e.label, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: fs, fill: '#ffd9d5', padding: 3, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.6 })); g.add(lbl); }
     g.on('click tap', ev => { ev.cancelBubble = true; if (linkTempFrom || carryPickFor) return; g.moveToTop(); tokenLayer.batchDraw(); openEnemyMenu(e, g.x(), g.y()); });
