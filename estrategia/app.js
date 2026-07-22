@@ -291,23 +291,40 @@
     if (ci && ci.width) { const s = rm * 1.92, h = s * (ci.height / ci.width); g.add(new Konva.Image({ image: ci, width: s, height: h, offsetX: s / 2, offsetY: h / 2, opacity: dead ? 0.7 : 1 })); }
     else g.add(new Konva.Text({ text: d.funcao[0], fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: rm * 1.1, fill: rc, align: 'center', verticalAlign: 'middle', width: rm * 2, height: rm * 2, offsetX: rm, offsetY: rm }));
     if (dead) g.add(new Konva.Text({ text: '✕', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: rm * 1.7, fill: '#E25B52', align: 'center', verticalAlign: 'middle', width: rm * 2, height: rm * 2, offsetX: rm, offsetY: rm, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.8 }));
+    // é carry de uma árvore que está up?
+    const carryTree = carryTreeOf(d.id);
+    const carryUp = carryTree ? objById.get(carryTree) : null;
+    const carryArr = (carryUp && (cur().objetivos || {})[carryTree]) ? (cur().treeCarry[carryTree] || []) : [];
+    const carryIdx = carryArr.indexOf(d.id), isCarry = carryIdx >= 0;
     if (state.showNames && !d.hideName) {
       const fs = Math.max(7, R * 0.29);
       const full = d.nome, short = full.length > 6 ? full.slice(0, 5) + '…' : full;
-      const lbl = new Konva.Label({ x: rm + 3, y: -fs * 0.7 });
-      lbl.add(new Konva.Tag({ fill: 'rgba(8,10,14,.42)', cornerRadius: 3 }));
+      let lbl;
+      if (isCarry) { // carry: nome centralizado embaixo, fundo opaco (2 carries não borram um no outro)
+        lbl = new Konva.Label({ y: rm + 2 });
+        lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.9)', cornerRadius: 3, stroke: rc, strokeWidth: 0.8 }));
+      } else {
+        lbl = new Konva.Label({ x: rm + 3, y: -fs * 0.7 });
+        lbl.add(new Konva.Tag({ fill: 'rgba(8,10,14,.42)', cornerRadius: 3 }));
+      }
       const nmTx = new Konva.Text({ text: short, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: fs, fill: dead ? '#c9cdd4' : '#EDEBE4', padding: 2.5, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.55 });
       lbl.add(nmTx); g.add(lbl);
+      const recenter = () => { if (isCarry) lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2); };
+      recenter();
       if (full !== short) { // nome longo: mostra completo ao passar o mouse
-        g.on('mouseenter.nm', () => { nmTx.text(full); tokenLayer.batchDraw(); });
-        g.on('mouseleave.nm', () => { nmTx.text(short); tokenLayer.batchDraw(); });
+        g.on('mouseenter.nm', () => { nmTx.text(full); recenter(); tokenLayer.batchDraw(); });
+        g.on('mouseleave.nm', () => { nmTx.text(short); recenter(); tokenLayer.batchDraw(); });
       }
     }
     g.position({ x: d.xf * W, y: d.yf * H });
-    // se é carry de uma árvore up, gruda na posição da árvore (segue ela)
-    const carryTree = carryTreeOf(d.id);
+    // se é carry de uma árvore up, gruda embaixo dela (empilhado, seguindo a árvore)
     let pinned = false;
-    if (carryTree) { const o = objById.get(carryTree); if (o && (cur().objetivos || {})[carryTree]) { const tp = objPos(o), arr = (cur().treeCarry[carryTree] || []), idx = arr.indexOf(d.id), off = (idx === 0 ? -1 : 1) * rm * 1.5; g.position({ x: tp.x * W + off, y: tp.y * H + rm * 1.4 }); g.draggable(false); pinned = true; } }
+    if (isCarry) {
+      const tp = objPos(carryUp), os2 = Math.max(13, W * 0.025), treeHalf = os2 * 0.9;
+      const step = rm * 2.6 + Math.max(7, R * 0.29) * 1.6; // altura do token + nome
+      g.position({ x: tp.x * W, y: tp.y * H + treeHalf + rm + carryIdx * step });
+      g.draggable(false); pinned = true;
+    }
     if (d.locked && !pinned) g.add(new Konva.Circle({ radius: rm + 2.5, stroke: '#8b93a1', strokeWidth: Math.max(1, rm * 0.1), dash: [2, 3], opacity: 0.7, listening: false }));
     if (d.hp != null && d.hp < 100 && !dead) hpBar(g, d.hp, rm, rm * 2.2);
     g.on('click tap', e => { e.cancelBubble = true; if (Date.now() - lpAt < 400) return; g.moveToTop(); tokenLayer.batchDraw(); iconClicked('mem:' + d.id, () => openMemberMenu(d, g.x(), g.y())); });
