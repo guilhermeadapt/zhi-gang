@@ -447,7 +447,7 @@
           <div class="leads" id="leadsList"></div>
         </div>
         <div class="set-row set-col">
-          <span class="s-name"><span data-i18n="alertSound">Som do aviso</span> <small data-i18n="alertSoundSub"></small></span>
+          <span class="s-name"><span data-i18n="alertSound">Som do aviso</span> <small data-i18n-html="alertSoundSub"></small></span>
           <div class="snd-picker" id="sndPicker"></div>
         </div>
         <div class="set-row">
@@ -508,7 +508,7 @@
         evNote:'Tempos em <b>tempo restante</b> de guerra (30:00 → 00:00). No modo Editar dá pra ajustar tudo — salvo neste navegador.',
         avisos:'Avisos', soundMark:'Som ao bater o marco', soundMarkSub:'bipe curto (precisa da aba aberta)',
         earlyWarn:'Avisos antecipados', earlyWarnSub:'aviso X segundos antes do marco e do fim de cada cooldown (até 3)',
-        alertSound:'Som do aviso', alertSoundSub:'toque para ouvir', voice:'Narração por voz', voiceSub:'fala o marco em voz alta (ex.: "Jungle em 15 segundos")',
+        alertSound:'Som do aviso', alertSoundSub:'toque para ouvir · <b>Voz</b> = fala o objetivo (ex.: “Jungle 15 segundos”, e “Jungle up” quando nasce)', voice:'Narração por voz', voiceSub:'fala o marco em voz alta (ex.: "Jungle em 15 segundos")',
         vibrate:'Vibrar no alerta', vibrateSub:'celular vibra ao chegar perto (a tela também pisca em vermelho)',
         notif:'Notificação do navegador', notifSub:'funciona com a aba em segundo plano', addWarn:'+ aviso',
         bottomHint:'Regressivo de <b>30:00</b> · JG a cada 5&nbsp;min · <b>5:00</b> de preparação antes. Agende pelo relógio e o timer se mantém certo mesmo se a aba abrir depois.',
@@ -519,7 +519,7 @@
         allPassed:'Todos os marcos passaram', scheduleStart:'Agende o início',
         cdUse:'Usar', cdCd:'cooldown', cdReady:'Pronto', cdCanUse:'pode usar', cdReadyEnemy:'pronto (inimigo pode usar)',
         mkNone:'Nenhuma', mkNext:'⏭ Próxima', mkPrev:'⏮ Anterior', mkPlay:'⏯ Play/Pause', mkStop:'⏹ Stop',
-        sndBeep:'Beep', sndDing:'Ding', sndAlarme:'Alarme', sndPulso:'Pulso', sndSino:'Sino',
+        sndBeep:'Beep', sndDing:'Ding', sndAlarme:'Alarme', sndPulso:'Pulso', sndSino:'Sino', sndVoice:'🔊 Voz',
         aiEm:'🎯', aiTime:'25:00', aiName:'Nome do marco', tName:'Ex.: Clamp e Revive', tCd:'01:00',
         tPrepStart:'primeiro', restored:'restaurado', cdsRestored:'Cooldowns restaurados', marksRestored:'Marcos restaurados', mediaActive:'Atalho de mídia ativo', voiceOn:'Narração ativada',
         spoken_in:'em', spoken_seg:'segundos', spoken_now:'agora', spoken_spawn:'pode nascer', spoken_back:'volta em', spoken_ready:'pronto',
@@ -539,7 +539,7 @@
         evNote:'Tiempos en <b>tiempo restante</b> de guerra (30:00 → 00:00). En modo Editar puedes ajustar todo — guardado en este navegador.',
         avisos:'Avisos', soundMark:'Sonido al llegar el hito', soundMarkSub:'bip corto (requiere la pestaña abierta)',
         earlyWarn:'Avisos anticipados', earlyWarnSub:'aviso X segundos antes del hito y del fin de cada cooldown (hasta 3)',
-        alertSound:'Sonido del aviso', alertSoundSub:'toca para oír', voice:'Narración por voz', voiceSub:'dice el hito en voz alta (ej.: "Jungle en 15 segundos")',
+        alertSound:'Sonido del aviso', alertSoundSub:'toca para oír · <b>Voz</b> = dice el objetivo (ej.: “Jungle 15 segundos” y “Jungle up” al aparecer)', voice:'Narración por voz', voiceSub:'dice el hito en voz alta (ej.: "Jungle en 15 segundos")',
         vibrate:'Vibrar en el aviso', vibrateSub:'el móvil vibra al acercarse (la pantalla también parpadea en rojo)',
         notif:'Notificación del navegador', notifSub:'funciona con la pestaña en segundo plano', addWarn:'+ aviso',
         bottomHint:'Regresivo de <b>30:00</b> · JG cada 5&nbsp;min · <b>5:00</b> de preparación antes. Programa por el reloj y el timer se mantiene correcto aunque abras la pestaña después.',
@@ -550,7 +550,7 @@
         allPassed:'Todos los hitos pasaron', scheduleStart:'Programa el inicio',
         cdUse:'Usar', cdCd:'cooldown', cdReady:'Listo', cdCanUse:'puede usar', cdReadyEnemy:'listo (el enemigo puede usar)',
         mkNone:'Ninguna', mkNext:'⏭ Siguiente', mkPrev:'⏮ Anterior', mkPlay:'⏯ Play/Pause', mkStop:'⏹ Stop',
-        sndBeep:'Beep', sndDing:'Ding', sndAlarme:'Alarma', sndPulso:'Pulso', sndSino:'Campana',
+        sndBeep:'Beep', sndDing:'Ding', sndAlarme:'Alarma', sndPulso:'Pulso', sndSino:'Campana', sndVoice:'🔊 Voz',
         aiEm:'🎯', aiTime:'25:00', aiName:'Nombre del hito', tName:'Ej.: Clamp y Revive', tCd:'01:00',
         tPrepStart:'primero', restored:'restaurado', cdsRestored:'Cooldowns restaurados', marksRestored:'Hitos restaurados', mediaActive:'Atajo de medios activo', voiceOn:'Narración activada',
         spoken_in:'en', spoken_seg:'segundos', spoken_now:'ahora', spoken_spawn:'puede aparecer', spoken_back:'vuelve en', spoken_ready:'listo',
@@ -570,7 +570,7 @@
         evNote:'Times are <b>war time remaining</b> (30:00 → 00:00). In Edit mode you can adjust everything — saved in this browser.',
         avisos:'Alerts', soundMark:'Sound when an event hits', soundMarkSub:'short beep (needs the tab open)',
         earlyWarn:'Early warnings', earlyWarnSub:'alert X seconds before an event and before each cooldown ends (up to 3)',
-        alertSound:'Alert sound', alertSoundSub:'tap to hear', voice:'Voice narration', voiceSub:'says the event out loud (e.g. "Jungle in 15 seconds")',
+        alertSound:'Alert sound', alertSoundSub:'tap to hear · <b>Voice</b> = says the objective (e.g. “Jungle 15 seconds”, and “Jungle up” on spawn)', voice:'Voice narration', voiceSub:'says the event out loud (e.g. "Jungle in 15 seconds")',
         vibrate:'Vibrate on alert', vibrateSub:'phone vibrates when close (the screen also flashes red)',
         notif:'Browser notification', notifSub:'works with the tab in the background', addWarn:'+ warning',
         bottomHint:'Counts down from <b>30:00</b> · JG every 5&nbsp;min · <b>5:00</b> prep before. Schedule by the clock and the timer stays correct even if the tab opens later.',
@@ -581,7 +581,7 @@
         allPassed:'All events passed', scheduleStart:'Schedule the start',
         cdUse:'Use', cdCd:'cooldown', cdReady:'Ready', cdCanUse:'can use', cdReadyEnemy:'ready (enemy can use)',
         mkNone:'None', mkNext:'⏭ Next', mkPrev:'⏮ Previous', mkPlay:'⏯ Play/Pause', mkStop:'⏹ Stop',
-        sndBeep:'Beep', sndDing:'Ding', sndAlarme:'Alarm', sndPulso:'Pulse', sndSino:'Bell',
+        sndBeep:'Beep', sndDing:'Ding', sndAlarme:'Alarm', sndPulso:'Pulse', sndSino:'Bell', sndVoice:'🔊 Voice',
         aiEm:'🎯', aiTime:'25:00', aiName:'Event name', tName:'e.g. Clamp & Revive', tCd:'01:00',
         tPrepStart:'first', restored:'restored', cdsRestored:'Cooldowns restored', marksRestored:'Events restored', mediaActive:'Media shortcut on', voiceOn:'Narration on',
         spoken_in:'in', spoken_seg:'seconds', spoken_now:'now', spoken_spawn:'may spawn', spoken_back:'back in', spoken_ready:'ready',
@@ -642,7 +642,7 @@
     function cloneCds(arr){ return arr.map(function(c){ return { id:c.id, nome:c.nome, cd:c.cd, kind:c.kind, val:c.val, mediaKey:c.mediaKey, at:null, rdy:false, warned:0 }; }); }
     var state = { startAt: null, events: [], sound: true, leads: DEFAULT_LEADS.slice(), snd:'beep', notif: false, voice: false, vibrate: false, cds: cloneCds(DEFAULT_CDS) };
     var MEDIA_KEYS = [ { k:'', tk:'mkNone' }, { k:'nexttrack', tk:'mkNext' }, { k:'previoustrack', tk:'mkPrev' }, { k:'play', tk:'mkPlay' }, { k:'stop', tk:'mkStop' } ];
-    var SND_LBL = { beep:'sndBeep', ding:'sndDing', alarme:'sndAlarme', pulso:'sndPulso', sino:'sndSino' };
+    var SND_LBL = { beep:'sndBeep', ding:'sndDing', alarme:'sndAlarme', pulso:'sndPulso', sino:'sndSino', voz:'sndVoice' };
 
     // ---------- persistência ----------
     function save(){ try{ localStorage.setItem(LS, JSON.stringify({ startAt: state.startAt, events: state.events.map(function(e){return {rem:e.rem,em:e.em,img:e.img,nome:e.nome,win:e.win};}), sound: state.sound, leads: state.leads, snd: state.snd, notif: state.notif, voice: state.voice, vibrate: state.vibrate, cds: state.cds.map(function(c){return {id:c.id,nome:c.nome,cd:c.cd,kind:c.kind,val:c.val,mediaKey:c.mediaKey,at:c.at};}) })); }catch(e){} }
@@ -673,27 +673,77 @@
     function warnedFor(r){ var w=0; while(w<state.leads.length && state.leads[w] > r) w++; return w; }
     function shortName(n){ var s=sayName(n); return (s.split(/[\s\/]+/)[0]||s); }
     function speakShort(n, secs){ speak(shortName(n)+' '+secs); }
-    // ---- narração por voz personalizada (clipes ElevenLabs em ./audio) ----
+    // ---- narração por voz personalizada (clipes gravados em ./audio) ----
+    // "sujeitos" com combos sujeito+tempo (jungle-15.mp3) e sujeito+up (jungle-up.mp3)
     function voiceKeyFor(name){ var s=(name||'').toLowerCase();
       if(/jungle|\bjg\b/.test(s)) return 'jungle';
+      if(/\bboss\b|nirvana/.test(s) && !/breve|soon/.test(s)) return 'boss';
       if(/sprint/.test(s)) return 'sprint';
       if(/relentless/.test(s)) return 'relentless';
       if(/city/.test(s)) return 'city';
       if(/hair/.test(s)) return 'hairpull';
-      if(/problem/.test(s)) return 'ygap';
+      if(/problem|ygap/.test(s)) return 'ygap';
       return null; }
-    var voiceCache={};
-    function voiceClip(key, lead){ var id=key+'-'+lead; if(voiceCache[id]===undefined){ var a=null; try{ a=new Audio('./audio/'+id+'.mp3'); a.preload='auto'; }catch(e){ a=null; } voiceCache[id]=a; } return voiceCache[id]; }
-    // toca o clipe do evento na antecedência (5/15/30); se não existir, cai no TTS
-    function announce(name, lead, spokenSecs){
-      if(!state.voice) return;
-      var key=voiceKeyFor(name);
-      if(key && (lead===5||lead===15||lead===30)){
-        var a=voiceClip(key, lead);
-        if(a){ try{ a.currentTime=0; var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ speakShort(name, spokenSecs); }); return; }catch(e){} }
-      }
-      speakShort(name, spokenSecs);
+    // frases avulsas (clipe único, sem tempo nem "up")
+    function standaloneClip(name){ var s=(name||'').toLowerCase();
+      if(/halftime|meia.?tempo|metade/.test(s)) return 'halftime';
+      if(/em breve|soon|boss.*(breve|soon)/.test(s)) return 'boss-soon';
+      if(/frontline|front.?line/.test(s)) return 'frontline-up';
+      if(/trocar|build|swap/.test(s)) return 'trocar-build';
+      return null; }
+    var CLIP_DURS={5:1,10:1,15:1,30:1,60:1};     // tempos gravados disponíveis
+    function voiceMode(){ return state.snd==='voz'; } // "Voz" no seletor de som = clipe no lugar do beep
+
+    // ---- fila de voz: serializa os clipes/TTS pra nunca falarem por cima ----
+    // (ex.: aos 20m cai Halftime + Jungle + aviso de City ao mesmo tempo)
+    var voiceQ=[], voiceBusy=false, voiceCache={};
+    function preload(url){ if(voiceCache[url]===undefined){ try{ var a=new Audio(url); a.preload='auto'; voiceCache[url]=a; }catch(e){ voiceCache[url]=null; } } return voiceCache[url]; }
+    function enqueueClip(url, fallbackTxt){ voiceQ.push({url:url, txt:fallbackTxt||''}); pumpVoice(); }
+    function enqueueTTS(text){ if(text) voiceQ.push({url:null, txt:text}); pumpVoice(); }
+    function doneVoice(){ voiceBusy=false; pumpVoice(); }
+    function pumpVoice(){
+      if(voiceBusy) return; var item=voiceQ.shift(); if(!item) return; voiceBusy=true;
+      if(item.url){
+        var a; try{ a=new Audio(item.url); }catch(e){ a=null; }
+        if(!a){ if(item.txt) return speakQueued(item.txt); return doneVoice(); }
+        var fired=false, fin=function(){ if(fired) return; fired=true; doneVoice(); };
+        var fail=function(){ if(fired) return; fired=true; if(item.txt){ voiceBusy=false; return speakQueued(item.txt); } doneVoice(); };
+        a.onended=fin; a.onerror=fail;
+        try{ a.currentTime=0; var pr=a.play(); if(pr&&pr.catch) pr.catch(fail); }catch(e){ fail(); }
+      } else { speakQueued(item.txt); }
     }
+    function speakQueued(text){
+      if(!('speechSynthesis' in window)){ return doneVoice(); }
+      try{ if(!ttsVoice) pickVoice(); var u=new SpeechSynthesisUtterance(text); if(ttsVoice) u.voice=ttsVoice; u.lang='pt-BR'; u.rate=1.06; u.pitch=1;
+        var fired=false, fin=function(){ if(fired) return; fired=true; doneVoice(); };
+        u.onend=fin; u.onerror=fin; speechSynthesis.speak(u);
+      }catch(e){ doneVoice(); }
+    }
+
+    // aviso de antecedência (X segundos antes) — respeita o modo de som escolhido
+    function warnAudio(name, lead, secs){
+      if(voiceMode()){
+        var k=voiceKeyFor(name);
+        if(k && CLIP_DURS[lead]) enqueueClip('./audio/'+k+'-'+lead+'.mp3', shortName(name)+' '+secs);
+        else enqueueTTS(shortName(name)+' '+secs+' '+t('spoken_seg'));
+      } else {
+        playAlert();
+        if(state.voice) enqueueTTS(shortName(name)+' '+secs);
+      }
+    }
+    // disparo do marco (0s) — no modo Voz toca "sujeito + up" (ou a frase avulsa)
+    function fireAudio(name){
+      if(voiceMode()){
+        var sc=standaloneClip(name); if(sc){ enqueueClip('./audio/'+sc+'.mp3', shortName(name)); return; }
+        var k=voiceKeyFor(name); if(k){ enqueueClip('./audio/'+k+'-up.mp3', shortName(name)); return; }
+        enqueueTTS(shortName(name));
+      } else {
+        playConfirm();
+        if(state.voice) enqueueTTS(shortName(name));
+      }
+    }
+    // preview ao escolher "Voz" no seletor de som
+    function previewVoice(){ enqueueClip('./audio/jungle-15.mp3', 'Jungle 15'); }
 
     // ---------- tempo ----------
     function now(){ return Date.now(); }
@@ -715,9 +765,10 @@
       ding:   { lbl:'Ding',   seq:[[988,0,.42,'sine']] },
       alarme: { lbl:'Alarme', seq:[[740,0,.13],[740,.19,.13],[740,.38,.13]] },
       pulso:  { lbl:'Pulso',  seq:[[520,0,.13],[820,.1,.18]] },
-      sino:   { lbl:'Sino',   seq:[[1245,0,.5,'sine']] }
+      sino:   { lbl:'Sino',   seq:[[1245,0,.5,'sine']] },
+      voz:    { lbl:'Voz',    seq:[] }
     };
-    var SND_IDS = ['beep','ding','alarme','pulso','sino'];
+    var SND_IDS = ['beep','ding','alarme','pulso','sino','voz'];
     function ensureCtx(){ try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended') actx.resume(); return true; }catch(e){ return false; } }
     function tone(freq, at, dur, type){ var o=actx.createOscillator(), g=actx.createGain(), t=actx.currentTime+at; o.type=type||'triangle'; o.frequency.value=freq; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.32,t+.02); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t+dur+.03); }
     function playAlert(){ if(!state.sound || !ensureCtx()) return; var p=SND[state.snd]||SND.beep; p.seq.forEach(function(s){ tone(s[0],s[1],s[2]||.26,s[3]); }); }
@@ -734,6 +785,9 @@
           g.gain.value=0.0001; o.connect(g); g.connect(actx.destination);
           o.start(0); o.stop(actx.currentTime+0.03);
           if('speechSynthesis' in window){ try{ var u=new SpeechSynthesisUtterance(' '); u.volume=0; speechSynthesis.speak(u); }catch(e){} }
+          // destrava o canal de <audio> (clipes de voz) dentro do gesto — senão
+          // no celular os clipes tocados pelo tick (fora de gesto) ficam bloqueados
+          try{ var ua=new Audio('./audio/up.mp3'); ua.muted=true; var p=ua.play(); if(p&&p.then) p.then(function(){ ua.pause(); ua.currentTime=0; }).catch(function(){}); }catch(e){}
           audioUnlocked=true;
         }
       }catch(e){}
@@ -848,9 +902,9 @@
         if(c.at==null){ val.textContent=t('cdUse'); sub.textContent='CD '+fmt(c.cd); return; }
         var rem = c.cd - (now()-c.at)/1000;
         if(rem>0){ b.classList.add('running'); val.textContent=fmt(rem); sub.textContent=t('cdCd'); c.rdy=false;
-          while((c.warned||0) < state.leads.length && rem <= state.leads[c.warned||0]){ var L=state.leads[c.warned||0]; c.warned=(c.warned||0)+1; playAlert(); buzz(70); showToast(iconHTML(c.kind,c.val), c.nome+' '+Math.round(rem)+'s', true); announce(c.nome, L, Math.round(rem)); } }
+          while((c.warned||0) < state.leads.length && rem <= state.leads[c.warned||0]){ var L=state.leads[c.warned||0]; c.warned=(c.warned||0)+1; buzz(70); showToast(iconHTML(c.kind,c.val), c.nome+' '+Math.round(rem)+'s', true); warnAudio(c.nome, L, Math.round(rem)); } }
         else { b.classList.add('ready'); val.textContent=t('cdReady'); sub.textContent=t('cdCanUse');
-          if(!c.rdy){ c.rdy=true; playConfirm(); flash(); buzz([120,60,120]); showToast(iconHTML(c.kind,c.val), c.nome+' '+t('spoken_ready'), false); bigAlert(iconHTML(c.kind,c.val), c.nome, t('spoken_ready')); } }
+          if(!c.rdy){ c.rdy=true; flash(); buzz([120,60,120]); fireAudio(c.nome); showToast(iconHTML(c.kind,c.val), c.nome+' '+t('spoken_ready'), false); bigAlert(iconHTML(c.kind,c.val), c.nome, t('spoken_ready')); } }
       });
     }
     function pressCd(id, announce){
@@ -930,8 +984,8 @@
         var wr = warRemaining();
         state.events.forEach(function(e){
           var un = wr - e.rem;
-          while((e.warned||0) < state.leads.length && un <= state.leads[e.warned||0] && un > 0){ var L=state.leads[e.warned||0]; e.warned=(e.warned||0)+1; playAlert(); buzz(70); showToast(ico(e), e.nome+' '+Math.round(un)+'s', true); announce(e.nome, L, Math.round(un)); }
-          if(!e.fired && wr <= e.rem){ e.fired=true; e.warned=state.leads.length; playConfirm(); flash(); buzz([120,60,120]); showToast(ico(e), e.nome+(e.win?' · '+t('spoken_spawn'):''), false); notify(e); bigAlert(ico(e), e.nome, e.win?t('spoken_spawn'):''); }
+          while((e.warned||0) < state.leads.length && un <= state.leads[e.warned||0] && un > 0){ var L=state.leads[e.warned||0]; e.warned=(e.warned||0)+1; buzz(70); showToast(ico(e), e.nome+' '+Math.round(un)+'s', true); warnAudio(e.nome, L, Math.round(un)); }
+          if(!e.fired && wr <= e.rem){ e.fired=true; e.warned=state.leads.length; flash(); buzz([120,60,120]); fireAudio(e.nome); showToast(ico(e), e.nome+(e.win?' · '+t('spoken_spawn'):''), false); notify(e); bigAlert(ico(e), e.nome, e.win?t('spoken_spawn'):''); }
         });
       }
       render();
@@ -1010,7 +1064,7 @@
     }
     function buildSndPicker(){ var g=$('sndPicker'); if(!g) return; g.innerHTML='';
       SND_IDS.forEach(function(id){ var b=document.createElement('button'); b.type='button'; b.className='snd-opt'+(state.snd===id?' active':''); b.textContent=t(SND_LBL[id]); b.dataset.snd=id;
-        b.addEventListener('click',function(){ state.snd=id; g.querySelectorAll('.snd-opt').forEach(function(x){x.classList.toggle('active',x.dataset.snd===id);}); playAlert(); save(); }); g.appendChild(b); });
+        b.addEventListener('click',function(){ state.snd=id; g.querySelectorAll('.snd-opt').forEach(function(x){x.classList.toggle('active',x.dataset.snd===id);}); if(id==='voz'){ ensureCtx(); previewVoice(); } else playAlert(); save(); }); g.appendChild(b); });
     }
     function resetCds(){ state.cds=cloneCds(DEFAULT_CDS); save(); buildCds(); updateCds(); if(mediaOn) refreshMediaHandlers(); showToast('↺',t('cdsRestored'), false); }
     function resetEvents(){ state.events=DEFAULT.map(function(e){ return { rem:e.rem, em:e.em, img:e.img, nome:e.nome, win:e.win }; }); sortEvents(); seedFired(); save(); render(); showToast('↺',t('marksRestored'), false); }
