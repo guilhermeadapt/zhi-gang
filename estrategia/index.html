@@ -211,6 +211,22 @@
     .icon-menu .im-cadd:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
     .icon-menu .im-note{width:100%;resize:vertical;min-height:56px;background:#0b0e15;border:1px solid var(--line-soft);border-radius:8px;color:var(--text);font-family:var(--body);font-size:12.5px;line-height:1.35;padding:8px 10px;margin-bottom:9px}
     .icon-menu .im-note:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .icon-menu .im-step{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+    .icon-menu .im-step button{width:30px;height:30px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--text);border-radius:8px;font-size:18px;line-height:1;cursor:pointer}
+    .icon-menu .im-step button:hover{border-color:var(--line);color:var(--gold)}
+    .icon-menu .im-stepv{font-family:var(--disp);font-weight:700;font-size:18px;min-width:34px;text-align:center;color:var(--gold-2)}
+    .icon-menu .im-elabel{width:100%;background:#0b0e15;border:1px solid var(--line-soft);border-radius:8px;color:var(--text);font-family:var(--body);font-size:12.5px;padding:8px 10px;margin-bottom:9px}
+    .icon-menu .im-elabel:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .draw-tools .dt-enemy{color:#e0857c}
+    .draw-tools .dt-enemy:hover{color:#ef9c93}
+    .draw-tools .dt-enemy.active{color:#241a06}
+    /* selo "nosso lado" */
+    .side-chip{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:9;font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.03em;color:var(--muted);background:rgba(12,15,22,.85);border:1px solid var(--line-soft);border-radius:999px;padding:6px 13px;cursor:pointer;backdrop-filter:blur(4px);transition:.15s;white-space:nowrap}
+    .side-chip:hover{color:var(--text);border-color:var(--line)}
+    .side-chip.on.blue{color:#bfe0ff;border-color:rgba(106,168,224,.55);background:rgba(18,32,48,.85)}
+    .side-chip.on.red{color:#ffcfca;border-color:rgba(226,91,82,.55);background:rgba(44,18,16,.85)}
+    .side-chip b{opacity:.65;font-weight:600;margin-right:2px}
+    body.present .side-chip{display:none}
     body.linking #stageWrap{cursor:crosshair}
     body.linking #stage{cursor:crosshair}
 
@@ -629,6 +645,7 @@
   <div class="workspace">
     <div class="stage-col">
       <div class="map-panel" id="mapPanel">
+        <button class="side-chip" id="sideChip" title="Alterna: Azul (Oeste) → Vermelho (Leste) → nenhum">Definir nosso lado</button>
         <div id="stageWrap"><div id="stage"></div></div>
 
         <div class="draw-tools" id="drawTools">
@@ -639,6 +656,7 @@
           <button class="dt" data-tool="retangulo" title="Área (R)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="1.5"/></svg></button>
           <button class="dt" data-tool="marca" title="Ícone / marcador (I)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></button>
           <button class="dt" data-tool="nota" title="Anotação / post-it (N)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v11l-5 5H4z"/><path d="M20 15h-5v5"/></svg></button>
+          <button class="dt dt-enemy" data-tool="inimigo" title="Inimigo defendendo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7M4 6V4h2M8.5 8.5L4 13v3h3l4.5-4.5"/><path d="M20 4l-7 7M20 6V4h-2M15.5 8.5L20 13v3h-3l-4.5-4.5"/></svg></button>
           <div class="dt-sep"></div>
           <button class="dt dt-cbtn" id="dtColorBtn" title="Cor do traço"><span class="dt-csw" id="dtCurColor"></span></button>
           <button class="dt dt-wbtn" id="dtWidthBtn" title="Espessura do traço">▬</button>
@@ -818,7 +836,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=31"></script>
-  <script src="./app.js?v=31"></script>
+  <script src="./config.js?v=32"></script>
+  <script src="./app.js?v=32"></script>
 </body>
 </html>

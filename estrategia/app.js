@@ -27,7 +27,7 @@
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
       shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
       menu:'Menú', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartir', present:'Presentar', exit:'Salir',
@@ -39,7 +39,7 @@
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
       shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
       menu:'Menu', phases:'Phases', objectives:'Objectives', roster:'Roster', share:'Share', present:'Present', exit:'Exit',
@@ -51,7 +51,7 @@
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
       shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move',
-      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
+      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
   function t(k) { return (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.pt[k] != null ? I18N.pt[k] : k); }
@@ -86,7 +86,7 @@
   const confirmModal = $('confirmModal'), confirmMsg = $('confirmMsg'), confirmYes = $('confirmYes'), confirmNo = $('confirmNo');
   const ptModal = $('ptModal'), peDot = $('peDot'), peTitle = $('peTitle'), peClose = $('peClose'), peDesc = $('peDesc'), peIcons = $('peIcons'), peMembers = $('peMembers'), peCount = $('peCount'), peAddSel = $('peAddSel'), peAddBtn = $('peAddBtn');
 
-  const state = { scenarios: [], currentId: null, roster: [], ptDesc: {}, ptIcon: {}, objetivoPosGlobal: {}, gates: {}, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false, showNames: true };
+  const state = { scenarios: [], currentId: null, roster: [], ptDesc: {}, ptIcon: {}, objetivoPosGlobal: {}, gates: {}, side: null, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false, showNames: true };
   let hintDismissed = false, editingPt = null;
   const objGroupOpen = {};   // grupos do painel de objetivos começam colapsados
   const partyById = new Map(CFG.parties.map(p => [p.id, p]));
@@ -103,7 +103,9 @@
   const markLayer = new Konva.Layer();
   const tokenLayer = new Konva.Layer();
   const noteLayer = new Konva.Layer();
-  stage.add(bgLayer, drawLayer, objLayer, markLayer, tokenLayer, noteLayer);
+  // ordem z: fundo < desenhos < tokens (PT/membros/inimigos/vínculos) < OBJETIVOS < carimbos < notas
+  // objetivos ficam ACIMA de setas e nomes pra não serem tapados.
+  stage.add(bgLayer, drawLayer, tokenLayer, objLayer, markLayer, noteLayer);
   const bgImage = new Konva.Image({ x: 0, y: 0 });
   bgLayer.add(bgImage);
   let W = 10, H = 10, R = 20;
@@ -113,7 +115,7 @@
   function uid() { return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
   function cur() { return state.scenarios.find(s => s.id === state.currentId) || state.scenarios[0]; }
   function curIndex() { return state.scenarios.findIndex(s => s.id === state.currentId); }
-  function newScenario(o) { return Object.assign({ id: uid(), fase: 'Cenário', nome: 'Novo cenário', condicao: null, tokens: [], desenhos: [], marcas: [], objetivos: {}, objetivoPos: {}, destacados: [], links: [], objHp: {}, objBuffs: {}, treeCarry: {}, notas: [], nota: '' }, o || {}); }
+  function newScenario(o) { return Object.assign({ id: uid(), fase: 'Cenário', nome: 'Novo cenário', condicao: null, tokens: [], desenhos: [], marcas: [], objetivos: {}, objetivoPos: {}, destacados: [], links: [], objHp: {}, objBuffs: {}, treeCarry: {}, notas: [], enemies: [], nota: '' }, o || {}); }
   function isPristine(s) { return s && !(s.tokens || []).length && !(s.desenhos || []).length && !(s.marcas || []).length && !(s.nota || '').trim() && !Object.keys(s.objetivos || {}).length && !(s.destacados || []).length && !(s.links || []).length && !Object.keys(s.objHp || {}).length && !(s.notas || []).length && !Object.keys(s.objBuffs || {}).length; }
   function clamp01(n) { n = Number(n); return isNaN(n) ? 0 : Math.max(0, Math.min(1, n)); }
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
@@ -158,7 +160,7 @@
     stage.scale({ x: 1, y: 1 }); stage.position({ x: 0, y: 0 });
     stage.size({ width: W, height: H });
     stageWrap.style.width = W + 'px'; stageWrap.style.height = H + 'px';
-    bgImage.size({ width: W, height: H }); bgLayer.batchDraw();
+    bgImage.size({ width: W, height: H }); renderSide();
     hidePopover(); updateStageDrag(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens();
   }
   function clampPos(x, y, s) { const minX = W - W * s, minY = H - H * s; if (s <= 1) return { x: 0, y: 0 }; return { x: Math.min(0, Math.max(minX, x)), y: Math.min(0, Math.max(minY, y)) }; }
@@ -168,9 +170,9 @@
   function frac() { const p = stage.getPointerPosition(); if (!p) return null; const s = stage.scaleX() || 1; return { xf: clamp01((p.x - stage.x()) / s / W), yf: clamp01((p.y - stage.y()) / s / H) }; }
 
   // ---- undo (cenário inteiro: tokens, desenhos, objetivos, posições, destacados) ----
-  function snap() { const s = cur(); return JSON.stringify({ tokens: s.tokens, desenhos: s.desenhos, marcas: s.marcas || [], objetivos: s.objetivos, objetivoPos: s.objetivoPos, destacados: s.destacados, links: s.links || [], objHp: s.objHp || {}, objBuffs: s.objBuffs || {}, treeCarry: s.treeCarry || {}, notas: s.notas || [], nota: s.nota }); }
+  function snap() { const s = cur(); return JSON.stringify({ tokens: s.tokens, desenhos: s.desenhos, marcas: s.marcas || [], objetivos: s.objetivos, objetivoPos: s.objetivoPos, destacados: s.destacados, links: s.links || [], objHp: s.objHp || {}, objBuffs: s.objBuffs || {}, treeCarry: s.treeCarry || {}, notas: s.notas || [], enemies: s.enemies || [], nota: s.nota }); }
   function pushUndo() { const id = cur().id; const st = (undoStacks[id] = undoStacks[id] || []); st.push(snap()); if (st.length > 60) st.shift(); redoStacks[id] = []; }
-  function applySnap(json) { const s = cur(), d = JSON.parse(json); s.tokens = d.tokens; s.desenhos = d.desenhos; s.marcas = d.marcas || []; s.objetivos = d.objetivos; s.objetivoPos = d.objetivoPos; s.destacados = d.destacados; s.links = d.links || []; s.objHp = d.objHp || {}; s.objBuffs = d.objBuffs || {}; s.treeCarry = d.treeCarry || {}; s.notas = d.notas || []; s.nota = d.nota; loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); if (!objPanel.hidden) renderObjPanel(); saveProject(); }
+  function applySnap(json) { const s = cur(), d = JSON.parse(json); s.tokens = d.tokens; s.desenhos = d.desenhos; s.marcas = d.marcas || []; s.objetivos = d.objetivos; s.objetivoPos = d.objetivoPos; s.destacados = d.destacados; s.links = d.links || []; s.objHp = d.objHp || {}; s.objBuffs = d.objBuffs || {}; s.treeCarry = d.treeCarry || {}; s.notas = d.notas || []; s.enemies = d.enemies || []; s.nota = d.nota; loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); if (!objPanel.hidden) renderObjPanel(); saveProject(); }
   function doUndo() { const id = cur().id, u = undoStacks[id]; if (!u || !u.length) return; (redoStacks[id] = redoStacks[id] || []).push(snap()); applySnap(u.pop()); }
   function doRedo() { const id = cur().id, r = redoStacks[id]; if (!r || !r.length) return; (undoStacks[id] = undoStacks[id] || []).push(snap()); applySnap(r.pop()); }
 
@@ -264,6 +266,59 @@
     }
     return g;
   }
+  // ---- token de inimigo (vermelho, com número + rótulo) ----
+  function makeEnemyToken(e) {
+    const er = Math.max(9, R * 0.8);
+    const g = new Konva.Group({ draggable: !state.present, id: 'enemy-' + e.id, name: 'enemy-' + e.id });
+    g.add(new Konva.Circle({ radius: er + 2, fill: '#E25B52', opacity: 0.14 }));
+    g.add(new Konva.Circle({ radius: er, fill: 'rgba(46,14,14,.66)', stroke: '#E25B52', strokeWidth: Math.max(1.6, er * 0.13), shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.45, shadowOffsetY: 1 }));
+    const hasN = e.n > 0;
+    g.add(new Konva.Text({ text: hasN ? String(e.n) : '⚔', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: er * (hasN ? 1.05 : 1.1), fill: '#ffd9d5', align: 'center', verticalAlign: 'middle', width: er * 2, height: er * 2, offsetX: er, offsetY: er, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.75 }));
+    g.position({ x: e.x * W, y: e.y * H });
+    if (e.label && state.showNames) { const fs = Math.max(8, R * 0.36); const lbl = new Konva.Label({ x: er + 4, y: -fs * 0.72 }); lbl.add(new Konva.Tag({ fill: 'rgba(30,8,8,.78)', cornerRadius: 4 })); lbl.add(new Konva.Text({ text: e.label, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: fs, fill: '#ffd9d5', padding: 3, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.6 })); g.add(lbl); }
+    g.on('click tap', ev => { ev.cancelBubble = true; if (linkTempFrom || carryPickFor) return; g.moveToTop(); tokenLayer.batchDraw(); openEnemyMenu(e, g.x(), g.y()); });
+    if (!state.present) {
+      g.dragBoundFunc(clampToStage);
+      g.on('dragstart', () => { pushUndo(); g.moveToTop(); });
+      g.on('dragend', () => { const ee = (cur().enemies || []).find(x => x.id === e.id); if (ee) { ee.x = clamp01(g.x() / W); ee.y = clamp01(g.y() / H); saveProject(); } });
+      g.on('dblclick dbltap', () => { pushUndo(); cur().enemies = (cur().enemies || []).filter(x => x.id !== e.id); renderTokens(); saveProject(); });
+      g.on('mouseenter', () => stage.container().style.cursor = 'grab');
+      g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
+    }
+    return g;
+  }
+  function placeEnemy() {
+    if (state.present) return; const f = frac(); if (!f) return;
+    pushUndo(); cur().enemies = cur().enemies || [];
+    const e = { id: uid(), x: f.xf, y: f.yf, n: 1, label: '' };
+    cur().enemies.push(e); hintDismissed = true; setTool('select'); renderTokens(); saveProject();
+    const g = tokenLayer.findOne('#enemy-' + e.id); openEnemyMenu(e, g ? g.x() : f.xf * W, g ? g.y() : f.yf * H);
+  }
+  function openEnemyMenu(e, x, y) {
+    if (!iconMenu || state.present) return; hidePopover();
+    let h = '<div class="im-hd"><span class="im-dot" style="background:#E25B52"></span><b>' + t('enemyTitle') + '</b><button class="im-x" data-act="close">✕</button></div>';
+    h += '<div class="im-sec">' + t('enemyCount') + '</div><div class="im-step"><button data-d="-1">−</button><span class="im-stepv">' + (e.n || 0) + '</span><button data-d="1">+</button></div>';
+    h += '<input class="im-elabel" placeholder="' + t('enemyLabel') + '" value="' + esc(e.label || '') + '">';
+    h += '<div class="im-actions"><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
+    iconMenu.innerHTML = h; iconMenu.hidden = false; placeIconMenu(x, y);
+    iconMenu.querySelectorAll('.im-step button').forEach(b => b.addEventListener('click', () => { pushUndo(); e.n = Math.max(0, Math.min(99, (e.n || 0) + (+b.dataset.d))); iconMenu.querySelector('.im-stepv').textContent = e.n; renderTokens(); saveProject(); }));
+    iconMenu.querySelector('.im-elabel').addEventListener('input', ev => { e.label = ev.target.value.slice(0, 24); renderTokens(); saveProject(); });
+    iconMenu.querySelector('[data-act="remove"]').addEventListener('click', () => { pushUndo(); cur().enemies = (cur().enemies || []).filter(x => x.id !== e.id); closeIconMenu(); renderTokens(); saveProject(); });
+    iconMenu.querySelector('[data-act="close"]').addEventListener('click', closeIconMenu);
+  }
+  // ---- nosso lado (Azul/Oeste ou Vermelho/Leste): destaque leve da nossa metade ----
+  function renderSide() {
+    bgLayer.find('.side-ov').forEach(n => n.destroy());
+    if (state.side) {
+      const west = state.side === 'blue';
+      bgLayer.add(new Konva.Rect({ name: 'side-ov', x: west ? 0 : W / 2, y: 0, width: W / 2, height: H, fill: west ? 'rgba(106,168,224,0.10)' : 'rgba(226,91,82,0.10)', listening: false }));
+      bgLayer.add(new Konva.Line({ name: 'side-ov', points: [W / 2, 0, W / 2, H], stroke: 'rgba(255,255,255,0.14)', strokeWidth: Math.max(1, R * 0.05), dash: [8, 8], listening: false }));
+    }
+    bgLayer.batchDraw();
+    updateSideChip();
+  }
+  function updateSideChip() { const c = $('sideChip'); if (!c) return; const west = state.side === 'blue'; c.className = 'side-chip' + (state.side ? (' on ' + state.side) : ''); c.innerHTML = state.side ? ('<b>' + t('usLbl') + '</b> ' + (west ? '🔵 ' + t('westLbl') : '🔴 ' + t('eastLbl'))) : t('sidePick'); }
+  function cycleSide() { state.side = state.side === 'blue' ? 'red' : (state.side === 'red' ? null : 'blue'); renderSide(); saveProject(); }
   function clampToStage(pos) { return { x: Math.max(0, Math.min(W, pos.x)), y: Math.max(0, Math.min(H, pos.y)) }; }
   function ptPos(pt) { const t = (cur().tokens || []).find(x => x.pt === pt); return t ? { x: t.xf * W, y: t.yf * H } : null; }
   function renderTokens() {
@@ -272,6 +327,7 @@
     renderLinks();                                    // vínculos ficam por baixo dos tokens
     toks.forEach(t => tokenLayer.add(makePtToken(t)));
     (cur() ? cur().destacados : []).forEach(d => { if (ptPos(d.pt)) tokenLayer.add(makeMemberToken(d)); });
+    (cur() ? cur().enemies : []).forEach(e => tokenLayer.add(makeEnemyToken(e)));
     if (linkTempFrom) tokenLayer.add(linkTempArrow);  // preview de vínculo por cima
     tokenLayer.batchDraw(); syncPlacedChips();
     mapHint.classList.toggle('hide', hintDismissed || toks.length > 0 || (cur() && cur().desenhos.length) || state.present);
@@ -513,7 +569,7 @@
   function toggleObjPanel(force) { const show = force != null ? force : objPanel.hidden; if (show) { renderObjPanel(); objPanel.hidden = false; objBtn.classList.add('on'); } else { objPanel.hidden = true; objBtn.classList.remove('on'); } renderObjectives(); }
 
   // ---- desenho ----
-  function toolCursor() { return (DRAW.includes(state.tool) || state.tool === 'marca' || state.tool === 'nota') ? 'crosshair' : 'default'; }
+  function toolCursor() { return (DRAW.includes(state.tool) || state.tool === 'marca' || state.tool === 'nota' || state.tool === 'inimigo') ? 'crosshair' : 'default'; }
   function selectDrawColor(c) { state.drawColor = c; if (dtCurColor) dtCurColor.style.background = c; dtColors.querySelectorAll('.sw').forEach(s => s.classList.toggle('active', s.dataset.c && s.dataset.c.toLowerCase() === c.toLowerCase())); }
   function buildColorSwatches() { dtColors.innerHTML = ''; CFG.drawColors.forEach(c => { const sw = document.createElement('div'); sw.className = 'sw' + (c === state.drawColor ? ' active' : ''); sw.style.background = c; sw.title = c; sw.dataset.c = c; sw.addEventListener('click', () => { selectDrawColor(c); }); dtColors.appendChild(sw); }); if (dtCurColor) dtCurColor.style.background = state.drawColor; }
   function buildWidthOpts() { if (!dtWidthOpts) return; dtWidthOpts.innerHTML = ''; CFG.drawWidths.forEach(w => { const b = document.createElement('button'); b.className = (w === state.drawWidth ? 'active' : ''); b.dataset.w = w; b.innerHTML = '<span class="wbar" style="height:' + w + 'px"></span><span style="font-size:10px;font-family:var(--disp);font-weight:700">' + w + '</span>'; b.addEventListener('click', () => { state.drawWidth = w; dtWidthOpts.querySelectorAll('button').forEach(x => x.classList.toggle('active', +x.dataset.w === w)); if (dtWidthBtn) dtWidthBtn.textContent = w <= 2 ? '▁' : w <= 3 ? '▬' : w <= 5 ? '▬' : '█'; dtWidthPop.hidden = true; }); dtWidthOpts.appendChild(b); }); }
@@ -531,7 +587,7 @@
     (M.emojis || []).forEach(em => gE.appendChild(cell('emoji', em, '<span class="mk-em">' + em + '</span>', em)));
     markGrid.appendChild(gE);
   }
-  function setTool(t) { if (linkTempFrom) { cancelLink(); renderTokens(); } state.tool = t; drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t)); const noHit = DRAW.includes(t) || t === 'marca'; tokenLayer.listening(!noHit); objLayer.listening(!noHit); noteLayer.listening(t !== 'nota' && !DRAW.includes(t)); stage.container().style.cursor = toolCursor(); if (noHit || t === 'nota') { hidePopover(); closeIconMenu(); } if (markPicker) markPicker.hidden = (t !== 'marca'); renderMarks(); updateStageDrag(); }
+  function setTool(t) { if (linkTempFrom) { cancelLink(); renderTokens(); } state.tool = t; drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t)); const noHit = DRAW.includes(t) || t === 'marca' || t === 'inimigo'; tokenLayer.listening(!noHit); objLayer.listening(!noHit); noteLayer.listening(t === 'select'); stage.container().style.cursor = toolCursor(); if (noHit || t === 'nota') { hidePopover(); closeIconMenu(); } if (markPicker) markPicker.hidden = (t !== 'marca'); renderMarks(); updateStageDrag(); }
   function pxPts(pts) { const a = []; pts.forEach(p => { a.push(p[0] * W, p[1] * H); }); return a; }
   function shapeFromDesenho(d) {
     const stroke = d.cor || '#FFC21A', sw = d.largura || 3;
@@ -647,7 +703,7 @@
   function loadScenarioIntoUI() { const s = cur(); if (!s) return; nameInput.value = s.nome || ''; condInput.value = s.condicao || ''; noteInput.value = s.nota || ''; updateMini(); }
   function insertAfterCurrent(s) { const i = curIndex(); state.scenarios.splice(i < 0 ? state.scenarios.length : i + 1, 0, s); saveProject(); }
   function addScenarioBlank() { const s = newScenario({ fase: 'Cenário', nome: 'Cenário ' + (state.scenarios.length + 1) }); insertAfterCurrent(s); selectScenario(s.id); }
-  function duplicateCurrent() { const s = cur(); const memMap = {}; const destacados = s.destacados.map(d => { const nid = uid(); memMap[d.id] = nid; return Object.assign({}, d, { id: nid }); }); const remap = ref => { if (typeof ref === 'string' && ref.indexOf('mem:') === 0) { const ni = memMap[ref.slice(4)]; return ni ? 'mem:' + ni : null; } return ref; }; const links = (s.links || []).map(l => { const a = remap(l.a), b = remap(l.b); return (a && b) ? { id: uid(), a, b } : null; }).filter(Boolean); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), marcas: (s.marcas || []).map(m => Object.assign({}, m, { id: uid() })), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados, links, objHp: Object.assign({}, s.objHp || {}), objBuffs: JSON.parse(JSON.stringify(s.objBuffs || {})), treeCarry: Object.fromEntries(Object.entries(s.treeCarry || {}).map(([k, v]) => [k, v.map(id => memMap[id] || id)])), notas: (s.notas || []).map(n => Object.assign({}, n, { id: uid() })), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
+  function duplicateCurrent() { const s = cur(); const memMap = {}; const destacados = s.destacados.map(d => { const nid = uid(); memMap[d.id] = nid; return Object.assign({}, d, { id: nid }); }); const remap = ref => { if (typeof ref === 'string' && ref.indexOf('mem:') === 0) { const ni = memMap[ref.slice(4)]; return ni ? 'mem:' + ni : null; } return ref; }; const links = (s.links || []).map(l => { const a = remap(l.a), b = remap(l.b); return (a && b) ? { id: uid(), a, b } : null; }).filter(Boolean); insertAfterCurrent(newScenario({ fase: s.fase, nome: s.nome, condicao: s.condicao, tokens: s.tokens.map(t => ({ pt: t.pt, xf: t.xf, yf: t.yf })), desenhos: JSON.parse(JSON.stringify(s.desenhos)), marcas: (s.marcas || []).map(m => Object.assign({}, m, { id: uid() })), objetivos: Object.assign({}, s.objetivos), objetivoPos: JSON.parse(JSON.stringify(s.objetivoPos || {})), destacados, links, objHp: Object.assign({}, s.objHp || {}), objBuffs: JSON.parse(JSON.stringify(s.objBuffs || {})), treeCarry: Object.fromEntries(Object.entries(s.treeCarry || {}).map(([k, v]) => [k, v.map(id => memMap[id] || id)])), notas: (s.notas || []).map(n => Object.assign({}, n, { id: uid() })), enemies: (s.enemies || []).map(e => Object.assign({}, e, { id: uid() })), nota: s.nota })); selectScenario(state.scenarios[curIndex() + 1].id); }
   async function deleteScenario(id) { if (state.scenarios.length <= 1) { toast('É preciso ter ao menos um cenário'); return; } const i = state.scenarios.findIndex(s => s.id === id); if (i < 0) return; if (!isPristine(state.scenarios[i]) && !await askConfirm('Excluir o cenário "' + (state.scenarios[i].nome || '') + '"?')) return; state.scenarios.splice(i, 1); if (state.currentId === id) state.currentId = state.scenarios[Math.max(0, i - 1)].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
   function reorder(dragIdV, targetId, before) { const from = state.scenarios.findIndex(s => s.id === dragIdV); if (from < 0) return; const [m] = state.scenarios.splice(from, 1); let to = state.scenarios.findIndex(s => s.id === targetId); if (to < 0) state.scenarios.push(m); else state.scenarios.splice(before ? to : to + 1, 0, m); renderRail(); saveProject(); }
   function seedStandard() { const key = e => (e.nome || '') + '|' + (e.condicao || ''); if (state.scenarios.length === 1 && isPristine(state.scenarios[0])) state.scenarios = []; const have = new Set(state.scenarios.map(key)); CFG.fasesPadrao.forEach(f => { if (!have.has(key(f))) state.scenarios.push(newScenario({ fase: f.fase, nome: f.nome, condicao: f.condicao })); }); state.currentId = state.scenarios[0].id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderTokens(); renderSidebar(); saveProject(); }
@@ -794,11 +850,11 @@
   }
 
   // ---- export / import / compartilhar / reset ----
-  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, showNames: state.showNames, cenarios: state.scenarios }; }
+  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side, showNames: state.showNames, cenarios: state.scenarios }; }
   function sanitizeDesc(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => PT_IDS.includes(k) && typeof v === 'string' && v.trim()).map(([k, v]) => [k, String(v)])) : {}; }
   function sanitizePosMap(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}; }
   function exportProject() { const blob = new Blob([JSON.stringify(projectData(), null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob), d = new Date(), pad = n => String(n).padStart(2, '0'); const a = document.createElement('a'); a.href = url; a.download = 'estrategia-wanted-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
-  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste plano.'); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
+  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert('Não encontrei cenários neste plano.'); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
   function importProjectFile(file) { const reader = new FileReader(); reader.onload = async () => { let d; try { d = JSON.parse(reader.result); } catch (e) { toast('Arquivo inválido: não é um JSON'); return; } if (!Array.isArray(d.cenarios) && !Array.isArray(d.scenarios)) { toast('Não encontrei cenários neste arquivo'); return; } if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Importar vai substituir o plano atual. Continuar?')) return; applyImported(d); }; reader.readAsText(file); }
   async function resetAll() { if (!await askConfirm('Resetar tudo e começar um plano do zero? Isso apaga o plano atual (PTs, cenários, desenhos, roster).')) return; try { localStorage.removeItem(CFG.projectKey); } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; state.roster = []; state.ptDesc = {}; state.ptIcon = {}; state.objetivoPosGlobal = {}; state.gates = {}; toggleObjPanel(false); hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); toast('Plano resetado ✓'); }
   function b64urlFromBytes(bytes) { let bin = ''; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
@@ -880,7 +936,7 @@
     stage.on('mousemove touchmove', moveDraw);
     stage.on('mousemove touchmove', () => { if (linkTempFrom) { updateLinkTemp(); tokenLayer.batchDraw(); } });
     stage.on('mouseup touchend', endDraw);
-    stage.on('click tap', e => { if (linkTempFrom) { if (e.target === stage || e.target === bgImage) { cancelLink(); renderTokens(); } return; } if (carryPickFor) { if (e.target === stage || e.target === bgImage) { carryPickFor = null; document.body.classList.remove('linking'); } return; } if (state.tool === 'marca' && !state.present) { placeMark(); return; } if (state.tool === 'nota' && !state.present) { placeNote(); return; } if (state.tool === 'select' && (e.target === stage || e.target === bgImage)) { hidePopover(); closeIconMenu(); } });
+    stage.on('click tap', e => { if (linkTempFrom) { if (e.target === stage || e.target === bgImage) { cancelLink(); renderTokens(); } return; } if (carryPickFor) { if (e.target === stage || e.target === bgImage) { carryPickFor = null; document.body.classList.remove('linking'); } return; } if (state.tool === 'marca' && !state.present) { placeMark(); return; } if (state.tool === 'nota' && !state.present) { placeNote(); return; } if (state.tool === 'inimigo' && !state.present) { placeEnemy(); return; } if (state.tool === 'select' && (e.target === stage || e.target === bgImage)) { hidePopover(); closeIconMenu(); } });
 
     drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
     // flyouts de cor e espessura (só aparecem ao apertar)
@@ -892,6 +948,7 @@
     document.addEventListener('click', e => { if (!e.target.closest('#dtColorPop') && !e.target.closest('#dtColorBtn')) dtColorPop.hidden = true; if (!e.target.closest('#dtWidthPop') && !e.target.closest('#dtWidthBtn')) dtWidthPop.hidden = true; });
     undoBtn.addEventListener('click', doUndo); redoBtn.addEventListener('click', doRedo); clearDraw.addEventListener('click', clearDrawings);
     { const nt = $('namesTgl'); if (nt) { nt.classList.toggle('on', state.showNames); nt.addEventListener('click', () => { state.showNames = !state.showNames; nt.classList.toggle('on', state.showNames); renderTokens(); saveProject(); }); } }
+    { const sc = $('sideChip'); if (sc) sc.addEventListener('click', cycleSide); }
     objBtn.addEventListener('click', () => toggleObjPanel()); objClose.addEventListener('click', () => toggleObjPanel(false));
 
     nameInput.addEventListener('input', () => { cur().nome = nameInput.value; syncCard(); saveProject(); });
@@ -973,8 +1030,8 @@
   function setDock(open) { document.body.classList.toggle('fases-open', open); fasesBtn.classList.toggle('on', open); updateMini(); }
 
   // ---- persistência ----
-  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, showNames: state.showNames })); } catch (e) {} }
-  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
-  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, objBuffs: (s.objBuffs && typeof s.objBuffs === 'object') ? Object.fromEntries(Object.entries(s.objBuffs).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string')])) : {}, treeCarry: (s.treeCarry && typeof s.treeCarry === 'object') ? Object.fromEntries(Object.entries(s.treeCarry).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string').slice(0, 2)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240) })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
+  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side, showNames: state.showNames })); } catch (e) {} }
+  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
+  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, objBuffs: (s.objBuffs && typeof s.objBuffs === 'object') ? Object.fromEntries(Object.entries(s.objBuffs).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string')])) : {}, treeCarry: (s.treeCarry && typeof s.treeCarry === 'object') ? Object.fromEntries(Object.entries(s.treeCarry).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string').slice(0, 2)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240) })) : [], enemies: Array.isArray(s.enemies) ? s.enemies.map(e => ({ id: e.id || uid(), x: clamp01(e.x), y: clamp01(e.y), n: Math.max(0, Math.min(99, parseInt(e.n) || 0)), label: typeof e.label === 'string' ? e.label.slice(0, 24) : '' })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tags: (Array.isArray(p.tags) ? p.tags : (p.tag2 ? [p.tag2] : [])).filter(tg => (CFG.secondaryTags || []).includes(tg)), flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], replace: !!p.replace, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
