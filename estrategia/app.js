@@ -156,6 +156,7 @@
   function roleColor(f) { return CFG.roleColors[f] || CFG.roleColors.DPS; }
   function memTags(m) { return Array.isArray(m.tags) ? m.tags : (m.tag2 ? [m.tag2] : []); }
   function memBadges(m) { let s = ''; memTags(m).forEach(tg => s += '<span class="mb-tag">' + esc(tg) + '</span>'); (m.flags || []).forEach(fid => { const f = (CFG.specialFlags || []).find(x => x.id === fid); if (f) s += '<span class="mb-flag" title="' + esc(f.label) + '">' + f.icon + '</span>'; }); return s; }
+  function centerLabelX(node) { const r = node.getClientRect({ skipTransform: true, skipShadow: true, skipStroke: true }); node.offsetX(r.x + r.width / 2); }
   function hexA(hex, a) { const m = /^#?([0-9a-f]{6})$/i.exec(hex); if (!m) return hex; const n = parseInt(m[1], 16); return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')'; }
 
   // ---- boot ----
@@ -272,7 +273,9 @@
     g.add(new Konva.Circle({ radius: pr + 2, fill: p.cor, opacity: 0.14 }));
     g.add(new Konva.Circle({ radius: pr, fill: 'rgba(11,14,21,.55)', stroke: p.cor, strokeWidth: Math.max(1.4, pr * 0.1), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.32, shadowOffsetY: 1 }));
     g.add(new Konva.Text({ text: t.pt, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: Math.round(pr * 0.72), fill: p.cor, align: 'center', verticalAlign: 'middle', width: pr * 2.4, height: pr * 1.4, offsetX: pr * 1.2, offsetY: pr * 0.7, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.7 }));
-    const n = membersOf(t.pt, false).length;
+    // conta só quem ainda está na formação: membros já destacados no mapa saem da conta
+    const placed = new Set((cur().destacados || []).filter(d => d.pt === t.pt).map(d => d.nome));
+    const n = membersOf(t.pt, false).filter(m => !placed.has(m.nome)).length;
     if (n) { const b = new Konva.Label({ x: pr * 0.72, y: pr * 0.72 }); b.add(new Konva.Tag({ fill: p.cor, cornerRadius: pr * 0.5 })); b.add(new Konva.Text({ text: String(n), fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: Math.round(pr * 0.55), fill: '#0a0c11', padding: Math.max(1.5, pr * 0.16) })); g.add(b); }
     const pIc = state.ptIcon[t.pt];
     if (pIc && pIc.indexOf('asset:') === 0) { const im = iconImgs[pIc.slice(6)]; if (im && im.width) { const s = pr * 1.5, h = s * (im.height / im.width); g.add(new Konva.Image({ image: im, width: s, height: h, offsetX: s / 2, offsetY: h / 2, y: -pr * 1.05, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); } }
@@ -318,7 +321,7 @@
       lbl.add(new Konva.Tag({ fill: 'rgba(10,12,17,.92)', cornerRadius: 3, stroke: dead ? '#5b626d' : rc, strokeWidth: 1 }));
       const nmTx = new Konva.Text({ text: short, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: dead ? '#c9cdd4' : '#F2EFE6', padding: 3, letterSpacing: 0.2, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.7 });
       lbl.add(nmTx); g.add(lbl);
-      const recenter = () => lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2);
+      const recenter = () => centerLabelX(lbl);
       recenter();
       if (full !== short) { // nome longo: mostra completo ao passar o mouse
         g.on('mouseenter.nm', () => { nmTx.text(full); recenter(); tokenLayer.batchDraw(); });
@@ -642,7 +645,7 @@
       if (!up[o.id]) return;
       const pos = objPos(o);
       const unlocked = unlockedObjs.has(o.id);
-      if (o.caminho) { const gp = gatePos(o); objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, gp.x * W, gp.y * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.06), dash: [4, 6], listening: false, name: 'treepath-' + o.id })); if (!state.present && state.tool === 'select' && unlocked) { const gh = new Konva.Group({ x: gp.x * W, y: gp.y * H, draggable: true, name: 'gate-' + o.id }); gh.add(new Konva.Rect({ width: os * 0.5, height: os * 0.9, offsetX: os * 0.25, offsetY: os * 0.45, cornerRadius: 2, fill: 'rgba(240,198,107,.18)', stroke: '#f0c66b', strokeWidth: Math.max(1.4, os * 0.06), dash: [3, 3] })); gh.add(new Konva.Text({ text: '⛩', fontSize: os * 0.5, offsetX: os * 0.25, offsetY: os * 0.3, opacity: 0.9 })); gh.dragBoundFunc(clampToStage); gh.on('dragstart', () => { pushUndo(); }); gh.on('dragmove', () => { const t2 = objLayer.findOne('.treepath-' + o.id); if (t2) t2.points([o.caminho.a[0] * W, o.caminho.a[1] * H, gh.x(), gh.y()]); const on = objLayer.findOne('.obj-' + o.id); if (on) { const tm = on.findOne('.tm'); if (tm) { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; const op = objPos(o); tm.findOne('Text').text(treeMeters(o, op.x, op.y) + 'm'); tm.offsetX(tm.getClientRect({ skipTransform: true }).width / 2); } } objLayer.batchDraw(); }); gh.on('dragend', () => { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; renderObjectives(); saveProject(); }); gh.on('mouseenter', () => stage.container().style.cursor = 'grab'); gh.on('mouseleave', () => stage.container().style.cursor = toolCursor()); objLayer.add(gh); } }
+      if (o.caminho) { const gp = gatePos(o); objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, gp.x * W, gp.y * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.06), dash: [4, 6], listening: false, name: 'treepath-' + o.id })); if (!state.present && state.tool === 'select' && unlocked) { const gh = new Konva.Group({ x: gp.x * W, y: gp.y * H, draggable: true, name: 'gate-' + o.id }); gh.add(new Konva.Rect({ width: os * 0.5, height: os * 0.9, offsetX: os * 0.25, offsetY: os * 0.45, cornerRadius: 2, fill: 'rgba(240,198,107,.18)', stroke: '#f0c66b', strokeWidth: Math.max(1.4, os * 0.06), dash: [3, 3] })); gh.add(new Konva.Text({ text: '⛩', fontSize: os * 0.5, offsetX: os * 0.25, offsetY: os * 0.3, opacity: 0.9 })); gh.dragBoundFunc(clampToStage); gh.on('dragstart', () => { pushUndo(); }); gh.on('dragmove', () => { const t2 = objLayer.findOne('.treepath-' + o.id); if (t2) t2.points([o.caminho.a[0] * W, o.caminho.a[1] * H, gh.x(), gh.y()]); const on = objLayer.findOne('.obj-' + o.id); if (on) { const tm = on.findOne('.tm'); if (tm) { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; const op = objPos(o); tm.findOne('Text').text(treeMeters(o, op.x, op.y) + 'm'); centerLabelX(tm); } } objLayer.batchDraw(); }); gh.on('dragend', () => { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; renderObjectives(); saveProject(); }); gh.on('mouseenter', () => stage.container().style.cursor = 'grab'); gh.on('mouseleave', () => stage.container().style.cursor = toolCursor()); objLayer.add(gh); } }
       const canDrag = !state.present && state.tool === 'select' && unlocked;
       const g = new Konva.Group({ x: pos.x * W, y: pos.y * H, draggable: canDrag, name: 'obj-' + o.id });
       if (unlocked) g.add(new Konva.Circle({ radius: os * 0.7, stroke: '#f0c66b', strokeWidth: Math.max(1, os * 0.05), dash: [3, 3], opacity: 0.85, listening: false }));
@@ -659,7 +662,7 @@
         g.add(new Konva.Image({ image: img, width: osz, height: h, offsetX: osz / 2, offsetY: h / 2, scaleX: o.flip ? -1 : 1, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 }));
       }
       else { const st = objStyle(o); iconH = os * 0.88; g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.62)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: os * (st.emoji ? 0.5 : st.t.length > 1 ? 0.3 : 0.42), fill: st.emoji ? undefined : st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
-      if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.52 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.26), fill: '#f0c66b', padding: 3 })); ml.offsetX(ml.getClientRect({ skipTransform: true }).width / 2); g.add(ml); }
+      if (o.caminho) { const ml = new Konva.Label({ name: 'tm', y: os * 0.52 }); ml.add(new Konva.Tag({ fill: 'rgba(10,12,17,.82)', cornerRadius: 3, pointerDirection: 'up', pointerWidth: 5, pointerHeight: 4 })); ml.add(new Konva.Text({ text: treeMeters(o, pos.x, pos.y) + 'm', fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.26), fill: '#f0c66b', padding: 3 })); centerLabelX(ml); g.add(ml); }
       // barra de HP (quando < 100%) — árvore mostra em cima pra não bater no medidor de metros
       const hp = (cur().objHp || {})[o.id];
       if (hp != null && hp < 100) {
@@ -671,7 +674,7 @@
         const lbl = new Konva.Label({ y: by });
         lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.86)', cornerRadius: fs * 0.55, stroke: hc, strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.6 }));
         lbl.add(new Konva.Text({ text: hp + '%', fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, padding: pad, shadowColor: '#000', shadowBlur: 1.5, shadowOpacity: 0.85 }));
-        lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2); g.add(lbl);
+        centerLabelX(lbl); g.add(lbl);
       }
       // selos de buff ativos (City Protection / You Got a Problem / Hair Pulling) acima do ícone
       const abuffs = (cur().objBuffs || {})[o.id] || [];
@@ -688,7 +691,7 @@
       if (canDrag) {
         g.dragBoundFunc(clampToStage);
         g.on('dragstart', () => { closeIconMenu(); g.moveToTop(); if (o.movel) pushUndo(); });
-        g.on('dragmove', () => { if (o.caminho) { const t = g.findOne('.tm'); if (t) { t.findOne('Text').text(treeMeters(o, g.x() / W, g.y() / H) + 'm'); t.offsetX(t.getClientRect({ skipTransform: true }).width / 2); } const carr = (cur().treeCarry || {})[o.id] || []; carr.forEach((mid, idx) => { const mn = tokenLayer.findOne('#mem-' + mid); if (mn) { const rm = Math.max(7, R * 0.5); mn.position({ x: g.x() + (idx === 0 ? -1 : 1) * rm * 1.5, y: g.y() + rm * 1.4 }); } }); tokenLayer.batchDraw(); } objLayer.batchDraw(); updateLinks(); });
+        g.on('dragmove', () => { if (o.caminho) { const t = g.findOne('.tm'); if (t) { t.findOne('Text').text(treeMeters(o, g.x() / W, g.y() / H) + 'm'); centerLabelX(t); } const carr = (cur().treeCarry || {})[o.id] || []; carr.forEach((mid, idx) => { const mn = tokenLayer.findOne('#mem-' + mid); if (mn) { const rm = Math.max(7, R * 0.5); mn.position({ x: g.x() + (idx === 0 ? -1 : 1) * rm * 1.5, y: g.y() + rm * 1.4 }); } }); tokenLayer.batchDraw(); } objLayer.batchDraw(); updateLinks(); });
         g.on('dragend', () => { const p = { x: clamp01(g.x() / W), y: clamp01(g.y() / H) }; if (o.movel) { cur().objetivoPos = cur().objetivoPos || {}; cur().objetivoPos[o.id] = p; } else { state.objetivoPosGlobal[o.id] = p; } saveProject(); });
         g.on('mouseenter', () => stage.container().style.cursor = 'grab');
         g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
