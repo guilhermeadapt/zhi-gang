@@ -228,6 +228,9 @@
     .draw-tools .dt-enemy{color:#e0857c}
     .draw-tools .dt-enemy:hover{color:#ef9c93}
     .draw-tools .dt-enemy.active{color:#241a06}
+    .draw-tools .dt-focus{color:#e6c877}
+    .draw-tools .dt-focus:hover{color:#f2d98a}
+    .draw-tools .dt-focus.active{color:#241a06}
     /* selo "nosso lado" */
     .side-ctl{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:9;display:inline-flex;align-items:center;gap:6px;
       font-family:var(--disp);background:rgba(12,15,22,.9);border:1px solid var(--line-soft);border-radius:999px;padding:3px 4px 3px 11px;backdrop-filter:blur(6px);box-shadow:0 6px 20px -10px rgba(0,0,0,.7)}
@@ -700,6 +703,7 @@
           <button class="dt" data-tool="marca" title="Ícone / marcador (I)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></button>
           <button class="dt" data-tool="nota" title="Anotação / post-it (N)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v11l-5 5H4z"/><path d="M20 15h-5v5"/></svg></button>
           <button class="dt dt-enemy" data-tool="inimigo" title="Inimigo defendendo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7M4 6V4h2M8.5 8.5L4 13v3h3l4.5-4.5"/><path d="M20 4l-7 7M20 6V4h-2M15.5 8.5L20 13v3h-3l-4.5-4.5"/></svg></button>
+          <button class="dt dt-focus" data-tool="foco" title="Foco — destaca uma área e escurece o resto (arraste; clique pra limpar)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg></button>
           <div class="dt-sep"></div>
           <button class="dt dt-cbtn" id="dtColorBtn" title="Cor do traço"><span class="dt-csw" id="dtCurColor"></span></button>
           <button class="dt dt-wbtn" id="dtWidthBtn" title="Espessura do traço">▬</button>
@@ -880,7 +884,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=45"></script>
-  <script src="./app.js?v=45"></script>
+  <script src="./config.js?v=46"></script>
+  <script src="./app.js?v=46"></script>
 </body>
 </html>
