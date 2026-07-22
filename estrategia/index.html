@@ -374,6 +374,12 @@
     .scene .sc-name{font-family:var(--disp);font-weight:600;font-size:12.5px;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .scene .sc-cond{font-family:var(--body);font-size:10px;color:var(--gold-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .scene .sc-meta{font-family:var(--disp);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    /* variação: card mais estreito, recuado, com traço-conector à esquerda (agrupado ao cenário-base) */
+    .scene.scene-var{width:118px;background:linear-gradient(180deg,#12151d,#0b0e14);border-style:dashed;margin-left:2px}
+    .scene.scene-var::before{content:"";position:absolute;left:-5px;top:50%;width:5px;height:1px;background:var(--line);opacity:.6}
+    .scene.scene-var .sc-idx.sc-idx-var{background:transparent;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);width:auto;min-width:17px;padding:0 4px}
+    .scene.scene-var.active .sc-idx.sc-idx-var{background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#0a0c11;border-color:var(--gold)}
+    .scene.scene-var .sc-meta{color:var(--gold-2);opacity:.75}
     .scene .sc-del{position:absolute;top:4px;right:4px;width:16px;height:16px;border:0;border-radius:5px;cursor:pointer;background:rgba(0,0,0,.35);color:var(--muted);font-size:12px;line-height:1;display:none;place-items:center}
     .scene:hover .sc-del{display:grid}
     .scene .sc-del:hover{color:var(--crimson);background:rgba(226,91,82,.15)}
@@ -787,6 +793,7 @@
         </div>
         <div class="dock-actions">
           <button class="rbtn gold" id="dupScene" title="Cria um novo cenário já com PTs, desenhos e objetivos como estão agora"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Duplicar</button>
+          <button class="rbtn" id="varScene" title="Cria uma variação do cenário atual (mesma base, mudança pequena) — fica agrupada embaixo dele"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a4 4 0 0 0 4 4h8"/><circle cx="6" cy="4" r="2"/><path d="M18 9l3 4-3 4"/></svg>Variação</button>
           <button class="rbtn" id="addScene" title="Cria um cenário em branco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Cenário</button>
           <button class="rbtn" id="seedBtn" title="Semeia os cenários das fases padrão da partida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>Fases padrão</button>
         </div>
@@ -884,7 +891,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=46"></script>
-  <script src="./app.js?v=46"></script>
+  <script src="./config.js?v=47"></script>
+  <script src="./app.js?v=47"></script>
 </body>
 </html>
