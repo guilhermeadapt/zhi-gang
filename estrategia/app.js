@@ -212,9 +212,9 @@
   function makePtToken(t) {
     const p = partyById.get(t.pt);
     const g = new Konva.Group({ draggable: !state.present, name: 'pt-' + t.pt });
-    g.add(new Konva.Circle({ radius: R + 3, fill: p.cor, opacity: 0.2 }));
-    g.add(new Konva.Circle({ radius: R, fill: '#0b0e15', stroke: p.cor, strokeWidth: Math.max(1.8, R * 0.11), shadowColor: '#000', shadowBlur: 6, shadowOpacity: 0.4, shadowOffsetY: 1 }));
-    g.add(new Konva.Text({ text: t.pt, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(R * 0.72), fill: p.cor, align: 'center', verticalAlign: 'middle', width: R * 2.4, height: R * 1.4, offsetX: R * 1.2, offsetY: R * 0.7 }));
+    g.add(new Konva.Circle({ radius: R + 2, fill: p.cor, opacity: 0.14 }));
+    g.add(new Konva.Circle({ radius: R, fill: 'rgba(11,14,21,.55)', stroke: p.cor, strokeWidth: Math.max(1.6, R * 0.1), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.32, shadowOffsetY: 1 }));
+    g.add(new Konva.Text({ text: t.pt, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(R * 0.72), fill: p.cor, align: 'center', verticalAlign: 'middle', width: R * 2.4, height: R * 1.4, offsetX: R * 1.2, offsetY: R * 0.7, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.7 }));
     const n = membersOf(t.pt, false).length;
     if (n) { const b = new Konva.Label({ x: R * 0.7, y: R * 0.7 }); b.add(new Konva.Tag({ fill: p.cor, cornerRadius: R * 0.5 })); b.add(new Konva.Text({ text: String(n), fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.round(R * 0.55), fill: '#0a0c11', padding: Math.max(1.5, R * 0.16) })); g.add(b); }
     const pIc = state.ptIcon[t.pt];
@@ -457,11 +457,11 @@
       const abuffs = (cur().objBuffs || {})[o.id] || [];
       if (abuffs.length) {
         const defs = objBuffsFor(o), shown = abuffs.map(id => defs.find(d => d.id === id)).filter(Boolean);
-        const br = Math.max(9, os * 0.5), gap = br * 2 + Math.max(2, os * 0.14), tot = (shown.length - 1) * gap, by = -iconH / 2 - br - Math.max(3, os * 0.22);
+        const br = Math.max(7, os * 0.4), gap = br * 2 + Math.max(1, os * 0.06), tot = (shown.length - 1) * gap, by = -iconH / 2 - br * 0.35;
         shown.forEach((def, i) => {
           const bx = -tot / 2 + i * gap;
-          g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: 'rgba(10,12,17,.92)', stroke: '#f0c66b', strokeWidth: Math.max(1, os * 0.06), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.6 }));
-          g.add(new Konva.Text({ text: def.icon, fontFamily: '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji","Twemoji Mozilla",sans-serif', fontSize: br * 1.28, x: bx - br, y: by - br, width: br * 2, height: br * 2, align: 'center', verticalAlign: 'middle' }));
+          g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: 'rgba(10,12,17,.55)', stroke: 'rgba(240,198,107,.7)', strokeWidth: Math.max(0.8, os * 0.04), shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.45 }));
+          g.add(new Konva.Text({ text: def.icon, fontFamily: '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji","Twemoji Mozilla",sans-serif', fontSize: br * 1.24, x: bx - br, y: by - br, width: br * 2, height: br * 2, align: 'center', verticalAlign: 'middle' }));
         });
       }
       g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); objLayer.batchDraw(); iconClicked('obj:' + o.id, () => openObjMenu(o, g.x(), g.y())); });
