@@ -183,6 +183,9 @@
     renderSidebar(); renderRail(); loadScenarioIntoUI(); fit(); wireEvents(); maybeLoadShared();
     setTimeout(() => { hintDismissed = true; mapHint.classList.add('hide'); }, 5000);   // aviso some em 5s (definitivo)
     setTimeout(() => toast(t(isMobile() ? 'zoomTipM' : 'zoomTip')), 900);
+    // canvas não reflui sozinho quando a webfont carrega: re-renderiza os rótulos
+    // do mapa quando Oswald/Barlow terminam de baixar (senão ficam na fonte fallback).
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { try { renderObjectives(); renderTokens(); renderMarks(); renderNotes(); } catch (_) {} });
   }
 
   // ---- layout + zoom ----
@@ -638,19 +641,15 @@
       // barra de HP (quando < 100%) — árvore mostra em cima pra não bater no medidor de metros
       const hp = (cur().objHp || {})[o.id];
       if (hp != null && hp < 100) {
+        // HP unificado: selo compacto em TODOS os objetivos (não mais barra larga).
+        // árvore tem os metros embaixo -> selo vai em cima; demais ficam na base do ícone.
         const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52';
-        if (isTower) {
-          // torre: HP como selo compacto DENTRO do ícone (não ocupa espaço em volta)
-          const fs = Math.max(6.5, osz * 0.22), pad = Math.max(1, fs * 0.16), lbl = new Konva.Label({ y: iconH * 0.16 });
-          lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.82)', cornerRadius: fs * 0.6, stroke: hc, strokeWidth: 0.7 }));
-          lbl.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, padding: pad, shadowColor: '#000', shadowBlur: 1.5, shadowOpacity: 0.8 }));
-          lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2); g.add(lbl);
-        } else {
-          const bw = Math.max(osz * 0.98, os * 0.92), bh = Math.max(4, os * 0.16), by = o.caminho ? (-iconH / 2 - bh - Math.max(9, os * 0.28)) : (iconH / 2 + Math.max(2, os * 0.12));
-          g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.92)', stroke: 'rgba(255,255,255,.3)', strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.7, shadowOffsetY: 1 }));
-          g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, shadowColor: hc, shadowBlur: 4, shadowOpacity: 0.5 }));
-          g.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: Math.max(9, os * 0.28), fill: hc, align: 'center', width: bw + os * 2, offsetX: (bw + os * 2) / 2, y: by + bh + 1, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.9 }));
-        }
+        const fs = Math.max(7, osz * 0.24), pad = Math.max(1, fs * 0.16);
+        const by = o.caminho ? (-iconH / 2 - fs * 0.9) : (iconH * 0.2);
+        const lbl = new Konva.Label({ y: by });
+        lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.86)', cornerRadius: fs * 0.55, stroke: hc, strokeWidth: 0.8, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.6 }));
+        lbl.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, padding: pad, shadowColor: '#000', shadowBlur: 1.5, shadowOpacity: 0.85 }));
+        lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2); g.add(lbl);
       }
       // selos de buff ativos (City Protection / You Got a Problem / Hair Pulling) acima do ícone
       const abuffs = (cur().objBuffs || {})[o.id] || [];
