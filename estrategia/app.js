@@ -26,7 +26,7 @@
       tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', groupClass:'⊟ Por classe', bdLegend:'Arraste cada jogador para a PT, para as <b>reservas da PT</b> ou reservas gerais. Clique num jogador para função, tarja e flags. Alvo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas da PT', genReserves:'Reservas gerais', obsPh:'Observações da PT…', roleLbl:'Função', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Jogar todos os disponíveis para reservas',
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
-      shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover', zoomTipM:'Pinça = zoom · arraste = mover · toque = editar',
+      shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', focusClear:'Foco removido', zoomTip:'Scroll = zoom · arraste o mapa para mover', zoomTipM:'Pinça = zoom · arraste = mover · toque = editar',
       menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', nameToggle:'Nome no mapa', unlockAction:'Destravar posição', lockAction:'Travar posição', unlockedHint:'Destravado — arraste para reposicionar', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
@@ -38,7 +38,7 @@
       tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', groupClass:'⊟ Por clase', bdLegend:'Arrastra cada jugador a la PT, a las <b>reservas de la PT</b> o reservas generales. Haz clic en un jugador para función, tarja y flags. Objetivo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas de la PT', genReserves:'Reservas generales', obsPh:'Observaciones de la PT…', roleLbl:'Función', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Enviar todos los disponibles a reservas',
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
-      shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover', zoomTipM:'Pellizca = zoom · arrastra = mover · toca = editar',
+      shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', focusClear:'Foco quitado', zoomTip:'Scroll = zoom · arrastra el mapa para mover', zoomTipM:'Pellizca = zoom · arrastra = mover · toca = editar',
       menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', nameToggle:'Nombre en el mapa', unlockAction:'Desbloquear posición', lockAction:'Bloquear posición', unlockedHint:'Desbloqueado — arrastra para reposicionar', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
@@ -50,7 +50,7 @@
       tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', groupClass:'⊟ By class', bdLegend:'Drag each player to the PT, to the <b>PT reserves</b> or general reserves. Click a player for role, tag and flags. Target: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Starters', ptReserves:'PT reserves', genReserves:'General reserves', obsPh:'PT notes…', roleLbl:'Role', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Send all available to reserves',
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
-      shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move', zoomTipM:'Pinch = zoom · drag = move · tap = edit',
+      shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', focusClear:'Focus cleared', zoomTip:'Scroll = zoom · drag the map to move', zoomTipM:'Pinch = zoom · drag = move · tap = edit',
       menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', nameToggle:'Name on map', unlockAction:'Unlock position', lockAction:'Lock position', unlockedHint:'Unlocked — drag to reposition', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
@@ -118,9 +118,10 @@
   const markLayer = new Konva.Layer();
   const tokenLayer = new Konva.Layer();
   const noteLayer = new Konva.Layer();
-  // ordem z: fundo < desenhos < tokens (PT/membros/inimigos/vínculos) < OBJETIVOS < carimbos < notas
+  const focusLayer = new Konva.Layer({ listening: false });   // spotlight de foco (por cima de tudo)
+  // ordem z: fundo < desenhos < tokens (PT/membros/inimigos/vínculos) < OBJETIVOS < carimbos < notas < FOCO
   // objetivos ficam ACIMA de setas e nomes pra não serem tapados.
-  stage.add(bgLayer, drawLayer, tokenLayer, objLayer, markLayer, noteLayer);
+  stage.add(bgLayer, drawLayer, tokenLayer, objLayer, markLayer, noteLayer, focusLayer);
   const bgImage = new Konva.Image({ x: 0, y: 0 });
   bgLayer.add(bgImage);
   let W = 10, H = 10, R = 20;
@@ -194,7 +195,7 @@
     stage.size({ width: W, height: H });
     stageWrap.style.width = W + 'px'; stageWrap.style.height = H + 'px';
     bgImage.size({ width: W, height: H }); renderSide();
-    hidePopover(); updateStageDrag(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens();
+    hidePopover(); updateStageDrag(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); renderFocus();
   }
   function clampPos(x, y, s) { const minX = W - W * s, minY = H - H * s; if (s <= 1) return { x: 0, y: 0 }; return { x: Math.min(0, Math.max(minX, x)), y: Math.min(0, Math.max(minY, y)) }; }
   function updateStageDrag() { stage.draggable(stage.scaleX() > 1 && state.tool === 'select'); }
@@ -303,20 +304,18 @@
     const carryUp = carryTree ? objById.get(carryTree) : null;
     const carryArr = (carryUp && (cur().objetivos || {})[carryTree]) ? (cur().treeCarry[carryTree] || []) : [];
     const carryIdx = carryArr.indexOf(d.id), isCarry = carryIdx >= 0;
+    const hasHp = d.hp != null && d.hp < 100 && !dead;
     if (state.showNames && !d.hideName) {
-      const fs = Math.max(7, R * 0.29);
-      const full = d.nome, short = full.length > 6 ? full.slice(0, 5) + '…' : full;
-      let lbl;
-      if (isCarry) { // carry: nome centralizado embaixo, fundo opaco (2 carries não borram um no outro)
-        lbl = new Konva.Label({ y: rm + 2 });
-        lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.9)', cornerRadius: 3, stroke: rc, strokeWidth: 0.8 }));
-      } else {
-        lbl = new Konva.Label({ x: rm + 3, y: -fs * 0.7 });
-        lbl.add(new Konva.Tag({ fill: 'rgba(8,10,14,.42)', cornerRadius: 3 }));
-      }
-      const nmTx = new Konva.Text({ text: short, fontFamily: 'Oswald, sans-serif', fontStyle: '600', fontSize: fs, fill: dead ? '#c9cdd4' : '#EDEBE4', padding: 2.5, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.55 });
+      // chip de nome: sólido, alto contraste, SEMPRE centralizado embaixo (previsível,
+      // não colide na horizontal com vizinhos). Borda na cor da função.
+      const fs = Math.max(8, R * 0.3);
+      const full = d.nome, short = full.length > 7 ? full.slice(0, 6) + '…' : full;
+      const ny = rm + (hasHp ? rm * 1.9 : rm * 0.32);
+      const lbl = new Konva.Label({ y: ny });
+      lbl.add(new Konva.Tag({ fill: 'rgba(10,12,17,.92)', cornerRadius: 3, stroke: dead ? '#5b626d' : rc, strokeWidth: 1 }));
+      const nmTx = new Konva.Text({ text: short, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: fs, fill: dead ? '#c9cdd4' : '#F2EFE6', padding: 3, letterSpacing: 0.2, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.7 });
       lbl.add(nmTx); g.add(lbl);
-      const recenter = () => { if (isCarry) lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2); };
+      const recenter = () => lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2);
       recenter();
       if (full !== short) { // nome longo: mostra completo ao passar o mouse
         g.on('mouseenter.nm', () => { nmTx.text(full); recenter(); tokenLayer.batchDraw(); });
@@ -327,9 +326,10 @@
     // se é carry de uma árvore up, gruda embaixo dela (empilhado, seguindo a árvore)
     let pinned = false;
     if (isCarry) {
-      const tp = objPos(carryUp), os2 = Math.max(13, W * 0.025), treeHalf = os2 * 0.9;
-      const step = rm * 2.6 + Math.max(7, R * 0.29) * 1.6; // altura do token + nome
-      g.position({ x: tp.x * W, y: tp.y * H + treeHalf + rm + carryIdx * step });
+      // carries lado a lado, tucados logo abaixo da árvore (nomes embaixo não colidem)
+      const tp = objPos(carryUp), os2 = Math.max(13, W * 0.025), treeHalf = os2 * 0.72;
+      const off = (carryIdx === 0 ? -1 : 1) * (rm + Math.max(15, R * 1.05));
+      g.position({ x: tp.x * W + off, y: tp.y * H + treeHalf + rm });
       g.draggable(false); pinned = true;
     }
     if (d.locked && !pinned) g.add(new Konva.Circle({ radius: rm + 2.5, stroke: '#8b93a1', strokeWidth: Math.max(1, rm * 0.1), dash: [2, 3], opacity: 0.7, listening: false }));
@@ -409,8 +409,8 @@
     bgLayer.batchDraw();
     updateSideChip();
   }
-  function updateSideChip() { const c = $('sideChip'); if (!c) return; const west = state.side === 'blue'; c.className = 'side-chip' + (state.side ? (' on ' + state.side) : ''); c.innerHTML = state.side ? ('<b>' + t('usLbl') + '</b> ' + (west ? '🔵 ' + t('westLbl') : '🔴 ' + t('eastLbl'))) : t('sidePick'); }
-  function cycleSide() { state.side = state.side === 'blue' ? 'red' : (state.side === 'red' ? null : 'blue'); renderSide(); saveProject(); }
+  function updateSideChip() { const c = $('sideChip'); if (!c) return; c.querySelectorAll('.sc-seg').forEach(b => b.classList.toggle('on', state.side === b.dataset.side)); const lbl = $('scLbl'); if (lbl) lbl.textContent = t('usLbl').replace(/:$/, ''); }
+  function setSide(v) { state.side = (state.side === v ? null : v); renderSide(); saveProject(); }
   function clampToStage(pos) { return { x: Math.max(0, Math.min(W, pos.x)), y: Math.max(0, Math.min(H, pos.y)) }; }
   function ptPos(pt) { const t = (cur().tokens || []).find(x => x.pt === pt); return t ? { x: t.xf * W, y: t.yf * H } : null; }
   function renderTokens() {
@@ -434,18 +434,21 @@
   }
   function anchorColor(ref) { const i = (ref || '').indexOf(':'); if (i < 0) return '#D9A441'; const ty = ref.slice(0, i), id = ref.slice(i + 1); if (ty === 'pt') { const p = partyById.get(id); return p ? p.cor : '#D9A441'; } if (ty === 'mem') { const d = (cur().destacados || []).find(x => x.id === id); return d ? roleColor(d.funcao) : '#D9A441'; } if (ty === 'obj') { const o = objById.get(id); return o ? objStyle(o).c : '#D9A441'; } return '#D9A441'; }
   // raio aproximado de cada ícone (pra seta parar na borda, não por cima)
-  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 0.94 : (o && o.icone === 'boss' ? 1.5 : 1); return os * sc * 0.55; } return R; }
+  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 0.94 : (o && o.icone === 'boss' ? 1.125 : 1); return os * sc * 0.55; } return R; }
   function linkPts(l) { const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (!a || !b) return null; const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, ra = anchorRadius(l.a), rb = anchorRadius(l.b); if (len <= ra + rb + 6) return [a.x, a.y, b.x, b.y]; return [a.x + ux * ra, a.y + uy * ra, b.x - ux * rb, b.y - uy * rb]; }
   function renderLinks() {
+    const dash = [Math.max(7, R * 0.5), Math.max(5, R * 0.34)], w = Math.max(2.8, R * 0.2);
     (cur() ? cur().links : []).forEach(l => {
       const pts = linkPts(l); if (!pts) return;
       const col = anchorColor(l.a);
-      const arr = new Konva.Arrow({ name: 'link-' + l.id, points: pts, stroke: col, fill: col, strokeWidth: Math.max(2.4, R * 0.17), pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), opacity: 0.95, dash: [Math.max(7, R * 0.5), Math.max(5, R * 0.34)], hitStrokeWidth: Math.max(16, R * 1.1), listening: !state.present, shadowColor: '#000', shadowBlur: Math.max(3, R * 0.28), shadowOpacity: 0.55, shadowOffsetY: 1 });
+      // sublinha escura (contorno) — faz a seta se destacar em qualquer terreno
+      tokenLayer.add(new Konva.Arrow({ name: 'linkbg-' + l.id, points: pts, stroke: '#0a0c11', fill: '#0a0c11', strokeWidth: w + 2.6, pointerLength: Math.max(8, R * 0.56), pointerWidth: Math.max(8, R * 0.56), opacity: 0.8, dash, lineCap: 'round', listening: false }));
+      const arr = new Konva.Arrow({ name: 'link-' + l.id, points: pts, stroke: col, fill: col, strokeWidth: w, pointerLength: Math.max(7, R * 0.5), pointerWidth: Math.max(7, R * 0.5), opacity: 1, dash, lineCap: 'round', hitStrokeWidth: Math.max(16, R * 1.1), listening: !state.present });
       if (!state.present) { arr.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; removeLink(l.id); }); arr.on('mouseenter', () => stage.container().style.cursor = 'pointer'); arr.on('mouseleave', () => stage.container().style.cursor = toolCursor()); }
       tokenLayer.add(arr);
     });
   }
-  function updateLinks() { (cur() ? cur().links : []).forEach(l => { const ln = tokenLayer.findOne('.link-' + l.id); if (!ln) return; const pts = linkPts(l); if (pts) ln.points(pts); }); if (linkTempFrom) updateLinkTemp(); tokenLayer.batchDraw(); }
+  function updateLinks() { (cur() ? cur().links : []).forEach(l => { const pts = linkPts(l); if (!pts) return; const ln = tokenLayer.findOne('.link-' + l.id); if (ln) ln.points(pts); const bg = tokenLayer.findOne('.linkbg-' + l.id); if (bg) bg.points(pts); }); if (linkTempFrom) updateLinkTemp(); tokenLayer.batchDraw(); }
   function updateConnectors() { updateLinks(); }
   function removeLink(id) { pushUndo(); cur().links = (cur().links || []).filter(l => l.id !== id); renderTokens(); saveProject(); toast('Vínculo removido'); }
   function pruneLinksFor(ref) { const s = cur(); if (s.links) s.links = s.links.filter(l => l.a !== ref && l.b !== ref); }
@@ -627,7 +630,7 @@
       const img = iconImgs[o.icone];
       // escala por tipo de ícone: torres 1.25x, boss 1.5x (o restante 1x)
       const isTower = o.icone && o.icone.indexOf('tower') === 0;
-      const osz = os * (isTower ? 0.94 : o.icone === 'boss' ? 1.5 : 1);
+      const osz = os * (isTower ? 0.94 : o.icone === 'boss' ? 1.125 : 1);
       let iconH = osz;
       if (img && img.width) { const h = osz * (img.height / img.width); iconH = h; g.add(new Konva.Image({ image: img, width: osz, height: h, offsetX: osz / 2, offsetY: h / 2, scaleX: o.flip ? -1 : 1, shadowColor: '#000', shadowBlur: 5, shadowOpacity: 0.35, shadowOffsetY: 1 })); }
       else { const st = objStyle(o); iconH = os * 0.88; g.add(new Konva.Circle({ radius: os * 0.44, fill: 'rgba(12,15,22,.62)', stroke: st.c, strokeWidth: Math.max(2, os * 0.08), shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.4 })); g.add(new Konva.Text({ text: st.t, fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: os * (st.emoji ? 0.5 : st.t.length > 1 ? 0.3 : 0.42), fill: st.emoji ? undefined : st.c, align: 'center', verticalAlign: 'middle', width: os * 1.6, height: os, offsetX: os * 0.8, offsetY: os / 2 })); }
@@ -709,7 +712,7 @@
   function toggleObjPanel(force) { const show = force != null ? force : objPanel.hidden; if (show) { renderObjPanel(); objPanel.hidden = false; objBtn.classList.add('on'); } else { objPanel.hidden = true; objBtn.classList.remove('on'); } renderObjectives(); }
 
   // ---- desenho ----
-  function toolCursor() { return (DRAW.includes(state.tool) || state.tool === 'marca' || state.tool === 'nota' || state.tool === 'inimigo') ? 'crosshair' : 'default'; }
+  function toolCursor() { return (DRAW.includes(state.tool) || state.tool === 'marca' || state.tool === 'nota' || state.tool === 'inimigo' || state.tool === 'foco') ? 'crosshair' : 'default'; }
   function selectDrawColor(c) { state.drawColor = c; if (dtCurColor) dtCurColor.style.background = c; dtColors.querySelectorAll('.sw').forEach(s => s.classList.toggle('active', s.dataset.c && s.dataset.c.toLowerCase() === c.toLowerCase())); }
   function buildColorSwatches() { dtColors.innerHTML = ''; CFG.drawColors.forEach(c => { const sw = document.createElement('div'); sw.className = 'sw' + (c === state.drawColor ? ' active' : ''); sw.style.background = c; sw.title = c; sw.dataset.c = c; sw.addEventListener('click', () => { selectDrawColor(c); }); dtColors.appendChild(sw); }); if (dtCurColor) dtCurColor.style.background = state.drawColor; }
   function buildWidthOpts() { if (!dtWidthOpts) return; dtWidthOpts.innerHTML = ''; CFG.drawWidths.forEach(w => { const b = document.createElement('button'); b.className = (w === state.drawWidth ? 'active' : ''); b.dataset.w = w; b.innerHTML = '<span class="wbar" style="height:' + w + 'px"></span><span style="font-size:10px;font-family:var(--disp);font-weight:700">' + w + '</span>'; b.addEventListener('click', () => { state.drawWidth = w; dtWidthOpts.querySelectorAll('button').forEach(x => x.classList.toggle('active', +x.dataset.w === w)); if (dtWidthBtn) dtWidthBtn.textContent = w <= 2 ? '▁' : w <= 3 ? '▬' : w <= 5 ? '▬' : '█'; dtWidthPop.hidden = true; }); dtWidthOpts.appendChild(b); }); }
@@ -727,7 +730,7 @@
     (M.emojis || []).forEach(em => gE.appendChild(cell('emoji', em, '<span class="mk-em">' + em + '</span>', em)));
     markGrid.appendChild(gE);
   }
-  function setTool(t) { if (linkTempFrom) { cancelLink(); renderTokens(); } state.tool = t; drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t)); const noHit = DRAW.includes(t) || t === 'marca' || t === 'inimigo'; tokenLayer.listening(!noHit); objLayer.listening(!noHit); noteLayer.listening(t === 'select'); stage.container().style.cursor = toolCursor(); if (noHit || t === 'nota') { hidePopover(); closeIconMenu(); } if (markPicker) markPicker.hidden = (t !== 'marca'); renderMarks(); updateStageDrag(); }
+  function setTool(t) { if (linkTempFrom) { cancelLink(); renderTokens(); } state.tool = t; drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t)); const noHit = DRAW.includes(t) || t === 'marca' || t === 'inimigo' || t === 'foco'; tokenLayer.listening(!noHit); objLayer.listening(!noHit); noteLayer.listening(t === 'select'); stage.container().style.cursor = toolCursor(); if (noHit || t === 'nota') { hidePopover(); closeIconMenu(); } if (markPicker) markPicker.hidden = (t !== 'marca'); renderMarks(); updateStageDrag(); }
   function pxPts(pts) { const a = []; pts.forEach(p => { a.push(p[0] * W, p[1] * H); }); return a; }
   function shapeFromDesenho(d) {
     const stroke = d.cor || '#FFC21A', sw = d.largura || 3;
@@ -742,6 +745,31 @@
   function beginDraw() { if (state.present || !DRAW.includes(state.tool)) return; const f = frac(); if (!f) return; live = { tipo: state.tool, pontos: state.tool === 'livre' ? [[f.xf, f.yf]] : [[f.xf, f.yf], [f.xf, f.yf]], cor: state.drawColor, largura: state.drawWidth, shape: null }; live.shape = shapeFromDesenho(live); drawLayer.add(live.shape); drawLayer.batchDraw(); }
   function moveDraw() { if (!live) return; const f = frac(); if (!f) return; if (live.tipo === 'livre') live.pontos.push([f.xf, f.yf]); else live.pontos[1] = [f.xf, f.yf]; live.shape.destroy(); live.shape = shapeFromDesenho(live); drawLayer.add(live.shape); drawLayer.batchDraw(); }
   function endDraw() { if (!live) return; const d = live; live = null; d.shape && d.shape.destroy(); const tiny = d.tipo === 'livre' ? d.pontos.length < 3 : Math.hypot((d.pontos[1][0] - d.pontos[0][0]) * W, (d.pontos[1][1] - d.pontos[0][1]) * H) < 6; if (tiny) { drawLayer.batchDraw(); return; } pushUndo(); cur().desenhos.push({ tipo: d.tipo, pontos: d.pontos.map(p => [p[0], p[1]]), cor: d.cor, largura: d.largura }); renderDrawings(); renderTokens(); saveProject(); }
+  // ---- FOCO / spotlight: destaca uma área e escurece o resto ----
+  let focusLive = null;
+  function renderFocus(previewRect) {
+    focusLayer.destroyChildren();
+    const f = previewRect || (cur() ? cur().focus : null);
+    if (f && f.w > 0.002 && f.h > 0.002) {
+      const hx = f.x * W, hy = f.y * H, hw = f.w * W, hh = f.h * H, r = Math.min(hw, hh) * 0.05 + 6;
+      focusLayer.add(new Konva.Rect({ x: 0, y: 0, width: W, height: H, fill: 'rgba(6,8,12,0.62)', listening: false }));
+      focusLayer.add(new Konva.Rect({ x: hx, y: hy, width: hw, height: hh, cornerRadius: r, fill: '#000', globalCompositeOperation: 'destination-out', listening: false }));
+      focusLayer.add(new Konva.Rect({ x: hx, y: hy, width: hw, height: hh, cornerRadius: r, stroke: 'rgba(240,198,107,0.55)', strokeWidth: 1.5, listening: false, shadowColor: '#f0c66b', shadowBlur: 14, shadowOpacity: 0.35 }));
+    }
+    focusLayer.batchDraw();
+  }
+  function beginFocus() { if (state.present || state.tool !== 'foco') return; const f = frac(); if (!f) return; focusLive = { x0: f.xf, y0: f.yf, x1: f.xf, y1: f.yf }; }
+  function moveFocus() { if (!focusLive) return; const f = frac(); if (!f) return; focusLive.x1 = f.xf; focusLive.y1 = f.yf; renderFocus(focusRectFromLive()); }
+  function focusRectFromLive() { const a = focusLive; return { x: Math.min(a.x0, a.x1), y: Math.min(a.y0, a.y1), w: Math.abs(a.x1 - a.x0), h: Math.abs(a.y1 - a.y0) }; }
+  function endFocus() {
+    if (!focusLive) return; const rect = focusRectFromLive(); focusLive = null;
+    const tiny = rect.w < 0.02 || rect.h < 0.02;
+    if (tiny && !(cur() && cur().focus)) { setTool('select'); return; } // clique no vazio, nada a fazer
+    pushUndo();
+    if (tiny) { cur().focus = null; toast(t('focusClear')); } // clique curto sobre foco = limpa
+    else cur().focus = rect;
+    renderFocus(); saveProject(); setTool('select');
+  }
   async function clearDrawings() { const hasM = (cur().marcas || []).length; if (!cur().desenhos.length && !hasM) return; if (!await askConfirm('Limpar desenhos e ícones deste cenário?')) return; pushUndo(); cur().desenhos = []; cur().marcas = []; renderDrawings(); renderMarks(); renderTokens(); saveProject(); }
 
   // ---- ícones carimbados no mapa (marcas) ----
@@ -839,7 +867,7 @@
     const a = rail.querySelector('.scene.active'); if (a) a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
   const dragRef = {}; function clearHints() { rail.querySelectorAll('.drop-before,.drop-after').forEach(c => c.classList.remove('drop-before', 'drop-after')); }
-  function selectScenario(id) { if (id === state.currentId) return; if (linkTempFrom) cancelLink(); closeIconMenu(); hidePopover(); state.currentId = id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); renderSidebar(); updateMini(); if (!objPanel.hidden) renderObjPanel(); if (state.present) updatePresentUI(); saveProject(); }
+  function selectScenario(id) { if (id === state.currentId) return; if (linkTempFrom) cancelLink(); closeIconMenu(); hidePopover(); state.currentId = id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); renderFocus(); renderSidebar(); updateMini(); if (!objPanel.hidden) renderObjPanel(); if (state.present) updatePresentUI(); saveProject(); }
   function loadScenarioIntoUI() { const s = cur(); if (!s) return; nameInput.value = s.nome || ''; condInput.value = s.condicao || ''; noteInput.value = s.nota || ''; updateMini(); }
   function insertAfterCurrent(s) { const i = curIndex(); state.scenarios.splice(i < 0 ? state.scenarios.length : i + 1, 0, s); saveProject(); }
   function addScenarioBlank() { const s = newScenario({ fase: 'Cenário', nome: 'Cenário ' + (state.scenarios.length + 1) }); insertAfterCurrent(s); selectScenario(s.id); }
@@ -1080,10 +1108,12 @@
     stage.on('wheel', e => { e.evt.preventDefault(); const old = stage.scaleX(), pointer = stage.getPointerPosition(); if (!pointer) return; const mp = { x: (pointer.x - stage.x()) / old, y: (pointer.y - stage.y()) / old }; const dir = e.evt.deltaY > 0 ? 1 / 1.12 : 1.12; let ns = Math.max(1, Math.min(4, old * dir)); stage.scale({ x: ns, y: ns }); stage.position(clampPos(pointer.x - mp.x * ns, pointer.y - mp.y * ns, ns)); stage.batchDraw(); updateStageDrag(); hidePopover(); });
     stage.dragBoundFunc(pos => clampPos(pos.x, pos.y, stage.scaleX()));
 
-    stage.on('mousedown touchstart', e => { if (DRAW.includes(state.tool) && !state.present) { e.evt && e.evt.preventDefault && e.evt.preventDefault(); beginDraw(); } });
+    stage.on('mousedown touchstart', e => { if (state.present) return; if (DRAW.includes(state.tool)) { e.evt && e.evt.preventDefault && e.evt.preventDefault(); beginDraw(); } else if (state.tool === 'foco') { e.evt && e.evt.preventDefault && e.evt.preventDefault(); beginFocus(); } });
     stage.on('mousemove touchmove', moveDraw);
+    stage.on('mousemove touchmove', moveFocus);
     stage.on('mousemove touchmove', () => { if (linkTempFrom) { updateLinkTemp(); tokenLayer.batchDraw(); } });
     stage.on('mouseup touchend', endDraw);
+    stage.on('mouseup touchend', endFocus);
     stage.on('click tap', e => { if (linkTempFrom) { if (e.target === stage || e.target === bgImage) { cancelLink(); renderTokens(); } return; } if (carryPickFor) { if (e.target === stage || e.target === bgImage) { carryPickFor = null; document.body.classList.remove('linking'); } return; } if (state.tool === 'marca' && !state.present) { placeMark(); return; } if (state.tool === 'nota' && !state.present) { placeNote(); return; } if (state.tool === 'inimigo' && !state.present) { placeEnemy(); return; } if (state.tool === 'select' && (e.target === stage || e.target === bgImage)) { hidePopover(); closeIconMenu(); } });
 
     drawTools.querySelectorAll('.dt[data-tool]').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
@@ -1096,7 +1126,7 @@
     document.addEventListener('click', e => { if (!e.target.closest('#dtColorPop') && !e.target.closest('#dtColorBtn')) dtColorPop.hidden = true; if (!e.target.closest('#dtWidthPop') && !e.target.closest('#dtWidthBtn')) dtWidthPop.hidden = true; });
     undoBtn.addEventListener('click', doUndo); redoBtn.addEventListener('click', doRedo); clearDraw.addEventListener('click', clearDrawings);
     { const nt = $('namesTgl'); if (nt) { nt.classList.toggle('on', state.showNames); nt.addEventListener('click', () => { state.showNames = !state.showNames; nt.classList.toggle('on', state.showNames); renderTokens(); saveProject(); }); } }
-    { const sc = $('sideChip'); if (sc) sc.addEventListener('click', cycleSide); }
+    { const sc = $('sideChip'); if (sc) sc.querySelectorAll('.sc-seg').forEach(b => b.addEventListener('click', () => setSide(b.dataset.side))); }
     { const rt = $('rosterTabs'); if (rt) rt.addEventListener('click', e => { const b = e.target.closest('button[data-rtab]'); if (b) { rosterSideView = b.dataset.rtab; renderSidebar(); } }); }
     objBtn.addEventListener('click', () => toggleObjPanel()); objClose.addEventListener('click', () => toggleObjPanel(false));
 
@@ -1183,6 +1213,6 @@
   // ---- persistência ----
   function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side, showNames: state.showNames })); } catch (e) {} }
   function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
-  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; if (d.hideName) o.hideName = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, objBuffs: (s.objBuffs && typeof s.objBuffs === 'object') ? Object.fromEntries(Object.entries(s.objBuffs).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string')])) : {}, treeCarry: (s.treeCarry && typeof s.treeCarry === 'object') ? Object.fromEntries(Object.entries(s.treeCarry).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string').slice(0, 2)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240) })) : [], enemies: Array.isArray(s.enemies) ? s.enemies.map(e => ({ id: e.id || uid(), x: clamp01(e.x), y: clamp01(e.y), n: Math.max(0, Math.min(99, parseInt(e.n) || 0)), label: typeof e.label === 'string' ? e.label.slice(0, 24) : '' })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], nota: typeof s.nota === 'string' ? s.nota : '' }; }
+  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; if (d.hideName) o.hideName = true; if (d.locked) o.locked = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, objBuffs: (s.objBuffs && typeof s.objBuffs === 'object') ? Object.fromEntries(Object.entries(s.objBuffs).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string')])) : {}, treeCarry: (s.treeCarry && typeof s.treeCarry === 'object') ? Object.fromEntries(Object.entries(s.treeCarry).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string').slice(0, 2)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240) })) : [], enemies: Array.isArray(s.enemies) ? s.enemies.map(e => ({ id: e.id || uid(), x: clamp01(e.x), y: clamp01(e.y), n: Math.max(0, Math.min(99, parseInt(e.n) || 0)), label: typeof e.label === 'string' ? e.label.slice(0, 24) : '' })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], focus: (s.focus && typeof s.focus === 'object' && s.focus.w > 0 && s.focus.h > 0) ? { x: clamp01(s.focus.x), y: clamp01(s.focus.y), w: clamp01(s.focus.w), h: clamp01(s.focus.h) } : null, nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tags: (Array.isArray(p.tags) ? p.tags : (p.tag2 ? [p.tag2] : [])).filter(tg => (CFG.secondaryTags || []).includes(tg)), flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], replace: !!p.replace, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
