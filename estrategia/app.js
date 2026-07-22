@@ -98,6 +98,19 @@
   const unlockedObjs = new Set();                   // objetivos destravados p/ mover (sessão)
   const undoStacks = {}, redoStacks = {};
 
+  // ---- PERF: desliga perfectDraw e shadow-para-contorno por padrão (mantém aparência) ----
+  // perfectDrawEnabled cria um canvas offscreen por shape; combinado com shadowForStroke,
+  // torna o pan/zoom ~780x mais lento quando há muitos tokens. Nada disso muda o visual.
+  (function tuneKonva() {
+    try {
+      const S = Konva.Shape.prototype;
+      ['perfectDrawEnabled', 'shadowForStrokeEnabled'].forEach(fn => {
+        const orig = S[fn];
+        S[fn] = function (v) { if (v === undefined && this.attrs[fn] === undefined) return false; return orig.call(this, v); };
+      });
+    } catch (e) { /* fallback: sem otimização, mas funciona */ }
+  })();
+
   const stage = new Konva.Stage({ container: 'stage', width: 10, height: 10 });
   const bgLayer = new Konva.Layer({ listening: false });
   const drawLayer = new Konva.Layer({ listening: false });
