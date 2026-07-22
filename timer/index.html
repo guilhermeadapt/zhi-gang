@@ -66,9 +66,13 @@
     @media(max-width:520px){.lang-sel button{padding:6px 7px;font-size:10px}.brand .kicker{display:none}}
 
     /* ---------- layout ---------- */
-    .wrap{max-width:920px;margin:0 auto;padding:clamp(18px,4vw,34px) clamp(16px,4vw,26px) 60px;
-      display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3vw,26px);align-items:start}
-    @media(max-width:720px){.wrap{grid-template-columns:1fr}}
+    .wrap{max-width:960px;margin:0 auto;padding:clamp(18px,4vw,34px) clamp(16px,4vw,26px) 60px;
+      display:flex;flex-direction:column;gap:clamp(14px,2.6vw,22px)}
+    /* colunas de trabalho: cooldowns | marcos */
+    .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(14px,2.6vw,22px);align-items:start}
+    @media(max-width:720px){.cols{grid-template-columns:1fr}
+      .sched-line{flex-direction:column;align-items:stretch;gap:8px}
+      .sched-row{width:100%}.sched-row #startTime,.sched-row .btn{flex:1 1 42%}}
 
     /* ---------- clock card ---------- */
     .main-left{display:flex;flex-direction:column;gap:14px}
@@ -91,12 +95,13 @@
     .sub-line{text-align:center;color:var(--muted);font-size:.84rem;min-height:19px;margin-top:3px}
     .sub-line b{color:var(--text);font-variant-numeric:tabular-nums}
 
-    /* agendar */
-    .sched{margin-top:18px;border:1px solid var(--line-soft);border-radius:13px;padding:13px;background:rgba(255,255,255,.015)}
-    .sched.sched-top{margin-top:0}
-    .clock-card .cc-lbl{margin-top:16px}
-    .sched-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;display:block}
-    .sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    /* hero: elementos internos centrados e sem esticar na largura toda do card */
+    .clock-card .next,.clock-card .sched-bottom{max-width:560px;margin-left:auto;margin-right:auto}
+    /* agendar (compacto, embaixo do relógio) */
+    .sched{margin-top:16px;border:1px solid var(--line-soft);border-radius:13px;padding:12px 13px;background:rgba(255,255,255,.015)}
+    .sched-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .sched-lbl{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+    .sched-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1;min-width:0}
     .sched input[type=time]{background:#0b0e15;border:1px solid var(--line-soft);border-radius:9px;color:var(--text);
       padding:9px 11px;font-family:var(--disp);font-weight:600;font-size:1rem;font-variant-numeric:tabular-nums;color-scheme:dark}
     .sched .btn{flex:none}
@@ -353,22 +358,8 @@
   </div>
 
   <div class="wrap">
-    <div class="main-left">
-    <!-- relógio -->
+    <!-- HERO: relógio (sempre no topo, à mão durante a guerra) -->
     <section class="clock-card">
-      <div class="sched sched-top">
-        <div class="sched-hint sched-hint-top" id="schedHint" data-i18n-html="schedHint"></div>
-        <span class="sched-lbl" data-i18n="warStart">Início da guerra</span>
-        <div class="sched-row">
-          <input type="time" id="startTime" />
-          <button class="btn primary" id="schedBtn" data-i18n="schedule">Agendar</button>
-        </div>
-        <div class="sched-row sched-row2">
-          <button class="btn" id="nowBtn" data-i18n="startNow">Começar agora</button>
-          <button class="btn ghost" id="resetBtn" data-i18n="reset">Zerar</button>
-        </div>
-      </div>
-
       <div class="cc-lbl" id="ccLbl">Guerra</div>
       <div class="clock" id="clock">30:00</div>
       <div class="phase-now" id="phaseNow">Defina o horário de início</div>
@@ -383,8 +374,24 @@
         <span class="n-cd" id="nextCd">--:--</span>
         <button class="skip-btn" id="skipBtn" title="Pular"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5l9 7-9 7V5zm11 0h2v14h-2z"/></svg></button>
       </div>
+
+      <!-- agendar (compacto, embaixo do relógio — usado só antes da guerra) -->
+      <div class="sched sched-bottom">
+        <div class="sched-line">
+          <span class="sched-lbl" data-i18n="warStart">Início da guerra</span>
+          <div class="sched-row">
+            <input type="time" id="startTime" />
+            <button class="btn primary" id="schedBtn" data-i18n="schedule">Agendar</button>
+            <button class="btn" id="nowBtn" data-i18n="startNow">Começar agora</button>
+            <button class="btn ghost" id="resetBtn" data-i18n="reset">Zerar</button>
+          </div>
+        </div>
+        <div class="sched-hint" id="schedHint" data-i18n-html="schedHint"></div>
+      </div>
     </section>
 
+    <!-- duas colunas de trabalho: cooldowns | marcos -->
+    <div class="cols">
     <!-- cooldowns do inimigo (independentes do relógio de guerra) -->
     <section class="panel cds-panel">
       <header><b data-i18n="cooldowns">Cooldowns do inimigo</b><span class="sp"></span><button class="mini" id="cdReset" data-i18n="defaultBtn">↺ padrão</button></header>
@@ -398,10 +405,8 @@
         <div class="cd-bg-hint" id="mediaHint" data-i18n-html="mediaHint" hidden></div>
       </div>
     </section>
-    </div><!-- /main-left -->
 
-    <!-- lateral: marcos + config -->
-    <div class="side">
+    <!-- marcos -->
       <div class="panel">
         <header>
           <b data-i18n="marcos">Marcos</b>
@@ -418,8 +423,10 @@
         </div>
         <div class="ev-note" id="evNote" data-i18n-html="evNote"></div>
       </div>
+    </div><!-- /cols -->
 
-      <div class="panel">
+    <!-- config (usada antes da guerra) -->
+      <div class="panel avisos-panel">
         <header><b data-i18n="avisos">Avisos</b></header>
         <div class="set-row">
           <span class="s-name"><span data-i18n="soundMark">Som ao bater o marco</span> <small data-i18n="soundMarkSub"></small></span>
@@ -446,7 +453,6 @@
           <div class="switch" id="swNotif" role="switch"></div>
         </div>
       </div>
-    </div>
 
     <p class="hint" data-i18n-html="bottomHint"></p>
   </div>
