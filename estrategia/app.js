@@ -628,9 +628,9 @@
         const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52';
         if (isTower) {
           // torre: HP como selo compacto DENTRO do ícone (não ocupa espaço em volta)
-          const fs = Math.max(8, osz * 0.34), lbl = new Konva.Label({ y: iconH * 0.14 });
-          lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.85)', cornerRadius: fs, stroke: hc, strokeWidth: 1 }));
-          lbl.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, padding: Math.max(2, fs * 0.28), shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.8 }));
+          const fs = Math.max(6.5, osz * 0.22), pad = Math.max(1, fs * 0.16), lbl = new Konva.Label({ y: iconH * 0.16 });
+          lbl.add(new Konva.Tag({ fill: 'rgba(6,8,12,.82)', cornerRadius: fs * 0.6, stroke: hc, strokeWidth: 0.7 }));
+          lbl.add(new Konva.Text({ text: hp + '%', fontFamily: 'Oswald, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, padding: pad, shadowColor: '#000', shadowBlur: 1.5, shadowOpacity: 0.8 }));
           lbl.offsetX(lbl.getClientRect({ skipTransform: true }).width / 2); g.add(lbl);
         } else {
           const bw = Math.max(osz * 0.98, os * 0.92), bh = Math.max(4, os * 0.16), by = o.caminho ? (-iconH / 2 - bh - Math.max(9, os * 0.28)) : (iconH / 2 + Math.max(2, os * 0.12));
