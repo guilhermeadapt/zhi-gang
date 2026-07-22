@@ -898,93 +898,10 @@
   <div class="modal-backdrop" id="helpModal" hidden>
     <div class="guide">
       <div class="guide-head">
-        <div><span class="guide-kick">Zhi Guides · Wanted</span><h2>Guia do Game Plan</h2></div>
+        <div><span class="guide-kick">Zhi Guides · Wanted</span><h2 id="guideTitle">Guia do Game Plan</h2></div>
         <button class="guide-x" id="helpClose" aria-label="Fechar">✕</button>
       </div>
-      <div class="guide-body">
-        <p class="guide-lead">Uma ferramenta pra montar e apresentar a estratégia da GvG em cima do mapa. Tudo é salvo automaticamente <b>neste navegador</b>. Abaixo, o essencial e principalmente os recursos que <b>não são óbvios</b> pela interface.</p>
-
-        <section class="guide-sec">
-          <h3>1 · A ideia — Fases &amp; Cenários</h3>
-          <p>Cada <b>cenário</b> é uma "foto" do mapa (posições, desenhos, objetivos up, vida). Você monta uma sequência de fases (ex.: <i>Abertura → Meio → Boss</i>) e navega por elas na régua embaixo (botão <b>Fases</b>). Apresentar roda essa sequência em tela cheia.</p>
-        </section>
-
-        <section class="guide-sec">
-          <h3>2 · Montar os times</h3>
-          <ul>
-            <li><b>Roster / Editar roster:</b> cole a montagem do raid-helper do Discord e clique <b>Processar</b>, ou use <b>Auto-montar PTs</b>. Dá pra ajustar classe, tarjas e função de cada um.</li>
-            <li><b>Colocar no mapa:</b> arraste uma <b>PT</b> inteira da lista lateral pro mapa, ou troque pra aba <b>Players</b> e arraste um jogador individual (fica "destacado" fora da bola).</li>
-            <li>O número dentro da bola da PT mostra <b>quantos ainda estão na formação</b> — ao destacar um jogador no mapa, esse número cai.</li>
-          </ul>
-        </section>
-
-        <section class="guide-sec highlight">
-          <h3>3 · Gestos no token do jogador <span class="tagimp">pouco óbvio</span></h3>
-          <ul>
-            <li><b>1 toque / clique</b> = abre o menu (vida, morto, vincular, travar, remover).</li>
-            <li><b>Segurar (long-press)</b> = esconde/mostra o nome. Com o nome escondido, aparece uma bolinha com o número da PT.</li>
-            <li><b>2 toques / duplo-clique</b> = remove o token do mapa.</li>
-            <li>No menu do jogador dá pra <b>travar a posição</b> (fica com anel tracejado e não arrasta sem querer).</li>
-          </ul>
-        </section>
-
-        <section class="guide-sec highlight">
-          <h3>4 · Vínculos (setas) <span class="tagimp">pouco óbvio</span></h3>
-          <p>Abra o menu de um ícone (PT, jogador ou objetivo) e clique <b>Vincular</b> → depois toque em <b>outro ícone</b> pra criar a seta. Ela fica "armada" no mesmo ponto de origem, então dá pra <b>encadear</b> várias saídas. <b>Clique na seta</b> pra removê-la. A seta fina e discreta é só a amarração PT↔membro (pertencimento); as grossas são as estratégicas.</p>
-        </section>
-
-        <section class="guide-sec highlight">
-          <h3>5 · Foco / spotlight <span class="tagimp">recurso novo</span></h3>
-          <p>Ferramenta de <b>alvo</b> na barra da esquerda: <b>arraste</b> pra destacar uma área — o resto do mapa escurece. Ótimo pra focar a atenção numa jogada ao apresentar. <b>Clique curto</b> sobre o foco pra limpar.</p>
-        </section>
-
-        <section class="guide-sec highlight">
-          <h3>6 · Variações do cenário <span class="tagimp">recurso novo</span></h3>
-          <p>Botão <b>Variação</b> (na régua de Fases) cria uma cópia do cenário atual pra uma mudança pequena — sem poluir a lista. Elas ficam agrupadas embaixo do cenário-base (<b>1 → 1a → 1b</b>).</p>
-        </section>
-
-        <section class="guide-sec">
-          <h3>7 · Objetivos (torres, ganso, árvore, boss, JG)</h3>
-          <ul>
-            <li>Ligue/desligue no painel <b>Objetivos</b>. Toque num objetivo pra ver a mecânica, definir <b>vida</b> e ativar <b>buffs</b> (City Protection, Sprint, etc.).</li>
-            <li>As posições vêm <b>travadas</b> por padrão — toque no objetivo e <b>destrave</b> pra mover.</li>
-            <li><b>Árvore:</b> os <b>333m</b> vão do ponto dela até o <b>portão inimigo</b> (arraste o ícone ⛩ do portão). Dá pra marcar até <b>2 carries</b> que seguem a árvore.</li>
-          </ul>
-        </section>
-
-        <section class="guide-sec">
-          <h3>8 · Nosso lado, inimigos e desenho</h3>
-          <ul>
-            <li><b>Nosso lado</b> (topo do mapa): marque Oeste ou Leste — dá um brilho sutil na base.</li>
-            <li><b>Inimigo defendendo</b> (ferramenta de espadas): marca um grupo inimigo com quantidade.</li>
-            <li><b>Desenho:</b> seta, linha, traço livre, área, ícone/marcador e <b>nota</b> (post-it). Cores e espessura abrem ao clicar.</li>
-          </ul>
-        </section>
-
-        <section class="guide-sec">
-          <h3>9 · Salvar, compartilhar e planos</h3>
-          <ul>
-            <li>Salva sozinho no navegador. <b>Exportar</b> gera um arquivo JSON do plano; <b>Importar</b> carrega de volta.</li>
-            <li><b>Planos</b> (topo): abre os planos salvos pela guild no repositório. Cada um tem um link curto <code>?plan=nome</code> — é esse que você manda no Discord, sem link gigante.</li>
-            <li><b>Compartilhar</b> gera um link com todo o plano embutido (fica grande, mas funciona sem depender do repositório).</li>
-          </ul>
-        </section>
-
-        <section class="guide-sec">
-          <h3>10 · Atalhos de teclado (no PC)</h3>
-          <p class="guide-keys"><b>V</b> selecionar · <b>A</b> seta · <b>L</b> linha · <b>D</b> traço livre · <b>R</b> área · <b>I</b> ícone · <b>N</b> nota · <b>scroll</b> zoom · <b>arrastar</b> move o mapa · <b>Ctrl+Z / Ctrl+Y</b> desfazer/refazer.</p>
-        </section>
-
-        <section class="guide-sec tips">
-          <h3>Dicas pra usar bem</h3>
-          <ul>
-            <li>Monte a base no <b>cenário 1</b> e use <b>Duplicar</b> pra próxima fase — só ajuste o que muda.</li>
-            <li>Esconda os nomes (segurando) em quem não precisa de destaque pra limpar o mapa.</li>
-            <li>Use <b>Foco</b> + <b>Apresentar</b> pra guiar a call: uma jogada por vez.</li>
-            <li>No fim, <b>Exportar</b> e me manda (ou commita em <code>/plans/</code>) pra virar um plano fixo.</li>
-          </ul>
-        </section>
-      </div>
+      <div class="guide-body" id="helpBody"></div>
     </div>
   </div>
 
@@ -1019,7 +936,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=56"></script>
-  <script src="./app.js?v=56"></script>
+  <script src="./config.js?v=57"></script>
+  <script src="./app.js?v=57"></script>
 </body>
 </html>
