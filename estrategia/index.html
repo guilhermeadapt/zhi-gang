@@ -203,6 +203,9 @@
     .icon-menu .im-namebtn{width:100%;margin-bottom:10px;font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;padding:8px;cursor:pointer;transition:.14s}
     .icon-menu .im-namebtn:hover{color:var(--text);border-color:var(--line)}
     .icon-menu .im-namebtn.on{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 38%,transparent);background:rgba(217,164,65,.08)}
+    .icon-menu .im-lockbtn{width:100%;margin-bottom:10px;font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;padding:8px;cursor:pointer;transition:.14s}
+    .icon-menu .im-lockbtn:hover{color:var(--text);border-color:var(--line)}
+    .icon-menu .im-lockbtn.on{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 40%,transparent);background:rgba(217,164,65,.1)}
     .icon-menu .im-buffs{display:flex;flex-direction:column;gap:5px;margin-bottom:11px}
     .icon-menu .im-buff{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;padding:7px 9px;cursor:pointer;text-align:left;transition:.14s}
     .icon-menu .im-buff:hover{color:var(--text);border-color:var(--line)}
@@ -266,6 +269,20 @@
     .roster{grid-column:2;grid-row:1;background:linear-gradient(180deg,var(--ink-2),var(--ink-3));border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;min-height:0}
     .roster-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px 9px;border-bottom:1px solid var(--line-soft)}
     .roster-head .h{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
+    .roster-tabs{display:inline-flex;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
+    .roster-tabs button{font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:transparent;border:0;padding:6px 11px;cursor:pointer;transition:.14s}
+    .roster-tabs button:hover{color:var(--text)}
+    .roster-tabs button.active{color:var(--gold);background:rgba(217,164,65,.12)}
+    .side-empty{color:var(--muted);font-size:12px;font-style:italic;padding:16px 6px;text-align:center}
+    .pl-chip{display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px;margin-bottom:5px;cursor:grab;background:linear-gradient(180deg,var(--ink-2),#0e1118);border:1px solid var(--line-soft);border-left:3px solid var(--rc);border-radius:9px;transition:.15s;user-select:none;font-size:13px}
+    .pl-chip:hover{border-color:color-mix(in srgb,var(--rc) 55%,transparent)}
+    .pl-chip.placed{opacity:.55}
+    .pl-chip.nodrag{cursor:default;opacity:.5}
+    .pl-chip .c-ico{width:22px;height:22px;flex:none;display:grid;place-items:center;border-radius:50%;background:#0b0e15;border:1.5px solid var(--rc)}
+    .pl-chip .c-ico img{width:14px;height:14px;object-fit:contain}
+    .pl-chip .pl-nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+    .pl-chip .pl-pt{font-family:var(--disp);font-weight:700;font-size:9.5px;letter-spacing:.05em;color:var(--muted);flex:none}
+    .pl-chip .pl-role{font-family:var(--disp);font-weight:700;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rc);flex:none;min-width:38px;text-align:right}
     .roster-head .edit{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 9px;cursor:pointer;transition:.15s}
     .roster-head .edit:hover{color:var(--gold);border-color:var(--line)}
     .roster-sum{display:flex;gap:6px;padding:9px 14px 4px;flex-wrap:wrap}
@@ -465,6 +482,14 @@
     .bd-pt-card.obs-edit .bd-obs-line{display:none}
     /* chips agora são LINHAS de largura total */
     .bd-chips{display:flex;flex-direction:column;gap:5px;min-height:30px}
+    .bd-cgrp{display:flex;flex-direction:column;gap:5px}
+    .bd-cgh{display:flex;align-items:center;gap:6px;cursor:pointer;font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7a8296;padding:3px 2px;user-select:none}
+    .bd-cgh:hover{color:var(--text)}
+    .bd-cgh .chev{font-size:8px;width:9px}
+    .bd-cgh .c-ico.sm{width:15px;height:15px;border-width:1px}
+    .bd-cgh b{color:inherit;font-weight:700}
+    .bd-cgh .bd-cc{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+    #bdGroup.on{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(217,164,65,.1)}
     .bd-empty{font-size:11px;color:#5c6474;font-style:italic;padding:5px 4px}
     .bd-chip{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:9px;cursor:grab;width:100%;
       background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.012));border:1px solid var(--line-soft);
@@ -715,7 +740,7 @@
 
     <aside class="roster">
       <button class="roster-mclose" id="rosterMClose" aria-label="Fechar">✕</button>
-      <div class="roster-head"><span class="h" data-i18n="pts">PTs</span><button class="edit" id="editRosterBtn" data-i18n="editRoster">Editar roster</button></div>
+      <div class="roster-head"><div class="roster-tabs" id="rosterTabs"><button data-rtab="pts" class="active">PTs</button><button data-rtab="players" data-i18n="playersTab">Players</button></div><button class="edit" id="editRosterBtn" data-i18n="editRoster">Editar roster</button></div>
       <div class="roster-sum" id="rosterSum">
         <span class="st"><b id="sumEsc">0</b> <span data-i18n="scaled">escalados</span></span>
         <span class="st"><b id="sumRes">0</b> <span data-i18n="reserves">reservas</span></span>
@@ -782,6 +807,7 @@
           <div class="board-tools" id="boardTools" hidden>
             <button class="rbtn gold" id="bdAuto" style="padding:8px 12px" data-i18n="bdAuto">⚙ Auto-preencher</button>
             <button class="rbtn" id="bdClearPt" style="padding:8px 12px" data-i18n="bdEmpty">Esvaziar PTs</button>
+            <button class="rbtn" id="bdGroup" style="padding:8px 12px" data-i18n="groupClass">⊟ Por classe</button>
             <span class="bd-legend" data-i18n-html="bdLegend">Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.</span>
           </div>
           <div class="roster-board" id="rosterBoard" hidden></div>
@@ -840,7 +866,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=34"></script>
-  <script src="./app.js?v=34"></script>
+  <script src="./config.js?v=36"></script>
+  <script src="./app.js?v=36"></script>
 </body>
 </html>

@@ -21,37 +21,37 @@
       menu:'Menu', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartilhar', present:'Apresentar', exit:'Sair',
       objUp:'Objetivos up', objInScene:'neste cenário', objAll:'Adicionar todos', objFoot:'Marque o que está "up" nesta fase. No mapa, arraste cada ícone para posicioná-lo (vale para todos os cenários).', copyPos:'Copiar posições',
       dragHint:'Arraste uma PT da lista para o mapa', dragHint2:'Cada cenário é uma "foto": posições, desenhos e objetivos up. Crie fases e navegue embaixo.',
-      pts:'PTs', editRoster:'Editar roster', scaled:'escalados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defesa', drag:'ARRASTE', noMembers:'sem membros', onMap:'No mapa', dragShort:'Arraste', tapShort:'Tocar',
+      pts:'PTs', editRoster:'Editar roster', playersTab:'Players', scaled:'escalados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defesa', drag:'ARRASTE', noMembers:'sem membros', onMap:'No mapa', dragShort:'Arraste', tapShort:'Tocar',
       rosterTitle:'Roster', rosterSub:'Cole a montagem do Board e ajuste PT / reservas', discordMontage:'Montagem do Discord', process:'Processar', autoMount:'⚙ Auto-montar PTs', clearAll:'Limpar tudo', saveRoster:'Salvar roster',
-      tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', bdLegend:'Arraste cada jogador para a PT, para as <b>reservas da PT</b> ou reservas gerais. Clique num jogador para função, tarja e flags. Alvo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas da PT', genReserves:'Reservas gerais', obsPh:'Observações da PT…', roleLbl:'Função', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Jogar todos os disponíveis para reservas',
+      tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', groupClass:'⊟ Por classe', bdLegend:'Arraste cada jogador para a PT, para as <b>reservas da PT</b> ou reservas gerais. Clique num jogador para função, tarja e flags. Alvo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas da PT', genReserves:'Reservas gerais', obsPh:'Observações da PT…', roleLbl:'Função', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Jogar todos os disponíveis para reservas',
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
       shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', zoomTip:'Scroll = zoom · arraste o mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', nameToggle:'Nome no mapa', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', nameToggle:'Nome no mapa', unlockAction:'Destravar posição', lockAction:'Travar posição', unlockedHint:'Destravado — arraste para reposicionar', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
       menu:'Menú', phases:'Fases', objectives:'Objetivos', roster:'Roster', share:'Compartir', present:'Presentar', exit:'Salir',
       objUp:'Objetivos activos', objInScene:'en esta escena', objAll:'Añadir todos', objFoot:'Marca lo que está "activo" en esta fase. En el mapa, arrastra cada icono para posicionarlo (vale para todas las escenas).', copyPos:'Copiar posiciones',
       dragHint:'Arrastra una PT de la lista al mapa', dragHint2:'Cada escena es una "foto": posiciones, dibujos y objetivos activos. Crea fases y navega abajo.',
-      pts:'PTs', editRoster:'Editar roster', scaled:'convocados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defensa', drag:'ARRASTRA', noMembers:'sin miembros', onMap:'En el mapa', dragShort:'Arrastra', tapShort:'Tocar',
+      pts:'PTs', editRoster:'Editar roster', playersTab:'Players', scaled:'convocados', reserves:'reservas', absent:'ausentes', atk:'Ataque', def:'Defensa', drag:'ARRASTRA', noMembers:'sin miembros', onMap:'En el mapa', dragShort:'Arrastra', tapShort:'Tocar',
       rosterTitle:'Roster', rosterSub:'Pega la formación del Board y ajusta PT / reservas', discordMontage:'Formación del Discord', process:'Procesar', autoMount:'⚙ Auto-armar PTs', clearAll:'Limpiar todo', saveRoster:'Guardar roster',
-      tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', bdLegend:'Arrastra cada jugador a la PT, a las <b>reservas de la PT</b> o reservas generales. Haz clic en un jugador para función, tarja y flags. Objetivo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas de la PT', genReserves:'Reservas generales', obsPh:'Observaciones de la PT…', roleLbl:'Función', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Enviar todos los disponibles a reservas',
+      tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', groupClass:'⊟ Por clase', bdLegend:'Arrastra cada jugador a la PT, a las <b>reservas de la PT</b> o reservas generales. Haz clic en un jugador para función, tarja y flags. Objetivo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas de la PT', genReserves:'Reservas generales', obsPh:'Observaciones de la PT…', roleLbl:'Función', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Enviar todos los disponibles a reservas',
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
       shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', zoomTip:'Scroll = zoom · arrastra el mapa para mover',
-      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', nameToggle:'Nombre en el mapa', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
+      menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', nameToggle:'Nombre en el mapa', unlockAction:'Desbloquear posición', lockAction:'Bloquear posición', unlockedHint:'Desbloqueado — arrastra para reposicionar', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
       menu:'Menu', phases:'Phases', objectives:'Objectives', roster:'Roster', share:'Share', present:'Present', exit:'Exit',
       objUp:'Objectives up', objInScene:'this scene', objAll:'Add all', objFoot:'Mark what is "up" in this phase. On the map, drag each icon to position it (applies to all scenes).', copyPos:'Copy positions',
       dragHint:'Drag a PT from the list onto the map', dragHint2:'Each scene is a "snapshot": positions, drawings and objectives up. Create phases and navigate below.',
-      pts:'PTs', editRoster:'Edit roster', scaled:'assigned', reserves:'reserves', absent:'absent', atk:'Attack', def:'Defense', drag:'DRAG', noMembers:'no members', onMap:'On map', dragShort:'Drag', tapShort:'Tap',
+      pts:'PTs', editRoster:'Edit roster', playersTab:'Players', scaled:'assigned', reserves:'reserves', absent:'absent', atk:'Attack', def:'Defense', drag:'DRAG', noMembers:'no members', onMap:'On map', dragShort:'Drag', tapShort:'Tap',
       rosterTitle:'Roster', rosterSub:'Paste the Board sign-up and adjust PT / reserves', discordMontage:'Discord sign-up', process:'Process', autoMount:'⚙ Auto-build PTs', clearAll:'Clear all', saveRoster:'Save roster',
-      tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', bdLegend:'Drag each player to the PT, to the <b>PT reserves</b> or general reserves. Click a player for role, tag and flags. Target: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Starters', ptReserves:'PT reserves', genReserves:'General reserves', obsPh:'PT notes…', roleLbl:'Role', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Send all available to reserves',
+      tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', groupClass:'⊟ By class', bdLegend:'Drag each player to the PT, to the <b>PT reserves</b> or general reserves. Click a player for role, tag and flags. Target: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Starters', ptReserves:'PT reserves', genReserves:'General reserves', obsPh:'PT notes…', roleLbl:'Role', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Send all available to reserves',
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
       shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', zoomTip:'Scroll = zoom · drag the map to move',
-      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', nameToggle:'Name on map', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
+      menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', nameToggle:'Name on map', unlockAction:'Unlock position', lockAction:'Lock position', unlockedHint:'Unlocked — drag to reposition', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
   function t(k) { return (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : (I18N.pt[k] != null ? I18N.pt[k] : k); }
@@ -91,10 +91,11 @@
   const objGroupOpen = {};   // grupos do painel de objetivos começam colapsados
   const partyById = new Map(CFG.parties.map(p => [p.id, p]));
   const objById = new Map(CFG.objetivos.map(o => [o.id, o]));
-  let popoverPt = null, rosterDraft = [];
+  let popoverPt = null, rosterDraft = [], rosterSideView = 'pts';
   let linkTempFrom = null, linkTempArrow = null;   // vínculo em criação (origem + seta-preview)
   let carryPickFor = null;                          // objId da árvore aguardando escolha de carry
   let lpTimer = null, lpAt = 0;                     // long-press (segurar) nos tokens de player
+  const unlockedObjs = new Set();                   // objetivos destravados p/ mover (sessão)
   const undoStacks = {}, redoStacks = {};
 
   const stage = new Konva.Stage({ container: 'stage', width: 10, height: 10 });
@@ -184,8 +185,10 @@
     sumAus.textContent = state.roster.filter(p => p.ausente).length;
     sumRes.textContent = state.roster.filter(p => p.reserva && !p.ausente).length;
     sumEsc.textContent = state.roster.filter(p => !p.ausente && !p.reserva && p.pt).length;
-    const placed = cur() ? cur().tokens.map(t => t.pt) : [];
+    const tabs = $('rosterTabs'); if (tabs) tabs.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.rtab === rosterSideView));
     ptList.innerHTML = '';
+    if (rosterSideView === 'players') { renderPlayerChips(); return; }
+    const placed = cur() ? cur().tokens.map(t => t.pt) : [];
     CFG.grupos.forEach(g => {
       const gh = document.createElement('div'); gh.className = 'grp-h ' + (g.nome === 'Ataque' ? 'atk' : 'def');
       const gnm = g.nome === 'Ataque' ? t('atk') : (g.nome === 'Defesa' ? t('def') : g.nome);
@@ -204,6 +207,21 @@
         chip.addEventListener('click', () => { if (isMobile() && !cur().tokens.some(x => x.pt === pid)) { placeTokenCenter(pid); document.body.classList.remove('mob-roster'); toast(pid + ' ✓'); } else openPtEditor(pid); });
         ptList.appendChild(chip);
       });
+    });
+  }
+  function renderPlayerChips() {
+    const players = byRole(state.roster.filter(p => !p.ausente));
+    if (!players.length) { ptList.innerHTML = '<div class="side-empty">' + t('noMembers') + '</div>'; return; }
+    const onMap = new Set((cur() ? cur().destacados : []).map(d => d.pt + '|' + d.nome));
+    players.forEach(p => {
+      const placed = p.pt && onMap.has(p.pt + '|' + p.nome), canDrag = !!p.pt && !state.present;
+      const chip = document.createElement('div'); chip.className = 'pl-chip' + (placed ? ' placed' : '') + (canDrag ? '' : ' nodrag'); chip.style.setProperty('--rc', roleColor(p.funcao));
+      if (canDrag) chip.setAttribute('draggable', 'true');
+      const where = p.pt ? p.pt : (p.reserva ? t('reservesLbl') : '—');
+      chip.innerHTML = classIcoHTML(p.funcao) + '<span class="pl-nm">' + esc(p.nome) + '</span><span class="pl-pt">' + esc(where) + '</span><span class="pl-role">' + (placed ? t('onMap') : p.funcao) + '</span>';
+      if (canDrag) chip.addEventListener('dragstart', ev => { if (state.present) { ev.preventDefault(); return; } ev.dataTransfer.setData('text/member', JSON.stringify({ pt: p.pt, nome: p.nome, funcao: p.funcao })); ev.dataTransfer.effectAllowed = 'copy'; });
+      chip.addEventListener('click', () => { if (isMobile() && p.pt) { const s = stage.scaleX() || 1; detachMember(p.pt, p.nome, p.funcao, clamp01(((W / 2) - stage.x()) / s / W), clamp01(((H / 2) - stage.y()) / s / H)); document.body.classList.remove('mob-roster'); toast(p.nome + ' ✓'); } });
+      ptList.appendChild(chip);
     });
   }
   function syncPlacedChips() {
@@ -315,9 +333,15 @@
   function renderSide() {
     bgLayer.find('.side-ov').forEach(n => n.destroy());
     if (state.side) {
-      const west = state.side === 'blue';
-      bgLayer.add(new Konva.Rect({ name: 'side-ov', x: west ? 0 : W / 2, y: 0, width: W / 2, height: H, fill: west ? 'rgba(106,168,224,0.10)' : 'rgba(226,91,82,0.10)', listening: false }));
-      bgLayer.add(new Konva.Line({ name: 'side-ov', points: [W / 2, 0, W / 2, H], stroke: 'rgba(255,255,255,0.14)', strokeWidth: Math.max(1, R * 0.05), dash: [8, 8], listening: false }));
+      const west = state.side === 'blue', col = west ? '106,168,224' : '226,91,82';
+      const gw = W * 0.15, bw = Math.max(3, R * 0.22);   // brilho suave só na nossa borda (base)
+      if (west) {
+        bgLayer.add(new Konva.Rect({ name: 'side-ov', x: 0, y: 0, width: gw, height: H, listening: false, fillLinearGradientStartPoint: { x: 0, y: 0 }, fillLinearGradientEndPoint: { x: gw, y: 0 }, fillLinearGradientColorStops: [0, 'rgba(' + col + ',0.20)', 1, 'rgba(' + col + ',0)'] }));
+        bgLayer.add(new Konva.Rect({ name: 'side-ov', x: 0, y: 0, width: bw, height: H, fill: 'rgba(' + col + ',0.5)', listening: false }));
+      } else {
+        bgLayer.add(new Konva.Rect({ name: 'side-ov', x: W - gw, y: 0, width: gw, height: H, listening: false, fillLinearGradientStartPoint: { x: W - gw, y: 0 }, fillLinearGradientEndPoint: { x: W, y: 0 }, fillLinearGradientColorStops: [0, 'rgba(' + col + ',0)', 1, 'rgba(' + col + ',0.20)'] }));
+        bgLayer.add(new Konva.Rect({ name: 'side-ov', x: W - bw, y: 0, width: bw, height: H, fill: 'rgba(' + col + ',0.5)', listening: false }));
+      }
     }
     bgLayer.batchDraw();
     updateSideChip();
@@ -331,7 +355,7 @@
     const toks = cur() ? cur().tokens : [];
     renderLinks();                                    // vínculos ficam por baixo dos tokens
     toks.forEach(t => tokenLayer.add(makePtToken(t)));
-    (cur() ? cur().destacados : []).forEach(d => { if (ptPos(d.pt)) tokenLayer.add(makeMemberToken(d)); });
+    (cur() ? cur().destacados : []).forEach(d => tokenLayer.add(makeMemberToken(d)));
     (cur() ? cur().enemies : []).forEach(e => tokenLayer.add(makeEnemyToken(e)));
     if (linkTempFrom) tokenLayer.add(linkTempArrow);  // preview de vínculo por cima
     tokenLayer.batchDraw(); syncPlacedChips();
@@ -421,8 +445,11 @@
     if (buffs.length) { const act = (cur().objBuffs || {})[o.id] || []; h += '<div class="im-sec">' + t('buffs') + '</div><div class="im-buffs">'; buffs.forEach(bf => { h += '<button class="im-buff' + (act.includes(bf.id) ? ' on' : '') + '" data-buff="' + bf.id + '">' + bf.icon + ' ' + esc(bf.label) + '</button>'; }); h += '</div>'; }
     const isTree = o.icone && o.icone.indexOf('tree') === 0;
     if (isTree) { const carries = (cur().treeCarry || {})[o.id] || []; h += '<div class="im-sec">' + t('carryTitle') + '</div><div class="im-carry">'; carries.forEach(mid => { const d = (cur().destacados || []).find(x => x.id === mid); h += '<span class="im-cchip">' + esc(d ? d.nome : '—') + '<button data-carryrm="' + mid + '">✕</button></span>'; }); if (carries.length < 2) h += '<button class="im-cadd" data-act="carryadd">+ ' + t('carryAdd') + '</button>'; h += '</div>'; }
+    const unlk = unlockedObjs.has(o.id);
+    h += '<button class="im-lockbtn' + (unlk ? ' on' : '') + '" data-act="lock">' + (unlk ? '🔓 ' + t('lockAction') : '🔒 ' + t('unlockAction')) + '</button>';
     h += '<div class="im-actions"><button class="im-link" data-act="link">' + t('menuLink') + '</button><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
     iconMenu.innerHTML = h; iconMenu.hidden = false; placeIconMenu(x, y);
+    iconMenu.querySelector('[data-act="lock"]').addEventListener('click', () => { if (unlockedObjs.has(o.id)) { unlockedObjs.delete(o.id); renderObjectives(); openObjMenu(o, x, y); } else { unlockedObjs.add(o.id); closeIconMenu(); renderObjectives(); toast(t('unlockedHint')); } });
     if (isTree) { const ca = iconMenu.querySelector('[data-act="carryadd"]'); if (ca) ca.addEventListener('click', () => { carryPickFor = o.id; closeIconMenu(); document.body.classList.add('linking'); toast(t('carryPick')); }); iconMenu.querySelectorAll('[data-carryrm]').forEach(bt => bt.addEventListener('click', () => { removeTreeCarry(o.id, bt.dataset.carryrm); openObjMenu(o, x, y); })); }
     iconMenu.querySelectorAll('.im-buff').forEach(bt => bt.addEventListener('click', () => { pushUndo(); cur().objBuffs = cur().objBuffs || {}; const arr = cur().objBuffs[o.id] = cur().objBuffs[o.id] || []; const id = bt.dataset.buff, i = arr.indexOf(id); if (i >= 0) arr.splice(i, 1); else arr.push(id); if (!arr.length) delete cur().objBuffs[o.id]; bt.classList.toggle('on', ((cur().objBuffs[o.id] || []).indexOf(id) >= 0)); renderObjectives(); saveProject(); }));
     const setHp = v => { v = Math.max(0, Math.min(100, Math.round(v / 5) * 5)); cur().objHp = cur().objHp || {}; if (v === 100) delete cur().objHp[o.id]; else cur().objHp[o.id] = v; iconMenu.querySelector('.im-range').value = v; iconMenu.querySelector('.im-hpv').textContent = v + '%'; iconMenu.querySelectorAll('.im-quick button').forEach(b => b.classList.toggle('on', +b.dataset.hp === v)); renderObjectives(); saveProject(); };
@@ -459,7 +486,7 @@
   function isMobile() { return window.matchMedia('(max-width:860px)').matches; }
   function placeTokenCenter(pt) { const s = stage.scaleX() || 1; const xf = clamp01(((W / 2) - stage.x()) / s / W), yf = clamp01(((H / 2) - stage.y()) / s / H); placeToken(pt, xf, yf); }
   function removeToken(pt) { pushUndo(); const s = cur(); const memObjs = s.destacados.filter(d => d.pt === pt); const memIds = memObjs.map(d => 'mem:' + d.id); memObjs.forEach(d => pruneCarry(d.id)); s.tokens = s.tokens.filter(t => t.pt !== pt); s.destacados = s.destacados.filter(d => d.pt !== pt); const drop = new Set(['pt:' + pt].concat(memIds)); if (s.links) s.links = s.links.filter(l => !drop.has(l.a) && !drop.has(l.b)); hidePopover(); renderTokens(); saveProject(); }
-  function detachMember(pt, nome, funcao, xf, yf) { if (!ptPos(pt)) return; pushUndo(); const id = uid(); cur().destacados.push({ id, pt, nome, funcao, xf: clamp01(xf), yf: clamp01(yf) }); cur().links = cur().links || []; cur().links.push({ id: uid(), a: 'pt:' + pt, b: 'mem:' + id }); hidePopover(); renderTokens(); saveProject(); }
+  function detachMember(pt, nome, funcao, xf, yf) { if (state.present) return; const ex = (cur().destacados || []).find(d => d.pt === pt && d.nome === nome); if (ex) { pushUndo(); ex.xf = clamp01(xf); ex.yf = clamp01(yf); hidePopover(); renderTokens(); renderSidebar(); saveProject(); return; } pushUndo(); const id = uid(); cur().destacados.push({ id, pt, nome, funcao, xf: clamp01(xf), yf: clamp01(yf) }); cur().links = cur().links || []; cur().links.push({ id: uid(), a: 'pt:' + pt, b: 'mem:' + id }); hidePopover(); renderTokens(); renderSidebar(); saveProject(); }
 
   // ---- popover ----
   function togglePopover(pt, x, y) {
@@ -506,9 +533,11 @@
     CFG.objetivos.forEach(o => {
       if (!up[o.id]) return;
       const pos = objPos(o);
-      if (o.caminho) { const gp = gatePos(o); objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, gp.x * W, gp.y * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.06), dash: [4, 6], listening: false, name: 'treepath-' + o.id })); if (!state.present && state.tool === 'select') { const gh = new Konva.Group({ x: gp.x * W, y: gp.y * H, draggable: true, name: 'gate-' + o.id }); gh.add(new Konva.Rect({ width: os * 0.5, height: os * 0.9, offsetX: os * 0.25, offsetY: os * 0.45, cornerRadius: 2, fill: 'rgba(240,198,107,.18)', stroke: '#f0c66b', strokeWidth: Math.max(1.4, os * 0.06), dash: [3, 3] })); gh.add(new Konva.Text({ text: '⛩', fontSize: os * 0.5, offsetX: os * 0.25, offsetY: os * 0.3, opacity: 0.9 })); gh.dragBoundFunc(clampToStage); gh.on('dragstart', () => { pushUndo(); }); gh.on('dragmove', () => { const t2 = objLayer.findOne('.treepath-' + o.id); if (t2) t2.points([o.caminho.a[0] * W, o.caminho.a[1] * H, gh.x(), gh.y()]); const on = objLayer.findOne('.obj-' + o.id); if (on) { const tm = on.findOne('.tm'); if (tm) { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; const op = objPos(o); tm.findOne('Text').text(treeMeters(o, op.x, op.y) + 'm'); tm.offsetX(tm.getClientRect({ skipTransform: true }).width / 2); } } objLayer.batchDraw(); }); gh.on('dragend', () => { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; renderObjectives(); saveProject(); }); gh.on('mouseenter', () => stage.container().style.cursor = 'grab'); gh.on('mouseleave', () => stage.container().style.cursor = toolCursor()); objLayer.add(gh); } }
-      const canDrag = !state.present && state.tool === 'select';
+      const unlocked = unlockedObjs.has(o.id);
+      if (o.caminho) { const gp = gatePos(o); objLayer.add(new Konva.Line({ points: [o.caminho.a[0] * W, o.caminho.a[1] * H, gp.x * W, gp.y * H], stroke: hexA(o.icone === 'tree_red' ? '#E25B52' : '#89ABC5', 0.45), strokeWidth: Math.max(1, R * 0.06), dash: [4, 6], listening: false, name: 'treepath-' + o.id })); if (!state.present && state.tool === 'select' && unlocked) { const gh = new Konva.Group({ x: gp.x * W, y: gp.y * H, draggable: true, name: 'gate-' + o.id }); gh.add(new Konva.Rect({ width: os * 0.5, height: os * 0.9, offsetX: os * 0.25, offsetY: os * 0.45, cornerRadius: 2, fill: 'rgba(240,198,107,.18)', stroke: '#f0c66b', strokeWidth: Math.max(1.4, os * 0.06), dash: [3, 3] })); gh.add(new Konva.Text({ text: '⛩', fontSize: os * 0.5, offsetX: os * 0.25, offsetY: os * 0.3, opacity: 0.9 })); gh.dragBoundFunc(clampToStage); gh.on('dragstart', () => { pushUndo(); }); gh.on('dragmove', () => { const t2 = objLayer.findOne('.treepath-' + o.id); if (t2) t2.points([o.caminho.a[0] * W, o.caminho.a[1] * H, gh.x(), gh.y()]); const on = objLayer.findOne('.obj-' + o.id); if (on) { const tm = on.findOne('.tm'); if (tm) { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; const op = objPos(o); tm.findOne('Text').text(treeMeters(o, op.x, op.y) + 'm'); tm.offsetX(tm.getClientRect({ skipTransform: true }).width / 2); } } objLayer.batchDraw(); }); gh.on('dragend', () => { state.gates[o.id] = { x: clamp01(gh.x() / W), y: clamp01(gh.y() / H) }; renderObjectives(); saveProject(); }); gh.on('mouseenter', () => stage.container().style.cursor = 'grab'); gh.on('mouseleave', () => stage.container().style.cursor = toolCursor()); objLayer.add(gh); } }
+      const canDrag = !state.present && state.tool === 'select' && unlocked;
       const g = new Konva.Group({ x: pos.x * W, y: pos.y * H, draggable: canDrag, name: 'obj-' + o.id });
+      if (unlocked) g.add(new Konva.Circle({ radius: os * 0.7, stroke: '#f0c66b', strokeWidth: Math.max(1, os * 0.05), dash: [3, 3], opacity: 0.85, listening: false }));
       const img = iconImgs[o.icone];
       // escala por tipo de ícone: torres 1.25x, boss 1.5x (o restante 1x)
       const osz = os * (o.icone && o.icone.indexOf('tower') === 0 ? 1.25 : o.icone === 'boss' ? 1.5 : 1);
@@ -769,7 +798,15 @@
   }
 
   // ---- montador visual de PTs (board drag & drop) ----
-  let rosterView = 'grid', bdDragId = null, bdPopId = null;
+  let rosterView = 'grid', bdDragId = null, bdPopId = null, bdGroupClass = false;
+  const bdClassCollapsed = new Set();
+  function bdChipsHTML(zoneId, list) {
+    if (!bdGroupClass) return list.length ? list.map(bdChip).join('') : '<span class="bd-empty">' + t('dropHere') + '</span>';
+    if (!list.length) return '<span class="bd-empty">' + t('dropHere') + '</span>';
+    let h = '';
+    CFG.roleOrder.forEach(f => { const grp = list.filter(x => x.funcao === f); if (!grp.length) return; const col = bdClassCollapsed.has(zoneId + ':' + f); h += '<div class="bd-cgrp"><div class="bd-cgh" data-cg="' + zoneId + ':' + f + '"><span class="chev">' + (col ? '▸' : '▾') + '</span>' + classIcoHTML(f, true) + '<b>' + f + '</b><span class="bd-cc">' + grp.length + '</span></div>' + (col ? '' : grp.map(bdChip).join('')) + '</div>'; });
+    return h;
+  }
   function refreshRoster() { renderGrid(); if (rosterView === 'board') renderBoard(); }
   function setRosterView(v) {
     rosterView = v; if (viewToggle) viewToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
@@ -805,8 +842,8 @@
     let side = '<div class="bd-zone bd-pool" data-zone="pool"><div class="bd-zh">' + t('available')
       + (pool.length ? '<button class="bd-allres" title="' + t('allToRes') + '">→ ' + t('reservesLbl') + '</button>' : '')
       + '<span class="bd-c">' + pool.length + '</span></div>'
-      + '<div class="bd-chips">' + (pool.length ? pool.map(bdChip).join('') : '<span class="bd-empty">' + t('dropHere') + '</span>') + '</div></div>';
-    side += bdZone('res', t('genReserves'), gres, 'bd-res', ' <span class="bd-c">' + gres.length + '</span>');
+      + '<div class="bd-chips">' + bdChipsHTML('pool', pool) + '</div></div>';
+    side += '<div class="bd-zone bd-res" data-zone="res"><div class="bd-zh">' + t('genReserves') + ' <span class="bd-c">' + gres.length + '</span></div><div class="bd-chips">' + bdChipsHTML('res', gres) + '</div></div>';
     let grid = '<div class="bd-grid">';
     PT_IDS.forEach(pid => {
       const party = partyById.get(pid);
@@ -959,6 +996,7 @@
     undoBtn.addEventListener('click', doUndo); redoBtn.addEventListener('click', doRedo); clearDraw.addEventListener('click', clearDrawings);
     { const nt = $('namesTgl'); if (nt) { nt.classList.toggle('on', state.showNames); nt.addEventListener('click', () => { state.showNames = !state.showNames; nt.classList.toggle('on', state.showNames); renderTokens(); saveProject(); }); } }
     { const sc = $('sideChip'); if (sc) sc.addEventListener('click', cycleSide); }
+    { const rt = $('rosterTabs'); if (rt) rt.addEventListener('click', e => { const b = e.target.closest('button[data-rtab]'); if (b) { rosterSideView = b.dataset.rtab; renderSidebar(); } }); }
     objBtn.addEventListener('click', () => toggleObjPanel()); objClose.addEventListener('click', () => toggleObjPanel(false));
 
     nameInput.addEventListener('input', () => { cur().nome = nameInput.value; syncCard(); saveProject(); });
@@ -1004,6 +1042,7 @@
     autoBtn.addEventListener('click', autoAssign);
     bdAuto.addEventListener('click', autoAssign);
     bdClearPt.addEventListener('click', () => { rosterDraft.forEach(p => { p.pt = null; p.reserva = false; }); refreshRoster(); });
+    { const bg = $('bdGroup'); if (bg) bg.addEventListener('click', () => { bdGroupClass = !bdGroupClass; bg.classList.toggle('on', bdGroupClass); renderBoard(); }); }
     viewToggle.addEventListener('click', e => { const b = e.target.closest('button[data-view]'); if (b) setRosterView(b.dataset.view); });
     rosterBoard.addEventListener('dragstart', e => { const c = e.target.closest('.bd-chip'); if (c) { bdDragId = c.dataset.id; c.classList.add('dragging'); try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', c.dataset.id); } catch (_) {} if (bdPop) bdPop.hidden = true; } });
     rosterBoard.addEventListener('dragend', () => { rosterBoard.querySelectorAll('.dragging').forEach(x => x.classList.remove('dragging')); rosterBoard.querySelectorAll('.bd-zone.over').forEach(z => z.classList.remove('over')); });
@@ -1012,6 +1051,7 @@
     rosterBoard.addEventListener('click', e => {
       if (e.target.closest('.bd-allres')) { rosterDraft.forEach(p => { if (!p.pt && !p.reserva && !p.ausente) p.reserva = true; }); refreshRoster(); return; }
       const ob = e.target.closest('.bd-obs-btn') || e.target.closest('.bd-obs-line'); if (ob) { const card = ob.closest('.bd-pt-card'); if (card) { card.classList.toggle('obs-edit'); const inp = card.querySelector('.bd-obs'); if (inp && card.classList.contains('obs-edit')) inp.focus(); } return; }
+      const cg = e.target.closest('.bd-cgh'); if (cg) { const k = cg.dataset.cg; if (bdClassCollapsed.has(k)) bdClassCollapsed.delete(k); else bdClassCollapsed.add(k); renderBoard(); return; }
       const c = e.target.closest('.bd-chip'); if (c) openBdPop(c.dataset.id, c);
     });
     bdPop.addEventListener('click', e => {
