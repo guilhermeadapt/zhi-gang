@@ -178,7 +178,8 @@
     .pt-popover .po-range,.icon-menu .im-range{width:100%;accent-color:var(--gold);height:4px;margin-top:5px}
     /* menu de ícone (objetivo / membro) — HP, vincular, remover */
     .icon-menu{position:absolute;z-index:15;min-width:190px;max-width:240px;padding:11px 12px;background:rgba(12,15,22,.98);border:1px solid var(--line);border-radius:13px;box-shadow:0 24px 60px -24px #000,inset 0 1px 0 rgba(255,255,255,.04)}
-    .icon-menu .im-hd{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+    .icon-menu .im-hd{display:flex;align-items:center;gap:8px;margin-bottom:9px;cursor:move;touch-action:none;-webkit-user-select:none;user-select:none}
+    .icon-menu .im-hd .im-x{cursor:pointer}
     .icon-menu .im-hd b{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .icon-menu .im-dot{width:11px;height:11px;border-radius:50%;flex:none}
     .icon-menu .im-x{flex:none;width:24px;height:24px;border:1px solid var(--line-soft);background:transparent;color:var(--muted);border-radius:6px;cursor:pointer;font-size:12px}
@@ -866,7 +867,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=37"></script>
-  <script src="./app.js?v=37"></script>
+  <script src="./config.js?v=38"></script>
+  <script src="./app.js?v=38"></script>
 </body>
 </html>
