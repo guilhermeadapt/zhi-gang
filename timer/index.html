@@ -663,6 +663,27 @@
     function warnedFor(r){ var w=0; while(w<state.leads.length && state.leads[w] > r) w++; return w; }
     function shortName(n){ var s=sayName(n); return (s.split(/[\s\/]+/)[0]||s); }
     function speakShort(n, secs){ speak(shortName(n)+' '+secs); }
+    // ---- narração por voz personalizada (clipes ElevenLabs em ./audio) ----
+    function voiceKeyFor(name){ var s=(name||'').toLowerCase();
+      if(/jungle|\bjg\b/.test(s)) return 'jungle';
+      if(/sprint/.test(s)) return 'sprint';
+      if(/relentless/.test(s)) return 'relentless';
+      if(/city/.test(s)) return 'city';
+      if(/hair/.test(s)) return 'hairpull';
+      if(/problem/.test(s)) return 'ygap';
+      return null; }
+    var voiceCache={};
+    function voiceClip(key, lead){ var id=key+'-'+lead; if(voiceCache[id]===undefined){ var a=null; try{ a=new Audio('./audio/'+id+'.mp3'); a.preload='auto'; }catch(e){ a=null; } voiceCache[id]=a; } return voiceCache[id]; }
+    // toca o clipe do evento na antecedência (5/15/30); se não existir, cai no TTS
+    function announce(name, lead, spokenSecs){
+      if(!state.voice) return;
+      var key=voiceKeyFor(name);
+      if(key && (lead===5||lead===15||lead===30)){
+        var a=voiceClip(key, lead);
+        if(a){ try{ a.currentTime=0; var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ speakShort(name, spokenSecs); }); return; }catch(e){} }
+      }
+      speakShort(name, spokenSecs);
+    }
 
     // ---------- tempo ----------
     function now(){ return Date.now(); }
@@ -817,7 +838,7 @@
         if(c.at==null){ val.textContent=t('cdUse'); sub.textContent='CD '+fmt(c.cd); return; }
         var rem = c.cd - (now()-c.at)/1000;
         if(rem>0){ b.classList.add('running'); val.textContent=fmt(rem); sub.textContent=t('cdCd'); c.rdy=false;
-          while((c.warned||0) < state.leads.length && rem <= state.leads[c.warned||0]){ var L=state.leads[c.warned||0]; c.warned=(c.warned||0)+1; playAlert(); buzz(70); showToast(iconHTML(c.kind,c.val), c.nome+' '+Math.round(rem)+'s', true); speakShort(c.nome, Math.round(rem)); } }
+          while((c.warned||0) < state.leads.length && rem <= state.leads[c.warned||0]){ var L=state.leads[c.warned||0]; c.warned=(c.warned||0)+1; playAlert(); buzz(70); showToast(iconHTML(c.kind,c.val), c.nome+' '+Math.round(rem)+'s', true); announce(c.nome, L, Math.round(rem)); } }
         else { b.classList.add('ready'); val.textContent=t('cdReady'); sub.textContent=t('cdCanUse');
           if(!c.rdy){ c.rdy=true; playConfirm(); flash(); buzz([120,60,120]); showToast(iconHTML(c.kind,c.val), c.nome+' '+t('spoken_ready'), false); bigAlert(iconHTML(c.kind,c.val), c.nome, t('spoken_ready')); } }
       });
@@ -899,7 +920,7 @@
         var wr = warRemaining();
         state.events.forEach(function(e){
           var un = wr - e.rem;
-          while((e.warned||0) < state.leads.length && un <= state.leads[e.warned||0] && un > 0){ e.warned=(e.warned||0)+1; playAlert(); buzz(70); showToast(ico(e), e.nome+' '+Math.round(un)+'s', true); speakShort(e.nome, Math.round(un)); }
+          while((e.warned||0) < state.leads.length && un <= state.leads[e.warned||0] && un > 0){ var L=state.leads[e.warned||0]; e.warned=(e.warned||0)+1; playAlert(); buzz(70); showToast(ico(e), e.nome+' '+Math.round(un)+'s', true); announce(e.nome, L, Math.round(un)); }
           if(!e.fired && wr <= e.rem){ e.fired=true; e.warned=state.leads.length; playConfirm(); flash(); buzz([120,60,120]); showToast(ico(e), e.nome+(e.win?' · '+t('spoken_spawn'):''), false); notify(e); bigAlert(ico(e), e.nome, e.win?t('spoken_spawn'):''); }
         });
       }
