@@ -906,17 +906,20 @@
   }
 
   // ---- anotações / post-its no mapa ----
+  function noteWidth(n, fs) { return Math.min(W * 0.32, Math.max(fs * 6, fs * (String(n.text || '').length > 26 ? 12 : 8))); }
   function renderNotes() {
     noteLayer.destroyChildren();
-    const list = (cur() ? cur().notas : []) || [], fs = Math.max(11, W * 0.016);
+    const list = (cur() ? cur().notas : []) || [], baseFs = Math.max(11, W * 0.016);
     list.forEach(n => {
+      if (noteEdit && noteEdit.id === n.id) return; // a nota em edição é a caixa HTML por cima
+      const fs = baseFs * (n.size || 1);
       const canDrag = !state.present && state.tool === 'select';
       const g = new Konva.Group({ x: n.x * W, y: n.y * H, draggable: canDrag, name: 'note-' + n.id });
       const label = new Konva.Label();
       label.add(new Konva.Tag({ fill: 'rgba(24,20,8,.92)', stroke: '#f0c66b', strokeWidth: 1, cornerRadius: 5, shadowColor: '#000', shadowBlur: 8, shadowOpacity: 0.5, shadowOffsetY: 2 }));
-      label.add(new Konva.Text({ text: n.text || '…', fontFamily: 'Barlow, sans-serif', fontStyle: '600', fontSize: fs, fill: '#f7e6bf', padding: Math.max(5, fs * 0.5), width: Math.min(W * 0.32, Math.max(fs * 6, fs * (String(n.text || '').length > 26 ? 12 : 8))), lineHeight: 1.25 }));
+      label.add(new Konva.Text({ text: n.text || '…', fontFamily: 'Barlow, sans-serif', fontStyle: '600', fontSize: fs, fill: '#f7e6bf', padding: Math.max(5, fs * 0.5), width: noteWidth(n, fs), lineHeight: 1.25 }));
       g.add(label);
-      g.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; g.moveToTop(); noteLayer.batchDraw(); if (!state.present) openNoteEditor(n, g.x(), g.y()); });
+      g.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; g.moveToTop(); noteLayer.batchDraw(); if (!state.present) editNoteInline(n); });
       if (canDrag) {
         g.dragBoundFunc(clampToStage);
         g.on('dragstart', () => { pushUndo(); g.moveToTop(); });
@@ -934,18 +937,34 @@
     pushUndo(); cur().notas = cur().notas || [];
     const n = { id: uid(), x: f.xf, y: f.yf, text: '' };
     cur().notas.push(n); hintDismissed = true; setTool('select'); renderNotes(); saveProject();
-    const g = noteLayer.findOne('.note-' + n.id); openNoteEditor(n, g ? g.x() : f.xf * W, g ? g.y() : f.yf * H);
+    editNoteInline(n);
   }
-  function openNoteEditor(n, x, y) {
-    if (!iconMenu || state.present) return; hidePopover();
-    iconMenu.innerHTML = '<div class="im-hd"><span class="im-dot" style="background:#f0c66b"></span><b>' + t('noteTitle') + '</b><button class="im-x" data-act="close">✕</button></div>'
-      + '<textarea class="im-note" rows="3" placeholder="' + t('notePh') + '">' + esc(n.text || '') + '</textarea>'
-      + '<div class="im-actions"><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
-    iconMenu.hidden = false; placeIconMenu(x, y);
-    const ta = iconMenu.querySelector('.im-note'); ta.focus();
-    ta.addEventListener('input', () => { n.text = ta.value; renderNotes(); saveProject(); });
-    iconMenu.querySelector('[data-act="remove"]').addEventListener('click', () => { pushUndo(); cur().notas = (cur().notas || []).filter(x => x.id !== n.id); closeIconMenu(); renderNotes(); saveProject(); });
-    iconMenu.querySelector('[data-act="close"]').addEventListener('click', closeIconMenu);
+  // edição INLINE da nota (caixa HTML posicionada em cima dela, sem abrir aba)
+  let noteEdit = null, noteEditEl = null;
+  function closeNoteEdit() { if (noteEditEl) { noteEditEl.remove(); noteEditEl = null; } noteEdit = null; renderNotes(); }
+  function editNoteInline(n) {
+    if (state.present || !mapPanel) return;
+    if (noteEdit && noteEdit.id === n.id) return;
+    closeNoteEdit(); closeIconMenu(); hidePopover();
+    noteEdit = n;
+    const s = stage.scaleX() || 1, baseFs = Math.max(11, W * 0.016);
+    const px = stageWrap.offsetLeft + stage.x() + n.x * W * s, py = stageWrap.offsetTop + stage.y() + n.y * H * s;
+    const wrap = document.createElement('div'); wrap.className = 'note-edit'; wrap.style.left = px + 'px'; wrap.style.top = py + 'px';
+    const bar = document.createElement('div'); bar.className = 'ne-bar';
+    bar.innerHTML = '<button type="button" data-a="dec" title="Menor">A−</button><button type="button" data-a="inc" title="Maior">A＋</button><button type="button" data-a="del" class="ne-del" title="Excluir">✕</button>';
+    const ta = document.createElement('textarea'); ta.className = 'ne-ta'; ta.value = n.text || ''; ta.placeholder = t('notePh'); ta.rows = 2;
+    wrap.appendChild(bar); wrap.appendChild(ta); mapPanel.appendChild(wrap); noteEditEl = wrap;
+    const applySize = () => { const fs = baseFs * (n.size || 1) * s; ta.style.fontSize = fs + 'px'; ta.style.width = (noteWidth(n, baseFs * (n.size || 1)) * s) + 'px'; ta.style.padding = Math.max(5, baseFs * (n.size || 1) * 0.5) * s + 'px'; };
+    applySize();
+    setTimeout(() => { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }, 20);
+    ta.addEventListener('input', () => { n.text = ta.value; applySize(); saveProject(); });
+    ta.addEventListener('keydown', e => { if (e.key === 'Escape') { ta.blur(); } });
+    bar.addEventListener('mousedown', e => e.preventDefault());   // não tira o foco do textarea ao clicar nos botões
+    bar.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const a = b.dataset.a;
+      if (a === 'del') { pushUndo(); cur().notas = (cur().notas || []).filter(x => x.id !== n.id); closeNoteEdit(); saveProject(); return; }
+      pushUndo(); n.size = Math.max(0.7, Math.min(1.7, (n.size || 1) * (a === 'inc' ? 1.18 : 0.85))); applySize(); saveProject();
+    });
+    ta.addEventListener('blur', () => setTimeout(() => { if (noteEditEl && noteEditEl.contains(document.activeElement)) return; closeNoteEdit(); saveProject(); }, 120));
   }
 
   // ---- cenários ----
@@ -1374,6 +1393,6 @@
   // ---- persistência ----
   function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side, showNames: state.showNames })); } catch (e) {} }
   function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
-  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; if (d.hideName) o.hideName = true; if (d.locked) o.locked = true; if (d.nameSide) o.nameSide = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, hideMeters: (s.hideMeters && typeof s.hideMeters === 'object') ? Object.fromEntries(Object.entries(s.hideMeters).filter(([k, v]) => objById.has(k) && v).map(([k]) => [k, true])) : {}, objBuffs: (s.objBuffs && typeof s.objBuffs === 'object') ? Object.fromEntries(Object.entries(s.objBuffs).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string')])) : {}, treeCarry: (s.treeCarry && typeof s.treeCarry === 'object') ? Object.fromEntries(Object.entries(s.treeCarry).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string').slice(0, 2)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240) })) : [], enemies: Array.isArray(s.enemies) ? s.enemies.map(e => ({ id: e.id || uid(), x: clamp01(e.x), y: clamp01(e.y), n: Math.max(0, Math.min(99, parseInt(e.n) || 0)), label: typeof e.label === 'string' ? e.label.slice(0, 24) : '' })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], focus: (function(f){ var a = Array.isArray(f) ? f : (f && typeof f === 'object' ? [f] : []); return a.filter(function(x){ return x && x.w > 0 && x.h > 0; }).map(function(x){ return { x: clamp01(x.x), y: clamp01(x.y), w: clamp01(x.w), h: clamp01(x.h) }; }); })(s.focus), varOf: typeof s.varOf === 'string' ? s.varOf : null, varLabel: typeof s.varLabel === 'string' ? s.varLabel.slice(0, 4) : null, nota: typeof s.nota === 'string' ? s.nota : '' }; }
+  function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; if (d.hideName) o.hideName = true; if (d.locked) o.locked = true; if (d.nameSide) o.nameSide = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, hideMeters: (s.hideMeters && typeof s.hideMeters === 'object') ? Object.fromEntries(Object.entries(s.hideMeters).filter(([k, v]) => objById.has(k) && v).map(([k]) => [k, true])) : {}, objBuffs: (s.objBuffs && typeof s.objBuffs === 'object') ? Object.fromEntries(Object.entries(s.objBuffs).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string')])) : {}, treeCarry: (s.treeCarry && typeof s.treeCarry === 'object') ? Object.fromEntries(Object.entries(s.treeCarry).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string').slice(0, 2)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240), size: (typeof n.size === 'number' && n.size >= 0.7 && n.size <= 1.7) ? n.size : 1 })) : [], enemies: Array.isArray(s.enemies) ? s.enemies.map(e => ({ id: e.id || uid(), x: clamp01(e.x), y: clamp01(e.y), n: Math.max(0, Math.min(99, parseInt(e.n) || 0)), label: typeof e.label === 'string' ? e.label.slice(0, 24) : '' })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], focus: (function(f){ var a = Array.isArray(f) ? f : (f && typeof f === 'object' ? [f] : []); return a.filter(function(x){ return x && x.w > 0 && x.h > 0; }).map(function(x){ return { x: clamp01(x.x), y: clamp01(x.y), w: clamp01(x.w), h: clamp01(x.h) }; }); })(s.focus), varOf: typeof s.varOf === 'string' ? s.varOf : null, varLabel: typeof s.varLabel === 'string' ? s.varLabel.slice(0, 4) : null, nota: typeof s.nota === 'string' ? s.nota : '' }; }
   function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tags: (Array.isArray(p.tags) ? p.tags : (p.tag2 ? [p.tag2] : [])).filter(tg => (CFG.secondaryTags || []).includes(tg)), flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], replace: !!p.replace, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
