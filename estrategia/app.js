@@ -128,20 +128,17 @@
   const mapImg = new Image(), iconImgs = {}, iconKeys = Object.keys(CFG.assets.icons);
 
   // ---- selos de buff desenhados como SVG (emoji não renderiza no canvas) ----
-  const BUFF_ICONS = {
-    cityprot:  { color: '#2a9d8f', glyph: '<path d="M20 7l11 4v8.5c0 7.6-11 12.5-11 12.5S9 27.1 9 19.5V11z" fill="#fff"/><path d="M14.5 20l4 4 7.5-8.5" fill="none" stroke="#2a9d8f" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>' },
-    ygap:      { color: '#e0503f', glyph: '<path d="M20 6l3.2 3.4v13.4l-3.2 3-3.2-3V9.4z" fill="#fff"/><rect x="12.5" y="24.4" width="15" height="3.2" rx="1.6" fill="#fff"/><rect x="18.4" y="27.4" width="3.2" height="6" rx="1.6" fill="#fff"/>' },
-    hairpull:  { color: '#d94f8a', glyph: '<g fill="none" stroke="#fff" stroke-width="3.1" stroke-linecap="round"><path d="M14 11c1.4 6 1.9 12 .8 18"/><path d="M20 9c1.3 7 1.3 13 .2 20"/><path d="M26 11c-1.1 6-1.2 12-2.2 17"/></g>' },
-    sprint:    { color: '#38b6e9', glyph: '<g stroke="#fff" stroke-width="3.4" stroke-linecap="round"><path d="M8 20h9"/><path d="M9 14h6.5"/><path d="M9 26h6.5"/></g><path d="M18 12l9 8-9 8" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>' },
-    relentless:{ color: '#e6a12e', glyph: '<circle cx="20" cy="25" r="6.6" fill="#fff"/><circle cx="12" cy="18.5" r="3" fill="#fff"/><circle cx="20" cy="14" r="3" fill="#fff"/><circle cx="28" cy="18.5" r="3" fill="#fff"/>' },
-  };
-  // re-render agrupado: vários SVGs terminam de carregar quase juntos no boot;
+  // Selos de buff — arte oficial do jogo (silhueta branca sobre disco colorido),
+  // pré-compostas em /assets/icons/badge_<id>.png. Trocar a arte = trocar o PNG.
+  const BUFF_BADGES = ['cityprot', 'ygap', 'hairpull', 'sprint', 'relentless', 'frontline', 'desperate'];
+  // re-render agrupado: vários ícones terminam de carregar quase juntos no boot;
   // sem debounce isso dispara 6+ renders completos. Junta tudo num só rAF.
   let _svgRenderQ = 0;
   function svgLoaded() { if (_svgRenderQ) return; _svgRenderQ = 1; requestAnimationFrame(() => { _svgRenderQ = 0; try { renderObjectives(); renderTokens(); } catch (_) {} }); }
   function svgImg(svg) { const im = new Image(); im.onload = svgLoaded; im.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); return im; }
-  const buffImgs = {}, buffKeys = Object.keys(BUFF_ICONS);
-  buffKeys.forEach(k => { const b = BUFF_ICONS[k]; buffImgs[k] = svgImg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="' + b.color + '" stroke="#0c0f16" stroke-width="2.4"/>' + b.glyph + '</svg>'); });
+  function pngImg(src) { const im = new Image(); im.onload = svgLoaded; im.src = src; return im; }
+  const buffImgs = {};
+  BUFF_BADGES.forEach(k => { buffImgs[k] = pngImg('../assets/icons/badge_' + k + '.png'); });
   // ícone de inimigo defendendo: espadas cruzadas
   const enemyImg = svgImg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><g stroke="#ffe6e2" stroke-width="3.3" stroke-linecap="round"><path d="M12 28L28 12"/><path d="M28 28L12 12"/></g><g stroke="#ffe6e2" stroke-width="2.6" stroke-linecap="round"><path d="M8.5 24.5l6.5 6.5"/><path d="M31.5 24.5l-6.5 6.5"/></g><circle cx="11" cy="29" r="2.3" fill="#ffe6e2"/><circle cx="29" cy="29" r="2.3" fill="#ffe6e2"/></svg>');
 
@@ -700,7 +697,7 @@
   function objPos(o) { if (o.movel) { const p = cur().objetivoPos && cur().objetivoPos[o.id]; if (p) return { x: p.x, y: p.y }; } else { const g = state.objetivoPosGlobal[o.id]; if (g) return { x: g.x, y: g.y }; } return { x: o.x, y: o.y }; }
   const OBJ_STYLE = { tower_blue: { c: '#6aa8e0', t: 'T' }, tower_red: { c: '#e0685a', t: 'T' }, goose_blue: { c: '#5ec8d8', t: 'G' }, goose_red: { c: '#e0685a', t: 'G' }, tree_blue: { c: '#5bc98a', t: 'A' }, tree_red: { c: '#e0685a', t: 'A' }, boss: { c: '#f0c66b', t: 'B' }, outpost: { c: '#b98be0', t: '🚩', emoji: true }, jungle: { c: '#8fc06a', t: 'JG' } };
   function objStyle(o) { return OBJ_STYLE[o.icone] || { c: '#9aa2b4', t: '?' }; }
-  function objBuffsFor(o) { if (!o || !o.icone || !CFG.objBuffs) return []; if (o.icone.indexOf('tower') === 0) return CFG.objBuffs.tower || []; if (o.icone.indexOf('goose') === 0) return CFG.objBuffs.goose || []; if (o.icone.indexOf('tree') === 0) return CFG.objBuffs.tree || []; return []; }
+  function objBuffsFor(o) { if (!o || !o.icone || !CFG.objBuffs) return []; if (o.icone.indexOf('tower') === 0) return CFG.objBuffs.tower || []; if (o.icone.indexOf('goose') === 0) return CFG.objBuffs.goose || []; if (o.icone.indexOf('tree') === 0) return CFG.objBuffs.tree || []; if (o.icone === 'boss') return CFG.objBuffs.boss || []; return []; }
   function objInfoFor(o) { if (!o || !o.icone || !CFG.objInfo) return ''; const ic = o.icone; if (ic.indexOf('tower') === 0) return CFG.objInfo.tower || ''; if (ic.indexOf('goose') === 0) return CFG.objInfo.goose || ''; if (ic.indexOf('tree') === 0) return CFG.objInfo.tree || ''; if (ic === 'jungle') return CFG.objInfo.jungle || ''; return CFG.objInfo[ic] || ''; }
   function gatePos(o) { const g = state.gates && state.gates[o.id]; return g ? { x: g.x, y: g.y } : { x: o.caminho.b[0], y: o.caminho.b[1] }; }
   function treeMeters(o, xf, yf) { const a = o.caminho.a, b = gatePos(o), ax = b.x - a[0], ay = b.y - a[1]; const t = ((xf - a[0]) * ax + (yf - a[1]) * ay) / (ax * ax + ay * ay || 1); return Math.round(Math.max(0, Math.min(1, t)) * CFG.treeMeters); }

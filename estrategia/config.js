@@ -37,8 +37,13 @@ const WWM = {
     },
   },
 
-  // buffs ativáveis por objetivo (torre / ganso / árvore). Mostram um selo no ícone.
-  //  escudo 🛡️ = City Protection (invulnerável) ; espada 🗡️ = buff de dano.
+  // buffs ativáveis por objetivo. Mostram um selo (arte do jogo) no ícone do
+  // objetivo. O emoji abaixo é só o rótulo do menu; no mapa usa-se a arte PNG
+  // em /assets/icons/badge_<id>.png (ver BUFF_BADGES no app.js).
+  //  City Protection = torres/gansos não levam dano · You Got a Problem = +dano na torre
+  //  Hair Pulling = +dano no ganso · Sprint = árvore anda mais rápido
+  //  Relentless = árvore não pode ser parada por Box · Frontline Zeal = buff commander
+  //  do time · Desperate Surge = corta cura dos inimigos.
   objBuffs: {
     tower: [
       { id: 'cityprot', icon: '🛡️', label: 'City Protection' },
@@ -51,6 +56,10 @@ const WWM = {
     tree: [
       { id: 'sprint',    icon: '💨', label: 'Sprint' },
       { id: 'relentless', icon: '🐗', label: 'Relentless' },
+    ],
+    boss: [
+      { id: 'frontline', icon: '🚩', label: 'Frontline Zeal' },
+      { id: 'desperate', icon: '⛔', label: 'Desperate Surge' },
     ],
   },
 
