@@ -644,6 +644,18 @@
     }
     .roster-mclose{display:none;position:absolute;top:10px;right:12px;width:28px;height:28px;place-items:center;
       border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);border-radius:7px;cursor:pointer;z-index:2}
+    /* menu de planos salvos */
+    .plans-wrap{position:relative;display:inline-flex}
+    .plans-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:60;min-width:230px;max-width:300px;
+      background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:12px;padding:6px;
+      box-shadow:0 24px 60px -20px #000;backdrop-filter:blur(8px)}
+    .plans-menu .pm-h{font-family:var(--disp);font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:7px 9px 5px}
+    .plans-menu .pm-item{display:flex;flex-direction:column;gap:1px;width:100%;text-align:left;cursor:pointer;
+      background:transparent;border:1px solid transparent;border-radius:8px;padding:8px 9px;color:var(--text);transition:.12s}
+    .plans-menu .pm-item:hover{background:rgba(255,255,255,.05);border-color:var(--line-soft)}
+    .plans-menu .pm-item .pm-name{font-family:var(--disp);font-weight:600;font-size:13px}
+    .plans-menu .pm-item .pm-sub{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .plans-menu .pm-empty{padding:9px;color:var(--muted);font-size:12px;line-height:1.5}
   </style>
 </head>
 <body>
@@ -674,6 +686,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
         <span data-i18n="roster">Roster</span>
       </button>
+      <div class="plans-wrap">
+        <button class="tbtn" id="plansBtn" title="Planos salvos (compartilhados pela guild)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h3l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg><span data-i18n="plans">Planos</span></button>
+        <div class="plans-menu" id="plansMenu" hidden></div>
+      </div>
       <button class="tbtn ico" id="exportBtn" title="Exportar o plano como JSON" aria-label="Exportar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg></button>
       <button class="tbtn ico" id="importBtn" title="Importar um plano de JSON" aria-label="Importar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M5 21h14"/></svg></button>
       <input type="file" id="importFile" accept="application/json,.json" hidden />
@@ -891,7 +907,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=53"></script>
-  <script src="./app.js?v=53"></script>
+  <script src="./config.js?v=54"></script>
+  <script src="./app.js?v=54"></script>
 </body>
 </html>

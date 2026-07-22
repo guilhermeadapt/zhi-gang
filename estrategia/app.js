@@ -26,7 +26,7 @@
       tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', groupClass:'⊟ Por classe', bdLegend:'Arraste cada jogador para a PT, para as <b>reservas da PT</b> ou reservas gerais. Clique num jogador para função, tarja e flags. Alvo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas da PT', genReserves:'Reservas gerais', obsPh:'Observações da PT…', roleLbl:'Função', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Jogar todos os disponíveis para reservas',
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
-      shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', focusClear:'Foco removido', variation:'Variação', zoomTip:'Scroll = zoom · arraste o mapa para mover', zoomTipM:'Pinça = zoom · arraste = mover · toque = editar',
+      shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', focusClear:'Foco removido', variation:'Variação', plans:'Planos', plansEmpty:'Nenhum plano salvo ainda. Exporte o plano e commite o JSON em /estrategia/plans/.', zoomTip:'Scroll = zoom · arraste o mapa para mover', zoomTipM:'Pinça = zoom · arraste = mover · toque = editar',
       menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', nameToggle:'Nome no mapa', unlockAction:'Destravar posição', lockAction:'Travar posição', unlockedHint:'Destravado — arraste para reposicionar', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
@@ -38,7 +38,7 @@
       tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', groupClass:'⊟ Por clase', bdLegend:'Arrastra cada jugador a la PT, a las <b>reservas de la PT</b> o reservas generales. Haz clic en un jugador para función, tarja y flags. Objetivo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas de la PT', genReserves:'Reservas generales', obsPh:'Observaciones de la PT…', roleLbl:'Función', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Enviar todos los disponibles a reservas',
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
-      shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', focusClear:'Foco quitado', variation:'Variación', zoomTip:'Scroll = zoom · arrastra el mapa para mover', zoomTipM:'Pellizca = zoom · arrastra = mover · toca = editar',
+      shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', focusClear:'Foco quitado', variation:'Variación', plans:'Planes', plansEmpty:'Aún no hay planes guardados. Exporta el plan y commitea el JSON en /estrategia/plans/.', zoomTip:'Scroll = zoom · arrastra el mapa para mover', zoomTipM:'Pellizca = zoom · arrastra = mover · toca = editar',
       menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', nameToggle:'Nombre en el mapa', unlockAction:'Desbloquear posición', lockAction:'Bloquear posición', unlockedHint:'Desbloqueado — arrastra para reposicionar', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
@@ -50,7 +50,7 @@
       tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', groupClass:'⊟ By class', bdLegend:'Drag each player to the PT, to the <b>PT reserves</b> or general reserves. Click a player for role, tag and flags. Target: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Starters', ptReserves:'PT reserves', genReserves:'General reserves', obsPh:'PT notes…', roleLbl:'Role', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Send all available to reserves',
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
-      shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', focusClear:'Focus cleared', variation:'Variation', zoomTip:'Scroll = zoom · drag the map to move', zoomTipM:'Pinch = zoom · drag = move · tap = edit',
+      shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', focusClear:'Focus cleared', variation:'Variation', plans:'Plans', plansEmpty:'No saved plans yet. Export the plan and commit the JSON to /estrategia/plans/.', zoomTip:'Scroll = zoom · drag the map to move', zoomTipM:'Pinch = zoom · drag = move · tap = edit',
       menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', nameToggle:'Name on map', unlockAction:'Unlock position', lockAction:'Lock position', unlockedHint:'Unlocked — drag to reposition', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
@@ -181,7 +181,7 @@
     document.querySelectorAll('#langSel button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
     loadProject(); bgImage.image(mapImg); bgLayer.batchDraw(); buildColorSwatches(); buildMarkPicker();
     dockMini.hidden = false;   // mini-nav sempre visível; painel de Fases começa fechado
-    renderSidebar(); renderRail(); loadScenarioIntoUI(); fit(); wireEvents(); maybeLoadShared();
+    renderSidebar(); renderRail(); loadScenarioIntoUI(); fit(); wireEvents(); maybeLoadShared(); maybeLoadPlan();
     setTimeout(() => { hintDismissed = true; mapHint.classList.add('hide'); }, 5000);   // aviso some em 5s (definitivo)
     setTimeout(() => toast(t(isMobile() ? 'zoomTipM' : 'zoomTip')), 900);
     // canvas não reflui sozinho quando a webfont carrega: re-renderiza os rótulos
@@ -319,8 +319,9 @@
       const full = d.nome, short = full.length > 7 ? full.slice(0, 6) + '…' : full;
       const ny = hasHp ? (mHpBy + mHpBh + Math.max(2, R * 0.13)) : (rm + rm * 0.32);
       const lbl = new Konva.Label({ y: ny });
-      lbl.add(new Konva.Tag({ fill: 'rgba(10,12,17,.92)', cornerRadius: 3, stroke: dead ? '#5b626d' : rc, strokeWidth: 1 }));
-      const nmTx = new Konva.Text({ text: short, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: dead ? '#c9cdd4' : '#F2EFE6', padding: 3, letterSpacing: 0.2, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.7 });
+      // leve: respiro escuro translúcido (sem borda) + sombra suave — nada de pill sólido
+      lbl.add(new Konva.Tag({ fill: 'rgba(8,10,14,.44)', cornerRadius: 3 }));
+      const nmTx = new Konva.Text({ text: short, fontFamily: 'Barlow, sans-serif', fontStyle: '600', fontSize: fs, fill: dead ? '#c9cdd4' : '#F4F2EC', padding: 2.5, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.95 });
       lbl.add(nmTx); g.add(lbl);
       const recenter = () => centerLabelX(lbl);
       recenter();
@@ -332,9 +333,9 @@
       // nome oculto (segurou pra esconder): bolinha no canto inferior direito com o nº da PT
       const num = (d.pt || '').replace(/\D/g, '');
       if (num) {
-        const br = Math.max(6, rm * 0.6), bx = rm * 0.74, by = rm * 0.74;
-        g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: p ? p.cor : '#D9A441', stroke: '#0a0c11', strokeWidth: Math.max(1, br * 0.18), shadowColor: '#000', shadowBlur: 2.5, shadowOpacity: 0.55 }));
-        g.add(new Konva.Text({ text: num, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: br * 1.2, fill: '#10131a', align: 'center', verticalAlign: 'middle', width: br * 2, height: br * 2, offsetX: br, offsetY: br, x: bx, y: by }));
+        const br = Math.max(5, rm * 0.5), bx = rm * 0.72, by = rm * 0.72;
+        g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: p ? p.cor : '#D9A441', opacity: 0.92, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.45 }));
+        g.add(new Konva.Text({ text: num, fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: br * 1.25, fill: '#10131a', align: 'center', verticalAlign: 'middle', width: br * 2, height: br * 2, offsetX: br, offsetY: br, x: bx, y: by }));
       }
     }
     g.position({ x: d.xf * W, y: d.yf * H });
@@ -350,7 +351,7 @@
     if (d.locked && !pinned) g.add(new Konva.Circle({ radius: rm + 2.5, stroke: '#8b93a1', strokeWidth: Math.max(1, rm * 0.1), dash: [2, 3], opacity: 0.7, listening: false }));
     if (hasHp) { // vida do player: barrinha fina discreta (sem % grande empurrando o nome)
       const hc = d.hp > 60 ? '#4CC9A4' : d.hp > 30 ? '#f0c66b' : '#E25B52', bw = rm * 1.9;
-      g.add(new Konva.Rect({ x: -bw / 2, y: mHpBy, width: bw, height: mHpBh, cornerRadius: mHpBh / 2, fill: 'rgba(6,8,12,.8)', stroke: 'rgba(255,255,255,.22)', strokeWidth: 0.6, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.5, listening: false }));
+      g.add(new Konva.Rect({ x: -bw / 2, y: mHpBy, width: bw, height: mHpBh, cornerRadius: mHpBh / 2, fill: 'rgba(6,8,12,.6)', shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.45, listening: false }));
       g.add(new Konva.Rect({ x: -bw / 2, y: mHpBy, width: Math.max(mHpBh, bw * d.hp / 100), height: mHpBh, cornerRadius: mHpBh / 2, fill: hc, listening: false }));
     }
     g.on('click tap', e => { e.cancelBubble = true; if (Date.now() - lpAt < 400) return; g.moveToTop(); tokenLayer.batchDraw(); iconClicked('mem:' + d.id, () => openMemberMenu(d, g.x(), g.y())); });
@@ -676,9 +677,9 @@
         const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52';
         const fs = Math.max(7, osz * 0.22), bw = Math.max(osz * 0.72, 14), bh = Math.max(2.2, fs * 0.32);
         const by = o.caminho ? (-iconH / 2 - fs - bh - 3) : (iconH * 0.16);
-        g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.72)', stroke: 'rgba(255,255,255,.2)', strokeWidth: 0.6, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.6, listening: false }));
+        g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.55)', shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.5, listening: false }));
         g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, listening: false }));
-        const tx = new Konva.Text({ text: hp + '%', fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, stroke: '#0a0c11', strokeWidth: Math.max(0.7, fs * 0.1), fillAfterStrokeEnabled: true, y: by + bh + 1.5, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.85, listening: false });
+        const tx = new Konva.Text({ text: hp + '%', fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, y: by + bh + 1.5, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.95, listening: false });
         tx.offsetX(tx.width() / 2); g.add(tx);
       }
       // selos de buff ativos (City Protection / You Got a Problem / Hair Pulling) acima do ícone
@@ -1127,6 +1128,26 @@
     (async () => { let ok = false; try { await navigator.clipboard.writeText(s); ok = true; } catch (e) {} if (!ok) { try { ok = document.execCommand('copy'); } catch (e) {} } toast(ok ? 'Posições copiadas ✓' : 'Selecione o texto e copie (Ctrl+C)'); })();
   }
   async function maybeLoadShared() { const m = /[#&]p=([^&]+)/.exec(location.hash); if (!m) return; let d; try { d = await decodeShare(decodeURIComponent(m[1])); } catch (e) { toast('Link de plano inválido'); return; } if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Este link abre um plano compartilhado. Abrir substitui o rascunho atual. Continuar?')) return; if (applyImported(d)) toast('Plano do link carregado ✓'); }
+  // ---- planos salvos (arquivos JSON no repo, sem banco de dados) ----
+  async function loadPlan(slug) {
+    let d;
+    try { const res = await fetch('./plans/' + slug + '.json', { cache: 'no-store' }); if (!res.ok) throw 0; d = await res.json(); }
+    catch (e) { toast('Não consegui carregar o plano "' + slug + '"'); return; }
+    if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Abrir o plano "' + slug + '" substitui o rascunho atual. Continuar?')) return;
+    if (applyImported(d)) toast('Plano carregado ✓');
+  }
+  async function maybeLoadPlan() { const m = /[?&]plan=([\w-]+)/.exec(location.search); if (m) await loadPlan(m[1]); }
+  async function openPlansMenu() {
+    const menu = $('plansMenu'); if (!menu) return;
+    if (!menu.hidden) { menu.hidden = true; return; }
+    const hd = '<div class="pm-h">' + t('plans') + '</div>';
+    menu.innerHTML = hd + '<div class="pm-empty">…</div>'; menu.hidden = false;
+    let list = [];
+    try { const res = await fetch('./plans/index.json', { cache: 'no-store' }); if (res.ok) list = await res.json(); } catch (e) {}
+    if (!Array.isArray(list) || !list.length) { menu.innerHTML = hd + '<div class="pm-empty">' + t('plansEmpty') + '</div>'; return; }
+    menu.innerHTML = hd + list.map(p => '<button class="pm-item" data-slug="' + esc(p.slug) + '"><span class="pm-name">' + esc(p.nome || p.slug) + '</span>' + (p.sub ? '<span class="pm-sub">' + esc(p.sub) + '</span>' : '') + '</button>').join('');
+    menu.querySelectorAll('.pm-item').forEach(b => b.addEventListener('click', () => { menu.hidden = true; loadPlan(b.dataset.slug); }));
+  }
   let toastT = null; function toast(msg) { toastEl.innerHTML = msg.replace(/✓/g, '<b>✓</b>'); toastEl.hidden = false; requestAnimationFrame(() => toastEl.classList.add('show')); clearTimeout(toastT); toastT = setTimeout(() => { toastEl.classList.remove('show'); setTimeout(() => toastEl.hidden = true, 220); }, 2600); }
   // confirm próprio (o confirm() nativo é bloqueado no iframe do preview)
   function askConfirm(msg) { return new Promise(res => { confirmMsg.textContent = msg; confirmModal.hidden = false; const done = v => { confirmModal.hidden = true; confirmYes.onclick = confirmNo.onclick = null; res(v); }; confirmYes.onclick = () => done(true); confirmNo.onclick = () => done(false); confirmModal.onclick = e => { if (e.target === confirmModal) done(false); }; }); }
@@ -1203,6 +1224,7 @@
     addScene.addEventListener('click', addScenarioBlank); dupScene.addEventListener('click', duplicateCurrent); { const vb = $('varScene'); if (vb) vb.addEventListener('click', createVariation); }
     seedBtn.addEventListener('click', async () => { if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm('Adicionar os cenários das fases padrão ao projeto?')) return; seedStandard(); });
     exportBtn.addEventListener('click', exportProject); importBtn.addEventListener('click', () => importFile.click());
+    { const pb = $('plansBtn'); if (pb) pb.addEventListener('click', e => { e.stopPropagation(); openPlansMenu(); }); document.addEventListener('click', e => { const m = $('plansMenu'); if (m && !m.hidden && !e.target.closest('.plans-wrap')) m.hidden = true; }); }
     importFile.addEventListener('change', e => { const f = e.target.files[0]; if (f) importProjectFile(f); e.target.value = ''; });
     shareBtn.addEventListener('click', shareLink); resetBtn.addEventListener('click', resetAll);
     shareClose.addEventListener('click', () => shareModal.hidden = true);
