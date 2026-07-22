@@ -552,11 +552,11 @@
       const abuffs = (cur().objBuffs || {})[o.id] || [];
       if (abuffs.length) {
         const defs = objBuffsFor(o), shown = abuffs.map(id => defs.find(d => d.id === id)).filter(Boolean);
-        const br = Math.max(7, os * 0.4), gap = br * 2 + Math.max(1, os * 0.06), tot = (shown.length - 1) * gap, by = -iconH / 2 - br * 0.35;
+        // só o ícone com sombra atrás (sem círculo), colado no topo do ícone
+        const bs = Math.max(11, os * 0.62), gap = bs * 0.92, tot = (shown.length - 1) * gap, by = -iconH / 2 - bs * 0.4;
         shown.forEach((def, i) => {
           const bx = -tot / 2 + i * gap;
-          g.add(new Konva.Circle({ x: bx, y: by, radius: br, fill: 'rgba(10,12,17,.55)', stroke: 'rgba(240,198,107,.7)', strokeWidth: Math.max(0.8, os * 0.04), shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.45 }));
-          g.add(new Konva.Text({ text: def.icon, fontFamily: '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji","Twemoji Mozilla",sans-serif', fontSize: br * 1.24, x: bx - br, y: by - br, width: br * 2, height: br * 2, align: 'center', verticalAlign: 'middle' }));
+          g.add(new Konva.Text({ text: def.icon, fontFamily: '"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji","Twemoji Mozilla",sans-serif', fontSize: bs, x: bx - bs / 2, y: by - bs / 2, width: bs, height: bs, align: 'center', verticalAlign: 'middle', shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.95, shadowOffsetY: 1 }));
         });
       }
       g.on('click tap', e => { e.cancelBubble = true; g.moveToTop(); objLayer.batchDraw(); iconClicked('obj:' + o.id, () => openObjMenu(o, g.x(), g.y())); });
