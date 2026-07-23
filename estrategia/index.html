@@ -93,6 +93,7 @@
     .zoom-ctrl button{width:34px;height:34px;display:grid;place-items:center;cursor:pointer;border:1px solid var(--line);border-radius:9px;
       background:rgba(12,15,22,.92);color:var(--text);font-family:var(--disp);font-size:17px;line-height:1;backdrop-filter:blur(4px);transition:.12s;box-shadow:0 10px 26px -18px #000}
     .zoom-ctrl button:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .zoom-ctrl button#zoomSave.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     .zoom-ctrl button svg{width:15px;height:15px}
     body.present .zoom-ctrl{display:none}
     /* header de grupo no painel de objetivos (toggle do grupo) */
@@ -256,13 +257,15 @@
     .scene-hud{position:absolute;top:9px;left:50%;transform:translateX(-50%);z-index:9;display:flex;align-items:center;gap:10px;max-width:78%;pointer-events:none}
     .scene-hud .sh-title{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:.02em;color:#f4ecd8;text-shadow:0 2px 10px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .scene-hud .sh-time{flex:none;font-family:var(--disp);font-weight:800;font-size:14px;letter-spacing:.03em;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:3px 11px;border-radius:999px;box-shadow:0 3px 12px -4px rgba(0,0,0,.7)}
-    .side-ctl{position:absolute;top:44px;left:50%;transform:translateX(-50%);z-index:9;display:inline-flex;align-items:center;gap:6px;
-      font-family:var(--disp);background:rgba(12,15,22,.9);border:1px solid var(--line-soft);border-radius:999px;padding:3px 4px 3px 11px;backdrop-filter:blur(6px);box-shadow:0 6px 20px -10px rgba(0,0,0,.7)}
-    .side-ctl .sc-lbl{font-weight:700;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-right:1px}
-    .side-ctl .sc-seg{display:inline-flex;align-items:center;gap:5px;font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.02em;
-      color:var(--muted);background:transparent;border:1px solid transparent;border-radius:999px;padding:4px 10px;cursor:pointer;transition:.14s}
+    /* discreto, no canto inferior esquerdo — some da leitura, aparece no hover */
+    .side-ctl{position:absolute;bottom:62px;left:12px;top:auto;transform:none;z-index:9;display:inline-flex;align-items:center;gap:3px;
+      font-family:var(--disp);background:rgba(10,12,17,.5);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px 3px 2px 7px;backdrop-filter:blur(4px);opacity:.62;transition:opacity .16s}
+    .side-ctl:hover{opacity:1}
+    .side-ctl .sc-lbl{font-weight:700;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:1px}
+    .side-ctl .sc-seg{display:inline-flex;align-items:center;gap:4px;font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.02em;
+      color:var(--muted);background:transparent;border:1px solid transparent;border-radius:7px;padding:3px 7px;cursor:pointer;transition:.14s}
     .side-ctl .sc-seg:hover{color:var(--text);background:rgba(255,255,255,.05)}
-    .side-ctl .sc-dot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+    .side-ctl .sc-dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
     .side-ctl .sc-dot.blue{background:#6aa8e0}.side-ctl .sc-dot.red{background:#e0685a}
     .side-ctl .sc-seg[data-side="blue"].on{color:#0c1420;background:linear-gradient(180deg,#8fc2ef,#6aa8e0);border-color:#8fc2ef}
     .side-ctl .sc-seg[data-side="red"].on{color:#2a0f0c;background:linear-gradient(180deg,#ef8c82,#e0685a);border-color:#ef8c82}
@@ -818,6 +821,7 @@
         <button class="pnav" id="nextBtn" aria-label="Próximo cenário">›</button>
       </div>
       <div class="zoom-ctrl" id="zoomCtrl">
+        <button id="zoomSave" title="Salvar/limpar o zoom desta cena" aria-label="Salvar zoom da cena"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></button>
         <button id="zoomIn" title="Aproximar" aria-label="Aproximar">+</button>
         <button id="zoomOut" title="Afastar" aria-label="Afastar">−</button>
         <button id="zoomReset" title="Ajustar / centralizar" aria-label="Ajustar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
@@ -973,7 +977,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=70"></script>
-  <script src="./app.js?v=70"></script>
+  <script src="./config.js?v=71"></script>
+  <script src="./app.js?v=71"></script>
 </body>
 </html>
