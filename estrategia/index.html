@@ -524,11 +524,14 @@
        (grid-head sai do fluxo) — libera uma linha inteira pras PTs */
     #rosterModal.board-mode .grid-head{position:absolute;top:0;left:200px;right:64px;height:49px;z-index:6;padding:0;border-bottom:0;background:transparent;align-items:center;flex-wrap:nowrap;overflow:hidden}
     #rosterModal.board-mode .grid-head .top-spacer{flex:1}
-    #rosterModal.board-mode .board-tools{padding:6px 16px}
     #rosterModal.board-mode .roster-board{padding:10px 16px 12px}
-    #rosterModal.board-mode .board-tools{padding:7px 16px}
     .board-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line-soft)}
     .board-tools[hidden]{display:none}
+    /* board-mode: as ferramentas moram DENTRO da coluna lateral (2×2, sticky)
+       — a linha inteira que elas ocupavam vira altura pro board */
+    #rosterModal.board-mode .bd-side .board-tools{position:sticky;top:0;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:0 0 6px;border-bottom:0;background:linear-gradient(180deg,var(--ink-2) 78%,transparent)}
+    #rosterModal.board-mode .bd-side .board-tools .rbtn{font-size:9px;padding:6px 4px;justify-content:center;letter-spacing:.02em;white-space:normal;line-height:1.25;text-align:center;min-width:0}
+    #rosterModal.board-mode .bd-side .board-tools .bd-legend{display:none}
     .bd-legend{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;min-width:200px}
     .roster-board{overflow-y:auto;flex:1 1 auto;padding:14px 16px;display:flex;flex-direction:column;gap:14px}
     /* board-mode desktop: cada coluna rola SOZINHA (a lista de players rola sem
@@ -545,7 +548,7 @@
     .bd-pool .bd-chips,.bd-res .bd-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
     /* board com 6 PTs de uma vez: coluna esquerda (arrastar) + grade 3x2 */
     .bd-layout{display:flex;gap:14px;align-items:stretch;height:100%;min-height:0}
-    .bd-side{width:246px;flex:none;display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-height:0;padding-right:2px}
+    .bd-side{width:200px;flex:none;display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-height:0;padding-right:2px}
     .bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:1fr}
     #rosterModal.board-mode .bd-grid{flex:1;min-width:0;grid-template-columns:repeat(3,1fr);overflow-y:auto;min-height:0;align-content:start;padding-right:2px}
     .bd-zh .bd-allres{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:6px;padding:3px 7px;cursor:pointer;margin-left:auto}
@@ -567,7 +570,12 @@
     .bd-pt-h{display:flex;align-items:center;gap:8px;font-family:var(--disp)}
     .bd-pt-h .dot{width:11px;height:11px;border-radius:50%;flex:none}
     .bd-pt-h b{font-weight:700;font-size:13.5px;letter-spacing:.06em}
-    .bd-pt-h .bd-comp{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+    /* composição com ícones de classe, empurrada pra direita do cabeçalho */
+    .bd-pt-h .bd-comp{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-variant-numeric:tabular-nums}
+    .bd-pt-h .bd-comp .bc{display:inline-flex;align-items:center;gap:3px;font-family:var(--disp);font-weight:700;font-size:10px;color:var(--muted)}
+    .bd-pt-h .bd-comp .c-ico.sm{width:14px;height:14px;display:grid;place-items:center;border-radius:50%;background:#0b0e15;border:1px solid var(--rc);overflow:hidden;flex:none}
+    .bd-pt-h .bd-comp .c-ico.sm img{width:8px;height:8px;object-fit:contain}
+    .bd-pt-h .bd-comp .c-ico.sm.dotonly{background:var(--rc)}
     .bd-pt-h .bd-n{margin-left:auto;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;font-weight:700}
     .bd-pt-h .bd-n.over{color:var(--crimson)}
     .bd-obs{width:100%;background:#0b0e15;border:1px solid var(--line-soft);border-radius:8px;color:var(--gold-2);font-family:var(--body);font-size:12px;padding:7px 9px}
@@ -583,16 +591,16 @@
     .bd-ptres.slim .bd-zh.mini{margin:0}
     /* reservas da PT compactas: 3 por linha, só ícone + nick + selo de replace
        (senão o card estica e corta a 2ª linha de PTs) */
-    /* 2 por linha: com o selo de replace, 3 colunas esmagavam o nome do reserva */
-    .bd-ptres .bd-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;min-height:0}
-    .bd-ptres .bd-chip{padding:3px 6px;gap:4px;border-radius:7px}
+    /* 3 por linha SEMPRE, ultra-compacto (lateral mais estreita compensa a largura) */
+    .bd-ptres .bd-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;min-height:0}
+    .bd-ptres .bd-chip{padding:2px 5px;gap:3px;border-radius:6px}
     .bd-ptres .bd-chip .c-grip,.bd-ptres .bd-chip .c-role,.bd-ptres .bd-chip .c-tags .c-tag2,.bd-ptres .bd-chip .c-tags .c-flag{display:none}
-    .bd-ptres .bd-chip .c-ico{width:15px;height:15px}
-    .bd-ptres .bd-chip .c-ico img{width:9px;height:9px}
-    .bd-ptres .bd-chip .c-name{font-size:10px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto}
-    .bd-ptres .bd-chip .c-rep{font-size:10px}
+    .bd-ptres .bd-chip .c-ico{width:13px;height:13px}
+    .bd-ptres .bd-chip .c-ico img{width:8px;height:8px}
+    .bd-ptres .bd-chip .c-name{font-size:9px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto}
+    .bd-ptres .bd-chip .c-rep{font-size:9px}
     /* o NOME do reserva tem prioridade; o alvo do replace é que trunca */
-    .bd-ptres .bd-chip .c-rep.has-of{font-size:7.5px;padding:1px 3px;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none}
+    .bd-ptres .bd-chip .c-rep.has-of{font-size:7px;padding:1px 3px;max-width:40px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none}
     /* selo no titular substituído: tracejado (direção inversa do replace) */
     .bd-chip .c-rep.has-of.repby{background:transparent;border-style:dashed;opacity:.8}
     /* observações escondidas atrás do lápis */
@@ -1066,7 +1074,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=79"></script>
-  <script src="./app.js?v=79"></script>
+  <script src="./config.js?v=80"></script>
+  <script src="./app.js?v=80"></script>
 </body>
 </html>

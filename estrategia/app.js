@@ -1410,6 +1410,9 @@
   }
   function renderBoard() {
     if (!rosterBoard) return;
+    // preserva o scroll das duas colunas (re-render em drag/edição resetava pro topo)
+    const pg = rosterBoard.querySelector('.bd-grid'), ps = rosterBoard.querySelector('.bd-side');
+    const sGrid = pg ? pg.scrollTop : 0, sSide = ps ? ps.scrollTop : 0;
     const active = rosterDraft.filter(p => !p.ausente);
     const pool = byRole(active.filter(p => !p.pt && !p.reserva));
     const gres = byRole(active.filter(p => !p.pt && p.reserva));
@@ -1425,8 +1428,9 @@
       const tit = byRole(active.filter(x => x.pt === pid && !x.reserva));
       const ptres = byRole(active.filter(x => x.pt === pid && x.reserva));
       const c = { Tank: 0, Healer: 0, DPS: 0 }; tit.forEach(m => c[m.funcao]++);
+      const compIco = CFG.roleOrder.map(f => '<span class="bc" style="--rc:' + roleColor(f) + '" title="' + f + '">' + classIcoHTML(f, true) + c[f] + '</span>').join('');
       const head = '<span class="dot" style="background:' + party.cor + '"></span><b>' + (state.ptIcon[pid] ? ptIconHTML(state.ptIcon[pid]) + ' ' : '') + pid + '</b>'
-        + '<span class="bd-comp">' + c.Tank + 'T · ' + c.Healer + 'H · ' + c.DPS + 'D</span>'
+        + '<span class="bd-comp">' + compIco + '</span>'
         + '<span class="bd-n' + (tit.length > CFG.ptSize ? ' over' : '') + '">' + tit.length + '/' + CFG.ptSize + '</span>';
       const obs = state.ptDesc[pid] || '';
       grid += '<div class="bd-pt-card">'
@@ -1439,6 +1443,11 @@
     });
     grid += '</div>';
     rosterBoard.innerHTML = '<div class="bd-layout"><div class="bd-side">' + side + '</div>' + grid + '</div>';
+    // ferramentas do board moram no topo da coluna lateral (libera a linha de cima)
+    const sideEl = rosterBoard.querySelector('.bd-side');
+    if (boardTools && sideEl) { sideEl.insertBefore(boardTools, sideEl.firstChild); boardTools.hidden = rosterView !== 'board'; }
+    const ng = rosterBoard.querySelector('.bd-grid'); if (ng) ng.scrollTop = sGrid;
+    if (sideEl) sideEl.scrollTop = sSide;
   }
   function bdMove(id, zone) {
     const p = rosterDraft.find(x => x.id === id); if (!p) return;
