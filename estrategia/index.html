@@ -67,6 +67,12 @@
     .scene-sel:hover{border-color:color-mix(in srgb,var(--gold) 45%,transparent);color:var(--text)}
     .scene-sel:focus{outline:none;border-color:var(--gold)}
     body.present .scene-sel{display:none}
+    /* cena + Fases fundidos numa composição só (a cena É a fase atual) */
+    .fase-group{display:inline-flex;align-items:stretch;border:1px solid var(--line-soft);border-radius:10px;overflow:hidden;flex:none}
+    .fase-group .scene-sel{border:0;border-radius:0;background-color:rgba(255,255,255,.02)}
+    .fase-group .tbtn{border:0;border-left:1px solid var(--line-soft);border-radius:0}
+    .fase-group:hover{border-color:var(--line)}
+    body.present .fase-group{display:none}
     /* botão único de idioma: bandeira + código; toque cicla PT → ES → EN */
     .lang-btn{display:inline-flex;align-items:center;gap:6px;flex:none;border:1px solid var(--line-soft);border-radius:9px;background:rgba(255,255,255,.02);padding:5px 8px 5px 6px;cursor:pointer;transition:.15s}
     .lang-btn:hover{border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(255,255,255,.05)}
@@ -120,6 +126,11 @@
     .draw-tools .dt svg{width:17px;height:17px;flex:none}
     .draw-tools .dt .dt-lbl{font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.02em;white-space:nowrap}
     .draw-tools .dt-sep{height:1px;background:var(--line-soft);margin:3px 4px}
+    /* barra recolhida: só os ícones */
+    .draw-tools.mini .dt-lbl{display:none}
+    .draw-tools.mini .dt{padding:6px 8px;justify-content:center}
+    .draw-tools.mini .dt-minbtn svg{transform:rotate(180deg)}
+    .draw-tools .dt-minbtn{color:var(--muted)}
     .draw-tools .dt.wide{font-size:12px;font-weight:700;font-family:var(--disp)}
     .draw-tools{position:absolute}   /* garante contexto p/ flyouts */
     .dt-cbtn .dt-csw{width:17px;height:17px;border-radius:5px;border:1.5px solid rgba(255,255,255,.4);box-shadow:0 0 0 1px rgba(0,0,0,.4)}
@@ -257,8 +268,8 @@
     .draw-tools .dt-focus.active{color:#241a06}
     /* selo "nosso lado" */
     .scene-hud{position:absolute;top:9px;left:50%;transform:translateX(-50%);z-index:9;display:flex;align-items:center;gap:10px;max-width:78%;pointer-events:none}
-    .scene-hud .sh-title{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:.02em;color:#f4ecd8;text-shadow:0 2px 10px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .scene-hud .sh-time{flex:none;font-family:var(--disp);font-weight:800;font-size:14px;letter-spacing:.03em;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:3px 11px;border-radius:999px;box-shadow:0 3px 12px -4px rgba(0,0,0,.7)}
+    .scene-hud .sh-title{font-family:var(--disp);font-weight:700;font-size:27px;letter-spacing:.02em;color:#f4ecd8;text-shadow:0 2px 12px rgba(0,0,0,.9),0 0 3px rgba(0,0,0,.95);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .scene-hud .sh-time{flex:none;font-family:var(--disp);font-weight:800;font-size:16px;letter-spacing:.03em;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:4px 13px;border-radius:999px;box-shadow:0 3px 12px -4px rgba(0,0,0,.7)}
     /* discreto, no canto inferior esquerdo — some da leitura, aparece no hover */
     .side-ctl{position:absolute;bottom:62px;left:12px;top:auto;transform:none;z-index:9;display:inline-flex;align-items:center;gap:3px;
       font-family:var(--disp);background:rgba(10,12,17,.5);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px 3px 2px 7px;backdrop-filter:blur(4px);opacity:.62;transition:opacity .16s}
@@ -305,7 +316,15 @@
     .obj-dump:hover{border-color:var(--gold);background:rgba(217,164,65,.08)}
 
     /* ---------- ROSTER (direita) ---------- */
-    .roster{grid-column:2;grid-row:1;background:linear-gradient(180deg,var(--ink-2),var(--ink-3));border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;min-height:0}
+    .roster{grid-column:2;grid-row:1;background:linear-gradient(180deg,var(--ink-2),var(--ink-3));border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;min-height:0;position:relative}
+    /* alça pra recolher o painel de PTs (desktop) */
+    .side-min-btn{position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:6;width:15px;height:58px;border:1px solid var(--line-soft);border-left:0;background:rgba(255,255,255,.03);color:var(--muted);border-radius:0 8px 8px 0;cursor:pointer;font-size:11px;line-height:1;display:grid;place-items:center;padding:0}
+    .side-min-btn:hover{color:var(--gold);border-color:var(--line);background:rgba(255,255,255,.06)}
+    body.side-min .workspace{grid-template-columns:1fr 30px}
+    body.side-min .roster > *:not(.side-min-btn){display:none!important}
+    body.side-min .side-min-btn{left:50%;top:50%;transform:translate(-50%,-50%);border-left:1px solid var(--line-soft);border-radius:8px}
+    body.present .side-min-btn{display:none}
+    @media(max-width:860px){.side-min-btn{display:none}}
     .roster-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 14px 9px;border-bottom:1px solid var(--line-soft)}
     .roster-head .h{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}
     .roster-tabs{display:inline-flex;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
@@ -366,6 +385,14 @@
     .dock-mini .dm-nav:hover{color:var(--gold);border-color:var(--line)}
     .dock-mini .dm-name{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.03em;color:var(--text);padding:0 6px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .dock-mini .dm-exp{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border:0;border-radius:999px;padding:6px 11px;cursor:pointer;margin-left:2px}
+    /* toggle discreto do "nosso lado": Azul / Vermelho / — (cicla ao tocar) */
+    .dock-mini .dm-side{display:inline-flex;align-items:center;gap:5px;font-family:var(--disp);font-weight:700;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-radius:999px;padding:5px 10px;cursor:pointer;margin-left:2px;transition:.14s}
+    .dock-mini .dm-side:hover{color:var(--text);border-color:var(--line)}
+    .dock-mini .dm-side .sc-dot{width:8px;height:8px;border-radius:50%;background:#3a4454;box-shadow:0 0 0 2px rgba(255,255,255,.07)}
+    .dock-mini .dm-side.blue{color:#a9cdf0;border-color:rgba(106,168,224,.5)}
+    .dock-mini .dm-side.blue .sc-dot{background:#6aa8e0}
+    .dock-mini .dm-side.red{color:#f0aca4;border-color:rgba(224,104,90,.5)}
+    .dock-mini .dm-side.red .sc-dot{background:#e0685a}
     body.present .dock-mini{display:none}
 
     /* ---------- FASES (painel flutuante em cima) ---------- */
@@ -750,14 +777,14 @@
       <span class="pb-prog" id="pbProg">1 / 1</span>
     </div>
     <div class="top-spacer"></div>
-    <select class="scene-sel" id="sceneSel" title="Ir para a cena" aria-label="Cena"></select>
-    <button class="lang-btn" id="langBtn" type="button" title="Idioma — toque pra trocar"><span class="lb-flag" id="lbFlag"></span><span class="lb-code" id="lbCode">PT</span></button>
     <div class="top-actions">
-      <button class="tbtn ico" id="helpBtn" title="Guia — como usar a ferramenta" aria-label="Guia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.8 2.5-2.8 2.5"/><path d="M12 17h.01"/></svg></button>
-      <button class="tbtn" id="fasesBtn" title="Mostrar / ocultar as fases (embaixo)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="4" height="6" rx="1"/><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="6" width="4" height="14" rx="1"/></svg>
-        <span data-i18n="phases">Fases</span>
-      </button>
+      <div class="fase-group" title="Cena atual — escolha direto ou abra as fases">
+        <select class="scene-sel" id="sceneSel" title="Ir para a cena" aria-label="Cena"></select>
+        <button class="tbtn" id="fasesBtn" title="Mostrar / ocultar as fases (embaixo)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="4" height="6" rx="1"/><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="17" y="6" width="4" height="14" rx="1"/></svg>
+          <span data-i18n="phases">Fases</span>
+        </button>
+      </div>
       <button class="tbtn" id="objBtn" title="Objetivos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
         <span data-i18n="objectives">Objetivos</span>
@@ -774,6 +801,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
         <span data-i18n="share">Compartilhar</span>
       </button>
+      <button class="tbtn ico" id="helpBtn" title="Guia — como usar a ferramenta" aria-label="Guia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.8 2.5-2.8 2.5"/><path d="M12 17h.01"/></svg></button>
+      <button class="lang-btn" id="langBtn" type="button" title="Idioma — toque pra trocar"><span class="lb-flag" id="lbFlag"></span><span class="lb-code" id="lbCode">PT</span></button>
       <button class="tbtn primary" id="presentBtn" title="Apresentar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20v12H2z"/><path d="M8 20h8M12 16v4"/></svg>
         <span data-i18n="present">Apresentar</span>
@@ -786,14 +815,11 @@
     <div class="stage-col">
       <div class="map-panel" id="mapPanel">
         <div class="scene-hud" id="sceneHud"><span class="sh-title" id="shTitle">—</span><span class="sh-time" id="shTime" hidden></span></div>
-        <div class="side-ctl" id="sideChip" role="group" aria-label="Nosso lado">
-          <span class="sc-lbl" id="scLbl">Nosso lado</span>
-          <button class="sc-seg" data-side="blue" type="button"><span class="sc-dot blue"></span><span data-i18n="westLbl">Oeste</span></button>
-          <button class="sc-seg" data-side="red" type="button"><span class="sc-dot red"></span><span data-i18n="eastLbl">Leste</span></button>
-        </div>
         <div id="stageWrap"><div id="stage"></div></div>
 
         <div class="draw-tools" id="drawTools">
+          <button class="dt dt-minbtn" id="dtMin" type="button" title="Recolher / expandir a barra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span class="dt-lbl" data-i18n="tool_collapse">Recolher</span></button>
+          <div class="dt-sep"></div>
           <button class="dt active" data-tool="select" title="Selecionar / mover (V)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3l7 17 2.5-6.5L20 11 4 3z"/></svg><span class="dt-lbl" data-i18n="tool_select">Selecionar</span></button>
           <button class="dt" data-tool="seta" title="Seta — movimento / rotação (A)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19L19 5M11 5h8v8"/></svg><span class="dt-lbl" data-i18n="tool_arrow">Seta</span></button>
           <button class="dt" data-tool="linha" title="Linha (L)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 19L19 5"/></svg><span class="dt-lbl" data-i18n="tool_line">Linha</span></button>
@@ -854,11 +880,13 @@
         <span class="dm-name" id="miniName">—</span>
         <button class="dm-nav" id="miniNext" aria-label="Próximo">›</button>
         <button class="dm-exp" id="dockExpand" title="Mostrar as fases">▴ Fases</button>
+        <button class="dm-side" id="sideTgl" type="button" title="Nosso lado — toque pra alternar"><span class="sc-dot" id="sideTglDot"></span><span id="sideTglLbl">—</span></button>
       </div>
       <div class="mobile-note"><b>Modo apresentação.</b> A edição é feita no desktop.</div>
     </div>
 
     <aside class="roster">
+      <button class="side-min-btn" id="sideMin" type="button" title="Recolher / expandir o painel de PTs">»</button>
       <button class="roster-mclose" id="rosterMClose" aria-label="Fechar">✕</button>
       <div class="roster-head"><div class="roster-tabs" id="rosterTabs"><button data-rtab="pts" class="active">PTs</button><button data-rtab="players" data-i18n="playersTab">Players</button></div><button class="edit" id="editRosterBtn" data-i18n="editRoster">Editar roster</button></div>
       <div class="roster-sum" id="rosterSum">
@@ -1001,7 +1029,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=76"></script>
-  <script src="./app.js?v=76"></script>
+  <script src="./config.js?v=77"></script>
+  <script src="./app.js?v=77"></script>
 </body>
 </html>
