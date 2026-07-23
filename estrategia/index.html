@@ -496,9 +496,15 @@
     #rosterModal.board-mode .modal-body{grid-template-columns:1fr}
     /* board-mode: enxuga o topo pra caber as 6 PTs */
     #rosterModal.board-mode .bd-legend{display:none}
+    #rosterModal.board-mode .modal{position:relative}
     #rosterModal.board-mode .modal > header{padding:9px 16px}
     #rosterModal.board-mode .modal > header .msub{display:none}
-    #rosterModal.board-mode .grid-head{padding:7px 16px}
+    /* board-mode: os contadores/toggle sobem pra MESMA linha do título ROSTER
+       (grid-head sai do fluxo) — libera uma linha inteira pras PTs */
+    #rosterModal.board-mode .grid-head{position:absolute;top:0;left:200px;right:64px;height:49px;z-index:6;padding:0;border-bottom:0;background:transparent;align-items:center;flex-wrap:nowrap;overflow:hidden}
+    #rosterModal.board-mode .grid-head .top-spacer{flex:1}
+    #rosterModal.board-mode .board-tools{padding:6px 16px}
+    #rosterModal.board-mode .roster-board{padding:10px 16px 12px}
     #rosterModal.board-mode .board-tools{padding:7px 16px}
     .board-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line-soft)}
     .board-tools[hidden]{display:none}
@@ -556,14 +562,18 @@
     .bd-ptres.slim .bd-zh.mini{margin:0}
     /* reservas da PT compactas: 3 por linha, só ícone + nick + selo de replace
        (senão o card estica e corta a 2ª linha de PTs) */
-    .bd-ptres .bd-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;min-height:0}
+    /* 2 por linha: com o selo de replace, 3 colunas esmagavam o nome do reserva */
+    .bd-ptres .bd-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;min-height:0}
     .bd-ptres .bd-chip{padding:3px 6px;gap:4px;border-radius:7px}
     .bd-ptres .bd-chip .c-grip,.bd-ptres .bd-chip .c-role,.bd-ptres .bd-chip .c-tags .c-tag2,.bd-ptres .bd-chip .c-tags .c-flag{display:none}
     .bd-ptres .bd-chip .c-ico{width:15px;height:15px}
     .bd-ptres .bd-chip .c-ico img{width:9px;height:9px}
-    .bd-ptres .bd-chip .c-name{font-size:10px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .bd-ptres .bd-chip .c-name{font-size:10px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 auto}
     .bd-ptres .bd-chip .c-rep{font-size:10px}
-    .bd-ptres .bd-chip .c-rep.has-of{font-size:7.5px;padding:1px 3px}
+    /* o NOME do reserva tem prioridade; o alvo do replace é que trunca */
+    .bd-ptres .bd-chip .c-rep.has-of{font-size:7.5px;padding:1px 3px;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:none}
+    /* selo no titular substituído: tracejado (direção inversa do replace) */
+    .bd-chip .c-rep.has-of.repby{background:transparent;border-style:dashed;opacity:.8}
     /* observações escondidas atrás do lápis */
     .bd-obs-btn{margin-left:6px;flex:none;width:22px;height:22px;border:1px solid var(--line-soft);background:rgba(255,255,255,.03);color:var(--muted);border-radius:6px;cursor:pointer;font-size:12px;line-height:1}
     .bd-obs-btn:hover{color:var(--gold);border-color:var(--line)}
@@ -602,7 +612,7 @@
     .bd-chip .c-tag2{flex:none;font-family:var(--disp);font-weight:600;font-size:8px;letter-spacing:.04em;text-transform:uppercase;color:#c9a24a;background:rgba(217,164,65,.1);border:1px solid color-mix(in srgb,var(--gold) 28%,transparent);border-radius:4px;padding:1px 4px;max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .bd-chip .c-flag{font-size:13px;line-height:1}
     /* popover de função/tarja/flags */
-    .bd-pop{position:fixed;z-index:80;width:236px;background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:11px;padding:11px;box-shadow:0 20px 50px -20px #000;backdrop-filter:blur(4px)}
+    .bd-pop{position:fixed;z-index:80;width:236px;max-height:min(72vh,560px);overflow-y:auto;background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:11px;padding:10px;box-shadow:0 20px 50px -20px #000;backdrop-filter:blur(4px)}
     .bd-pop[hidden]{display:none}
     .bd-pop .bp-nm{font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--text);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .bd-pop .bp-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:9px 0 5px}
@@ -1029,7 +1039,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=77"></script>
-  <script src="./app.js?v=77"></script>
+  <script src="./config.js?v=78"></script>
+  <script src="./app.js?v=78"></script>
 </body>
 </html>
