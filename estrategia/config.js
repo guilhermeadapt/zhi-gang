@@ -2,11 +2,10 @@
  * Zhi Guides — Mapa de Estratégia GvG (guild Wanted)
  * config.js — ponto único de configuração
  *
- * TODO (assets próprios): as imagens abaixo são reaproveitadas TEMPORARIAMENTE
- * do gvgstratmaker (MightyLabs) como placeholder, guardadas em
- * /assets/vendor-ref/. São de uso INTERNO e devem ser substituídas por assets
- * próprios. Para trocar o mapa ou os ícones, basta editar os caminhos aqui —
- * o resto do app lê tudo deste objeto.
+ * TODO (assets próprios): as imagens abaixo são placeholders temporários de
+ * uso INTERNO, guardadas em /assets/vendor-ref/, e devem ser substituídas por
+ * assets próprios da guild. Para trocar o mapa ou os ícones, basta editar os
+ * caminhos aqui — o resto do app lê tudo deste objeto.
  * ========================================================================== */
 
 const WWM = {

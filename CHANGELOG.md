@@ -1,10 +1,55 @@
 # Changelog — Zhi Guides · Wanted
 
-Cada versão corresponde ao `?v=` dos scripts do Game Plan (cache-buster).
-O detalhe completo de cada mudança está na mensagem do commit (`git show <hash>`).
+Cada versão corresponde ao `?v=` dos scripts do Game Plan (cache-buster que força o navegador a baixar o código novo).
+Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O detalhe completo de cada mudança está na mensagem do commit (`git show <hash>`).
 
 | Versão | Data | Mudança | Commit |
 |---|---|---|---|
+| — | 20/07/2026 | Estrategia: etapa 1 do mapa interativo de GvG (casca + mapa + tokens de PT) | `9775483` |
+| — | 20/07/2026 | Estrategia: etapas 2-3 (cenarios + nota + modo apresentacao) | `ff5989b` |
+| — | 20/07/2026 | Estrategia: etapa 5 (roster + parse do Discord) e otimizacao de layout | `874a6d9` |
+| — | 20/07/2026 | Estrategia: etapa 6 (export/import JSON do plano) | `da2e6f8` |
+| — | 20/07/2026 | Estrategia: etapa 4 (desenho, objetivos por cenario, destacar membro) + mapa novo + compartilhar por link | `ecc0e9f` |
+| — | 20/07/2026 | Estrategia: ajustes de UX (zoom, tamanhos, links, contador da arvore, ocultar fases) | `70beda5` |
+| — | 20/07/2026 | Estrategia: lote de ajustes de UX + mapa v2 (grama ate a borda) | `9ee6cd8` |
+| — | 20/07/2026 | Estrategia: remapear objetivos + calibracao + zoom + corte + icones de classe | `df49b5a` |
+| — | 20/07/2026 | Estrategia: editor de PT, confirm proprio, icones centrados, aviso/tracejado | `4dbd7a3` |
+| — | 20/07/2026 | Estrategia: marcadores limpos, Fases em painel no topo, icone/galeria de PT | `369a494` |
+| v12 | 21/07/2026 | Estrategia: editar PT no popover, objetivos (marcar todos + colapsar), share copiavel, no-cache | `3db3992` |
+| v13 | 21/07/2026 | estrategia: ícones de torre 1.25x e boss 1.5x + botão "Copiar posições" | `dd15887` |
+| v14 | 21/07/2026 | estrategia: calibra objetivos no mapa + torres espelhadas + flip azul | `73691fa` |
+| v15 | 21/07/2026 | menu+estrategia: renomeia para "Game Plan", reordena ferramentas, flag no outpost | `567a89e` |
+| v16 | 21/07/2026 | timer: modelo regressivo + agendamento; jungle usa ícone Fun Coin | `ea12569` |
+| v17 | 21/07/2026 | gameplan: ferramenta Ícone — carimbar assets e emojis no mapa | `02df2d9` |
+| v17 | 21/07/2026 | mobile: corrige cards de guia (overflow) e compacta topbar do Game Plan | `47ab756` |
+| v18 | 21/07/2026 | gameplan: montador visual de PTs (drag-and-drop) + tarjas e flags | `12f7bc5` |
+| v19 | 21/07/2026 | Game Plan: adiciona i18n PT/ES/EN (seletor de idioma + tradução do chrome, sidebar, roster, board e modais) | `05b785b` |
+| v19 | 21/07/2026 | Game Plan mobile: seletor de idioma acessível no mobile + marca sem truncar + traduz dica de zoom | `3fd4e1c` |
+| v20 | 21/07/2026 | Game Plan: vínculos genéricos entre ícones (PT/objetivo/membro) apagáveis + HP por objetivo (torre/ganso/boss…) via menu ao tocar no ícone | `96c3fe8` |
+| v21 | 21/07/2026 | Game Plan: mobile editável (não só visualização) — ações essenciais na topbar, ferramentas de desenho, gaveta de PTs com toque-pra-posicionar, objetivos/fases em folha inferior | `daf4c3d` |
+| v22 | 21/07/2026 | Game Plan: Board redesenhado (tela grande, ícones de classe, 1 jogador por linha, reservas dentro da PT + gerais, observações por PT, função editável) + reduz tamanho dos ícones carimbáveis | `2cb0ef5` |
+| v23 | 21/07/2026 | Game Plan mapa: seta de vínculo para na borda do ícone + sombra; HP com mais contraste; vínculo encadeia (leque) da mesma origem; player mais leve + fundo translúcido; HP/Morto no membro e HP na PT; z-order do último selecionado; toggle mostrar/ocultar nomes; ícones carimbados menores | `4d2e309` |
+| v24 | 21/07/2026 | Game Plan Board: layout 3x2 com as 6 PTs visíveis + painel lateral de disponíveis/reservas pra arrastar; seletor de PT e marca 'Replace' no popover do jogador; botão para jogar todos os disponíveis pra reserva | `d71688b` |
+| v25 | 21/07/2026 | Game Plan: barra de desenho compacta (cor e espessura abrem só ao apertar, +cores e seletor HEX); ferramenta de anotação/post-it no mapa | `868d749` |
+| v26 | 21/07/2026 | Game Plan: ícone de Outpost (asset da guild) no lugar do emoji; buffs ativáveis na torre (City Protection / You Got a Problem) e ganso (City Protection / Hair Pulling) com selo no mapa; ícones de PT com assets do jogo (Tank/DPS/Healer/Boss/Ganso/Árvore/JG/Outpost); tarja secundária discreta à esquerda do nome; 'Tank' como tarja secundária | `55f773e` |
+| v27 | 21/07/2026 | Game Plan: buffs da árvore (Sprint/Relentless) + ícones de buff corrigidos (escudo=City Protection, espada=dano); caminho da árvore vai até o portão inimigo com ponto arrastável (333m recalibrável); Carry da árvore (até 2 players que seguem a árvore); Board otimizado — cabe as 6 PTs de uma vez (sem legenda/subtítulo, observações atrás do lápis, reservas da PT compactas) | `25a42e5` |
+| v28 | 21/07/2026 | Game Plan: 'Copiar posições' agora inclui os portões da árvore (state.gates) + título claro no modal e fallback de cópia (execCommand + instrução manual) | `0d88ed5` |
+| v29 | 21/07/2026 | Game Plan: portão da árvore calibrado (posição da guild); token do mapa mais limpo (ícone preenche o anel, sem círculo escuro grande; nome discreto sem borda torta); Board — tarja secundária depois do nome, múltiplas funções secundárias por player (+Fan/Healer/DPS) | `61cc8aa` |
+| v30 | 21/07/2026 | Game Plan: selos de buff agora visíveis (disco com anel dourado + ícone maior) — antes ficavam minúsculos e sumiam no ganso/árvore/torre | `67f6c60` |
+| v31 | 22/07/2026 | Game Plan: selos de buff menores, mais colados no ícone e com fundo mais leve; token de PT com fundo translúcido (menos pesado, nome com sombra pra legibilidade) | `a2d42dc` |
+| v32 | 22/07/2026 | Game Plan: objetivos por cima de setas/nomes (não são mais tapados); selo 'Nosso lado' (Azul/Oeste ou Vermelho/Leste) com destaque leve da nossa metade; token de inimigo (vermelho, com quantidade e nome) via ferramenta de desenho | `677a931` |
+| v33 | 22/07/2026 | Game Plan: segurar (long-press) num player mostra/oculta o nome dele; 1 toque abre o menu (com botão 'Nome no mapa'); 2 toques exclui — nome por token, respeitando o toggle global | `f9ee507` |
+| v34 | 22/07/2026 | Game Plan: ícones de PT menores; info de mecânica ao tocar no objetivo (JG=780 fun coins ao matar; torre=200 fun coins/30s; ganso libera após 1 torre cair e perde dano/resistência por torre; árvore libera após o ganso morrer) | `7ac1c97` |
+| v35 | 22/07/2026 | Game Plan: objetivos travados por padrão (destravar no menu pra mover, com anel tracejado indicando); indicador de lado mais discreto (glow suave só na nossa borda, sem tint na metade do mapa) | `6559697` |
+| v36 | 22/07/2026 | Game Plan: aba Players na sidebar (arrasta player direto pro mapa, toque-pra-posicionar no mobile); Board com 'Por classe' — agrupa Disponíveis/Reservas em grupos de classe colapsáveis | `013e83c` |
+| v37 | 22/07/2026 | Game Plan: selos de buff sem o círculo/anel — só o ícone com sombra atrás, menor e colado no topo do objetivo | `88729e9` |
+| v38 | 22/07/2026 | GamePlan: buff icons visíveis, menu de edição arrastável, lock por player | `9cbea8d` |
+| v39 | 22/07/2026 | GamePlan: selos de buff desenhados (SVG) no lugar de emoji | `86fd4ce` |
+| v40 | 22/07/2026 | GamePlan: performance — desliga perfectDraw/shadowForStroke (pan ~780x mais leve) | `850b6f0` |
+| v41 | 22/07/2026 | GamePlan: nome do player menor/discreto, torre -25% e HP dentro do ícone | `01f8f3c` |
+| v42 | 22/07/2026 | GamePlan: 2 carries da árvore não borram mais os nomes | `dee6bb5` |
+| v43 | 22/07/2026 | GamePlan: selo de HP da torre bem mais compacto | `3ac3d7e` |
+| v44 | 22/07/2026 | GamePlan: ícone de inimigo, boot mais leve, toolbar mobile compacta | `aa66ab6` |
 | v45 | 22/07/2026 | GamePlan: nomes legíveis, boss -25%, carries juntos, links visíveis, controle de lado | `17196dd` |
 | v46 | 22/07/2026 | GamePlan: ferramenta de Foco (spotlight) + persistência de foco/lock | `7dc6242` |
 | v47 | 22/07/2026 | GamePlan: variações dentro do cenário (agrupadas na régua de fases) | `36596b8` |
