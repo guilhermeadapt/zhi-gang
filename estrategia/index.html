@@ -63,6 +63,10 @@
     .tbtn.primary{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     .tbtn.primary:hover{filter:brightness(1.06)}
     .tbtn.ico{padding:7px 9px} .tbtn.ico svg{width:15px;height:15px}
+    .scene-sel{flex:none;max-width:190px;font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.02em;color:var(--gold-2);background:#0e1118;border:1px solid var(--line-soft);border-radius:9px;padding:6px 8px;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d9a441' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:22px}
+    .scene-sel:hover{border-color:color-mix(in srgb,var(--gold) 45%,transparent);color:var(--text)}
+    .scene-sel:focus{outline:none;border-color:var(--gold)}
+    body.present .scene-sel{display:none}
     .lang-sel{display:inline-flex;border:1px solid var(--line-soft);border-radius:9px;overflow:hidden;flex:none}
     .lang-sel button{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.05em;color:var(--muted);background:transparent;border:0;padding:7px 9px;cursor:pointer;transition:.15s}
     .lang-sel button:hover{color:var(--text)}
@@ -714,6 +718,7 @@
       <span class="pb-prog" id="pbProg">1 / 1</span>
     </div>
     <div class="top-spacer"></div>
+    <select class="scene-sel" id="sceneSel" title="Ir para a cena" aria-label="Cena"></select>
     <div class="lang-sel" id="langSel"><button type="button" data-lang="pt">PT</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button></div>
     <div class="top-actions">
       <button class="tbtn ico" id="helpBtn" title="Guia — como usar a ferramenta" aria-label="Guia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.8 2.5-2.8 2.5"/><path d="M12 17h.01"/></svg></button>
@@ -960,7 +965,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=67"></script>
-  <script src="./app.js?v=67"></script>
+  <script src="./config.js?v=68"></script>
+  <script src="./app.js?v=68"></script>
 </body>
 </html>

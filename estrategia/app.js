@@ -26,7 +26,7 @@
       tabTable:'Tabela', tabBoard:'Board', bdAuto:'⚙ Auto-preencher', bdEmpty:'Esvaziar PTs', groupClass:'⊟ Por classe', bdLegend:'Arraste cada jogador para a PT, para as <b>reservas da PT</b> ou reservas gerais. Clique num jogador para função, tarja e flags. Alvo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas da PT', genReserves:'Reservas gerais', obsPh:'Observações da PT…', roleLbl:'Função', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Jogar todos os disponíveis para reservas',
       available:'Disponíveis', reservesLbl:'Reservas', dropHere:'solte jogadores aqui', secTag:'Tarja secundária', special:'Especial', tagNone:'nenhuma',
       colPlayer:'Jogador', colRole:'Função', colPT:'PT', colRes:'Res.',
-      shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', focusClear:'Foco removido', variation:'Variação', hideMeters:'Ocultar metros', showMeters:'Mostrar metros', iconsTitle:'Ícones', iconsHint:'escolha e clique no mapa', plans:'Planos', plansEmpty:'Nenhum plano salvo ainda. Exporte o plano e commite o JSON em /estrategia/plans/.', tool_select:'Selecionar', tool_arrow:'Seta', tool_line:'Linha', tool_free:'Livre', tool_area:'Área', tool_icon:'Ícone', tool_note:'Nota', tool_enemy:'Inimigo', tool_focus:'Foco', tool_color:'Cor', tool_width:'Traço', tool_undo:'Desfazer', tool_redo:'Refazer', tool_clear:'Limpar', tool_names:'Nomes', tool_focusZones:'Zonas', linkRemoved:'Vínculo removido', confirmClearDraw:'Limpar desenhos e ícones deste cenário?', needOneScene:'É preciso ter ao menos um cenário', noScenes:'Não encontrei cenários neste plano.', invalidJson:'Arquivo inválido: não é um JSON', noScenesFile:'Não encontrei cenários neste arquivo', confirmImport:'Importar vai substituir o plano atual. Continuar?', confirmReset:'Resetar tudo e começar um plano do zero? Isso apaga o plano atual (PTs, cenários, desenhos, roster).', planReset:'Plano resetado ✓', linkCopied:'Link copiado ✓', selectCopy:'Selecione o link e copie (Ctrl+C)', linkFail:'Não consegui gerar o link', linkInvalid:'Link de plano inválido', confirmShared:'Este link abre um plano compartilhado. Abrir substitui o rascunho atual. Continuar?', planLoadedLink:'Plano do link carregado ✓', planLoadFail:'Não consegui carregar o plano', confirmOpenPlan:'Abrir este plano substitui o rascunho atual. Continuar?', planLoaded:'Plano carregado ✓', confirmSeed:'Adicionar os cenários das fases padrão ao projeto?', confirmClearPlayers:'Limpar todos os jogadores?', posTitle:'Posições (inclui o portão da árvore) — copie tudo e me mande:', rosterNone:'Não reconheci jogadores. Confira o formato.', rosterOk:'jogadores reconhecidos.', nameSide:'Nome ao lado', nameBelow:'Nome embaixo', zoomTip:'Scroll = zoom · arraste o mapa para mover', zoomTipM:'Pinça = zoom · arraste = mover · toque = editar',
+      shareTitle:'Link do plano — copie e mande no Discord:', close:'Fechar', copy:'Copiar', focusClear:'Foco removido', variation:'Variação', hideMeters:'Ocultar metros', showMeters:'Mostrar metros', iconsTitle:'Ícones', iconsHint:'escolha e clique no mapa', plans:'Planos', plansEmpty:'Nenhum plano salvo ainda. Exporte o plano e commite o JSON em /estrategia/plans/.', tool_select:'Selecionar', tool_arrow:'Seta', tool_line:'Linha', tool_free:'Livre', tool_area:'Área', tool_icon:'Ícone', tool_note:'Nota', tool_enemy:'Inimigo', tool_focus:'Foco', tool_color:'Cor', tool_width:'Traço', tool_undo:'Desfazer', tool_redo:'Refazer', tool_clear:'Limpar', tool_names:'Nomes', tool_focusZones:'Zonas', linkRemoved:'Vínculo removido', copied:'Copiado ✓', pasted:'Colado ✓', confirmClearDraw:'Limpar desenhos e ícones deste cenário?', needOneScene:'É preciso ter ao menos um cenário', noScenes:'Não encontrei cenários neste plano.', invalidJson:'Arquivo inválido: não é um JSON', noScenesFile:'Não encontrei cenários neste arquivo', confirmImport:'Importar vai substituir o plano atual. Continuar?', confirmReset:'Resetar tudo e começar um plano do zero? Isso apaga o plano atual (PTs, cenários, desenhos, roster).', planReset:'Plano resetado ✓', linkCopied:'Link copiado ✓', selectCopy:'Selecione o link e copie (Ctrl+C)', linkFail:'Não consegui gerar o link', linkInvalid:'Link de plano inválido', confirmShared:'Este link abre um plano compartilhado. Abrir substitui o rascunho atual. Continuar?', planLoadedLink:'Plano do link carregado ✓', planLoadFail:'Não consegui carregar o plano', confirmOpenPlan:'Abrir este plano substitui o rascunho atual. Continuar?', planLoaded:'Plano carregado ✓', confirmSeed:'Adicionar os cenários das fases padrão ao projeto?', confirmClearPlayers:'Limpar todos os jogadores?', posTitle:'Posições (inclui o portão da árvore) — copie tudo e me mande:', rosterNone:'Não reconheci jogadores. Confira o formato.', rosterOk:'jogadores reconhecidos.', nameSide:'Nome ao lado', nameBelow:'Nome embaixo', zoomTip:'Scroll = zoom · arraste o mapa para mover', zoomTipM:'Pinça = zoom · arraste = mover · toque = editar',
       menuLink:'🔗 Vincular', menuRemove:'Remover', menuHp:'Vida / HP', dead:'Morto', showNames:'Nomes', noteTitle:'Anotação', notePh:'Escreva a anotação…', buffs:'Buffs', carryTitle:'Carry da árvore (máx 2)', carryAdd:'Carry', carryPick:'Toque num player pra ser o carry', carryMax:'Máximo de 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Inimigo', enemyCount:'Quantidade', enemyLabel:'Nome / nota (opcional)', nameToggle:'Nome no mapa', unlockAction:'Destravar posição', lockAction:'Travar posição', unlockedHint:'Destravado — arraste para reposicionar', usLbl:'Nós:', westLbl:'Oeste', eastLbl:'Leste', sidePick:'Definir nosso lado', linkPick:'Toque em outro ícone para vincular', linkDone:'Vinculado ✓', linkDup:'Esses dois já estão vinculados', tapPlace:'Toque numa PT (embaixo) e depois no mapa'
     },
     es: {
@@ -38,7 +38,7 @@
       tabTable:'Tabla', tabBoard:'Board', bdAuto:'⚙ Auto-rellenar', bdEmpty:'Vaciar PTs', groupClass:'⊟ Por clase', bdLegend:'Arrastra cada jugador a la PT, a las <b>reservas de la PT</b> o reservas generales. Haz clic en un jugador para función, tarja y flags. Objetivo: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Titulares', ptReserves:'Reservas de la PT', genReserves:'Reservas generales', obsPh:'Observaciones de la PT…', roleLbl:'Función', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Enviar todos los disponibles a reservas',
       available:'Disponibles', reservesLbl:'Reservas', dropHere:'suelta jugadores aquí', secTag:'Tarja secundaria', special:'Especial', tagNone:'ninguna',
       colPlayer:'Jugador', colRole:'Función', colPT:'PT', colRes:'Res.',
-      shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', focusClear:'Foco quitado', variation:'Variación', hideMeters:'Ocultar metros', showMeters:'Mostrar metros', iconsTitle:'Íconos', iconsHint:'elige y haz clic en el mapa', plans:'Planes', plansEmpty:'Aún no hay planes guardados. Exporta el plan y commitea el JSON en /estrategia/plans/.', tool_select:'Seleccionar', tool_arrow:'Flecha', tool_line:'Línea', tool_free:'Libre', tool_area:'Área', tool_icon:'Ícono', tool_note:'Nota', tool_enemy:'Enemigo', tool_focus:'Foco', tool_color:'Color', tool_width:'Trazo', tool_undo:'Deshacer', tool_redo:'Rehacer', tool_clear:'Limpiar', tool_names:'Nombres', tool_focusZones:'Zonas', linkRemoved:'Vínculo quitado', confirmClearDraw:'¿Borrar dibujos e íconos de este escenario?', needOneScene:'Debe haber al menos un escenario', noScenes:'No encontré escenarios en este plan.', invalidJson:'Archivo inválido: no es un JSON', noScenesFile:'No encontré escenarios en este archivo', confirmImport:'Importar reemplazará el plan actual. ¿Continuar?', confirmReset:'¿Resetear todo y empezar un plan desde cero? Esto borra el plan actual (PTs, escenarios, dibujos, roster).', planReset:'Plan reseteado ✓', linkCopied:'Enlace copiado ✓', selectCopy:'Selecciona el enlace y cópialo (Ctrl+C)', linkFail:'No pude generar el enlace', linkInvalid:'Enlace de plan inválido', confirmShared:'Este enlace abre un plan compartido. Abrirlo reemplaza el borrador actual. ¿Continuar?', planLoadedLink:'Plan del enlace cargado ✓', planLoadFail:'No pude cargar el plan', confirmOpenPlan:'Abrir este plan reemplaza el borrador actual. ¿Continuar?', planLoaded:'Plan cargado ✓', confirmSeed:'¿Agregar los escenarios de las fases estándar al proyecto?', confirmClearPlayers:'¿Borrar todos los jugadores?', posTitle:'Posiciones (incluye la puerta del árbol) — copia todo y mándamelo:', rosterNone:'No reconocí jugadores. Revisa el formato.', rosterOk:'jugadores reconocidos.', nameSide:'Nombre al lado', nameBelow:'Nombre abajo', zoomTip:'Scroll = zoom · arrastra el mapa para mover', zoomTipM:'Pellizca = zoom · arrastra = mover · toca = editar',
+      shareTitle:'Enlace del plan — cópialo y mándalo al Discord:', close:'Cerrar', copy:'Copiar', focusClear:'Foco quitado', variation:'Variación', hideMeters:'Ocultar metros', showMeters:'Mostrar metros', iconsTitle:'Íconos', iconsHint:'elige y haz clic en el mapa', plans:'Planes', plansEmpty:'Aún no hay planes guardados. Exporta el plan y commitea el JSON en /estrategia/plans/.', tool_select:'Seleccionar', tool_arrow:'Flecha', tool_line:'Línea', tool_free:'Libre', tool_area:'Área', tool_icon:'Ícono', tool_note:'Nota', tool_enemy:'Enemigo', tool_focus:'Foco', tool_color:'Color', tool_width:'Trazo', tool_undo:'Deshacer', tool_redo:'Rehacer', tool_clear:'Limpiar', tool_names:'Nombres', tool_focusZones:'Zonas', linkRemoved:'Vínculo quitado', copied:'Copiado ✓', pasted:'Pegado ✓', confirmClearDraw:'¿Borrar dibujos e íconos de este escenario?', needOneScene:'Debe haber al menos un escenario', noScenes:'No encontré escenarios en este plan.', invalidJson:'Archivo inválido: no es un JSON', noScenesFile:'No encontré escenarios en este archivo', confirmImport:'Importar reemplazará el plan actual. ¿Continuar?', confirmReset:'¿Resetear todo y empezar un plan desde cero? Esto borra el plan actual (PTs, escenarios, dibujos, roster).', planReset:'Plan reseteado ✓', linkCopied:'Enlace copiado ✓', selectCopy:'Selecciona el enlace y cópialo (Ctrl+C)', linkFail:'No pude generar el enlace', linkInvalid:'Enlace de plan inválido', confirmShared:'Este enlace abre un plan compartido. Abrirlo reemplaza el borrador actual. ¿Continuar?', planLoadedLink:'Plan del enlace cargado ✓', planLoadFail:'No pude cargar el plan', confirmOpenPlan:'Abrir este plan reemplaza el borrador actual. ¿Continuar?', planLoaded:'Plan cargado ✓', confirmSeed:'¿Agregar los escenarios de las fases estándar al proyecto?', confirmClearPlayers:'¿Borrar todos los jugadores?', posTitle:'Posiciones (incluye la puerta del árbol) — copia todo y mándamelo:', rosterNone:'No reconocí jugadores. Revisa el formato.', rosterOk:'jugadores reconocidos.', nameSide:'Nombre al lado', nameBelow:'Nombre abajo', zoomTip:'Scroll = zoom · arrastra el mapa para mover', zoomTipM:'Pellizca = zoom · arrastra = mover · toca = editar',
       menuLink:'🔗 Vincular', menuRemove:'Quitar', menuHp:'Vida / HP', dead:'Muerto', showNames:'Nombres', noteTitle:'Nota', notePh:'Escribe la nota…', buffs:'Buffs', carryTitle:'Carry del árbol (máx 2)', carryAdd:'Carry', carryPick:'Toca un jugador para ser el carry', carryMax:'Máximo 2 carries', carrySet:'Carry definido ✓', enemyTitle:'Enemigo', enemyCount:'Cantidad', enemyLabel:'Nombre / nota (opcional)', nameToggle:'Nombre en el mapa', unlockAction:'Desbloquear posición', lockAction:'Bloquear posición', unlockedHint:'Desbloqueado — arrastra para reposicionar', usLbl:'Nosotros:', westLbl:'Oeste', eastLbl:'Este', sidePick:'Definir nuestro lado', linkPick:'Toca otro ícono para vincular', linkDone:'Vinculado ✓', linkDup:'Esos dos ya están vinculados', tapPlace:'Toca una PT (abajo) y luego el mapa'
     },
     en: {
@@ -50,7 +50,7 @@
       tabTable:'Table', tabBoard:'Board', bdAuto:'⚙ Auto-fill', bdEmpty:'Empty PTs', groupClass:'⊟ By class', bdLegend:'Drag each player to the PT, to the <b>PT reserves</b> or general reserves. Click a player for role, tag and flags. Target: <b>1 Tank · 1 Healer · 3 DPS</b>.', titulars:'Starters', ptReserves:'PT reserves', genReserves:'General reserves', obsPh:'PT notes…', roleLbl:'Role', ptLbl:'PT', replaceLbl:'Replace', allToRes:'Send all available to reserves',
       available:'Available', reservesLbl:'Reserves', dropHere:'drop players here', secTag:'Secondary tag', special:'Special', tagNone:'none',
       colPlayer:'Player', colRole:'Role', colPT:'PT', colRes:'Res.',
-      shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', focusClear:'Focus cleared', variation:'Variation', hideMeters:'Hide meters', showMeters:'Show meters', iconsTitle:'Icons', iconsHint:'pick and click on the map', plans:'Plans', plansEmpty:'No saved plans yet. Export the plan and commit the JSON to /estrategia/plans/.', tool_select:'Select', tool_arrow:'Arrow', tool_line:'Line', tool_free:'Free', tool_area:'Area', tool_icon:'Icon', tool_note:'Note', tool_enemy:'Enemy', tool_focus:'Focus', tool_color:'Color', tool_width:'Width', tool_undo:'Undo', tool_redo:'Redo', tool_clear:'Clear', tool_names:'Names', tool_focusZones:'Zones', linkRemoved:'Link removed', confirmClearDraw:'Clear drawings and icons in this scenario?', needOneScene:'At least one scenario is required', noScenes:'No scenarios found in this plan.', invalidJson:'Invalid file: not JSON', noScenesFile:'No scenarios found in this file', confirmImport:'Importing will replace the current plan. Continue?', confirmReset:'Reset everything and start a fresh plan? This erases the current plan (PTs, scenarios, drawings, roster).', planReset:'Plan reset ✓', linkCopied:'Link copied ✓', selectCopy:'Select the link and copy it (Ctrl+C)', linkFail:'Could not generate the link', linkInvalid:'Invalid plan link', confirmShared:'This link opens a shared plan. Opening it replaces the current draft. Continue?', planLoadedLink:'Plan from link loaded ✓', planLoadFail:'Could not load the plan', confirmOpenPlan:'Opening this plan replaces the current draft. Continue?', planLoaded:'Plan loaded ✓', confirmSeed:'Add the standard-phase scenarios to the project?', confirmClearPlayers:'Clear all players?', posTitle:'Positions (includes the tree gate) — copy it all and send to me:', rosterNone:'No players recognized. Check the format.', rosterOk:'players recognized.', nameSide:'Name to the side', nameBelow:'Name below', zoomTip:'Scroll = zoom · drag the map to move', zoomTipM:'Pinch = zoom · drag = move · tap = edit',
+      shareTitle:'Plan link — copy and share on Discord:', close:'Close', copy:'Copy', focusClear:'Focus cleared', variation:'Variation', hideMeters:'Hide meters', showMeters:'Show meters', iconsTitle:'Icons', iconsHint:'pick and click on the map', plans:'Plans', plansEmpty:'No saved plans yet. Export the plan and commit the JSON to /estrategia/plans/.', tool_select:'Select', tool_arrow:'Arrow', tool_line:'Line', tool_free:'Free', tool_area:'Area', tool_icon:'Icon', tool_note:'Note', tool_enemy:'Enemy', tool_focus:'Focus', tool_color:'Color', tool_width:'Width', tool_undo:'Undo', tool_redo:'Redo', tool_clear:'Clear', tool_names:'Names', tool_focusZones:'Zones', linkRemoved:'Link removed', copied:'Copied ✓', pasted:'Pasted ✓', confirmClearDraw:'Clear drawings and icons in this scenario?', needOneScene:'At least one scenario is required', noScenes:'No scenarios found in this plan.', invalidJson:'Invalid file: not JSON', noScenesFile:'No scenarios found in this file', confirmImport:'Importing will replace the current plan. Continue?', confirmReset:'Reset everything and start a fresh plan? This erases the current plan (PTs, scenarios, drawings, roster).', planReset:'Plan reset ✓', linkCopied:'Link copied ✓', selectCopy:'Select the link and copy it (Ctrl+C)', linkFail:'Could not generate the link', linkInvalid:'Invalid plan link', confirmShared:'This link opens a shared plan. Opening it replaces the current draft. Continue?', planLoadedLink:'Plan from link loaded ✓', planLoadFail:'Could not load the plan', confirmOpenPlan:'Opening this plan replaces the current draft. Continue?', planLoaded:'Plan loaded ✓', confirmSeed:'Add the standard-phase scenarios to the project?', confirmClearPlayers:'Clear all players?', posTitle:'Positions (includes the tree gate) — copy it all and send to me:', rosterNone:'No players recognized. Check the format.', rosterOk:'players recognized.', nameSide:'Name to the side', nameBelow:'Name below', zoomTip:'Scroll = zoom · drag the map to move', zoomTipM:'Pinch = zoom · drag = move · tap = edit',
       menuLink:'🔗 Link', menuRemove:'Remove', menuHp:'Health / HP', dead:'Dead', showNames:'Names', noteTitle:'Note', notePh:'Write the note…', buffs:'Buffs', carryTitle:'Tree carry (max 2)', carryAdd:'Carry', carryPick:'Tap a player to be the carry', carryMax:'Max 2 carries', carrySet:'Carry set ✓', enemyTitle:'Enemy', enemyCount:'Count', enemyLabel:'Name / note (optional)', nameToggle:'Name on map', unlockAction:'Unlock position', lockAction:'Lock position', unlockedHint:'Unlocked — drag to reposition', usLbl:'Us:', westLbl:'West', eastLbl:'East', sidePick:'Set our side', linkPick:'Tap another icon to link', linkDone:'Linked ✓', linkDup:'Those two are already linked', tapPlace:'Tap a PT (below) then the map'
     }
   };
@@ -94,6 +94,7 @@
   const objById = new Map(CFG.objetivos.map(o => [o.id, o]));
   let popoverPt = null, rosterDraft = [], rosterSideView = 'pts';
   let linkTempFrom = null, linkTempArrow = null;   // vínculo em criação (origem + seta-preview)
+  let lastPicked = null, clipboard = null;   // Ctrl+C / Ctrl+V de elementos (nota, ícone, inimigo, foco)
   let carryPickFor = null;                          // objId da árvore aguardando escolha de carry
   let lpTimer = null, lpTimer2 = null, lpAt = 0;    // long-press (segurar) nos tokens de player
   const unlockedObjs = new Set();                   // objetivos destravados p/ mover (sessão)
@@ -166,7 +167,7 @@
 <section class="guide-sec"><h3>7 · Objetivos &amp; buffs</h3><ul><li>Ligue/desligue no painel <b>Objetivos</b>. Toque num objetivo pra ver a mecânica, definir <b>vida</b> e ativar <b>buffs</b> (viram selos em cima do ícone).</li><li><b>Buffs por estrutura:</b> Torre → <i>City Protection</i> (não leva dano) e <i>You Got a Problem</i> (+dano na torre); Ganso → <i>City Protection</i> e <i>Hair Pulling</i> (+dano no ganso); Árvore → <i>Sprint</i> (anda mais rápido) e <i>Relentless</i> (não pode ser parada por Box); Boss/Nirvana → <i>Frontline Zeal</i> (buff de commander pro time) e <i>Desperate Surge</i> (corta a cura dos inimigos).</li><li>As posições vêm <b>travadas</b> — destrave no menu (🔓) pra arrastar.</li><li><b>Árvore:</b> anda <b>333m</b> até o <b>portão inimigo</b>. O contador de metros fica no ícone; a <b>linha do caminho</b> só aparece quando você destrava a árvore pra ajustar o portão (arraste o ⛩). Use <b>📏 Ocultar metros</b> se não quiser o contador. Até <b>2 carries</b> seguem a árvore (com seta).</li></ul></section>
 <section class="guide-sec"><h3>8 · Nosso lado, inimigos e desenho</h3><ul><li><b>Nosso lado</b> (topo): Oeste ou Leste.</li><li><b>Inimigo defendendo</b> (espadas): grupo inimigo com quantidade.</li><li><b>Desenho:</b> seta, linha, traço livre, área, ícone e <b>nota</b>.</li></ul></section>
 <section class="guide-sec"><h3>9 · Salvar, compartilhar e planos</h3><ul><li>Salva sozinho no navegador. <b>Exportar</b> gera um JSON; <b>Importar</b> carrega de volta.</li><li>Planos fixos da guild abrem por um link curto <code>?plan=nome</code>.</li><li><b>Compartilhar</b> gera um link com o plano inteiro embutido (fica grande).</li></ul></section>
-<section class="guide-sec"><h3>10 · Atalhos (PC)</h3><p class="guide-keys"><b>V</b> selecionar · <b>A</b> seta · <b>L</b> linha · <b>D</b> livre · <b>R</b> área · <b>I</b> ícone · <b>N</b> nota · <b>scroll</b> zoom · <b>Ctrl+Z/Y</b> desfazer/refazer.</p></section>
+<section class="guide-sec"><h3>10 · Atalhos (PC)</h3><p class="guide-keys"><b>V</b> selecionar · <b>A</b> seta · <b>L</b> linha · <b>D</b> livre · <b>R</b> área · <b>I</b> ícone · <b>N</b> nota · <b>scroll</b> zoom · <b>Ctrl+Z/Y</b> desfazer/refazer · <b>Ctrl+C/V</b> copiar/colar elemento.</p></section>
 <section class="guide-sec tips"><h3>Dicas</h3><ul><li>Monte a base no <b>cenário 1</b> e use <b>Duplicar</b> pra próxima fase.</li><li>Esconda nomes em quem não precisa de destaque.</li><li>Use <b>Foco</b> + <b>Apresentar</b> pra guiar a call.</li></ul></section>` },
     es: { title: 'Guía del Game Plan', html: `<p class="guide-lead">Una herramienta para armar y presentar la estrategia de la GvG sobre el mapa. Todo se guarda automáticamente <b>en este navegador</b>. Abajo, lo esencial y sobre todo las funciones que <b>no son obvias</b> en la interfaz.</p>
 <section class="guide-sec"><h3>1 · La idea — Fases y Escenarios</h3><p>Cada <b>escenario</b> es una "foto" del mapa (posiciones, dibujos, objetivos activos, vida). Armas una secuencia de fases (ej.: <i>Apertura → Medio → Boss</i>) y navegas por ellas en la barra de abajo (botón <b>Fases</b>). Presentar reproduce esa secuencia en pantalla completa.</p><p>En el editor de fases (abajo) puedes poner un <b>nombre</b>, una <b>condición</b> y el <b>tiempo de juego</b> de ese escenario (campo <b>⏱ 30m</b>) — aparece como sello en la barra y en la presentación, dejando claro que esa escena es a los 30m, la otra a los 25m, etc.</p></section>
@@ -178,7 +179,7 @@
 <section class="guide-sec"><h3>7 · Objetivos y buffs</h3><ul><li>Activa/desactiva en el panel <b>Objetivos</b>. Toca un objetivo para ver la mecánica, definir <b>vida</b> y activar <b>buffs</b> (aparecen como sellos sobre el ícono).</li><li><b>Buffs por estructura:</b> Torre → <i>City Protection</i> (no recibe daño) y <i>You Got a Problem</i> (+daño a la torre); Ganso → <i>City Protection</i> y <i>Hair Pulling</i> (+daño al ganso); Árbol → <i>Sprint</i> (anda más rápido) y <i>Relentless</i> (no puede ser detenido por Box); Boss/Nirvana → <i>Frontline Zeal</i> (buff de commander para el equipo) y <i>Desperate Surge</i> (corta la cura de los enemigos).</li><li>Las posiciones vienen <b>bloqueadas</b> — desbloquea en el menú (🔓) para arrastrar.</li><li><b>Árbol:</b> recorre <b>333m</b> hasta la <b>puerta enemiga</b>. El contador de metros está en el ícono; la <b>línea del camino</b> solo aparece cuando desbloqueas el árbol para ajustar la puerta (arrastra el ⛩). Usa <b>📏 Ocultar metros</b> si no lo quieres. Hasta <b>2 carries</b> siguen al árbol (con flecha).</li></ul></section>
 <section class="guide-sec"><h3>8 · Nuestro lado, enemigos y dibujo</h3><ul><li><b>Nuestro lado</b> (arriba): Oeste o Este.</li><li><b>Enemigo defendiendo</b> (espadas): grupo enemigo con cantidad.</li><li><b>Dibujo:</b> flecha, línea, trazo libre, área, ícono y <b>nota</b>.</li></ul></section>
 <section class="guide-sec"><h3>9 · Guardar, compartir y planes</h3><ul><li>Se guarda solo en el navegador. <b>Exportar</b> genera un JSON; <b>Importar</b> lo carga de vuelta.</li><li>Los planes fijos de la guild abren con un enlace corto <code>?plan=nombre</code>.</li><li><b>Compartir</b> genera un enlace con todo el plan incrustado (queda largo).</li></ul></section>
-<section class="guide-sec"><h3>10 · Atajos (PC)</h3><p class="guide-keys"><b>V</b> seleccionar · <b>A</b> flecha · <b>L</b> línea · <b>D</b> libre · <b>R</b> área · <b>I</b> ícono · <b>N</b> nota · <b>scroll</b> zoom · <b>Ctrl+Z/Y</b> deshacer/rehacer.</p></section>
+<section class="guide-sec"><h3>10 · Atajos (PC)</h3><p class="guide-keys"><b>V</b> seleccionar · <b>A</b> flecha · <b>L</b> línea · <b>D</b> libre · <b>R</b> área · <b>I</b> ícono · <b>N</b> nota · <b>scroll</b> zoom · <b>Ctrl+Z/Y</b> deshacer/rehacer · <b>Ctrl+C/V</b> copiar/pegar elemento.</p></section>
 <section class="guide-sec tips"><h3>Consejos</h3><ul><li>Arma la base en el <b>escenario 1</b> y usa <b>Duplicar</b> para la fase siguiente.</li><li>Oculta nombres en quien no necesita destaque.</li><li>Usa <b>Foco</b> + <b>Presentar</b> para guiar la call.</li></ul></section>` },
     en: { title: 'Game Plan Guide', html: `<p class="guide-lead">A tool to build and present the GvG strategy on top of the map. Everything is saved automatically <b>in this browser</b>. Below, the essentials and especially the features that <b>aren't obvious</b> from the UI.</p>
 <section class="guide-sec"><h3>1 · The idea — Phases &amp; Scenarios</h3><p>Each <b>scenario</b> is a "snapshot" of the map (positions, drawings, active objectives, HP). You build a sequence of phases (e.g. <i>Opening → Mid → Boss</i>) and step through them on the bottom rail (<b>Phases</b> button). Present plays that sequence full-screen.</p><p>In the phase editor (bottom) you can set a <b>name</b>, a <b>condition</b> and the <b>game time</b> for that scenario (the <b>⏱ 30m</b> field) — it shows as a badge on the rail and in Present, making it clear that this scene is at 30m, the next at 25m, and so on.</p></section>
@@ -190,7 +191,7 @@
 <section class="guide-sec"><h3>7 · Objectives &amp; buffs</h3><ul><li>Toggle them in the <b>Objectives</b> panel. Tap an objective to see its mechanic, set <b>HP</b> and enable <b>buffs</b> (they show as badges above the icon).</li><li><b>Buffs per structure:</b> Tower → <i>City Protection</i> (takes no damage) and <i>You Got a Problem</i> (+tower damage); Goose → <i>City Protection</i> and <i>Hair Pulling</i> (+goose damage); Tree → <i>Sprint</i> (moves faster) and <i>Relentless</i> (can't be stopped by Box); Boss/Nirvana → <i>Frontline Zeal</i> (commander buff for the team) and <i>Desperate Surge</i> (cuts enemy healing).</li><li>Positions come <b>locked</b> — unlock in the menu (🔓) to drag.</li><li><b>Tree:</b> walks <b>333m</b> to the <b>enemy gate</b>. The meter counter sits on the icon; the <b>path line</b> only shows when you unlock the tree to adjust the gate (drag the ⛩). Use <b>📏 Hide meters</b> if you don't want the counter. Up to <b>2 carries</b> follow the tree (with an arrow).</li></ul></section>
 <section class="guide-sec"><h3>8 · Our side, enemies and drawing</h3><ul><li><b>Our side</b> (top): West or East.</li><li><b>Defending enemy</b> (swords): an enemy group with a count.</li><li><b>Drawing:</b> arrow, line, freehand, area, icon and <b>note</b>.</li></ul></section>
 <section class="guide-sec"><h3>9 · Save, share and plans</h3><ul><li>Auto-saves in the browser. <b>Export</b> makes a JSON; <b>Import</b> loads it back.</li><li>Fixed guild plans open via a short link <code>?plan=name</code>.</li><li><b>Share</b> makes a link with the whole plan embedded (it gets long).</li></ul></section>
-<section class="guide-sec"><h3>10 · Shortcuts (PC)</h3><p class="guide-keys"><b>V</b> select · <b>A</b> arrow · <b>L</b> line · <b>D</b> freehand · <b>R</b> area · <b>I</b> icon · <b>N</b> note · <b>scroll</b> zoom · <b>Ctrl+Z/Y</b> undo/redo.</p></section>
+<section class="guide-sec"><h3>10 · Shortcuts (PC)</h3><p class="guide-keys"><b>V</b> select · <b>A</b> arrow · <b>L</b> line · <b>D</b> freehand · <b>R</b> area · <b>I</b> icon · <b>N</b> note · <b>scroll</b> zoom · <b>Ctrl+Z/Y</b> undo/redo · <b>Ctrl+C/V</b> copy/paste element.</p></section>
 <section class="guide-sec tips"><h3>Tips</h3><ul><li>Build the base in <b>scenario 1</b> and use <b>Duplicate</b> for the next phase.</li><li>Hide names on players that don't need highlighting.</li><li>Use <b>Focus</b> + <b>Present</b> to guide the call.</li></ul></section>` }
   };
   function fillGuide() { const b = $('helpBody'), tt = $('guideTitle'); const g = GUIDE[lang] || GUIDE.pt; if (b) b.innerHTML = g.html; if (tt) tt.textContent = g.title; }
@@ -379,8 +380,9 @@
         g.on('mouseenter.nm', () => { nmTx.text(full); recenter(); tokenLayer.batchDraw(); });
         g.on('mouseleave.nm', () => { nmTx.text(short); recenter(); tokenLayer.batchDraw(); });
       }
-    } else if (state.showNames && d.hideName) {
-      // nome oculto (segurou pra esconder): bolinha no canto inferior direito com o nº da PT
+    } else {
+      // nome não mostrado (toggle global de Nomes desligado OU segurou pra esconder):
+      // mostra uma bolinha no canto inferior direito com o nº da PT
       const num = (d.pt || '').replace(/\D/g, '');
       if (num) {
         const br = Math.max(3.2, rm * 0.32), bx = rm * 0.82, by = rm * 0.82;
@@ -439,13 +441,14 @@
     // contador (quando informado) — selo no canto inferior direito
     if (e.n > 0) { const b = new Konva.Label({ x: er * 0.62, y: er * 0.62 }); b.add(new Konva.Tag({ fill: '#E25B52', cornerRadius: er * 0.5, stroke: '#2a0c0c', strokeWidth: 1 })); b.add(new Konva.Text({ text: String(e.n), fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: Math.max(9, er * 0.72), fill: '#2a0c0c', padding: Math.max(1.5, er * 0.16) })); g.add(b); }
     g.position({ x: e.x * W, y: e.y * H });
-    if (e.label && state.showNames) { const fs = Math.max(8, R * 0.36); const lbl = new Konva.Label({ x: er + 4, y: -fs * 0.72 }); lbl.add(new Konva.Tag({ fill: 'rgba(30,8,8,.78)', cornerRadius: 4 })); lbl.add(new Konva.Text({ text: e.label, fontFamily: 'Barlow, sans-serif', fontStyle: '600', fontSize: fs, fill: '#ffd9d5', padding: 3, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.6 })); g.add(lbl); }
-    g.on('click tap', ev => { ev.cancelBubble = true; if (linkTempFrom || carryPickFor) return; g.moveToTop(); tokenLayer.batchDraw(); openEnemyMenu(e, g.x(), g.y()); });
+    // rótulo do inimigo: sempre visível no mapa (é uma anotação, não nome de player)
+    if (e.label) { const fs = Math.max(8, R * 0.36); const lbl = new Konva.Label({ x: er + 4, y: -fs * 0.72 }); lbl.add(new Konva.Tag({ fill: 'rgba(30,8,8,.86)', cornerRadius: 4 })); lbl.add(new Konva.Text({ text: e.label, fontFamily: 'Barlow, sans-serif', fontStyle: '600', fontSize: fs, fill: '#ffd9d5', padding: 3, shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.6 })); g.add(lbl); }
+    g.on('click tap', ev => { ev.cancelBubble = true; if (carryPickFor) return; lastPicked = { kind: 'enemy', id: e.id }; g.moveToTop(); tokenLayer.batchDraw(); iconClicked('enemy:' + e.id, () => openEnemyMenu(e, g.x(), g.y())); });
     if (!state.present) {
       g.dragBoundFunc(clampToStage);
       g.on('dragstart', () => { pushUndo(); g.moveToTop(); });
       g.on('dragend', () => { const ee = (cur().enemies || []).find(x => x.id === e.id); if (ee) { ee.x = clamp01(g.x() / W); ee.y = clamp01(g.y() / H); saveProject(); } });
-      g.on('dblclick dbltap', () => { pushUndo(); cur().enemies = (cur().enemies || []).filter(x => x.id !== e.id); renderTokens(); saveProject(); });
+      g.on('dblclick dbltap', () => { pushUndo(); cur().enemies = (cur().enemies || []).filter(x => x.id !== e.id); pruneLinksFor('enemy:' + e.id); renderTokens(); saveProject(); });
       g.on('mouseenter', () => stage.container().style.cursor = 'grab');
       g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
     }
@@ -463,11 +466,12 @@
     let h = '<div class="im-hd"><span class="im-dot" style="background:#E25B52"></span><b>' + t('enemyTitle') + '</b><button class="im-x" data-act="close">✕</button></div>';
     h += '<div class="im-sec">' + t('enemyCount') + '</div><div class="im-step"><button data-d="-1">−</button><span class="im-stepv">' + (e.n || 0) + '</span><button data-d="1">+</button></div>';
     h += '<input class="im-elabel" placeholder="' + t('enemyLabel') + '" value="' + esc(e.label || '') + '">';
-    h += '<div class="im-actions"><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
+    h += '<div class="im-actions"><button class="im-link" data-act="link">' + t('menuLink') + '</button><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
     iconMenu.innerHTML = h; iconMenu.hidden = false; placeIconMenu(x, y);
     iconMenu.querySelectorAll('.im-step button').forEach(b => b.addEventListener('click', () => { pushUndo(); e.n = Math.max(0, Math.min(99, (e.n || 0) + (+b.dataset.d))); iconMenu.querySelector('.im-stepv').textContent = e.n; renderTokens(); saveProject(); }));
     iconMenu.querySelector('.im-elabel').addEventListener('input', ev => { e.label = ev.target.value.slice(0, 24); renderTokens(); saveProject(); });
-    iconMenu.querySelector('[data-act="remove"]').addEventListener('click', () => { pushUndo(); cur().enemies = (cur().enemies || []).filter(x => x.id !== e.id); closeIconMenu(); renderTokens(); saveProject(); });
+    iconMenu.querySelector('[data-act="link"]').addEventListener('click', () => startLink('enemy:' + e.id));
+    iconMenu.querySelector('[data-act="remove"]').addEventListener('click', () => { pushUndo(); cur().enemies = (cur().enemies || []).filter(x => x.id !== e.id); pruneLinksFor('enemy:' + e.id); closeIconMenu(); renderTokens(); saveProject(); });
     iconMenu.querySelector('[data-act="close"]').addEventListener('click', closeIconMenu);
   }
   // ---- nosso lado (Azul/Oeste ou Vermelho/Leste): destaque leve da nossa metade ----
@@ -508,11 +512,12 @@
     if (ty === 'pt') { const n = tokenLayer.findOne('.pt-' + id); if (n) return { x: n.x(), y: n.y() }; return ptPos(id); }
     if (ty === 'mem') { const n = tokenLayer.findOne('#mem-' + id); if (n) return { x: n.x(), y: n.y() }; const d = (cur().destacados || []).find(x => x.id === id); return (d && ptPos(d.pt)) ? { x: d.xf * W, y: d.yf * H } : null; }
     if (ty === 'obj') { const n = objLayer.findOne('.obj-' + id); if (n) return { x: n.x(), y: n.y() }; const o = objById.get(id); if (o && (cur().objetivos || {})[id]) { const p = objPos(o); return { x: p.x * W, y: p.y * H }; } return null; }
+    if (ty === 'enemy') { const n = tokenLayer.findOne('#enemy-' + id); if (n) return { x: n.x(), y: n.y() }; const e = (cur().enemies || []).find(x => x.id === id); return e ? { x: e.x * W, y: e.y * H } : null; }
     return null;
   }
-  function anchorColor(ref) { const i = (ref || '').indexOf(':'); if (i < 0) return '#D9A441'; const ty = ref.slice(0, i), id = ref.slice(i + 1); if (ty === 'pt') { const p = partyById.get(id); return p ? p.cor : '#D9A441'; } if (ty === 'mem') { const d = (cur().destacados || []).find(x => x.id === id); return d ? roleColor(d.funcao) : '#D9A441'; } if (ty === 'obj') { const o = objById.get(id); return o ? objStyle(o).c : '#D9A441'; } return '#D9A441'; }
+  function anchorColor(ref) { const i = (ref || '').indexOf(':'); if (i < 0) return '#D9A441'; const ty = ref.slice(0, i), id = ref.slice(i + 1); if (ty === 'pt') { const p = partyById.get(id); return p ? p.cor : '#D9A441'; } if (ty === 'mem') { const d = (cur().destacados || []).find(x => x.id === id); return d ? roleColor(d.funcao) : '#D9A441'; } if (ty === 'obj') { const o = objById.get(id); return o ? objStyle(o).c : '#D9A441'; } if (ty === 'enemy') return '#E25B52'; return '#D9A441'; }
   // raio aproximado de cada ícone (pra seta parar na borda, não por cima)
-  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 0.94 : (o && o.icone === 'boss' ? 1.125 : 1); return os * sc * 0.55; } return R; }
+  function anchorRadius(ref) { const i = (ref || '').indexOf(':'); const ty = ref.slice(0, i), id = ref.slice(i + 1); const os = Math.max(13, W * 0.025); if (ty === 'pt') return R * 0.78 + 4; if (ty === 'mem') return Math.max(8, R * 0.56) + 3; if (ty === 'obj') { const o = objById.get(id); const sc = o && o.icone && o.icone.indexOf('tower') === 0 ? 0.94 : (o && o.icone === 'boss' ? 1.125 : 1); return os * sc * 0.55; } if (ty === 'enemy') return Math.max(9, R * 0.8) + 3; return R; }
   function linkPts(l) { const a = anchorLivePos(l.a), b = anchorLivePos(l.b); if (!a || !b) return null; const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len, ra = anchorRadius(l.a), rb = anchorRadius(l.b); if (len <= ra + rb + 6) return [a.x, a.y, b.x, b.y]; return [a.x + ux * ra, a.y + uy * ra, b.x - ux * rb, b.y - uy * rb]; }
   function isTether(l) { const ta = (l.a || '').split(':')[0], tb = (l.b || '').split(':')[0]; return (ta === 'pt' && tb === 'mem') || (ta === 'mem' && tb === 'pt'); }
   function renderLinks() {
@@ -661,6 +666,43 @@
   function isMobile() { return window.matchMedia('(max-width:860px)').matches; }
   function placeTokenCenter(pt) { const s = stage.scaleX() || 1; const xf = clamp01(((W / 2) - stage.x()) / s / W), yf = clamp01(((H / 2) - stage.y()) / s / H); placeToken(pt, xf, yf); }
   function removeToken(pt) { pushUndo(); const s = cur(); const memObjs = s.destacados.filter(d => d.pt === pt); const memIds = memObjs.map(d => 'mem:' + d.id); memObjs.forEach(d => pruneCarry(d.id)); s.tokens = s.tokens.filter(t => t.pt !== pt); s.destacados = s.destacados.filter(d => d.pt !== pt); const drop = new Set(['pt:' + pt].concat(memIds)); if (s.links) s.links = s.links.filter(l => !drop.has(l.a) && !drop.has(l.b)); hidePopover(); renderTokens(); saveProject(); }
+  // Ao trocar o roster (substituir o Board), quem saiu da PT deixa "órfão" o
+  // token que estava no mapa. Aqui cada posição órfã é herdada por um membro
+  // NOVO da mesma PT que ainda não está no mapa — mantendo a posição.
+  function reconcileMemberSlots() {
+    const byPt = {}; state.roster.forEach(p => { if (p.pt && !p.ausente) (byPt[p.pt] = byPt[p.pt] || []).push(p); });
+    let moved = 0;
+    (state.scenarios || []).forEach(s => {
+      const dl = s.destacados || [];
+      const placed = new Set(dl.map(d => d.pt + '|' + d.nome));   // quem já ocupa posição nesta cena
+      dl.forEach(d => {
+        const stillHere = state.roster.some(p => p.pt === d.pt && p.nome === d.nome);
+        if (stillHere) return;                                      // o membro do token ainda está nessa PT
+        const cand = (byPt[d.pt] || []).find(p => !placed.has(p.pt + '|' + p.nome));
+        if (cand) { placed.delete(d.pt + '|' + d.nome); d.nome = cand.nome; d.funcao = cand.funcao; placed.add(cand.pt + '|' + cand.nome); moved++; }
+      });
+    });
+    return moved;
+  }
+  // Ctrl+C / Ctrl+V de elementos: copia o último elemento tocado (nota, ícone,
+  // inimigo, foco) e cola uma cópia deslocada no cenário atual.
+  function pickedData(pk) {
+    if (!pk) return null; const s = cur(); if (!s) return null;
+    if (pk.kind === 'note') { const n = (s.notas || []).find(x => x.id === pk.id); return n ? { kind: 'note', d: n } : null; }
+    if (pk.kind === 'marca') { const m = (s.marcas || []).find(x => x.id === pk.id); return m ? { kind: 'marca', d: m } : null; }
+    if (pk.kind === 'enemy') { const e = (s.enemies || []).find(x => x.id === pk.id); return e ? { kind: 'enemy', d: e } : null; }
+    if (pk.kind === 'focus') { const f = (Array.isArray(s.focus) ? s.focus : [])[pk.idx]; return f ? { kind: 'focus', d: f } : null; }
+    return null;
+  }
+  function doCopy() { const pd = pickedData(lastPicked); if (!pd) return; clipboard = { kind: pd.kind, d: JSON.parse(JSON.stringify(pd.d)) }; toast(t('copied')); }
+  function doPaste() {
+    if (!clipboard || state.present) return; const s = cur(); if (!s) return; const OX = 0.035, OY = 0.035; pushUndo();
+    if (clipboard.kind === 'note') { s.notas = s.notas || []; const n = Object.assign({}, clipboard.d, { id: uid(), x: clamp01(clipboard.d.x + OX), y: clamp01(clipboard.d.y + OY) }); s.notas.push(n); lastPicked = { kind: 'note', id: n.id }; renderNotes(); }
+    else if (clipboard.kind === 'marca') { s.marcas = s.marcas || []; const m = Object.assign({}, clipboard.d, { id: uid(), x: clamp01(clipboard.d.x + OX), y: clamp01(clipboard.d.y + OY) }); s.marcas.push(m); lastPicked = { kind: 'marca', id: m.id }; renderMarks(); }
+    else if (clipboard.kind === 'enemy') { s.enemies = s.enemies || []; const e = Object.assign({}, clipboard.d, { id: uid(), x: clamp01(clipboard.d.x + OX), y: clamp01(clipboard.d.y + OY) }); s.enemies.push(e); lastPicked = { kind: 'enemy', id: e.id }; renderTokens(); }
+    else if (clipboard.kind === 'focus') { if (!Array.isArray(s.focus)) s.focus = []; const f = { x: clamp01(clipboard.d.x + OX), y: clamp01(clipboard.d.y + OY), w: clipboard.d.w, h: clipboard.d.h }; s.focus.push(f); lastPicked = { kind: 'focus', idx: s.focus.length - 1 }; renderFocus(); }
+    saveProject(); toast(t('pasted'));
+  }
   function detachMember(pt, nome, funcao, xf, yf) { if (state.present) return; const ex = (cur().destacados || []).find(d => d.pt === pt && d.nome === nome); if (ex) { pushUndo(); ex.xf = clamp01(xf); ex.yf = clamp01(yf); hidePopover(); renderTokens(); renderSidebar(); saveProject(); return; } pushUndo(); const id = uid(); cur().destacados.push({ id, pt, nome, funcao, xf: clamp01(xf), yf: clamp01(yf) }); cur().links = cur().links || []; cur().links.push({ id: uid(), a: 'pt:' + pt, b: 'mem:' + id }); hidePopover(); renderTokens(); renderSidebar(); saveProject(); }
 
   // ---- popover ----
@@ -877,7 +919,7 @@
         badge.on('mouseenter', () => stage.container().style.cursor = 'pointer');
         frame.on('mouseenter', () => { stage.container().style.cursor = 'move'; showX(); });
         frame.on('mouseleave', () => { stage.container().style.cursor = toolCursor(); hideX(); });
-        frame.on('mousedown touchstart', () => showX());   // toque (mobile): revela ao encostar na borda
+        frame.on('mousedown touchstart', () => { lastPicked = { kind: 'focus', idx: idx }; showX(); });   // toque (mobile): revela ao encostar na borda
         grp.on('dragstart', () => { pushUndo(); showX(); grp.moveToTop(); });
         grp.on('dragend', () => { const ff = focusList()[idx]; if (ff) { ff.x = clamp01(ff.x + grp.x() / W); ff.y = clamp01(ff.y + grp.y() / H); } renderFocus(); saveProject(); });
         focusLayer.add(grp);
@@ -911,10 +953,11 @@
       } else {
         g.add(new Konva.Text({ text: m.val, fontSize: ms, align: 'center', verticalAlign: 'middle', width: ms * 1.7, height: ms * 1.5, offsetX: ms * 0.85, offsetY: ms * 0.75, shadowColor: '#000', shadowBlur: 4, shadowOpacity: 0.5, shadowOffsetY: 1 }));
       }
+      g.on('click tap', e => { e.cancelBubble = true; lastPicked = { kind: 'marca', id: m.id }; });
       g.on('dblclick dbltap', e => { e.cancelBubble = true; pushUndo(); cur().marcas = (cur().marcas || []).filter(x => x.id !== m.id); renderMarks(); saveProject(); });
       if (canDrag) {
         g.dragBoundFunc(clampToStage);
-        g.on('dragstart', () => { pushUndo(); g.moveToTop(); });
+        g.on('dragstart', () => { lastPicked = { kind: 'marca', id: m.id }; pushUndo(); g.moveToTop(); });
         g.on('dragend', () => { const mm = (cur().marcas || []).find(x => x.id === m.id); if (mm) { mm.x = clamp01(g.x() / W); mm.y = clamp01(g.y() / H); saveProject(); } });
         g.on('mouseenter', () => stage.container().style.cursor = 'grab');
         g.on('mouseleave', () => stage.container().style.cursor = toolCursor());
@@ -943,10 +986,15 @@
       const canDrag = !state.present && state.tool === 'select';
       const g = new Konva.Group({ x: n.x * W, y: n.y * H, draggable: canDrag, name: 'note-' + n.id });
       const label = new Konva.Label();
-      label.add(new Konva.Tag({ fill: 'rgba(24,20,8,.92)', stroke: '#f0c66b', strokeWidth: 1, cornerRadius: 5, shadowColor: '#000', shadowBlur: 8, shadowOpacity: 0.5, shadowOffsetY: 2 }));
-      label.add(new Konva.Text({ text: n.text || '…', fontFamily: 'Barlow, sans-serif', fontStyle: '600', fontSize: fs, fill: '#f7e6bf', padding: Math.max(5, fs * 0.5), width: noteWidth(n, fs), lineHeight: 1.25 }));
+      label.add(new Konva.Tag({ fill: 'rgba(20,17,7,.97)', stroke: '#f0c66b', strokeWidth: 1, cornerRadius: 5, shadowColor: '#000', shadowBlur: 8, shadowOpacity: 0.5, shadowOffsetY: 2 }));
+      // auto-ajuste: sem largura fixa (a caixa acompanha o texto); só quebra linha
+      // quando fica largo demais (acima de ~30% do mapa).
+      const maxW = W * 0.3;
+      const txt = new Konva.Text({ text: n.text || '…', fontFamily: 'Barlow, sans-serif', fontStyle: '600', fontSize: fs, fill: '#f7e6bf', padding: Math.max(4, fs * 0.45), lineHeight: 1.25 });
+      if (txt.width() > maxW) txt.width(maxW);
+      label.add(txt);
       g.add(label);
-      g.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; g.moveToTop(); noteLayer.batchDraw(); if (!state.present) editNoteInline(n); });
+      g.on('click tap', e => { e.cancelBubble = true; if (linkTempFrom) return; lastPicked = { kind: 'note', id: n.id }; g.moveToTop(); noteLayer.batchDraw(); if (!state.present) editNoteInline(n); });
       if (canDrag) {
         g.dragBoundFunc(clampToStage);
         g.on('dragstart', () => { pushUndo(); g.moveToTop(); });
@@ -981,7 +1029,7 @@
     bar.innerHTML = '<button type="button" data-a="dec" title="Menor">A−</button><button type="button" data-a="inc" title="Maior">A＋</button><button type="button" data-a="del" class="ne-del" title="Excluir">✕</button>';
     const ta = document.createElement('textarea'); ta.className = 'ne-ta'; ta.value = n.text || ''; ta.placeholder = t('notePh'); ta.rows = 2;
     wrap.appendChild(bar); wrap.appendChild(ta); mapPanel.appendChild(wrap); noteEditEl = wrap;
-    const applySize = () => { const fs = baseFs * (n.size || 1) * s; ta.style.fontSize = fs + 'px'; ta.style.width = (noteWidth(n, baseFs * (n.size || 1)) * s) + 'px'; ta.style.padding = Math.max(5, baseFs * (n.size || 1) * 0.5) * s + 'px'; };
+    const applySize = () => { const fs = baseFs * (n.size || 1) * s; ta.style.fontSize = fs + 'px'; ta.style.width = (Math.min(W * 0.3, Math.max(fs * 7, W * 0.16)) ) + 'px'; ta.style.padding = Math.max(4, baseFs * (n.size || 1) * 0.45) * s + 'px'; };
     applySize();
     setTimeout(() => { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }, 20);
     ta.addEventListener('input', () => { n.text = ta.value; applySize(); saveProject(); });
@@ -1021,6 +1069,17 @@
       state.scenarios.filter(x => x.varOf === m.id).forEach((v, vi) => makeSceneCard(v, ord + String.fromCharCode(97 + Math.min(25, vi)), true));
     });
     const a = rail.querySelector('.scene.active'); if (a) a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    buildSceneSel();
+  }
+  // seletor compacto de cena no cabeçalho (mesma ordem da régua: base + variações)
+  function buildSceneSel() {
+    const sel = $('sceneSel'); if (!sel) return;
+    const byId = new Map(state.scenarios.map(s => [s.id, s]));
+    const mains = state.scenarios.filter(s => !(s.varOf && byId.has(s.varOf)));
+    let html = '', ord = 0;
+    mains.forEach(m => { ord++; const num = String(ord); html += '<option value="' + m.id + '">' + esc(num + '. ' + (m.nome || 'Cena') + (m.tempo ? ' · ' + m.tempo : '')) + '</option>';
+      state.scenarios.filter(x => x.varOf === m.id).forEach((v, vi) => { const vn = num + String.fromCharCode(97 + Math.min(25, vi)); html += '<option value="' + v.id + '">' + esc('   ' + vn + '. ' + (v.nome || 'Var') + (v.tempo ? ' · ' + v.tempo : '')) + '</option>'; }); });
+    sel.innerHTML = html; sel.value = state.currentId;
   }
   const dragRef = {}; function clearHints() { rail.querySelectorAll('.drop-before,.drop-after').forEach(c => c.classList.remove('drop-before', 'drop-after')); }
   function selectScenario(id) { if (id === state.currentId) return; if (linkTempFrom) cancelLink(); closeIconMenu(); hidePopover(); state.currentId = id; renderRail(); loadScenarioIntoUI(); renderDrawings(); renderMarks(); renderObjectives(); renderTokens(); renderFocus(); renderSidebar(); updateMini(); if (!objPanel.hidden) renderObjPanel(); if (state.present) updatePresentUI(); saveProject(); }
@@ -1353,6 +1412,7 @@
     undoBtn.addEventListener('click', doUndo); redoBtn.addEventListener('click', doRedo); clearDraw.addEventListener('click', clearDrawings);
     { const nt = $('namesTgl'); if (nt) { nt.classList.toggle('on', state.showNames); nt.addEventListener('click', () => { state.showNames = !state.showNames; nt.classList.toggle('on', state.showNames); renderTokens(); saveProject(); }); } }
     { const ft = $('focusTgl'); if (ft) { ft.classList.toggle('on', !focusHidden); ft.addEventListener('click', toggleFocusHidden); } }
+    { const ss = $('sceneSel'); if (ss) ss.addEventListener('change', () => { if (ss.value && ss.value !== state.currentId) selectScenario(ss.value); }); }
     { const sc = $('sideChip'); if (sc) sc.querySelectorAll('.sc-seg').forEach(b => b.addEventListener('click', () => setSide(b.dataset.side))); }
     { const rt = $('rosterTabs'); if (rt) rt.addEventListener('click', e => { const b = e.target.closest('button[data-rtab]'); if (b) { rosterSideView = b.dataset.rtab; renderSidebar(); } }); }
     objBtn.addEventListener('click', () => toggleObjPanel()); objClose.addEventListener('click', () => toggleObjPanel(false));
@@ -1394,6 +1454,8 @@
       if (typing) return;
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); e.shiftKey ? doRedo() : doUndo(); return; }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') { e.preventDefault(); doRedo(); return; }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') { doCopy(); return; }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'v') { e.preventDefault(); doPaste(); return; }
       const map = { v: 'select', a: 'seta', l: 'linha', d: 'livre', r: 'retangulo', i: 'marca' }; if (map[e.key.toLowerCase()]) setTool(map[e.key.toLowerCase()]);
     });
     document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && state.present) exitPresent(); });
@@ -1437,7 +1499,7 @@
     peAddBtn.addEventListener('click', () => { const id = peAddSel.value; if (!id) return; const pl = state.roster.find(x => x.id === id); if (pl) { pl.pt = editingPt; pl.reserva = false; saveProject(); renderSidebar(); renderTokens(); renderPtEditor(); } });
     rosterGrid.addEventListener('change', e => { const row = e.target.closest('.rrow'); if (!row) return; const p = rosterDraft[+row.dataset.i]; if (!p) return; if (e.target.classList.contains('f-fn')) p.funcao = e.target.value; else if (e.target.classList.contains('f-pt')) p.pt = e.target.value || null; else if (e.target.classList.contains('f-res')) p.reserva = e.target.checked; renderGrid(); });
     rosterGrid.addEventListener('click', e => { if (!e.target.classList.contains('rdel')) return; const row = e.target.closest('.rrow'); if (!row) return; rosterDraft.splice(+row.dataset.i, 1); renderGrid(); });
-    rosterSave.addEventListener('click', () => { state.roster = rosterDraft.map(p => Object.assign({}, p)); saveProject(); renderSidebar(); renderTokens(); saveMsg.className = 'parse-msg ok'; saveMsg.textContent = 'Roster salvo ✓'; setTimeout(closeRoster, 500); });
+    rosterSave.addEventListener('click', () => { state.roster = rosterDraft.map(p => Object.assign({}, p)); const moved = reconcileMemberSlots(); saveProject(); renderSidebar(); renderTokens(); saveMsg.className = 'parse-msg ok'; saveMsg.textContent = 'Roster salvo ✓' + (moved ? ' · ' + moved + ' posição(ões) herdada(s)' : ''); setTimeout(closeRoster, 500); });
 
     let raf = null; const relayout = () => { if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(fit); }; new ResizeObserver(relayout).observe(mapPanel); window.addEventListener('resize', relayout);
   }
