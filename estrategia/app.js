@@ -984,6 +984,7 @@
       drawLayer.add(sh);
     });
     drawLayer.batchDraw();
+    if (autoSpot) renderFocus();   // desenhos entram no auto-foco
   }
   let live = null;
   function beginDraw() { if (state.present || !DRAW.includes(state.tool)) return; const f = frac(); if (!f) return; live = { tipo: state.tool, pontos: state.tool === 'livre' ? [[f.xf, f.yf]] : [[f.xf, f.yf], [f.xf, f.yf]], cor: state.drawColor, largura: state.drawWidth, shape: null }; live.shape = shapeFromDesenho(live); drawLayer.add(live.shape); drawLayer.batchDraw(); }
@@ -1012,6 +1013,20 @@
       focusLayer.add(new Konva.Rect({ x: x, y: y, width: w, height: h, cornerRadius: rad, fill: '#000', globalCompositeOperation: 'destination-out', listening: false }));
       focusLayer.add(new Konva.Rect({ x: x, y: y, width: w, height: h, cornerRadius: rad, stroke: 'rgba(240,198,107,0.24)', strokeWidth: 1, listening: false }));
     });
+    // ícones carimbados (ferramenta Ícone) também entram na luz
+    markLayer.getChildren().forEach(n => {
+      let r; try { r = n.getClientRect({ skipShadow: true }); } catch (_) { return; }
+      if (!r || !(r.width > 0)) return;
+      const x = (r.x - ox) / sc - pad, y = (r.y - oy) / sc - pad, w = r.width / sc + pad * 2, h = r.height / sc + pad * 2;
+      focusLayer.add(new Konva.Rect({ x: x, y: y, width: w, height: h, cornerRadius: Math.min(w, h) * 0.42, fill: '#000', globalCompositeOperation: 'destination-out', listening: false }));
+    });
+    // desenhos manuais (seta/linha/livre/área): cápsula de luz seguindo o traço
+    (s.desenhos || []).forEach(d => {
+      if (!d || !Array.isArray(d.pontos)) return;
+      const sw = Math.max(16, R * 1.1) + (d.largura || 3);
+      if (d.tipo === 'retangulo') { const a = d.pontos[0], b = d.pontos[1], pd2 = Math.max(6, R * 0.4); focusLayer.add(new Konva.Rect({ x: Math.min(a[0], b[0]) * W - pd2, y: Math.min(a[1], b[1]) * H - pd2, width: Math.abs(b[0] - a[0]) * W + pd2 * 2, height: Math.abs(b[1] - a[1]) * H + pd2 * 2, cornerRadius: 8, fill: '#000', globalCompositeOperation: 'destination-out', listening: false })); }
+      else focusLayer.add(new Konva.Line({ points: pxPts(d.pontos), stroke: '#000', strokeWidth: sw, lineCap: 'round', lineJoin: 'round', tension: d.tipo === 'livre' ? 0.35 : 0, globalCompositeOperation: 'destination-out', listening: false }));
+    });
     // linhas de conexão: cápsula de luz seguindo o traço (pontos já em coords de camada)
     (s.links || []).forEach(l => { const pts = linkPts(l); if (!pts) return; focusLayer.add(new Konva.Line({ points: pts, stroke: '#000', strokeWidth: Math.max(12, R * 0.85), lineCap: 'round', lineJoin: 'round', globalCompositeOperation: 'destination-out', listening: false })); });
   }
@@ -1019,9 +1034,10 @@
     focusLayer.destroyChildren();
     const list = cur() ? focusList() : [];
     if (focusHidden && !previewRect) { focusLayer.batchDraw(); return; }
-    const manual = previewRect ? list.concat([previewRect]) : list;
-    const validManual = manual.filter(f => f && f.w > 0.002 && f.h > 0.002);
     const auto = autoSpot && !previewRect;
+    // auto-foco ligado OCULTA os focos manuais (só um modo de spotlight por vez)
+    const manual = previewRect ? list.concat([previewRect]) : (auto ? [] : list);
+    const validManual = manual.filter(f => f && f.w > 0.002 && f.h > 0.002);
     if (!validManual.length && !auto) { focusLayer.batchDraw(); return; }
     focusLayer.add(new Konva.Rect({ x: 0, y: 0, width: W, height: H, fill: 'rgba(6,8,12,0.66)', listening: false }));
     // auto-foco: furos cobrindo cada elemento por inteiro + as linhas de conexão
@@ -1036,7 +1052,7 @@
     };
     const editable = !state.present && !previewRect && state.tool === 'select';
     if (!editable) { validManual.forEach(f => { const c = focusCenter(f); const g = new Konva.Group({ x: c.cx, y: c.cy, rotation: f.rot || 0 }); holeInto(g, f); focusLayer.add(g); }); }
-    else list.forEach((f, idx) => {
+    else manual.forEach((f, idx) => {
       if (!(f.w > 0.002 && f.h > 0.002)) return;
       const active = (focusRotDrag && focusRotDrag.idx === idx) || (focusResizeDrag && focusResizeDrag.idx === idx);
       const c = focusCenter(f), grp = new Konva.Group({ x: c.cx, y: c.cy, rotation: f.rot || 0, draggable: true, name: 'focusg-' + idx });
@@ -1125,6 +1141,7 @@
       markLayer.add(g);
     });
     markLayer.batchDraw();
+    if (autoSpot) renderFocus();   // ícones entram no auto-foco
     renderNotes();
   }
   function placeMark() {
