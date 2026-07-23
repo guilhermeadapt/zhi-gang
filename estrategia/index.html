@@ -477,6 +477,9 @@
     .board-tools[hidden]{display:none}
     .bd-legend{font-size:11.5px;color:var(--muted);line-height:1.45;flex:1;min-width:200px}
     .roster-board{overflow-y:auto;flex:1 1 auto;padding:14px 16px;display:flex;flex-direction:column;gap:14px}
+    /* board-mode desktop: cada coluna rola SOZINHA (a lista de players rola sem
+       levar o board junto — as PTs ficam sempre à vista pra soltar o drag) */
+    #rosterModal.board-mode .roster-board{overflow:hidden}
     .roster-board[hidden]{display:none}
     .bd-zone{border:1px solid var(--line-soft);border-radius:12px;background:rgba(255,255,255,.015);padding:10px 11px;transition:.12s}
     .bd-zone.over{border-color:var(--gold);background:rgba(217,164,65,.08);box-shadow:inset 0 0 0 1px var(--gold)}
@@ -487,19 +490,21 @@
     /* pool e reservas gerais: chips em colunas responsivas (compacto) */
     .bd-pool .bd-chips,.bd-res .bd-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
     /* board com 6 PTs de uma vez: coluna esquerda (arrastar) + grade 3x2 */
-    .bd-layout{display:flex;gap:14px;align-items:flex-start}
-    .bd-side{width:246px;flex:none;display:flex;flex-direction:column;gap:12px;position:sticky;top:0}
+    .bd-layout{display:flex;gap:14px;align-items:stretch;height:100%;min-height:0}
+    .bd-side{width:246px;flex:none;display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-height:0;padding-right:2px}
     .bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:1fr}
-    #rosterModal.board-mode .bd-grid{flex:1;min-width:0;grid-template-columns:repeat(3,1fr)}
+    #rosterModal.board-mode .bd-grid{flex:1;min-width:0;grid-template-columns:repeat(3,1fr);overflow-y:auto;min-height:0;align-content:start;padding-right:2px}
     .bd-zh .bd-allres{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:6px;padding:3px 7px;cursor:pointer;margin-left:auto}
     .bd-zh .bd-allres:hover{color:var(--gold);border-color:var(--line)}
     .bd-pool .bd-zh .bd-c{margin-left:6px}
     .bd-chip .c-rep{font-size:12.5px;color:#f0c66b;font-weight:700;line-height:1}
+    .bd-chip .c-rep.has-of{font-family:var(--disp);font-size:9px;letter-spacing:.02em;background:rgba(240,198,107,.14);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:5px;padding:1.5px 5px;white-space:nowrap}
+    .pl-chip .pl-rep{font-family:var(--disp);font-size:8.5px;font-weight:700;color:#f0c66b;background:rgba(240,198,107,.12);border-radius:4px;padding:1px 4px;margin-left:5px;white-space:nowrap}
     .bd-pop .bp-p{font-family:var(--disp);font-weight:700;font-size:10.5px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 9px;cursor:pointer}
     .bd-pop .bp-p:hover{color:var(--text);border-color:var(--line)}
     .bd-pop .bp-p.active{color:#0b0e15;background:var(--rc,#D9A441);border-color:var(--rc,#D9A441)}
     .bd-pop .bp-rep.active{color:#241a06;background:linear-gradient(180deg,#f0c66b,#D9A441);border-color:var(--gold)}
-    @media(max-width:860px){.bd-layout{flex-direction:column}.bd-side{width:auto;position:static}#rosterModal.board-mode .bd-grid{grid-template-columns:1fr}.bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+    @media(max-width:860px){.bd-layout{flex-direction:column;height:auto}.bd-side{width:auto;overflow:visible}#rosterModal.board-mode .roster-board{overflow-y:auto}#rosterModal.board-mode .bd-grid{grid-template-columns:1fr;overflow:visible}.bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
     /* grade de PTs */
     .bd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
     .bd-pt-card{border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,rgba(255,255,255,.022),rgba(255,255,255,.005));padding:11px 12px;display:flex;flex-direction:column;gap:8px}
@@ -534,7 +539,9 @@
     .bd-cgh{display:flex;align-items:center;gap:6px;cursor:pointer;font-family:var(--disp);font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7a8296;padding:3px 2px;user-select:none}
     .bd-cgh:hover{color:var(--text)}
     .bd-cgh .chev{font-size:8px;width:9px}
-    .bd-cgh .c-ico.sm{width:15px;height:15px;border-width:1px}
+    .bd-cgh .c-ico.sm{width:15px;height:15px;border-width:1px;display:grid;place-items:center;border-radius:50%;background:#0b0e15;border:1px solid var(--rc);overflow:hidden;flex:none}
+    .bd-cgh .c-ico.sm img{width:9px;height:9px;object-fit:contain}
+    .bd-cgh .c-ico.sm.dotonly{background:var(--rc)}
     .bd-cgh b{color:inherit;font-weight:700}
     .bd-cgh .bd-cc{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
     #bdGroup.on{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(217,164,65,.1)}
@@ -561,9 +568,11 @@
     .bd-pop .bp-nm{font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--text);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .bd-pop .bp-sec{font-family:var(--disp);font-weight:600;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:9px 0 5px}
     .bd-pop .bp-row{display:flex;flex-wrap:wrap;gap:5px}
-    .bd-pop .bp-t,.bd-pop .bp-f,.bd-pop .bp-r{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 9px;cursor:pointer}
-    .bd-pop .bp-t:hover,.bd-pop .bp-f:hover,.bd-pop .bp-r:hover{color:var(--text);border-color:var(--line)}
-    .bd-pop .bp-t.active,.bd-pop .bp-f.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .bd-pop .bp-t,.bd-pop .bp-f,.bd-pop .bp-r,.bd-pop .bp-ro{font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 9px;cursor:pointer}
+    .bd-pop .bp-t:hover,.bd-pop .bp-f:hover,.bd-pop .bp-r:hover,.bd-pop .bp-ro:hover{color:var(--text);border-color:var(--line)}
+    .bd-pop .bp-t.active,.bd-pop .bp-f.active,.bd-pop .bp-ro.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .bd-pop .bp-ro small{font-size:8.5px;opacity:.75;letter-spacing:.05em;margin-right:2px}
+    .bd-pop .bp-row-ro{max-height:130px;overflow-y:auto}
     .bd-pop .bp-r.active{color:#0b0e15;background:var(--rc);border-color:var(--rc)}
     /* badges de tarja/flag nas listas de membros (popover/editor) */
     .mb-tag{font-family:var(--disp);font-weight:600;font-size:8px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-2);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:4px;padding:1px 4px;margin-left:5px;vertical-align:1px}
@@ -910,6 +919,7 @@
             <button class="rbtn gold" id="bdAuto" style="padding:8px 12px" data-i18n="bdAuto">⚙ Auto-preencher</button>
             <button class="rbtn" id="bdClearPt" style="padding:8px 12px" data-i18n="bdEmpty">Esvaziar PTs</button>
             <button class="rbtn" id="bdGroup" style="padding:8px 12px" data-i18n="groupClass">⊟ Por classe</button>
+            <button class="rbtn" id="bdShare" style="padding:8px 12px" title="Gera um link só com o board (players, PTs, reservas, replaces) — sem os cenários" data-i18n="copyBoard">🔗 Copiar board</button>
             <span class="bd-legend" data-i18n-html="bdLegend">Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.</span>
           </div>
           <div class="roster-board" id="rosterBoard" hidden></div>
@@ -979,7 +989,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=74"></script>
-  <script src="./app.js?v=74"></script>
+  <script src="./config.js?v=75"></script>
+  <script src="./app.js?v=75"></script>
 </body>
 </html>
