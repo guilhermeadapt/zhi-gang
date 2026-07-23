@@ -208,11 +208,19 @@
   function done() { if (++ready === need) init(); }
   mapImg.onload = mapImg.onerror = done; mapImg.src = CFG.assets.map;
   iconKeys.forEach(k => { const im = new Image(); iconImgs[k] = im; im.onload = im.onerror = done; im.src = CFG.assets.icons[k]; });
+  const LANG_CYCLE = ['pt', 'es', 'en'];
+  const LANG_FLAGS = {
+    pt: '<svg viewBox="0 0 20 14" preserveAspectRatio="none"><rect width="20" height="14" fill="#009c3b"/><path d="M10 1.5 18.5 7 10 12.5 1.5 7Z" fill="#ffdf00"/><circle cx="10" cy="7" r="2.8" fill="#002776"/></svg>',
+    es: '<svg viewBox="0 0 20 14" preserveAspectRatio="none"><rect width="20" height="14" fill="#aa151b"/><rect y="3.5" width="20" height="7" fill="#f1bf00"/></svg>',
+    en: '<svg viewBox="0 0 20 14" preserveAspectRatio="none"><rect width="20" height="14" fill="#012169"/><path d="M0 0 20 14M20 0 0 14" stroke="#fff" stroke-width="2.6"/><path d="M0 0 20 14M20 0 0 14" stroke="#c8102e" stroke-width="1.3"/><path d="M10 0V14M0 7H20" stroke="#fff" stroke-width="3.6"/><path d="M10 0V14M0 7H20" stroke="#c8102e" stroke-width="1.8"/></svg>'
+  };
+  function updateLangBtn() { const f = $('lbFlag'), c = $('lbCode'); if (f) f.innerHTML = LANG_FLAGS[lang] || LANG_FLAGS.pt; if (c) c.textContent = lang.toUpperCase(); }
+  function cycleLang() { const i = LANG_CYCLE.indexOf(lang); setLang(LANG_CYCLE[(i + 1) % LANG_CYCLE.length]); }
   function setLang(l) {
     if (!I18N[l]) l = 'pt';
     lang = l;
     try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
-    document.querySelectorAll('#langSel button').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
+    updateLangBtn();
     applyI18n();
     { const hm = $('helpModal'); if (hm && !hm.hidden) fillGuide(); }
     // re-render dynamic surfaces that hold translated strings
@@ -223,7 +231,7 @@
   function init() {
     try { const sl = localStorage.getItem(LANG_KEY); if (sl && I18N[sl]) lang = sl; } catch (e) {}
     applyI18n();
-    document.querySelectorAll('#langSel button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    updateLangBtn();
     loadProject(); bgImage.image(mapImg); bgLayer.batchDraw(); buildColorSwatches(); buildMarkPicker();
     dockMini.hidden = false;   // mini-nav sempre visível; painel de Fases começa fechado
     renderSidebar(); renderRail(); loadScenarioIntoUI(); fit(); applySceneView(cur()); updateZoomSaveBtn(); wireEvents(); maybeLoadShared(); maybeLoadPlan();
@@ -1484,7 +1492,7 @@
   // ---- eventos ----
   function wireEvents() {
     const cont = stage.container();
-    const langSel = $('langSel'); if (langSel) langSel.addEventListener('click', e => { const b = e.target.closest('button[data-lang]'); if (b) setLang(b.dataset.lang); });
+    { const lb = $('langBtn'); if (lb) lb.addEventListener('click', cycleLang); }
     ['dragenter', 'dragover'].forEach(evt => cont.addEventListener(evt, e => { if (state.present) return; const ty = Array.from(e.dataTransfer.types); if (!ty.includes('text/plain') && !ty.includes('text/member')) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; mapPanel.classList.add('dragover'); }));
     ['dragleave', 'dragend'].forEach(evt => cont.addEventListener(evt, () => mapPanel.classList.remove('dragover')));
     cont.addEventListener('drop', e => { e.preventDefault(); mapPanel.classList.remove('dragover'); if (state.present) return; stage.setPointersPositions(e); const f = frac() || { xf: 0.5, yf: 0.5 }; const mem = e.dataTransfer.getData('text/member'); if (mem) { try { const o = JSON.parse(mem); detachMember(o.pt, o.nome, o.funcao, f.xf, f.yf); } catch (x) {} return; } const pt = e.dataTransfer.getData('text/plain'); if (pt) placeToken(pt, f.xf, f.yf); });

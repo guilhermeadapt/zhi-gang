@@ -67,10 +67,12 @@
     .scene-sel:hover{border-color:color-mix(in srgb,var(--gold) 45%,transparent);color:var(--text)}
     .scene-sel:focus{outline:none;border-color:var(--gold)}
     body.present .scene-sel{display:none}
-    .lang-sel{display:inline-flex;border:1px solid var(--line-soft);border-radius:9px;overflow:hidden;flex:none}
-    .lang-sel button{font-family:var(--disp);font-weight:600;font-size:11px;letter-spacing:.05em;color:var(--muted);background:transparent;border:0;padding:7px 9px;cursor:pointer;transition:.15s}
-    .lang-sel button:hover{color:var(--text)}
-    .lang-sel button.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold))}
+    /* botão único de idioma: bandeira + código; toque cicla PT → ES → EN */
+    .lang-btn{display:inline-flex;align-items:center;gap:6px;flex:none;border:1px solid var(--line-soft);border-radius:9px;background:rgba(255,255,255,.02);padding:5px 8px 5px 6px;cursor:pointer;transition:.15s}
+    .lang-btn:hover{border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:rgba(255,255,255,.05)}
+    .lang-btn .lb-flag{width:20px;height:14px;border-radius:2px;overflow:hidden;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.35);display:block}
+    .lang-btn .lb-flag svg{display:block;width:100%;height:100%}
+    .lang-btn .lb-code{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.06em;color:var(--gold-2)}
 
     .present-bar{display:none;align-items:center;gap:14px;flex:1 1 auto;min-width:0}
     .present-bar .pb-title{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
@@ -728,7 +730,7 @@
     </div>
     <div class="top-spacer"></div>
     <select class="scene-sel" id="sceneSel" title="Ir para a cena" aria-label="Cena"></select>
-    <div class="lang-sel" id="langSel"><button type="button" data-lang="pt">PT</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="en">EN</button></div>
+    <button class="lang-btn" id="langBtn" type="button" title="Idioma — toque pra trocar"><span class="lb-flag" id="lbFlag"></span><span class="lb-code" id="lbCode">PT</span></button>
     <div class="top-actions">
       <button class="tbtn ico" id="helpBtn" title="Guia — como usar a ferramenta" aria-label="Guia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.8 2.5-2.8 2.5"/><path d="M12 17h.01"/></svg></button>
       <button class="tbtn" id="fasesBtn" title="Mostrar / ocultar as fases (embaixo)">
@@ -977,7 +979,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=73"></script>
-  <script src="./app.js?v=73"></script>
+  <script src="./config.js?v=74"></script>
+  <script src="./app.js?v=74"></script>
 </body>
 </html>
