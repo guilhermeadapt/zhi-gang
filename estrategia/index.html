@@ -66,6 +66,7 @@
     .scene-sel{flex:none;max-width:190px;font-family:var(--disp);font-weight:600;font-size:11.5px;letter-spacing:.02em;color:var(--gold-2);background:#0e1118;border:1px solid var(--line-soft);border-radius:9px;padding:6px 8px;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d9a441' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:22px}
     .scene-sel:hover{border-color:color-mix(in srgb,var(--gold) 45%,transparent);color:var(--text)}
     .scene-sel:focus{outline:none;border-color:var(--gold)}
+    .scene-sel option{background:#12151d;color:#e8ecf2}
     body.present .scene-sel{display:none}
     /* cena + Fases fundidos numa composição só (a cena É a fase atual) */
     .fase-group{display:inline-flex;align-items:stretch;border:1px solid var(--line-soft);border-radius:10px;overflow:hidden;flex:none}
@@ -101,7 +102,7 @@
     .zoom-ctrl button{width:34px;height:34px;display:grid;place-items:center;cursor:pointer;border:1px solid var(--line);border-radius:9px;
       background:rgba(12,15,22,.92);color:var(--text);font-family:var(--disp);font-size:17px;line-height:1;backdrop-filter:blur(4px);transition:.12s;box-shadow:0 10px 26px -18px #000}
     .zoom-ctrl button:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
-    .zoom-ctrl button#zoomSave.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .zoom-ctrl button#zoomSave.on,.zoom-ctrl button#fillTgl.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     .zoom-ctrl button svg{width:15px;height:15px}
     body.present .zoom-ctrl{display:none}
     /* header de grupo no painel de objetivos (toggle do grupo) */
@@ -267,7 +268,10 @@
     .draw-tools .dt-focus:hover{color:#f2d98a}
     .draw-tools .dt-focus.active{color:#241a06}
     /* selo "nosso lado" */
-    .scene-hud{position:absolute;top:9px;left:50%;transform:translateX(-50%);z-index:9;display:flex;align-items:center;gap:10px;max-width:78%;pointer-events:none}
+    .scene-hud{position:absolute;top:9px;left:50%;transform:translateX(-50%);z-index:9;display:flex;flex-direction:column;align-items:center;gap:2px;max-width:78%;pointer-events:none}
+    .scene-hud .sh-row{display:flex;align-items:center;gap:10px;max-width:100%}
+    .scene-hud .sh-cond{font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2);text-shadow:0 2px 8px rgba(0,0,0,.9)}
+    .scene-hud .sh-desc{font-family:var(--body);font-weight:500;font-size:12.5px;line-height:1.4;color:#d6dae2;text-align:center;max-width:min(560px,64vw);text-shadow:0 2px 8px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.95);white-space:pre-line}
     .scene-hud .sh-title{font-family:var(--disp);font-weight:700;font-size:27px;letter-spacing:.02em;color:#f4ecd8;text-shadow:0 2px 12px rgba(0,0,0,.9),0 0 3px rgba(0,0,0,.95);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .scene-hud .sh-time{flex:none;font-family:var(--disp);font-weight:800;font-size:16px;letter-spacing:.03em;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:4px 13px;border-radius:999px;box-shadow:0 3px 12px -4px rgba(0,0,0,.7)}
     /* discreto, no canto inferior esquerdo — some da leitura, aparece no hover */
@@ -297,6 +301,20 @@
     .obj-panel > header .x{margin-left:auto;width:26px;height:26px;border:1px solid var(--line-soft);background:transparent;color:var(--muted);border-radius:7px;cursor:pointer}
     .obj-panel > header .x:hover{color:var(--text);border-color:var(--line)}
     .obj-groups{padding:8px 12px 12px}
+    /* toggles por lado (Azul/Vermelho) nos objetivos */
+    .obj-siderow{display:flex;gap:6px;margin:2px 0 8px}
+    .obj-side{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.02);border:1px solid var(--line-soft);border-radius:8px;padding:6px 8px;cursor:pointer;transition:.13s}
+    .obj-side .sc-dot{width:8px;height:8px;border-radius:50%}
+    .obj-side.blue .sc-dot{background:#6aa8e0}.obj-side.red .sc-dot{background:#e0685a}
+    .obj-side:hover{color:var(--text);border-color:var(--line)}
+    .obj-side.blue.on{color:#0c1420;background:linear-gradient(180deg,#8fc2ef,#6aa8e0);border-color:#8fc2ef}
+    .obj-side.blue.on .sc-dot{background:#0c1420}
+    .obj-side.red.on{color:#2a0f0c;background:linear-gradient(180deg,#ef8c82,#e0685a);border-color:#ef8c82}
+    .obj-side.red.on .sc-dot{background:#2a0f0c}
+    .obj-side .gcount{font-size:9px;opacity:.8}
+    .gh-sides{display:inline-flex;gap:4px;margin-left:auto;margin-right:6px}
+    .gh-sides .obj-side.mini{flex:none;padding:3px 6px;border-radius:6px}
+    .obj-gh .gh-sides + .gcount{margin-left:0}
     .obj-master{display:flex;align-items:center;gap:9px;padding:8px 8px;border:1px solid var(--line-soft);border-radius:8px;cursor:pointer;margin-bottom:4px}
     .obj-master input{accent-color:var(--gold);width:15px;height:15px}
     .obj-master .mtxt{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text)}
@@ -379,10 +397,13 @@
 
     /* mini navegação (fases ocultas) */
     .dock-mini{position:absolute;left:14px;bottom:12px;z-index:9;display:flex;align-items:center;gap:6px;
-      background:rgba(12,15,22,.92);border:1px solid var(--line);border-radius:999px;padding:5px 6px;backdrop-filter:blur(4px);box-shadow:0 14px 34px -20px #000}
+      background:rgba(12,15,22,.92);border:1px solid var(--line);border-radius:999px;padding:5px 6px;backdrop-filter:blur(4px);box-shadow:0 14px 34px -20px #000;
+      opacity:.55;transition:opacity .16s}
+    .dock-mini:hover,.dock-mini:focus-within{opacity:1}
     .dock-mini[hidden]{display:none}
     .dock-mini .dm-nav{width:26px;height:26px;border-radius:50%;border:1px solid var(--line-soft);background:transparent;color:var(--text);cursor:pointer;font-family:var(--disp);font-size:16px;line-height:1}
     .dock-mini .dm-nav:hover{color:var(--gold);border-color:var(--line)}
+    .dock-mini .dm-nav:disabled{opacity:.3;cursor:default;pointer-events:none}
     .dock-mini .dm-name{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.03em;color:var(--text);padding:0 6px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .dock-mini .dm-exp{font-family:var(--disp);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border:0;border-radius:999px;padding:6px 11px;cursor:pointer;margin-left:2px}
     /* toggle discreto do "nosso lado": Azul / Vermelho / — (cicla ao tocar) */
@@ -824,7 +845,11 @@
   <div class="workspace">
     <div class="stage-col">
       <div class="map-panel" id="mapPanel">
-        <div class="scene-hud" id="sceneHud"><span class="sh-title" id="shTitle">—</span><span class="sh-time" id="shTime" hidden></span></div>
+        <div class="scene-hud" id="sceneHud">
+          <div class="sh-row"><span class="sh-time" id="shTime" hidden></span><span class="sh-title" id="shTitle">—</span></div>
+          <span class="sh-cond" id="shCond" hidden></span>
+          <span class="sh-desc" id="shDesc" hidden></span>
+        </div>
         <div id="stageWrap"><div id="stage"></div></div>
 
         <div class="draw-tools" id="drawTools">
@@ -880,6 +905,7 @@
         <button class="pnav" id="nextBtn" aria-label="Próximo cenário">›</button>
       </div>
       <div class="zoom-ctrl" id="zoomCtrl">
+        <button id="fillTgl" title="Expandir o mapa — preenche a largura e corta em cima/embaixo (arraste pra mover)" aria-label="Expandir mapa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M8 12h8M12 8v8"/></svg></button>
         <button id="zoomSave" title="Salvar/limpar o zoom desta cena" aria-label="Salvar zoom da cena"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></button>
         <button id="zoomIn" title="Aproximar" aria-label="Aproximar">+</button>
         <button id="zoomOut" title="Afastar" aria-label="Afastar">−</button>
@@ -931,6 +957,7 @@
           <button class="rbtn" id="varScene" title="Cria uma variação do cenário atual (mesma base, mudança pequena) — fica agrupada embaixo dele"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a4 4 0 0 0 4 4h8"/><circle cx="6" cy="4" r="2"/><path d="M18 9l3 4-3 4"/></svg>Variação</button>
           <button class="rbtn" id="addScene" title="Cria um cenário em branco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Cenário</button>
           <button class="rbtn" id="seedBtn" title="Semeia os cenários das fases padrão da partida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>Fases padrão</button>
+          <button class="rbtn on" id="hudTgl" title="Mostrar / ocultar o título, condição e descrição em cima do mapa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2M9 5v14M7 19h4"/></svg><span data-i18n="hudToggle">Título no mapa</span></button>
         </div>
       </div>
       <div class="dock-rail"><div class="rail-scroll" id="rail"></div></div>
@@ -1039,7 +1066,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=78"></script>
-  <script src="./app.js?v=78"></script>
+  <script src="./config.js?v=79"></script>
+  <script src="./app.js?v=79"></script>
 </body>
 </html>
