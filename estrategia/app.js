@@ -807,7 +807,7 @@
         // árvore mostra em cima (metros ficam embaixo); os demais na base do ícone.
         const hc = hp > 60 ? '#4CC9A4' : hp > 30 ? '#f0c66b' : '#E25B52';
         const fs = Math.max(7, osz * 0.22), bw = Math.max(osz * 0.72, 14), bh = Math.max(2.2, fs * 0.32);
-        const by = o.caminho ? (-iconH / 2 - fs - bh - 3) : (iconH * 0.3);
+        const by = o.caminho ? (-iconH / 2 - fs - bh - 3) : (iconH * 0.4);
         g.add(new Konva.Rect({ x: -bw / 2, y: by, width: bw, height: bh, cornerRadius: bh / 2, fill: 'rgba(6,8,12,.55)', shadowColor: '#000', shadowBlur: 2, shadowOpacity: 0.5, listening: false }));
         g.add(new Konva.Rect({ x: -bw / 2, y: by, width: Math.max(bh, bw * hp / 100), height: bh, cornerRadius: bh / 2, fill: hc, listening: false }));
         const tx = new Konva.Text({ text: hp + '%', fontFamily: 'Barlow, sans-serif', fontStyle: '700', fontSize: fs, fill: hc, y: by + bh + 1.5, shadowColor: '#000', shadowBlur: 3, shadowOpacity: 0.95, listening: false });
@@ -928,14 +928,27 @@
   let focusLive = null, focusHidden = false, autoSpot = false, focusRotDrag = null, focusResizeDrag = null;
   function focusList() { const s = cur(); if (!s) return []; if (s.focus && !Array.isArray(s.focus)) s.focus = [s.focus]; if (!Array.isArray(s.focus)) s.focus = []; return s.focus; }
   function focusCenter(f) { return { cx: (f.x + f.w / 2) * W, cy: (f.y + f.h / 2) * H }; }
-  // alvos do auto-foco: um "furo" de luz em cada elemento posicionado (PTs, players, objetivos/bosses, inimigos)
-  function autoSpotTargets() {
-    const s = cur(); if (!s) return []; const out = [], rm = Math.max(7, R * 0.5), os = Math.max(13, W * 0.025), er = Math.max(9, R * 0.8);
-    (s.tokens || []).forEach(tk => out.push({ x: tk.xf * W, y: tk.yf * H, r: R * 1.25 }));
-    (s.destacados || []).forEach(d => out.push({ x: d.xf * W, y: d.yf * H, r: rm * 1.7 }));
-    const up = s.objetivos || {}; CFG.objetivos.forEach(o => { if (up[o.id]) { const p = objPos(o); out.push({ x: p.x * W, y: p.y * H, r: os * 0.95 }); } });
-    (s.enemies || []).forEach(e => out.push({ x: e.x * W, y: e.y * H, r: er * 1.5 }));
-    return out;
+  // auto-foco: abre um "furo" de luz cobrindo CADA elemento por inteiro. Usa a
+  // caixa real (getClientRect) de cada grupo — assim inclui nome, contadores,
+  // selos e ícones-dentro-de-ícones — e um furo em cápsula ao longo de cada
+  // linha de conexão. Converte a caixa (coords absolutas) p/ coords de camada.
+  function autoSpotHoles() {
+    const s = cur(); if (!s) return; const sc = stage.scaleX() || 1, ox = stage.x(), oy = stage.y();
+    const nodes = [];
+    (s.tokens || []).forEach(tk => { const n = tokenLayer.findOne('.pt-' + tk.pt); if (n) nodes.push(n); });
+    (s.destacados || []).forEach(d => { const n = tokenLayer.findOne('#mem-' + d.id); if (n) nodes.push(n); });
+    (s.enemies || []).forEach(e => { const n = tokenLayer.findOne('#enemy-' + e.id); if (n) nodes.push(n); });
+    const up = s.objetivos || {}; CFG.objetivos.forEach(o => { if (up[o.id]) { const n = objLayer.findOne('.obj-' + o.id); if (n) nodes.push(n); } });
+    const pad = Math.max(5, R * 0.3);
+    nodes.forEach(n => {
+      let r; try { r = n.getClientRect({ skipShadow: true }); } catch (_) { return; }
+      if (!r || !(r.width > 0)) return;
+      const x = (r.x - ox) / sc - pad, y = (r.y - oy) / sc - pad, w = r.width / sc + pad * 2, h = r.height / sc + pad * 2, rad = Math.min(w, h) * 0.42;
+      focusLayer.add(new Konva.Rect({ x: x, y: y, width: w, height: h, cornerRadius: rad, fill: '#000', globalCompositeOperation: 'destination-out', listening: false }));
+      focusLayer.add(new Konva.Rect({ x: x, y: y, width: w, height: h, cornerRadius: rad, stroke: 'rgba(240,198,107,0.24)', strokeWidth: 1, listening: false }));
+    });
+    // linhas de conexão: cápsula de luz seguindo o traço (pontos já em coords de camada)
+    (s.links || []).forEach(l => { const pts = linkPts(l); if (!pts) return; focusLayer.add(new Konva.Line({ points: pts, stroke: '#000', strokeWidth: Math.max(12, R * 0.85), lineCap: 'round', lineJoin: 'round', globalCompositeOperation: 'destination-out', listening: false })); });
   }
   function renderFocus(previewRect) {
     focusLayer.destroyChildren();
@@ -946,11 +959,8 @@
     const auto = autoSpot && !previewRect;
     if (!validManual.length && !auto) { focusLayer.batchDraw(); return; }
     focusLayer.add(new Konva.Rect({ x: 0, y: 0, width: W, height: H, fill: 'rgba(6,8,12,0.66)', listening: false }));
-    // auto-foco: furos circulares em cada elemento
-    if (auto) autoSpotTargets().forEach(tg => {
-      focusLayer.add(new Konva.Circle({ x: tg.x, y: tg.y, radius: tg.r, fill: '#000', globalCompositeOperation: 'destination-out', listening: false }));
-      focusLayer.add(new Konva.Circle({ x: tg.x, y: tg.y, radius: tg.r, stroke: 'rgba(240,198,107,0.30)', strokeWidth: 1.2, listening: false }));
-    });
+    // auto-foco: furos cobrindo cada elemento por inteiro + as linhas de conexão
+    if (auto) autoSpotHoles();
     // furo + contorno de um foco manual (ret ou elipse), centrado na origem do grupo
     const holeInto = (parent, f) => {
       const hw = f.w * W, hh = f.h * H, r = Math.min(hw, hh) * 0.05 + 6, ell = f.shape === 'ellipse';
