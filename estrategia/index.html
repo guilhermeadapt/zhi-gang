@@ -783,6 +783,16 @@
     .guide-sec ol{margin:6px 0 8px;padding-left:20px;display:flex;flex-direction:column;gap:5px;list-style:decimal}
     .guide-sec li{font-size:13px;line-height:1.55;color:#cdd2da}
     .guide-sec ol li::marker{color:var(--gold-2);font-weight:700}
+    /* abas Guia / Novidades */
+    .guide-tabs{display:inline-flex;border:1px solid var(--line-soft);border-radius:9px;overflow:hidden;margin-left:auto;margin-right:10px;flex:none}
+    .guide-tabs .gt-tab{font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:transparent;border:0;padding:7px 12px;cursor:pointer}
+    .guide-tabs .gt-tab.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold))}
+    /* lista de novidades (changelog) */
+    .cl-day{font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
+    .cl-item{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .cl-item .cl-v{flex:none;font-family:var(--disp);font-weight:800;font-size:9.5px;color:var(--gold-2);background:rgba(240,198,107,.1);border:1px solid color-mix(in srgb,var(--gold) 30%,transparent);border-radius:6px;padding:2px 7px;margin-top:1px;min-width:34px;text-align:center}
+    .cl-item .cl-t{font-size:12.5px;line-height:1.45;color:#cdd2da}
+    .cl-load{color:var(--muted);font-size:12.5px;padding:14px 0}
     .guide-sec b{color:var(--text)}
     .guide-sec code{font-family:ui-monospace,monospace;font-size:12px;background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 5px;color:var(--gold-2)}
     .tagimp{font-family:var(--disp);font-weight:700;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:2px 7px;border-radius:999px}
@@ -1038,6 +1048,7 @@
     <div class="guide">
       <div class="guide-head">
         <div><span class="guide-kick">Zhi Guides · Wanted</span><h2 id="guideTitle">Guia do Game Plan</h2></div>
+        <div class="guide-tabs" id="guideTabs"><button type="button" class="gt-tab active" data-gt="guide" data-i18n="tabGuide">Guia</button><button type="button" class="gt-tab" data-gt="news" data-i18n="tabNews">Novidades</button></div>
         <button class="guide-x" id="helpClose" aria-label="Fechar">✕</button>
       </div>
       <div class="guide-body" id="helpBody"></div>
@@ -1075,7 +1086,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=83"></script>
-  <script src="./app.js?v=83"></script>
+  <script src="./config.js?v=84"></script>
+  <script src="./app.js?v=84"></script>
 </body>
 </html>
