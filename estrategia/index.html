@@ -718,7 +718,7 @@
     .pe-hint{font-size:10.5px;color:var(--muted)}
 
     /* toast */
-    .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(8px);z-index:70;opacity:0;
+    .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(8px);z-index:300;opacity:0;
       background:linear-gradient(180deg,var(--ink-2),#0b0e15);border:1px solid var(--line);border-radius:10px;
       padding:10px 16px;font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.05em;color:var(--text);
       box-shadow:0 18px 40px -18px #000;transition:opacity .2s,transform .2s;pointer-events:none}
@@ -842,8 +842,19 @@
     #liveLockOv{position:fixed;inset:0;z-index:200;background:rgba(5,7,12,.08)}
     .lv-name{width:100%;background:#0b0e15;border:1px solid var(--line-soft);border-radius:10px;color:var(--text);font-size:12px;padding:8px 10px;margin-bottom:9px}
     .lv-name:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
-    #liveBar .lb-follow{background:none;border:1px solid var(--line-soft);border-radius:999px;color:var(--muted);cursor:pointer;font-size:13px;padding:4px 9px}
-    #liveBar .lb-follow.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    #liveBar .lb-t{flex:none;display:flex;align-items:center;background:none;border:1px solid var(--line-soft);border-radius:999px;color:var(--muted);cursor:pointer;padding:5px 10px}
+    #liveBar .lb-t svg{width:14px;height:14px}
+    #liveBar .lb-t:hover{color:var(--text);border-color:color-mix(in srgb,var(--gold) 40%,transparent)}
+    #liveBar .lb-t.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    .lvp-opts{border-bottom:1px solid var(--line-soft);padding-bottom:7px;margin-bottom:5px}
+    .lvp-opts .lvp-t{flex:1}
+    .lvp-kick{flex:none}
+    .lvp .lvp-t.lvp-kick:hover{color:#ff9c9c;border-color:rgba(255,120,120,.4)}
+    body.live-on .toast{bottom:64px}
+    /* espectador (sem caneta) vê o Board aberto do editor, mas não mexe */
+    body.live-locked #rosterModal .bd-chip,body.live-locked #rosterModal .rbtn,body.live-locked #rosterModal input,
+    body.live-locked #rosterModal select,body.live-locked #rosterModal textarea,body.live-locked #rosterModal .rdel,
+    body.live-locked #rosterModal .bd-allres,body.live-locked #rosterModal .bd-obs-btn{pointer-events:none;opacity:.8}
     /* sem a caneta: só EDIÇÃO trava — navegar, zoom e trocar de cena seguem livres */
     body.live-locked #drawTools,body.live-locked aside.roster,body.live-locked #objBtn,body.live-locked #rosterBtn,
     body.live-locked #exportBtn,body.live-locked #importBtn,body.live-locked #resetBtn,body.live-locked .plans-wrap,
@@ -927,7 +938,7 @@
           <button class="tbtn" id="resetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span data-i18n="mReset">Resetar…</span></button>
         </div>
       </div>
-      <input type="file" id="importFile" accept="application/json,.json" hidden />
+      <input type="file" id="importFile" accept="application/json,.json,.zhi" hidden />
       <button class="tbtn ico" id="helpBtn" data-i18n-title="tipHelp" title="Guia — como usar a ferramenta" aria-label="Guia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.8 2.5-2.8 2.5"/><path d="M12 17h.01"/></svg></button>
       <button class="lang-btn" id="langBtn" type="button" data-i18n-title="tipLang" title="Idioma — toque pra trocar"><span class="lb-flag" id="lbFlag"></span><span class="lb-code" id="lbCode">PT</span></button>
     </div>
@@ -1145,6 +1156,18 @@
     </div>
   </div>
 
+  <!-- exportar: o quê? -->
+  <div class="modal-backdrop" id="exportModal" hidden>
+    <div class="confirm-box">
+      <h3 class="lv-title" data-i18n="exportTitle">Exportar o quê?</h3>
+      <button class="rbtn lv-full" data-exp="all" data-i18n="scAll">Tudo</button>
+      <button class="rbtn lv-full" data-exp="scenes" data-i18n="scScenes">Só as cenas</button>
+      <button class="rbtn lv-full" data-exp="board" data-i18n="scBoard">Só o board</button>
+      <button class="rbtn lv-full" data-exp="obj" data-i18n="scObj">Objetivos da cena</button>
+      <div class="confirm-actions" style="margin-top:12px"><button class="rbtn" id="exClose" data-i18n="btnCancel">Cancelar</button></div>
+    </div>
+  </div>
+
   <!-- resetar: o quê? -->
   <div class="modal-backdrop" id="resetModal" hidden>
     <div class="confirm-box">
@@ -1181,7 +1204,7 @@
     </div>
   </div>
   <div id="liveLockOv" hidden></div>
-  <div id="liveBar" hidden><span class="lb-dot"></span><span id="liveBarTxt">—</span><button class="lb-follow" id="liveFollowBtn" hidden>🔭</button><button class="rbtn gold" id="livePenBtn">✋</button><button class="lb-x" id="liveBarLeave" data-i18n-title="liveLeaveBtn" title="Sair da sessão">✕</button></div>
+  <div id="liveBar" hidden><span class="lb-dot"></span><span id="liveBarTxt">—</span><button class="lb-t" id="liveFollowBtn" hidden data-i18n-title="liveFollowTitle" title="Seguir o editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg></button><button class="lb-t" id="livePenBtn" data-i18n-title="tipPenBar" title="Caneta — pegar / largar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L8 20l-5 1 1-5L17 3z"/></svg></button><button class="lb-t" id="liveCfgBtn" hidden data-i18n-title="tipCfg" title="Opções da sessão"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg></button><button class="lb-x" id="liveBarLeave" data-i18n-title="liveLeaveBtn" title="Sair da sessão">✕</button></div>
 
   <!-- editor de PT -->
   <div class="modal-backdrop" id="ptModal" hidden>
@@ -1207,7 +1230,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=95"></script>
-  <script src="./app.js?v=95"></script>
+  <script src="./config.js?v=96"></script>
+  <script src="./app.js?v=96"></script>
 </body>
 </html>
