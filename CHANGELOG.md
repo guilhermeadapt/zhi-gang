@@ -92,6 +92,8 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v83 | 23/07/2026 | GamePlan: auto-foco oculta focos manuais e ilumina desenhos/ícones | `6bfd5a1` |
 | v84 | 24/07/2026 | GamePlan: guia (?) completo com todas as funções + aba Novidades (changelog no app) | `53f70cc` |
 | v85 | 24/07/2026 | GamePlan i18n: varredura de textos cravados em PT — agora tudo traduz (ES/EN) | `bf1094d` |
+| v86 | 24/07/2026 | GamePlan v86: minutagem acima do título (menor, centralizada) + plano padrão novo + changelog em dia | `7e95e58` |
+| v87 | 24/07/2026 | GamePlan v87: atalho N (nota) que o guia prometia + apóstrofo em What's new | `c990590` |
 
 
 ## Resumo por área
