@@ -437,7 +437,7 @@
     .note-wrap .nic{color:var(--gold);font-size:13px;padding-top:2px;flex:none}
     #noteInput{flex:1;resize:none;background:transparent;border:0;color:var(--text);font-size:13.5px;line-height:1.42;min-height:44px;max-height:56px}
     #noteInput:focus{outline:none} #noteInput::placeholder{color:#5f6672}
-    .dock-actions{flex:none;display:flex;flex-direction:column;gap:6px;justify-content:center}
+    .dock-actions{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:6px;align-content:center;max-width:330px}
     .rbtn{display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;font-family:var(--disp);font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:8px;padding:7px 11px;transition:.15s}
     .rbtn:hover{border-color:var(--line)}
     .rbtn.gold{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
@@ -806,6 +806,20 @@
     .guide-keys b{display:inline-block;font-family:var(--disp);background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 6px;margin:0 1px;color:var(--gold-2)}
     /* menu de planos salvos */
     .plans-wrap{position:relative;display:inline-flex}
+    .more-menu{min-width:196px}
+    .more-menu .tbtn{display:flex;width:100%;justify-content:flex-start;gap:9px;border:none;background:none;border-radius:8px;padding:8px 10px}
+    .more-menu .tbtn:hover{background:rgba(255,255,255,.06)}
+    .sh-scopes{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+    .sh-scopes button{flex:1 1 auto;font-size:10.5px;padding:6px 8px;background:#10131b;border:1px solid var(--line-soft);border-radius:999px;color:var(--muted);cursor:pointer;white-space:nowrap}
+    .sh-scopes button.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold);font-weight:700}
+    .lvp{display:flex;align-items:center;gap:8px;padding:4px 2px;font-size:12px}
+    .lvp .lvp-n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .lvp .lvp-t{background:#10131b;border:1px solid var(--line-soft);border-radius:999px;color:var(--muted);cursor:pointer;font-size:10.5px;padding:4px 9px}
+    .lvp .lvp-t.on{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold);font-weight:700}
+    body.live-guest #importBtn,body.live-guest #resetBtn,body.live-guest #warsBtn,body.live-guest #warsMenu{pointer-events:none;opacity:.4}
+    body.live-nosave #exportBtn,body.live-nosave #shareBtn{pointer-events:none;opacity:.4}
+    #noteTgl{justify-content:center;padding:6px 8px;font-size:11px}
+    #noteTgl.on{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 40%,transparent)}
     /* guerras: linha da guerra + mini ações */
     .pm-war{display:flex;align-items:center;gap:2px;width:100%}
     .pm-war .pm-item{flex:1 1 auto;min-width:0}
@@ -887,10 +901,6 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
         <span data-i18n="roster">Roster</span>
       </button>
-      <button class="tbtn ico" id="exportBtn" title="Exportar o plano como JSON" aria-label="Exportar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg></button>
-      <button class="tbtn ico" id="importBtn" title="Importar um plano de JSON" aria-label="Importar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M5 21h14"/></svg></button>
-      <input type="file" id="importFile" accept="application/json,.json" hidden />
-      <button class="tbtn ico" id="resetBtn" title="Resetar — começar um plano do zero" aria-label="Resetar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
       <div class="plans-wrap">
         <button class="tbtn" id="warsBtn" title="Guerras — planos salvos neste navegador">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4c3-1.5 6 1.5 9 0s5 0 5 0v9s-2-1.5-5 0-6-1.5-9 0"/></svg>
@@ -906,12 +916,18 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
         <span data-i18n="share">Compartilhar</span>
       </button>
+      <div class="plans-wrap">
+        <button class="tbtn ico" id="moreBtn" title="Mais opções" aria-label="Mais opções"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
+        <div class="plans-menu more-menu" id="moreMenu" hidden>
+          <button class="tbtn" id="presentBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20v12H2z"/><path d="M8 20h8M12 16v4"/></svg><span data-i18n="present">Apresentar</span></button>
+          <button class="tbtn" id="exportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg><span data-i18n="mExport">Exportar JSON</span></button>
+          <button class="tbtn" id="importBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M5 21h14"/></svg><span data-i18n="mImport">Importar JSON</span></button>
+          <button class="tbtn" id="resetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span data-i18n="mReset">Resetar…</span></button>
+        </div>
+      </div>
+      <input type="file" id="importFile" accept="application/json,.json" hidden />
       <button class="tbtn ico" id="helpBtn" title="Guia — como usar a ferramenta" aria-label="Guia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.8 2.5-2.8 2.5"/><path d="M12 17h.01"/></svg></button>
       <button class="lang-btn" id="langBtn" type="button" title="Idioma — toque pra trocar"><span class="lb-flag" id="lbFlag"></span><span class="lb-code" id="lbCode">PT</span></button>
-      <button class="tbtn primary" id="presentBtn" title="Apresentar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20v12H2z"/><path d="M8 20h8M12 16v4"/></svg>
-        <span data-i18n="present">Apresentar</span>
-      </button>
     </div>
     <button class="tbtn primary" id="exitBtn" style="display:none" title="Sair"><span data-i18n="exit">Sair</span> ✕</button>
   </header>
@@ -1022,8 +1038,9 @@
           <input id="nameInput" class="f-name" placeholder="Nome da fase" data-i18n-ph="phName" />
           <input id="timeInput" class="f-time" maxlength="8" placeholder="⏱ 30m" title="Tempo de jogo deste cenário (ex.: 30m, 25m). Aparece na régua de fases e na apresentação." />
           <input id="condInput" class="f-cond" placeholder="condição (opcional)" data-i18n-ph="phCond" />
+          <button class="rbtn" id="noteTgl" title="Nota do estrategista desta cena (aparece no topo do mapa)">✎ <span data-i18n="noteBtn">Nota</span></button>
         </div>
-        <div class="note-wrap">
+        <div class="note-wrap" id="noteWrap" hidden>
           <span class="nic" aria-hidden="true">✎</span>
           <textarea id="noteInput" data-i18n-ph="phDesc" placeholder="Nota do estrategista neste cenário. Ex: PT1/PT2 vão de torre; PT3 segura a árvore; PT4 abre corredor…"></textarea>
         </div>
@@ -1115,8 +1132,25 @@
   <div class="modal-backdrop" id="shareModal" hidden>
     <div class="confirm-box">
       <p style="margin-bottom:10px" id="shareTitleP" data-i18n="shareTitle">Link do plano — copie e mande no Discord:</p>
+      <div class="sh-scopes" id="shareScopes">
+        <button data-scope="all" class="on" data-i18n="scAll">Tudo</button>
+        <button data-scope="scenes" data-i18n="scScenes">Só as cenas</button>
+        <button data-scope="board" data-i18n="scBoard">Só o board</button>
+        <button data-scope="obj" data-i18n="scObj">Objetivos da cena</button>
+      </div>
       <input id="shareUrl" class="pe-desc" readonly style="width:100%;font-size:11px;font-family:ui-monospace,monospace" />
       <div class="confirm-actions" style="margin-top:14px"><button class="rbtn" id="shareClose" data-i18n="close">Fechar</button><button class="rbtn gold" id="shareCopy" data-i18n="copy">Copiar</button></div>
+    </div>
+  </div>
+
+  <!-- resetar: o quê? -->
+  <div class="modal-backdrop" id="resetModal" hidden>
+    <div class="confirm-box">
+      <h3 class="lv-title" data-i18n="resetTitle">Resetar o quê?</h3>
+      <button class="rbtn lv-full" id="rsObj" data-i18n="resetObjBtn">Só os objetivos (todas as cenas)</button>
+      <button class="rbtn lv-full" id="rsBoard" data-i18n="resetBoardBtn">Só o board (PTs e players do mapa)</button>
+      <button class="rbtn lv-full" id="rsAll" style="color:#ff9c9c" data-i18n="resetAllBtn">Tudo — plano do zero</button>
+      <div class="confirm-actions" style="margin-top:12px"><button class="rbtn" id="rsClose" data-i18n="btnCancel">Cancelar</button></div>
     </div>
   </div>
 
@@ -1138,6 +1172,7 @@
         <div class="lv-info" id="liveInfo">—</div>
         <p class="lv-hint" data-i18n="liveShareHint">Mande o link (ou só o código) pros outros comandantes:</p>
         <input id="liveShareUrl" class="pe-desc" readonly style="width:100%;font-size:11px;font-family:ui-monospace,monospace" />
+        <div id="livePerms" hidden><p class="lv-hint" style="margin:10px 0 5px" data-i18n="livePermsT">Permissões (quem pode salvar cópia da guerra):</p><div id="livePermList"></div></div>
         <div class="confirm-actions" style="margin-top:12px"><button class="rbtn" id="liveLeaveBtn" data-i18n="liveLeaveBtn">Sair da sessão</button><button class="rbtn gold" id="liveCopyBtn" data-i18n="copy">Copiar</button></div>
       </div>
       <div class="confirm-actions" style="margin-top:12px"><button class="rbtn" id="liveCloseBtn" data-i18n="close">Fechar</button></div>
@@ -1170,7 +1205,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=93"></script>
-  <script src="./app.js?v=93"></script>
+  <script src="./config.js?v=94"></script>
+  <script src="./app.js?v=94"></script>
 </body>
 </html>
