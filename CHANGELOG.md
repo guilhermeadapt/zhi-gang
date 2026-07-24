@@ -102,6 +102,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v93 | 24/07/2026 | GamePlan v93: ao vivo — modo Seguir (cena+zoom), lock leve e nome dos comandantes | `7ebb673` |
 | v94 | 24/07/2026 | GamePlan v94: header repensado (hub ⋯), share por escopo, reset seletivo, permissão de cópia no ao vivo, dock compacto | `923b3c7` |
 | v95 | 24/07/2026 | GamePlan v95: revisão de HUDs/posicionamento + tradução completa dos tooltips | `f4ee044` |
+| v96 | 24/07/2026 | GamePlan v96: ao vivo repaginado — board ao vivo, painel do host, canetas múltiplas, barra compacta; export/import por escopo | `36c9f5c` |
 
 
 ## Resumo por área
