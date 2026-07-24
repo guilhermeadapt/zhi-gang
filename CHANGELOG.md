@@ -98,6 +98,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v89 | 24/07/2026 | GamePlan v89: botão de sync do raid-helper discreto (SVG, sem emoji estourado) | `83cbc59` |
 | v90 | 24/07/2026 | GamePlan v90: Guerras (multi-planos locais) + sessão de comando ao vivo (P2P) | `1436349` |
 | v91 | 24/07/2026 | GamePlan v91: barra da sessão ao vivo não vaza mais fora da sessão + vai pro rodapé | `11147d4` |
+| v92 | 24/07/2026 | GamePlan v92: ao vivo com feedback de conexão, caneta pegar/largar, contador 👥 | `51aad1c` |
 
 
 ## Resumo por área
