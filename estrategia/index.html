@@ -1120,6 +1120,10 @@
         <button class="rbtn gold lv-full" id="liveHostBtn" data-i18n="liveHostBtn">📡 Criar sessão (eu comando)</button>
         <div class="lv-row"><input id="liveCodeIn" maxlength="6" autocapitalize="characters" data-i18n-ph="liveJoinPh" placeholder="código de 6 letras"><button class="rbtn" id="liveJoinBtn" data-i18n="liveJoinBtn">Entrar</button></div>
       </div>
+      <div id="liveConn" hidden>
+        <p class="lv-hint" data-i18n="liveConnecting">⏳ Conectando… pode levar alguns segundos.</p>
+        <button class="rbtn lv-full" id="liveCancelBtn" data-i18n="btnCancel">Cancelar</button>
+      </div>
       <div id="liveStatus" hidden>
         <div class="lv-info" id="liveInfo">—</div>
         <p class="lv-hint" data-i18n="liveShareHint">Mande o link (ou só o código) pros outros comandantes:</p>
@@ -1156,7 +1160,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=91"></script>
-  <script src="./app.js?v=91"></script>
+  <script src="./config.js?v=92"></script>
+  <script src="./app.js?v=92"></script>
 </body>
 </html>
