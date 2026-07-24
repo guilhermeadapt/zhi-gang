@@ -934,7 +934,7 @@
         <button class="dm-nav" id="miniPrev" aria-label="Anterior">‹</button>
         <span class="dm-name" id="miniName">—</span>
         <button class="dm-nav" id="miniNext" aria-label="Próximo">›</button>
-        <button class="dm-exp" id="dockExpand" title="Mostrar as fases">▴ Fases</button>
+        <button class="dm-exp" id="dockExpand" title="Mostrar as fases">▴ <span data-i18n="phases">Fases</span></button>
         <button class="dm-side" id="sideTgl" type="button" title="Nosso lado — toque pra alternar"><span class="sc-dot" id="sideTglDot"></span><span id="sideTglLbl">—</span></button>
       </div>
       <div class="mobile-note"><b>Modo apresentação.</b> A edição é feita no desktop.</div>
@@ -960,22 +960,22 @@
     </aside>
 
     <section class="dock">
-      <div class="dock-head"><span class="dh-title">Fases &amp; cenários</span><button class="dock-collapse" id="dockCollapse" title="Fechar">✕ Fechar</button></div>
+      <div class="dock-head"><span class="dh-title" data-i18n="dockTitle">Fases &amp; cenários</span><button class="dock-collapse" id="dockCollapse" title="Fechar">✕ <span data-i18n="close">Fechar</span></button></div>
       <div class="dock-top">
         <div class="scene-edit">
-          <input id="nameInput" class="f-name" placeholder="Nome da fase" />
+          <input id="nameInput" class="f-name" placeholder="Nome da fase" data-i18n-ph="phName" />
           <input id="timeInput" class="f-time" maxlength="8" placeholder="⏱ 30m" title="Tempo de jogo deste cenário (ex.: 30m, 25m). Aparece na régua de fases e na apresentação." />
-          <input id="condInput" class="f-cond" placeholder="condição (opcional)" />
+          <input id="condInput" class="f-cond" placeholder="condição (opcional)" data-i18n-ph="phCond" />
         </div>
         <div class="note-wrap">
           <span class="nic" aria-hidden="true">✎</span>
-          <textarea id="noteInput" placeholder="Nota do estrategista neste cenário. Ex: PT1/PT2 vão de torre; PT3 segura a árvore; PT4 abre corredor…"></textarea>
+          <textarea id="noteInput" data-i18n-ph="phDesc" placeholder="Nota do estrategista neste cenário. Ex: PT1/PT2 vão de torre; PT3 segura a árvore; PT4 abre corredor…"></textarea>
         </div>
         <div class="dock-actions">
-          <button class="rbtn gold" id="dupScene" title="Cria um novo cenário já com PTs, desenhos e objetivos como estão agora"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Duplicar</button>
-          <button class="rbtn" id="varScene" title="Cria uma variação do cenário atual (mesma base, mudança pequena) — fica agrupada embaixo dele"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a4 4 0 0 0 4 4h8"/><circle cx="6" cy="4" r="2"/><path d="M18 9l3 4-3 4"/></svg>Variação</button>
-          <button class="rbtn" id="addScene" title="Cria um cenário em branco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Cenário</button>
-          <button class="rbtn" id="seedBtn" title="Semeia os cenários das fases padrão da partida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg>Fases padrão</button>
+          <button class="rbtn gold" id="dupScene" title="Cria um novo cenário já com PTs, desenhos e objetivos como estão agora"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span data-i18n="dupBtn">Duplicar</span></button>
+          <button class="rbtn" id="varScene" title="Cria uma variação do cenário atual (mesma base, mudança pequena) — fica agrupada embaixo dele"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a4 4 0 0 0 4 4h8"/><circle cx="6" cy="4" r="2"/><path d="M18 9l3 4-3 4"/></svg><span data-i18n="variation">Variação</span></button>
+          <button class="rbtn" id="addScene" title="Cria um cenário em branco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="sceneBtn">Cenário</span></button>
+          <button class="rbtn" id="seedBtn" title="Semeia os cenários das fases padrão da partida"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/></svg><span data-i18n="seedLbl">Fases padrão</span></button>
           <button class="rbtn on" id="hudTgl" title="Mostrar / ocultar o título, condição e descrição em cima do mapa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2M9 5v14M7 19h4"/></svg><span data-i18n="hudToggle">Título no mapa</span></button>
         </div>
       </div>
@@ -994,11 +994,11 @@
       <div class="modal-body">
         <div class="paste-col">
           <label for="rosterPaste" data-i18n="discordMontage">Montagem do Discord</label>
-          <textarea id="rosterPaste" placeholder='Cole aqui o JSON do raid-helper (o bloco { "date":..., "signUps":[...] }) OU texto simples:&#10;PT1 — Fulano (Tank), Ciclano (DPS)&#10;PT2 — …&#10;Reservas — Sicrano (DPS)'></textarea>
+          <textarea id="rosterPaste" data-i18n-ph="pastePh" placeholder='Cole aqui o JSON do raid-helper (o bloco { "date":..., "signUps":[...] }) OU texto simples:&#10;PT1 — Fulano (Tank), Ciclano (DPS)&#10;PT2 — …&#10;Reservas — Sicrano (DPS)'></textarea>
           <button class="rbtn gold" id="parseBtn" style="justify-content:center" data-i18n="process">Processar (substitui)</button>
           <button class="rbtn" id="mergeBtn" style="justify-content:center" data-i18n="merge" data-i18n-title="mergeHint" title="Mantém quem já está montado, adiciona os novos como reserva e tira quem não está no novo JSON.">Mesclar com atual</button>
           <div class="parse-msg" id="parseMsg"></div>
-          <p class="hint">Detecta o JSON do raid-helper (Ranged/Melee → DPS; Absence → ausente; Bench → reserva). Depois ajuste na grade e distribua nas PTs.</p>
+          <p class="hint" data-i18n="pasteHint">Detecta o JSON do raid-helper (Ranged/Melee → DPS; Absence → ausente; Bench → reserva). Depois ajuste na grade e distribua nas PTs.</p>
           <button class="rbtn" id="autoBtn" style="justify-content:center" title="Distribui os escalados nas PTs equilibrando funções" data-i18n="autoMount">⚙ Auto-montar PTs</button>
         </div>
         <div class="grid-col">
@@ -1036,8 +1036,8 @@
     <div class="confirm-box">
       <p id="confirmMsg">Tem certeza?</p>
       <div class="confirm-actions">
-        <button class="rbtn" id="confirmNo">Cancelar</button>
-        <button class="rbtn gold" id="confirmYes">Confirmar</button>
+        <button class="rbtn" id="confirmNo" data-i18n="btnCancel">Cancelar</button>
+        <button class="rbtn gold" id="confirmYes" data-i18n="btnConfirm">Confirmar</button>
       </div>
     </div>
   </div>
@@ -1086,7 +1086,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=84"></script>
-  <script src="./app.js?v=84"></script>
+  <script src="./config.js?v=85"></script>
+  <script src="./app.js?v=85"></script>
 </body>
 </html>
