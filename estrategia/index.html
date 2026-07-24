@@ -745,7 +745,7 @@
       .lang-sel button{padding:6px 7px;font-size:10px}
       .present-bar{display:none}
       .top-actions{display:flex;gap:6px}
-      .top-actions #seedBtn,.top-actions #exportBtn,.top-actions #importBtn,.top-actions #resetBtn,.top-actions #shareBtn,.top-actions #fasesBtn{display:none}
+      .top-actions #seedBtn,.top-actions #exportBtn,.top-actions #importBtn,.top-actions #resetBtn,.top-actions #shareBtn,.top-actions #fasesBtn,.top-actions #liveBtn,.top-actions .plans-wrap{display:none}
       .top-actions .tbtn > span[data-i18n]{display:none}
       .top-actions .tbtn{padding:7px 9px}
       /* ferramentas de desenho: barra flutuante à esquerda, compacta (com rótulo menor) */
@@ -806,6 +806,34 @@
     .guide-keys b{display:inline-block;font-family:var(--disp);background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 6px;margin:0 1px;color:var(--gold-2)}
     /* menu de planos salvos */
     .plans-wrap{position:relative;display:inline-flex}
+    /* guerras: linha da guerra + mini ações */
+    .pm-war{display:flex;align-items:center;gap:2px;width:100%}
+    .pm-war .pm-item{flex:1 1 auto;min-width:0}
+    .pm-war.on .pm-item .pm-name{color:var(--gold)}
+    .pm-mini{flex:none;width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:none;border:1px solid transparent;border-radius:7px;color:var(--muted);cursor:pointer;font-size:11px}
+    .pm-mini:hover{color:var(--text);border-color:var(--line-soft);background:rgba(255,255,255,.05)}
+    .pm-acts{display:flex;gap:5px;padding:4px 6px 7px}
+    .pm-acts button{flex:1;font-size:10.5px;padding:6px 4px;background:#10131b;border:1px solid var(--line-soft);border-radius:8px;color:var(--muted);cursor:pointer}
+    .pm-acts button:hover{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 40%,transparent)}
+    /* sessão ao vivo */
+    .live-box{max-width:400px}
+    .lv-title{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.04em;color:var(--gold-2);margin-bottom:10px}
+    .lv-hint{font-size:11.5px;color:var(--muted);line-height:1.5;margin:0 0 10px}
+    .lv-full{width:100%;justify-content:center;margin-bottom:9px}
+    .lv-row{display:flex;gap:6px}
+    .lv-row input{flex:1;min-width:0;background:#0b0e15;border:1px solid var(--line-soft);border-radius:10px;color:var(--text);font-size:13px;letter-spacing:.2em;text-transform:uppercase;text-align:center;padding:8px 10px;font-family:ui-monospace,monospace}
+    .lv-row input:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
+    .lv-info{font-family:var(--disp);font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px}
+    #liveLockOv{position:fixed;inset:0;z-index:200;background:rgba(5,7,12,.08)}
+    #liveBar{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:210;display:flex;align-items:center;gap:9px;
+      background:rgba(13,16,24,.96);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:999px;
+      padding:6px 9px 6px 13px;box-shadow:0 8px 30px rgba(0,0,0,.55);font-size:12px;color:var(--text)}
+    #liveBar .lb-dot{width:7px;height:7px;border-radius:50%;background:#41d97a;box-shadow:0 0 8px #41d97a;animation:lbp 1.6s infinite}
+    @keyframes lbp{50%{opacity:.35}}
+    #liveBar .rbtn{padding:5px 10px;font-size:11px}
+    #liveBar .lb-x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:3px 5px}
+    #liveBar .lb-x:hover{color:var(--text)}
+    body.live-locked #liveBar{border-color:color-mix(in srgb,#ff9c6b 45%,transparent)}
     .plans-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:60;min-width:230px;max-width:300px;
       background:rgba(14,17,24,.98);border:1px solid var(--line);border-radius:12px;padding:6px;
       box-shadow:0 24px 60px -20px #000;backdrop-filter:blur(8px)}
@@ -853,6 +881,17 @@
       <button class="tbtn ico" id="importBtn" title="Importar um plano de JSON" aria-label="Importar JSON"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M5 21h14"/></svg></button>
       <input type="file" id="importFile" accept="application/json,.json" hidden />
       <button class="tbtn ico" id="resetBtn" title="Resetar — começar um plano do zero" aria-label="Resetar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+      <div class="plans-wrap">
+        <button class="tbtn" id="warsBtn" title="Guerras — planos salvos neste navegador">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4c3-1.5 6 1.5 9 0s5 0 5 0v9s-2-1.5-5 0-6-1.5-9 0"/></svg>
+          <span id="warsLbl" data-i18n="wars">Guerras</span>
+        </button>
+        <div class="plans-menu" id="warsMenu" hidden></div>
+      </div>
+      <button class="tbtn" id="liveBtn" title="Sessão de comando ao vivo (P2P)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.6"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8"/></svg>
+        <span data-i18n="live">Ao vivo</span>
+      </button>
       <button class="tbtn" id="shareBtn" title="Compartilhar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
         <span data-i18n="share">Compartilhar</span>
@@ -1071,6 +1110,27 @@
     </div>
   </div>
 
+  <!-- sessão de comando ao vivo -->
+  <div class="modal-backdrop" id="liveModal" hidden>
+    <div class="confirm-box live-box">
+      <h3 class="lv-title" data-i18n="liveTitle">Sessão de comando (ao vivo)</h3>
+      <div id="liveHome">
+        <p class="lv-hint" data-i18n="liveHint">Comandantes editam o mesmo plano em tempo real, direto entre navegadores (P2P). Um segura a caneta por vez; os outros acompanham e podem pedi-la.</p>
+        <button class="rbtn gold lv-full" id="liveHostBtn" data-i18n="liveHostBtn">📡 Criar sessão (eu comando)</button>
+        <div class="lv-row"><input id="liveCodeIn" maxlength="6" autocapitalize="characters" data-i18n-ph="liveJoinPh" placeholder="código de 6 letras"><button class="rbtn" id="liveJoinBtn" data-i18n="liveJoinBtn">Entrar</button></div>
+      </div>
+      <div id="liveStatus" hidden>
+        <div class="lv-info" id="liveInfo">—</div>
+        <p class="lv-hint" data-i18n="liveShareHint">Mande o link (ou só o código) pros outros comandantes:</p>
+        <input id="liveShareUrl" class="pe-desc" readonly style="width:100%;font-size:11px;font-family:ui-monospace,monospace" />
+        <div class="confirm-actions" style="margin-top:12px"><button class="rbtn" id="liveLeaveBtn" data-i18n="liveLeaveBtn">Sair da sessão</button><button class="rbtn gold" id="liveCopyBtn" data-i18n="copy">Copiar</button></div>
+      </div>
+      <div class="confirm-actions" style="margin-top:12px"><button class="rbtn" id="liveCloseBtn" data-i18n="close">Fechar</button></div>
+    </div>
+  </div>
+  <div id="liveLockOv" hidden></div>
+  <div id="liveBar" hidden><span class="lb-dot"></span><span id="liveBarTxt">—</span><button class="rbtn gold" id="livePenBtn" data-i18n="livePenBtn">✋ Pedir a caneta</button><button class="lb-x" id="liveBarLeave" title="Sair da sessão">✕</button></div>
+
   <!-- editor de PT -->
   <div class="modal-backdrop" id="ptModal" hidden>
     <div class="pt-editor">
@@ -1094,7 +1154,8 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="../assets/vendor/konva.min.js"></script>
-  <script src="./config.js?v=89"></script>
-  <script src="./app.js?v=89"></script>
+  <script src="../assets/vendor/peerjs.min.js"></script>
+  <script src="./config.js?v=90"></script>
+  <script src="./app.js?v=90"></script>
 </body>
 </html>
