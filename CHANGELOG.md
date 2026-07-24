@@ -95,6 +95,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v86 | 24/07/2026 | GamePlan v86: minutagem acima do título (menor, centralizada) + plano padrão novo + changelog em dia | `7e95e58` |
 | v87 | 24/07/2026 | GamePlan v87: atalho N (nota) que o guia prometia + apóstrofo em What's new | `c990590` |
 | v88 | 24/07/2026 | GamePlan v88: integração raid-helper — link do evento sincroniza o roster sozinho | `2940acf` |
+| v89 | 24/07/2026 | GamePlan v89: botão de sync do raid-helper discreto (SVG, sem emoji estourado) | `83cbc59` |
 
 
 ## Resumo por área
