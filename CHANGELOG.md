@@ -90,6 +90,9 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v80 | 23/07/2026 | GamePlan: expandir por cena, minutagem discreta, lados por posição (jungle/boss/outpost) | `1bda982` |
 | v82 | 23/07/2026 | GamePlan Board: ferramentas em 1 linha com ícones melhores + abre direto no Board | `f77e7e6` |
 | v83 | 23/07/2026 | GamePlan: auto-foco oculta focos manuais e ilumina desenhos/ícones | `6bfd5a1` |
+| v84 | 24/07/2026 | GamePlan: guia (?) completo com todas as funções + aba Novidades (changelog no app) | `53f70cc` |
+| v85 | 24/07/2026 | GamePlan i18n: varredura de textos cravados em PT — agora tudo traduz (ES/EN) | `bf1094d` |
+
 
 ## Resumo por área
 
