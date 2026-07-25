@@ -354,9 +354,11 @@
       const chip = document.createElement('div'); chip.className = 'pl-chip' + (placed ? ' placed' : '') + (canDrag ? '' : ' nodrag'); chip.style.setProperty('--rc', roleColor(p.funcao));
       if (canDrag) chip.setAttribute('draggable', 'true');
       const where = p.pt ? p.pt : (p.reserva ? t('reservesLbl') : '—');
-      const rep = p.replaceOf ? '<span class="pl-rep" title="' + esc(t('swapHint') + ' ' + p.replaceOf) + '">⇄ ' + esc(p.replaceOf) + '</span>' : '';
+      const repBy2 = !p.replaceOf ? state.roster.find(x => x.replaceOf === p.nome && x.nome !== p.nome) : null;
+      const rep = p.replaceOf ? '<span class="pl-rep" data-swap="' + esc(p.nome) + '" title="' + esc(t('swapHint') + ' ' + p.replaceOf) + '">⇄ ' + esc(p.replaceOf) + '</span>'
+        : (repBy2 ? '<span class="pl-rep repby" data-swap="' + esc(repBy2.nome) + '" title="' + esc(t('swapHint') + ' ' + repBy2.nome) + '">⇄ ' + esc(repBy2.nome) + '</span>' : '');
       chip.innerHTML = classIcoHTML(p.funcao) + '<span class="pl-nm">' + esc(p.nome) + rep + '</span><span class="pl-pt">' + esc(where) + '</span><span class="pl-role">' + (placed ? t('onMap') : p.funcao) + '</span>';
-      { const rb = chip.querySelector('.pl-rep'); if (rb) rb.addEventListener('click', ev => { ev.stopPropagation(); swapReplace(p.nome); }); }
+      { const rb = chip.querySelector('.pl-rep'); if (rb) rb.addEventListener('click', ev => { ev.stopPropagation(); swapReplace(rb.dataset.swap); }); }
       if (canDrag) chip.addEventListener('dragstart', ev => { if (state.present) { ev.preventDefault(); return; } ev.dataTransfer.setData('text/member', JSON.stringify({ pt: p.pt, nome: p.nome, funcao: p.funcao })); ev.dataTransfer.effectAllowed = 'copy'; });
       chip.addEventListener('click', () => { if (isMobile() && p.pt) { const s = stage.scaleX() || 1; detachMember(p.pt, p.nome, p.funcao, clamp01(((VW / 2) - stage.x()) / s / W), clamp01(((VH / 2) - stage.y()) / s / H)); document.body.classList.remove('mob-roster'); toast(p.nome + ' ✓'); return; } if (state.present) return; const d = (cur() && cur().destacados || []).find(x => x.pt === p.pt && x.nome === p.nome); if (d) openMemberMenu(d, d.xf * W, d.yf * H); else toast(t('sbNotOnMap')); });
       ptList.appendChild(chip);
@@ -720,12 +722,15 @@
     // se alguém é replace deste titular, oferece a troca direto daqui
     const repRes = state.roster.find(x => x.replaceOf === d.nome && x.nome !== d.nome);
     if (repRes) h += '<button class="im-namebtn im-swap" data-act="swap">⇄ ' + t('swapWith') + ' ' + esc(repRes.nome) + '</button>';
+    const meRes = !repRes ? state.roster.find(x => x.nome === d.nome && x.replaceOf) : null;
+    if (meRes) h += '<button class="im-namebtn im-swap" data-act="swapme">⇄ ' + t('swapWith') + ' ' + esc(meRes.replaceOf) + '</button>';
     h += '<div class="im-actions"><button class="im-link" data-act="link">' + t('menuLink') + '</button><button class="im-del" data-act="remove">' + t('menuRemove') + '</button></div>';
     iconMenu.innerHTML = h; iconMenu.hidden = false; placeIconMenu(x, y);
     iconMenu.querySelector('[data-act="name"]').addEventListener('click', () => { pushUndo(); d.hideName = !d.hideName; closeIconMenu(); renderTokens(); saveProject(); });
     iconMenu.querySelector('[data-act="lock"]').addEventListener('click', () => { pushUndo(); d.locked = !d.locked; closeIconMenu(); renderTokens(); saveProject(); });
     iconMenu.querySelector('[data-act="chicken"]').addEventListener('click', () => { pushUndo(); if (d.chicken) delete d.chicken; else d.chicken = true; closeIconMenu(); renderTokens(); saveProject(); });
     { const sw = iconMenu.querySelector('[data-act="swap"]'); if (sw && repRes) sw.addEventListener('click', () => { closeIconMenu(); swapReplace(repRes.nome); }); }
+    { const sm = iconMenu.querySelector('[data-act="swapme"]'); if (sm && meRes) sm.addEventListener('click', () => { closeIconMenu(); swapReplace(meRes.nome); }); }
     { const eb = iconMenu.querySelector('[data-act="edit"]'); if (eb) eb.addEventListener('click', () => { closeIconMenu(); openRoster(); }); }
     const setHp = v => { v = Math.max(0, Math.min(100, Math.round(v / 5) * 5)); if (v === 100) delete d.hp; else d.hp = v; iconMenu.querySelector('.im-range').value = v; iconMenu.querySelector('.im-hpv').textContent = v + '%'; iconMenu.querySelectorAll('.im-quick button').forEach(b => b.classList.toggle('on', +b.dataset.hp === v)); renderTokens(); saveProject(); };
     let pushed = false;
