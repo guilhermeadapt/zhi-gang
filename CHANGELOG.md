@@ -105,6 +105,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v96 | 24/07/2026 | GamePlan v96: ao vivo repaginado — board ao vivo, painel do host, canetas múltiplas, barra compacta; export/import por escopo | `36c9f5c` |
 | v97 | 25/07/2026 | GamePlan v97: menu do player pelo sidebar, alças do foco só ao selecionar, importar por escopo, timer do HUD ajustado | `8091b7a` |
 | v98 | 25/07/2026 | GamePlan v98: ícones carimbados voltavam mortos depois de sessão ao vivo | `836fc9a` |
+| v99 | 25/07/2026 | GamePlan v99: board pro Discord com @menções + scroll das listas do board | `0a22e84` |
 
 
 ## Resumo por área
