@@ -1844,7 +1844,7 @@
     });
     p.on('error', e => { toast(t('liveErr') + ' (' + (e && e.type || '?') + ')'); liveTeardown(); fillLiveModal(); });
   }
-  function liveTeardown() { LIVE.on = false; clearTimeout(LIVE.txT); clearTimeout(LIVE.connT); clearInterval(LIVE.viewT); LIVE.count = 0; LIVE.people = []; LIVE.follow = true; LIVE.canSave = false; try { setTool(state.tool); } catch (e) {} LIVE.conns.forEach(c => { try { c.close(); } catch (e) {} }); LIVE.conns = []; try { if (LIVE.peer) LIVE.peer.destroy(); } catch (e) {} LIVE.peer = null; LIVE.host = false; LIVE.pens = []; LIVE.penLock = false; LIVE.multi = false; LIVE.code = ''; updateLiveUI(); }
+  function liveTeardown() { LIVE.on = false; clearTimeout(LIVE.txT); clearTimeout(LIVE.connT); clearInterval(LIVE.viewT); LIVE.count = 0; LIVE.people = []; LIVE.follow = true; LIVE.canSave = false; try { liveLayersOn(); setTool(state.tool); } catch (e) {} LIVE.conns.forEach(c => { try { c.close(); } catch (e) {} }); LIVE.conns = []; try { if (LIVE.peer) LIVE.peer.destroy(); } catch (e) {} LIVE.peer = null; LIVE.host = false; LIVE.pens = []; LIVE.penLock = false; LIVE.multi = false; LIVE.code = ''; updateLiveUI(); }
   async function liveLeave(hostGone) {
     const wasGuest = LIVE.on && !LIVE.host;
     const canSave = !!LIVE.canSave;
@@ -1861,10 +1861,11 @@
     else { r.list = r.list.filter(x => x.id !== w.id); try { localStorage.removeItem(warSlotKey(w.id)); } catch (e) {} if (!r.list.length) r.list = [{ id: 'w1', nome: 'Guerra 1', ts: Date.now() }]; r.cur = r.list[0].id; warsSave(r); applyImported(loadWarSlot(r.cur)); }
     updateWarsBtn();
   }
+  function liveLayersOn() { [tokenLayer, objLayer, noteLayer, drawLayer, markLayer, focusLayer].forEach(l => l.listening(true)); }
   function liveApplyLock() {
     if (!LIVE.on) return;
     if (!livePenMine()) { if (state.tool !== 'select') setTool('select'); [tokenLayer, objLayer, noteLayer, drawLayer, markLayer, focusLayer].forEach(l => l.listening(false)); stage.batchDraw(); }
-    else setTool(state.tool);
+    else { liveLayersOn(); setTool(state.tool); stage.batchDraw(); }
   }
   function placeDockMini() {
     const dm = $('dockMini'), dt = $('drawTools'); if (!dm || !dt || !dm.offsetParent || !dt.offsetParent) return;
