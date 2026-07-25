@@ -204,6 +204,16 @@ const WWM = {
   ],
 
   /* --- persistência (localStorage) --------------------------------------- */
+  // fixos do ⚙ Preencher: se o player está disponível, cai direto nessa PT
+  // (casamento de nome tolerante — apelido/acentos/espaços não atrapalham)
+  fixosPadrao: {
+    PT1: ['DGDIN', 'Bai-zhi', 'Sasaki7'],
+    PT2: ['Atroz', 'Logic', 'Alona', 'Lovely', 'Serenna'],
+    PT3: ['Destyner', 'Gimmy', 'xChong', 'Gd-zhi', 'Loe9'],
+    PT4: ['Ly', 'KattyPerua', 'Macedo', 'Kyudery'],
+    PT5: ['Sentiary', 'JFAguilarHN', 'Soliac'],
+    PT6: ['Gorakam', 'Yixian', 'estressad', 'PandaCaquino']
+  },
   projectKey: 'zhi_estrategia_projeto_v1',   // projeto completo (cenários)
   storageKey: 'zhi_estrategia_rascunho_v1',  // rascunho antigo (etapa 1) — migrado
 };

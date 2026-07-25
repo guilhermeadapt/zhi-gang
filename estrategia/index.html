@@ -807,6 +807,8 @@
     .guide-sec.tips{background:rgba(217,164,65,.05);margin:6px -12px 0;padding:14px 12px;border-radius:12px;border-bottom:0}
     .guide-keys b{display:inline-block;font-family:var(--disp);background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 6px;margin:0 1px;color:var(--gold-2)}
     /* menu de planos salvos */
+    .bd-chip .c-pin{flex:none;font-size:10px}
+    .bp-fix.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     .plans-wrap{position:relative;display:inline-flex}
     .more-menu{min-width:196px}
     .more-menu .tbtn{display:flex;width:100%;justify-content:flex-start;gap:9px;border:none;background:none;border-radius:8px;padding:8px 10px}
@@ -1105,6 +1107,7 @@
             <button class="rbtn" id="bdGroup" style="padding:8px 12px" data-i18n="groupClass">🗂 Classe</button>
             <button class="rbtn" id="bdShare" style="padding:8px 12px" data-i18n-title="tipBdShare" title="Gera um link só com o board (players, PTs, reservas, replaces) — sem os cenários" data-i18n="copyBoard">🔗 Copiar</button>
             <button class="rbtn" id="bdDisc" style="padding:8px 12px" data-i18n-title="tipBdDisc" title="Copia a montagem por PT com menções do Discord" data-i18n="copyDisc">💬 Discord</button>
+            <button class="rbtn" id="bdSaveJson" style="padding:8px 12px" data-i18n-title="tipBdSave" title="Baixa o board como arquivo JSON" data-i18n="bdSave">💾 Salvar</button>
             <span class="bd-legend" data-i18n-html="bdLegend">Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.</span>
           </div>
           <div class="roster-board" id="rosterBoard" hidden></div>
@@ -1245,7 +1248,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=100"></script>
-  <script src="./app.js?v=100"></script>
+  <script src="./config.js?v=101"></script>
+  <script src="./app.js?v=101"></script>
 </body>
 </html>
