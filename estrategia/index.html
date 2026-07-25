@@ -274,7 +274,7 @@
     .scene-hud .sh-desc{font-family:var(--body);font-weight:500;font-size:12.5px;line-height:1.4;color:#d6dae2;text-align:center;max-width:min(560px,64vw);text-shadow:0 2px 8px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.95);white-space:pre-line}
     .scene-hud .sh-title{font-family:var(--disp);font-weight:700;font-size:27px;letter-spacing:.02em;color:#f4ecd8;text-shadow:0 2px 12px rgba(0,0,0,.9),0 0 3px rgba(0,0,0,.95);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     /* minutagem discreta: texto pequeno dourado, sem pill (não empurra o título) */
-    .scene-hud .sh-time{flex:none;font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.1em;color:var(--gold-2);opacity:.85;line-height:1;margin-bottom:-1px;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+    .scene-hud .sh-time{flex:none;font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.1em;color:var(--gold-2);opacity:.85;line-height:1;margin:9px 0 -4px;text-shadow:0 2px 8px rgba(0,0,0,.9)}
     /* discreto, no canto inferior esquerdo — some da leitura, aparece no hover */
     .side-ctl{position:absolute;bottom:62px;left:12px;top:auto;transform:none;z-index:9;display:inline-flex;align-items:center;gap:3px;
       font-family:var(--disp);background:rgba(10,12,17,.5);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px 3px 2px 7px;backdrop-filter:blur(4px);opacity:.62;transition:opacity .16s}
@@ -1168,6 +1168,19 @@
     </div>
   </div>
 
+  <!-- importar: o quê? -->
+  <div class="modal-backdrop" id="importModal" hidden>
+    <div class="confirm-box">
+      <h3 class="lv-title" data-i18n="importTitle">Importar o quê deste arquivo?</h3>
+      <p class="lv-hint" data-i18n="impHint">O arquivo tem um plano completo — escolha o que puxar dele (o resto do seu plano fica como está):</p>
+      <button class="rbtn lv-full" data-imp="all" data-i18n="scAll">Tudo</button>
+      <button class="rbtn lv-full" data-imp="scenes" data-i18n="scScenes">Só as cenas</button>
+      <button class="rbtn lv-full" data-imp="board" data-i18n="scBoard">Só o board</button>
+      <button class="rbtn lv-full" data-imp="obj" data-i18n="scObj">Objetivos da cena</button>
+      <div class="confirm-actions" style="margin-top:12px"><button class="rbtn" id="imClose" data-i18n="btnCancel">Cancelar</button></div>
+    </div>
+  </div>
+
   <!-- resetar: o quê? -->
   <div class="modal-backdrop" id="resetModal" hidden>
     <div class="confirm-box">
@@ -1230,7 +1243,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=96"></script>
-  <script src="./app.js?v=96"></script>
+  <script src="./config.js?v=97"></script>
+  <script src="./app.js?v=97"></script>
 </body>
 </html>
