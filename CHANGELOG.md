@@ -109,6 +109,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v100 | 25/07/2026 | GamePlan v100: formato do 💬 Discord no padrão da guild (1 menção por linha, replace legível) | `d41eee6` |
 | v101 | 25/07/2026 | GamePlan v101: replace não-fixo, fixos do Preencher (📌 + lista da guild), Ctrl+Z no board, 💾 Salvar | `ba22bb1` |
 | v102 | 25/07/2026 | GamePlan v102: botão de troca ⇄ nos DOIS lados do replace | `219f3fa` |
+| v103 | 25/07/2026 | GamePlan v103: revisão do painel do host no ao vivo | `a3a74f3` |
 
 
 ## Resumo por área
