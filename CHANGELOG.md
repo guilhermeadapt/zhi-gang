@@ -106,6 +106,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v97 | 25/07/2026 | GamePlan v97: menu do player pelo sidebar, alças do foco só ao selecionar, importar por escopo, timer do HUD ajustado | `8091b7a` |
 | v98 | 25/07/2026 | GamePlan v98: ícones carimbados voltavam mortos depois de sessão ao vivo | `836fc9a` |
 | v99 | 25/07/2026 | GamePlan v99: board pro Discord com @menções + scroll das listas do board | `0a22e84` |
+| v100 | 25/07/2026 | GamePlan v100: formato do 💬 Discord no padrão da guild (1 menção por linha, replace legível) | `d41eee6` |
 
 
 ## Resumo por área
