@@ -112,6 +112,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v103 | 25/07/2026 | GamePlan v103: revisão do painel do host no ao vivo | `a3a74f3` |
 | v104 | 26/07/2026 | GamePlan v104: modo stream — código da sessão oculto por padrão (👁 revela) | `4d793cd` |
 | v105 | 26/07/2026 | GamePlan v105: lateral do board mais larga (258px) + busca de players | `b5f4905` |
+| v106 | 26/07/2026 | GamePlan v106: tour de boas-vindas (holofote passo a passo na primeira visita) | `94cc559` |
 
 
 ## Resumo por área
