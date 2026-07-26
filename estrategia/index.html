@@ -557,7 +557,10 @@
     .bd-pool .bd-chips,.bd-res .bd-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
     /* board com 6 PTs de uma vez: coluna esquerda (arrastar) + grade 3x2 */
     .bd-layout{display:flex;gap:14px;align-items:stretch;height:100%;min-height:0}
-    .bd-side{width:200px;flex:none;display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-height:0;padding-right:2px}
+    .bd-side{width:258px;flex:none;display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-height:0;padding-right:2px}
+    .bd-search{flex:none}
+    .bd-search input{width:100%;background:#0b0e15;border:1px solid var(--line-soft);border-radius:10px;color:var(--text);font-size:12px;padding:8px 11px}
+    .bd-search input:focus{outline:none;border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
     .bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:1fr}
     #liveRevealBtn.on{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
     #rosterModal.board-mode .bd-grid{flex:1;min-width:0;grid-template-columns:repeat(3,1fr);overflow-y:auto;min-height:0;align-content:start;padding-right:2px}
@@ -1250,7 +1253,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=104"></script>
-  <script src="./app.js?v=104"></script>
+  <script src="./config.js?v=105"></script>
+  <script src="./app.js?v=105"></script>
 </body>
 </html>
