@@ -110,6 +110,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v101 | 25/07/2026 | GamePlan v101: replace não-fixo, fixos do Preencher (📌 + lista da guild), Ctrl+Z no board, 💾 Salvar | `ba22bb1` |
 | v102 | 25/07/2026 | GamePlan v102: botão de troca ⇄ nos DOIS lados do replace | `219f3fa` |
 | v103 | 25/07/2026 | GamePlan v103: revisão do painel do host no ao vivo | `a3a74f3` |
+| v104 | 26/07/2026 | GamePlan v104: modo stream — código da sessão oculto por padrão (👁 revela) | `4d793cd` |
 
 
 ## Resumo por área
