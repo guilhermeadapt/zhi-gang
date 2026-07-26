@@ -559,6 +559,7 @@
     .bd-layout{display:flex;gap:14px;align-items:stretch;height:100%;min-height:0}
     .bd-side{width:200px;flex:none;display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-height:0;padding-right:2px}
     .bd-side .bd-pool .bd-chips,.bd-side .bd-res .bd-chips{grid-template-columns:1fr}
+    #liveRevealBtn.on{color:var(--gold-2);border-color:color-mix(in srgb,var(--gold) 45%,transparent)}
     #rosterModal.board-mode .bd-grid{flex:1;min-width:0;grid-template-columns:repeat(3,1fr);overflow-y:auto;min-height:0;align-content:start;padding-right:2px}
     .bd-zh .bd-allres{font-family:var(--disp);font-weight:600;font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:6px;padding:3px 7px;cursor:pointer;margin-left:auto}
     .bd-zh .bd-allres:hover{color:var(--gold);border-color:var(--line)}
@@ -1215,7 +1216,7 @@
       <div id="liveStatus" hidden>
         <div class="lv-info" id="liveInfo">—</div>
         <p class="lv-hint" data-i18n="liveShareHint">Mande o link (ou só o código) pros outros comandantes:</p>
-        <input id="liveShareUrl" class="pe-desc" readonly style="width:100%;font-size:11px;font-family:ui-monospace,monospace" />
+        <div class="lv-row" style="margin-bottom:0"><input id="liveShareUrl" class="pe-desc" readonly style="flex:1;min-width:0;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:0;text-transform:none" /><button class="rbtn" id="liveRevealBtn" data-i18n-title="tipReveal" title="Mostrar / ocultar o código" style="flex:none;padding:7px 10px">👁</button></div>
         <div id="livePerms" hidden><p class="lv-hint" style="margin:10px 0 5px" data-i18n="livePermsT">Permissões (quem pode salvar cópia da guerra):</p><div id="livePermList"></div></div>
         <div class="confirm-actions" style="margin-top:12px"><button class="rbtn" id="liveLeaveBtn" data-i18n="liveLeaveBtn">Sair da sessão</button><button class="rbtn gold" id="liveCopyBtn" data-i18n="copy">Copiar</button></div>
       </div>
@@ -1249,7 +1250,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=103"></script>
-  <script src="./app.js?v=103"></script>
+  <script src="./config.js?v=104"></script>
+  <script src="./app.js?v=104"></script>
 </body>
 </html>
