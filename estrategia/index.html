@@ -814,6 +814,19 @@
     .bd-chip .c-pin{flex:none;font-size:10px}
     .pl-rep.repby{border-style:dashed;opacity:.92}
     .bp-fix.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
+    #tourOv{position:fixed;inset:0;z-index:398}
+    #tourOv[hidden],#tourHole[hidden],#tourCard[hidden]{display:none!important}
+    #tourHole{position:fixed;z-index:399;border:2px solid var(--gold);border-radius:13px;box-shadow:0 0 0 9999px rgba(4,6,10,.8),0 0 24px rgba(217,164,65,.35);pointer-events:none;transition:left .28s,top .28s,width .28s,height .28s}
+    #tourCard{position:fixed;z-index:400;width:312px;background:#12151d;border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:14px;padding:14px 15px;box-shadow:0 14px 44px rgba(0,0,0,.6)}
+    #tourCard .tc-step{font-family:var(--disp);font-weight:700;font-size:9.5px;letter-spacing:.14em;color:var(--muted);margin-bottom:4px}
+    #tourCard .tc-t{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--gold-2);margin-bottom:5px}
+    #tourCard .tc-d{font-size:12.5px;line-height:1.5;color:#d6dae2;margin-bottom:11px}
+    #tourCard .tc-btns{display:flex;gap:6px;align-items:center}
+    #tourCard .tc-btns button{cursor:pointer}
+    #tourCard .tc-skip,#tourCard .tc-prev{background:none;border:1px solid var(--line-soft);border-radius:9px;color:var(--muted);font-size:11.5px;padding:6px 10px}
+    #tourCard .tc-skip:hover,#tourCard .tc-prev:hover{color:var(--text)}
+    #tourCard .tc-next{padding:6px 13px}
+    .gt-tour{margin-left:auto}
     .plans-wrap{position:relative;display:inline-flex}
     .more-menu{min-width:196px}
     .more-menu .tbtn{display:flex;width:100%;justify-content:flex-start;gap:9px;border:none;background:none;border-radius:8px;padding:8px 10px}
@@ -1145,7 +1158,7 @@
     <div class="guide">
       <div class="guide-head">
         <div><span class="guide-kick">Zhi Guides · Wanted</span><h2 id="guideTitle">Guia do Game Plan</h2></div>
-        <div class="guide-tabs" id="guideTabs"><button type="button" class="gt-tab active" data-gt="guide" data-i18n="tabGuide">Guia</button><button type="button" class="gt-tab" data-gt="news" data-i18n="tabNews">Novidades</button></div>
+        <div class="guide-tabs" id="guideTabs"><button class="gt-tab gt-tour" id="tourBtn" data-i18n="tourBtn">🎓 Tutorial</button><button type="button" class="gt-tab active" data-gt="guide" data-i18n="tabGuide">Guia</button><button type="button" class="gt-tab" data-gt="news" data-i18n="tabNews">Novidades</button></div>
         <button class="guide-x" id="helpClose" aria-label="Fechar">✕</button>
       </div>
       <div class="guide-body" id="helpBody"></div>
@@ -1165,6 +1178,19 @@
       <div class="confirm-actions" style="margin-top:14px"><button class="rbtn" id="shareClose" data-i18n="close">Fechar</button><button class="rbtn gold" id="shareCopy" data-i18n="copy">Copiar</button></div>
     </div>
   </div>
+
+  <!-- tour de boas-vindas -->
+  <div class="modal-backdrop" id="tourIntro" hidden>
+    <div class="confirm-box" style="max-width:380px">
+      <h3 class="lv-title" data-i18n="tourIntroT">Primeira vez por aqui?</h3>
+      <p class="lv-hint" data-i18n="tourIntroD">Quer um tour rápido? Eu escureço a tela e mostro, área por área, como o Game Plan funciona.</p>
+      <button class="rbtn gold lv-full" id="tourGo" data-i18n="tourStart">🎓 Fazer o tour</button>
+      <div class="confirm-actions" style="margin-top:10px"><button class="rbtn" id="tourNo" data-i18n="tourNo">Agora não</button></div>
+    </div>
+  </div>
+  <div id="tourOv" hidden></div>
+  <div id="tourHole" hidden></div>
+  <div id="tourCard" hidden></div>
 
   <!-- exportar: o quê? -->
   <div class="modal-backdrop" id="exportModal" hidden>
@@ -1253,7 +1279,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=105"></script>
-  <script src="./app.js?v=105"></script>
+  <script src="./config.js?v=106"></script>
+  <script src="./app.js?v=106"></script>
 </body>
 </html>
