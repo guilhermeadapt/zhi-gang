@@ -822,6 +822,22 @@
     .guide-keys b{display:inline-block;font-family:var(--disp);background:rgba(255,255,255,.06);border:1px solid var(--line-soft);border-radius:5px;padding:1px 6px;margin:0 1px;color:var(--gold-2)}
     /* menu de planos salvos */
     .bd-chip .c-pin{flex:none;font-size:10px}
+    /* Grade dos jogos (jogos nas colunas, escalação nas linhas) */
+    .grade-box{background:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px;width:min(96vw,1100px);max-height:92vh;display:flex;flex-direction:column;gap:10px}
+    .grade-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .grade-acts{display:flex;gap:8px}
+    .grade-body{overflow:auto;flex:1}
+    .grade-tb{border-collapse:collapse;width:100%;font-size:12.5px}
+    .grade-tb th,.grade-tb td{border:1px solid var(--line-soft);padding:5px 9px;text-align:left;white-space:nowrap}
+    .grade-tb thead th{position:sticky;top:0;background:var(--ink-2);font-family:var(--disp);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);z-index:1}
+    .grade-tb tr.g-sec td{background:var(--ink-2);font-family:var(--disp);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .grade-tb td.g-nm{border-left:3px solid var(--rc,var(--line-soft))}
+    .grade-tb td.g-ch{color:var(--gold);background:rgba(217,164,65,.1);font-weight:700}
+    .grade-tb td.g-out{color:var(--muted)}
+    .grade-hint{color:var(--muted);font-size:11.5px;margin:0}
+    /* Selo de "marcou Absence e foi escalado assim mesmo" — aviso, não erro */
+    .c-sabs{flex:none;font-size:10px;color:var(--gold);cursor:help}
+    .pl-nm .c-sabs{margin-left:5px}
     .pl-rep.repby{border-style:dashed;opacity:.92}
     .bp-fix.active{color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));border-color:var(--gold)}
     #tourOv{position:fixed;inset:0;z-index:398}
@@ -1205,6 +1221,21 @@
   <div id="tourCard" hidden></div>
 
   <!-- exportar: o quê? -->
+  <!-- Grade do fim de semana: todos os jogos lado a lado, para ver o que muda entre eles
+       e para gerar a imagem que circula no Discord. -->
+  <div class="modal-backdrop" id="gradeModal" hidden>
+    <div class="grade-box">
+      <div class="grade-head">
+        <h3 class="lv-title" data-i18n="gradeTitle">Grade dos jogos</h3>
+        <div class="grade-acts">
+          <button class="rbtn" id="gradePng" data-i18n="gradePng">🖼 Imagem</button>
+          <button class="rbtn" id="gradeClose" data-i18n="close">Fechar</button>
+        </div>
+      </div>
+      <div class="grade-body" id="gradeBody"></div>
+      <p class="grade-hint" data-i18n="gradeHint">Cada coluna é um jogo. Célula destacada = mudou em relação ao jogo anterior.</p>
+    </div>
+  </div>
   <div class="modal-backdrop" id="exportModal" hidden>
     <div class="confirm-box">
       <h3 class="lv-title" data-i18n="exportTitle">Exportar o quê?</h3>
