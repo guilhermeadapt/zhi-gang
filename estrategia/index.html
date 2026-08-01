@@ -880,6 +880,7 @@
     /* sessão ao vivo */
     .live-box{max-width:400px}
     .lv-title{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.04em;color:var(--gold-2);margin-bottom:10px}
+    .imp-sub{color:var(--muted);font-size:12.5px;margin:-4px 0 12px;line-height:1.45}
     .lv-hint{font-size:11.5px;color:var(--muted);line-height:1.5;margin:0 0 10px}
     .lv-full{width:100%;justify-content:center;margin-bottom:9px}
     .lv-row{display:flex;gap:6px}
@@ -1221,6 +1222,18 @@
   <div id="tourCard" hidden></div>
 
   <!-- exportar: o quê? -->
+  <!-- Link/arquivo que traz uma guerra inteira: perguntar antes de sobrescrever. Sem isto,
+       abrir um plano de outro grupo apaga em silêncio a guerra que está aberta — o app só
+       avisava quando algum CENÁRIO tinha sido mexido, e mexer no roster não contava. -->
+  <div class="modal-backdrop" id="impModeModal" hidden>
+    <div class="confirm-box">
+      <h3 class="lv-title" id="impModeTitle" data-i18n="impTitle">Este link traz uma guerra inteira</h3>
+      <p class="imp-sub" id="impModeSub" data-i18n="impSub">O que fazer com a guerra aberta agora?</p>
+      <button class="rbtn lv-full" data-imp="new" data-i18n="impNew">Abrir numa guerra nova — mantém a atual</button>
+      <button class="rbtn lv-full" data-imp="replace" data-i18n="impReplace">Substituir a guerra atual</button>
+      <button class="rbtn lv-full" data-imp="cancel" data-i18n="btnCancel">Cancelar</button>
+    </div>
+  </div>
   <!-- Grade do fim de semana: todos os jogos lado a lado, para ver o que muda entre eles
        e para gerar a imagem que circula no Discord. -->
   <div class="modal-backdrop" id="gradeModal" hidden>
