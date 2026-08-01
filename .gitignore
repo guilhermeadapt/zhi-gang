@@ -1,0 +1,7 @@
+# Planos de trabalho locais. Um plano exportado carrega o roster REAL — nomes e
+# IDs de Discord de gente de verdade — e este repositório é público (GitHub Pages).
+# Use o prefixo local- para qualquer plano que não deva ser publicado.
+/estrategia/plans/local-*.json
+
+# Saída de teste
+/estrategia/plans/*.tmp.json
