@@ -1437,39 +1437,36 @@
     if (state.jogoAtual === id) { state.jogoAtual = state.jogos[Math.max(0, i - 1)].id; applyEscalacao(state.jogos.find(x => x.id === state.jogoAtual)); }
     saveProject(); renderSidebar(); renderTokens(); renderJogos();
   }
+  // Listener no CONTÊINER, não nos botões: autoSyncRoster() re-renderiza esta barra alguns
+  // segundos depois do load, e um clique que caísse nessa janela morria junto com o botão
+  // substituído — dava a impressão de que "o primeiro clique não funciona".
+  function wireJogoBar(wrap) {
+    if (wrap.dataset.wired) return;
+    wrap.dataset.wired = '1';
+    wrap.addEventListener('click', e => {
+      const b = e.target.closest('.jogo-chip'); if (!b || !wrap.contains(b)) return;
+      const a = b.dataset.act;
+      if (a === 'add') addJogo(!e.altKey);
+      else if (a === 'grade') openGrade();
+      else if (a === 'del') { const j = state.jogos.find(x => x.id === state.jogoAtual); if (j && confirm(t('jogoDelAsk') + ' ' + j.nome + '?')) delJogo(state.jogoAtual); }
+      else if (a) switchJogo(a);
+    });
+    wrap.addEventListener('dblclick', e => {
+      const b = e.target.closest('.jogo-chip'); if (!b) return;
+      const j = state.jogos.find(x => x.id === b.dataset.act); if (!j) return;
+      const n = prompt(t('jogoName'), j.nome);
+      if (n && n.trim()) { j.nome = n.trim().slice(0, 24); saveProject(); renderJogos(); }
+    });
+  }
   function renderJogos() {
     const wrap = $('jogoBar');
     if (!wrap) return;
-    ensureJogos();
-    wrap.innerHTML = '';
-    state.jogos.forEach(j => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.className = 'jogo-chip' + (j.id === state.jogoAtual ? ' on' : '');
-      b.textContent = j.nome;
-      b.title = j.nome + (j.id === state.jogoAtual ? ' (atual)' : '');
-      b.addEventListener('click', () => switchJogo(j.id));
-      b.addEventListener('dblclick', () => { const n = prompt(t('jogoName') || 'Nome do jogo:', j.nome); if (n && n.trim()) { j.nome = n.trim().slice(0, 24); saveProject(); renderJogos(); } });
-      wrap.appendChild(b);
-    });
-    const add = document.createElement('button');
-    add.type = 'button'; add.className = 'jogo-chip jogo-add';
-    add.textContent = '+'; add.title = t('jogoDup') || 'Novo jogo copiando a escalação atual (Alt+clique: vazio)';
-    add.addEventListener('click', e => addJogo(!e.altKey));
-    wrap.appendChild(add);
-    if (state.jogos.length > 1) {
-      const gr = document.createElement('button');
-      gr.type = 'button'; gr.className = 'jogo-chip jogo-grade';
-      gr.textContent = '▦'; gr.title = t('gradeTip') || 'Grade: todos os jogos lado a lado (e a imagem pro Discord)';
-      gr.addEventListener('click', openGrade);
-      wrap.appendChild(gr);
-    }
-    if (state.jogos.length > 1) {
-      const del = document.createElement('button');
-      del.type = 'button'; del.className = 'jogo-chip jogo-del';
-      del.textContent = '×'; del.title = t('jogoDel') || 'Remover este jogo';
-      del.addEventListener('click', () => { if (confirm((t('jogoDelAsk') || 'Remover o jogo') + ' ' + (state.jogos.find(x => x.id === state.jogoAtual) || {}).nome + '?')) delJogo(state.jogoAtual); });
-      wrap.appendChild(del);
-    }
+    ensureJogos(); wireJogoBar(wrap);
+    const chip = (act, txt, cls, tip) => '<button type="button" class="jogo-chip' + (cls ? ' ' + cls : '') + '" data-act="' + esc(act) + '" title="' + esc(tip || txt) + '">' + esc(txt) + '</button>';
+    let h = state.jogos.map(j => chip(j.id, j.nome, j.id === state.jogoAtual ? 'on' : '', j.nome + (j.id === state.jogoAtual ? ' (atual)' : ''))).join('');
+    h += chip('add', '+', 'jogo-add', t('jogoDup'));
+    if (state.jogos.length > 1) h += chip('grade', '▦', 'jogo-grade', t('gradeTip')) + chip('del', '×', 'jogo-del', t('jogoDel'));
+    wrap.innerHTML = h;
   }
   // ---- grade do fim de semana ----
   // Uma linha por jogador, agrupada pela PT do jogo ATUAL; cada coluna é um jogo e diz em que
@@ -1912,7 +1909,7 @@
   // versão MAIS NOVA que este app — sem isso ele descartaria os campos que não conhece e ainda
   // gravaria o plano decepado por cima (saveProject no fim desta função). Foi o que aconteceria
   // com o v6 em app v5, e não havia como evitar porque nada lia `v`. Daqui pra frente, avisa.
-  function applyImported(d) { if (typeof d.v === 'number' && d.v > PLAN_V && !confirm(t('vNewer') || 'Este plano foi feito numa versão mais nova do Game Plan. Abrir aqui pode descartar partes que esta versão não entende (e sobrescrever o plano). Continuar?')) return false; const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert(t('noScenes')); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; cleanupReplaces(state.roster); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; if (typeof d.rhEvent === 'string' && d.rhEvent) state.rhEvent = d.rhEvent; if (Array.isArray(d.jogos) && d.jogos.length) { state.jogos = d.jogos.map(sanitizeJogo); state.jogoAtual = state.jogos.some(j => j.id === d.jogoAtual) ? d.jogoAtual : state.jogos[0].id; } else { state.jogos = []; state.jogoAtual = null; } state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
+  function applyImported(d) { if (typeof d.v === 'number' && d.v > PLAN_V && !confirm(t('vNewer') || 'Este plano foi feito numa versão mais nova do Game Plan. Abrir aqui pode descartar partes que esta versão não entende (e sobrescrever o plano). Continuar?')) return false; const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert(t('noScenes')); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; cleanupReplaces(state.roster); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; if (typeof d.rhEvent === 'string' && d.rhEvent) state.rhEvent = d.rhEvent; if (Array.isArray(d.jogos) && d.jogos.length) { state.jogos = d.jogos.map(sanitizeJogo); state.jogoAtual = state.jogos.some(j => j.id === d.jogoAtual) ? d.jogoAtual : state.jogos[0].id; } else { state.jogos = []; state.jogoAtual = null; } state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); renderJogos(); saveProject(); return true; }
   let pendingImport = null;
   function importProjectFile(file) { const reader = new FileReader(); reader.onload = async () => {
     let d; try { d = JSON.parse(reader.result); } catch (e) { toast(t('invalidJson')); return; }
@@ -1927,7 +1924,7 @@
   async function importScoped(scope) {
     const d = pendingImport; pendingImport = null; if (!d) return;
     if (scope === 'all') { if (state.scenarios.some(s => !isPristine(s)) && !await askConfirm(t('confirmImport'))) return; if (applyImported(d)) toast(t('planLoaded')); return; }
-    if (scope === 'scenes') { const kr = state.roster, kd = state.ptDesc, ki = state.ptIcon; if (applyImported(d)) { state.roster = kr; state.ptDesc = kd; state.ptIcon = ki; cleanupReplaces(state.roster); reconcileMemberSlots(); saveProject(); renderSidebar(); renderTokens(); toast(t('scenesLoaded')); } return; }
+    if (scope === 'scenes') { const kr = state.roster, kd = state.ptDesc, ki = state.ptIcon, kj = state.jogos, kja = state.jogoAtual; if (applyImported(d)) { state.roster = kr; state.ptDesc = kd; state.ptIcon = ki; state.jogos = kj; state.jogoAtual = kja; cleanupReplaces(state.roster); reconcileMemberSlots(); saveProject(); renderSidebar(); renderTokens(); renderJogos(); toast(t('scenesLoaded')); } return; }
     if (scope === 'board') { if (!Array.isArray(d.roster) || !d.roster.length) { toast(t('rosterNone')); return; } if (state.roster.length && !await askConfirm(t('confirmBoard'))) return; applyBoardData({ roster: d.roster, ptDesc: d.ptDesc, ptIcon: d.ptIcon }); toast(t('boardLoaded')); return; }
     if (scope === 'obj') { const scs = Array.isArray(d.cenarios) ? d.cenarios : d.scenarios; const s = (scs || []).find(x => x.id === d.currentId) || (scs || [])[0]; if (!s) { toast(t('noScenesFile')); return; } applyObjData({ objetivos: s.objetivos, objetivoPos: s.objetivoPos, objHp: s.objHp, objBuffs: s.objBuffs, hideMeters: s.hideMeters, objetivoPosGlobal: d.objetivoPosGlobal, gates: d.gates, side: d.side }); toast(t('objLoaded')); return; }
   }
