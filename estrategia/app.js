@@ -1641,13 +1641,13 @@
       const np = newByName.get(norm(p.nome));
       if (!np) { removed++; return; }
       if (np.disc && !p.disc) p.disc = np.disc;
-      // O status do signup NÃO desfaz escalação feita à mão. "Absence" no raid-helper é
-      // negociável (a staff conversa e a pessoa acaba jogando), então quem já está numa PT
-      // permanece nela — só registramos o conflito em signupAusente para a UI avisar.
-      // Quem NÃO está escalado segue a regra antiga: vai pra ausentes.
+      // Guerra COM jogos: "Absence" é negociável (a staff conversa e a pessoa acaba jogando),
+      // então quem já está numa PT permanece nela e o conflito só vira selo (signupAusente).
+      // Guerra SEM jogos: comportamento de sempre — quem marcou ausência sai da PT. Quem já
+      // usa a ferramenta assim não tem o fluxo trocado por baixo.
       if (np.ausente && !p.ausente) {
-        if (p.pt) p.signupAusente = true;
-        else { p.ausente = true; p.reserva = false; p.pt = null; }
+        if (p.pt && state.jogos.length) p.signupAusente = true;
+        else { p.ausente = true; p.reserva = false; p.pt = null; p.signupAusente = undefined; }
       }
       else if (!np.ausente) { if (p.ausente) p.ausente = false; p.signupAusente = undefined; }
       result.push(p); kept++;
