@@ -351,6 +351,14 @@
     .roster-tabs button{font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:transparent;border:0;padding:6px 11px;cursor:pointer;transition:.14s}
     .roster-tabs button:hover{color:var(--text)}
     .roster-tabs button.active{color:var(--gold);background:rgba(217,164,65,.12)}
+    /* Barra de jogos (G1..G5) — cada chip é uma escalação própria dentro da mesma guerra */
+    .jogo-bar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 12px 0}
+    .jogo-bar:empty{display:none}
+    .jogo-chip{font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--ink-2);border:1px solid var(--line-soft);border-radius:7px;padding:5px 10px;cursor:pointer;transition:.14s;line-height:1}
+    .jogo-chip:hover{color:var(--text);border-color:var(--line)}
+    .jogo-chip.on{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 50%,transparent);background:rgba(217,164,65,.12)}
+    .jogo-chip.jogo-add,.jogo-chip.jogo-del{padding:5px 9px;font-size:12px}
+    .jogo-chip.jogo-del:hover{color:var(--crimson);border-color:color-mix(in srgb,var(--crimson) 50%,transparent)}
     .side-empty{color:var(--muted);font-size:12px;font-style:italic;padding:16px 6px;text-align:center}
     .pl-chip{display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px;margin-bottom:5px;cursor:grab;background:linear-gradient(180deg,var(--ink-2),#0e1118);border:1px solid var(--line-soft);border-left:3px solid var(--rc);border-radius:9px;transition:.15s;user-select:none;font-size:13px}
     .pl-chip:hover{border-color:color-mix(in srgb,var(--rc) 55%,transparent)}
@@ -1052,6 +1060,8 @@
       <button class="side-min-btn" id="sideMin" type="button" data-i18n-title="tipSideMin" title="Recolher / expandir o painel de PTs">»</button>
       <button class="roster-mclose" id="rosterMClose" aria-label="Fechar">✕</button>
       <div class="roster-head"><div class="roster-tabs" id="rosterTabs"><button data-rtab="pts" class="active">PTs</button><button data-rtab="players" data-i18n="playersTab">Players</button></div><button class="edit" id="editRosterBtn" data-i18n="editRoster">Editar roster</button></div>
+      <!-- Jogos da guerra (G1..G5): cada um guarda sua própria escalação. Clique troca; duplo-clique renomeia; + duplica o atual. -->
+      <div class="jogo-bar" id="jogoBar"></div>
       <div class="roster-sum" id="rosterSum">
         <span class="st"><b id="sumEsc">0</b> <span data-i18n="scaled">escalados</span></span>
         <span class="st"><b id="sumRes">0</b> <span data-i18n="reserves">reservas</span></span>

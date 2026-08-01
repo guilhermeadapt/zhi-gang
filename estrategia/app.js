@@ -87,7 +87,12 @@
   const confirmModal = $('confirmModal'), confirmMsg = $('confirmMsg'), confirmYes = $('confirmYes'), confirmNo = $('confirmNo');
   const ptModal = $('ptModal'), peDot = $('peDot'), peTitle = $('peTitle'), peClose = $('peClose'), peDesc = $('peDesc'), peIcons = $('peIcons'), peMembers = $('peMembers'), peCount = $('peCount'), peAddSel = $('peAddSel'), peAddBtn = $('peAddBtn');
 
-  const state = { scenarios: [], currentId: null, roster: [], ptDesc: {}, ptIcon: {}, objetivoPosGlobal: {}, gates: {}, side: null, rhEvent: '', tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false, showNames: true };
+  const PLAN_V = 6;
+  // jogos[] / jogoAtual: eixo "partida" dentro da MESMA guerra (G1..G5 de um dia).
+  // player.pt continua sendo a verdade viva DO JOGO ATUAL — nada mudou nos ~100 pontos que
+  // escrevem nele. jogos[].escalacao é DERIVADA: materializada ao salvar e ao trocar de jogo,
+  // nunca editada direto. Plano sem `jogos` se comporta exatamente como antes.
+  const state = { scenarios: [], currentId: null, roster: [], ptDesc: {}, ptIcon: {}, objetivoPosGlobal: {}, gates: {}, side: null, rhEvent: '', jogos: [], jogoAtual: null, tool: 'select', drawColor: CFG.drawColors[0], drawWidth: CFG.drawWidths[0], present: false, showNames: true };
   let hintDismissed = false, editingPt = null;
   const objGroupOpen = {};   // grupos do painel de objetivos começam colapsados
   const partyById = new Map(CFG.parties.map(p => [p.id, p]));
@@ -261,7 +266,7 @@
     loadProject(); bgImage.image(mapImg); bgLayer.batchDraw(); buildColorSwatches(); buildMarkPicker();
     dockMini.hidden = false;   // mini-nav sempre visível; painel de Fases começa fechado
     try { if (localStorage.getItem('gp-tools-mini') === '1') drawTools.classList.add('mini'); if (localStorage.getItem('gp-side-min') === '1' && !isMobile()) { document.body.classList.add('side-min'); const sm = $('sideMin'); if (sm) sm.textContent = '«'; } if (localStorage.getItem('gp-hud') === '0') { const sh = $('sceneHud'); if (sh) sh.style.display = 'none'; } } catch (e) {}
-    renderSidebar(); renderRail(); loadScenarioIntoUI(); syncCanvasFill(cur()); fit(); applySceneView(cur()); updateZoomSaveBtn(); wireEvents(); (async () => { await maybeLoadShared(); await maybeLoadScenes(); await maybeLoadObj(); await maybeLoadBoard(); await maybeLoadPlan(); await maybeLoadCommand(); autoSyncRoster(); maybeTour(); })();
+    renderSidebar(); renderJogos(); renderRail(); loadScenarioIntoUI(); syncCanvasFill(cur()); fit(); applySceneView(cur()); updateZoomSaveBtn(); wireEvents(); (async () => { await maybeLoadShared(); await maybeLoadScenes(); await maybeLoadObj(); await maybeLoadBoard(); await maybeLoadPlan(); await maybeLoadCommand(); autoSyncRoster(); maybeTour(); })();
     setTimeout(() => { hintDismissed = true; mapHint.classList.add('hide'); }, 5000);   // aviso some em 5s (definitivo)
     setTimeout(() => toast(t(isMobile() ? 'zoomTipM' : 'zoomTip')), 900);
     // canvas não reflui sozinho quando a webfont carrega: re-renderiza os rótulos
@@ -1369,6 +1374,110 @@
   //  · quem está no novo JSON e não no rascunho entra como novo (reserva);
   //  · quem está no rascunho e NÃO está no novo JSON é removido;
   //  · se alguém passou a ser "ausente" no novo JSON, sai da PT.
+  // ---- eixo JOGO (G1..G5 da mesma guerra) ----
+  // Regra de propriedade, e ela é o contrato inteiro:
+  //   · player.pt / player.reserva = verdade VIVA do jogo atual (ninguém mais escreve nisso).
+  //   · jogos[].escalacao        = DERIVADA, materializada só em saveProject() e ao trocar
+  //                                de jogo. Nunca editada direto por outro código.
+  // Assim os ~100 pontos que mexem em p.pt seguem intactos e não há o que dessincronizar.
+  function sanitizeJogo(j) {
+    const esc = {}, src = (j && j.escalacao && typeof j.escalacao === 'object') ? j.escalacao : {};
+    Object.keys(src).forEach(k => { const v = src[k] || {}; esc[String(k)] = { pt: PT_IDS.includes(v.pt) ? v.pt : null, reserva: !!v.reserva }; });
+    return { id: (j && j.id) || uid(), nome: String((j && j.nome) || 'G1').slice(0, 24), escalacao: esc };
+  }
+  function serializeEscalacao() {
+    const esc = {};
+    state.roster.forEach(p => { if (p.pt || p.reserva) esc[p.id] = { pt: p.pt || null, reserva: !!p.reserva }; });
+    return esc;
+  }
+  function stashJogoAtual() {
+    const j = state.jogos.find(x => x.id === state.jogoAtual);
+    if (j) j.escalacao = serializeEscalacao();
+  }
+  function applyEscalacao(j) {
+    const esc = (j && j.escalacao) || {};
+    state.roster.forEach(p => { const e = esc[p.id]; p.pt = (e && PT_IDS.includes(e.pt)) ? e.pt : null; p.reserva = !!(e && e.reserva); });
+  }
+  // Tira da escalação de TODOS os jogos quem saiu do roster. Roda no único ponto onde o
+  // roster commita (applyRosterDraft), senão id removido vira órfão em 10 jogos.
+  function pruneJogos() {
+    const vivos = new Set(state.roster.map(p => p.id));
+    state.jogos.forEach(j => { Object.keys(j.escalacao).forEach(k => { if (!vivos.has(k)) delete j.escalacao[k]; }); });
+  }
+  // Plano antigo (sem jogos): o primeiro uso adota a escalação que já está no roster como G1.
+  function ensureJogos() {
+    if (state.jogos.length) return;
+    const j = sanitizeJogo({ nome: 'G1', escalacao: serializeEscalacao() });
+    state.jogos = [j]; state.jogoAtual = j.id;
+  }
+  function switchJogo(id) {
+    if (!id || id === state.jogoAtual) return;
+    const alvo = state.jogos.find(x => x.id === id);
+    if (!alvo) return;
+    stashJogoAtual();
+    state.jogoAtual = id;
+    applyEscalacao(alvo);
+    saveProject(); renderSidebar(); renderTokens(); renderJogos();
+  }
+  // dup=true copia a escalação do jogo atual — entre G1 e G2 mudam 1 a 3 pessoas, então
+  // duplicar-e-ajustar é o fluxo real; montar do zero 5 vezes não é.
+  function addJogo(dup) {
+    ensureJogos(); stashJogoAtual();
+    const base = state.jogos.find(x => x.id === state.jogoAtual);
+    const j = sanitizeJogo({ nome: 'G' + (state.jogos.length + 1), escalacao: (dup && base) ? JSON.parse(JSON.stringify(base.escalacao)) : {} });
+    state.jogos.push(j); state.jogoAtual = j.id;
+    applyEscalacao(j);
+    saveProject(); renderSidebar(); renderTokens(); renderJogos();
+  }
+  function delJogo(id) {
+    const i = state.jogos.findIndex(x => x.id === id);
+    if (i < 0 || state.jogos.length <= 1) return;
+    state.jogos.splice(i, 1);
+    if (state.jogoAtual === id) { state.jogoAtual = state.jogos[Math.max(0, i - 1)].id; applyEscalacao(state.jogos.find(x => x.id === state.jogoAtual)); }
+    saveProject(); renderSidebar(); renderTokens(); renderJogos();
+  }
+  function renderJogos() {
+    const wrap = $('jogoBar');
+    if (!wrap) return;
+    ensureJogos();
+    wrap.innerHTML = '';
+    state.jogos.forEach(j => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'jogo-chip' + (j.id === state.jogoAtual ? ' on' : '');
+      b.textContent = j.nome;
+      b.title = j.nome + (j.id === state.jogoAtual ? ' (atual)' : '');
+      b.addEventListener('click', () => switchJogo(j.id));
+      b.addEventListener('dblclick', () => { const n = prompt(t('jogoName') || 'Nome do jogo:', j.nome); if (n && n.trim()) { j.nome = n.trim().slice(0, 24); saveProject(); renderJogos(); } });
+      wrap.appendChild(b);
+    });
+    const add = document.createElement('button');
+    add.type = 'button'; add.className = 'jogo-chip jogo-add';
+    add.textContent = '+'; add.title = t('jogoDup') || 'Novo jogo copiando a escalação atual (Alt+clique: vazio)';
+    add.addEventListener('click', e => addJogo(!e.altKey));
+    wrap.appendChild(add);
+    if (state.jogos.length > 1) {
+      const del = document.createElement('button');
+      del.type = 'button'; del.className = 'jogo-chip jogo-del';
+      del.textContent = '×'; del.title = t('jogoDel') || 'Remover este jogo';
+      del.addEventListener('click', () => { if (confirm((t('jogoDelAsk') || 'Remover o jogo') + ' ' + (state.jogos.find(x => x.id === state.jogoAtual) || {}).nome + '?')) delJogo(state.jogoAtual); });
+      wrap.appendChild(del);
+    }
+  }
+  // Reaproveita id e disc (userId do Discord) de quem já está no rascunho, casando por
+  // NOME — que é a identidade real do app (destacados usam pt+'|'+nome, replaceOf é nome).
+  // Sem isto, PROCESSAR (SUBSTITUI) troca o roster por players com id novo (uid()) e sem
+  // disc: órfã qualquer referência por id e apaga as menções do Discord.
+  function preserveIdentity(parsed) {
+    const norm = s => (s || '').trim().toLowerCase();
+    const byName = new Map(rosterDraft.map(p => [norm(p.nome), p]));
+    parsed.forEach(np => {
+      const prev = byName.get(norm(np.nome));
+      if (!prev) return;
+      np.id = prev.id;
+      if (!np.disc && prev.disc) np.disc = prev.disc;
+    });
+    return parsed;
+  }
   function mergeRoster(parsed) {
     const norm = s => (s || '').trim().toLowerCase();
     const newByName = new Map(parsed.map(p => [norm(p.nome), p]));
@@ -1379,8 +1488,15 @@
       const np = newByName.get(norm(p.nome));
       if (!np) { removed++; return; }
       if (np.disc && !p.disc) p.disc = np.disc;
-      if (np.ausente && !p.ausente) { p.ausente = true; p.reserva = false; p.pt = null; }
-      else if (!np.ausente && p.ausente) { p.ausente = false; }
+      // O status do signup NÃO desfaz escalação feita à mão. "Absence" no raid-helper é
+      // negociável (a staff conversa e a pessoa acaba jogando), então quem já está numa PT
+      // permanece nela — só registramos o conflito em signupAusente para a UI avisar.
+      // Quem NÃO está escalado segue a regra antiga: vai pra ausentes.
+      if (np.ausente && !p.ausente) {
+        if (p.pt) p.signupAusente = true;
+        else { p.ausente = true; p.reserva = false; p.pt = null; }
+      }
+      else if (!np.ausente) { if (p.ausente) p.ausente = false; p.signupAusente = undefined; }
       result.push(p); kept++;
     });
     parsed.forEach(np => { if (!curNames.has(norm(np.nome))) { result.push(np); added++; } });
@@ -1448,7 +1564,7 @@
   }
   function openRoster() { rosterDraft = state.roster.map(p => Object.assign({}, p, { flags: (p.flags || []).slice() })); rosterPaste.value = ''; { const rl = $('rhLink'); if (rl) rl.value = state.rhEvent || ''; } parseMsg.textContent = ''; parseMsg.className = 'parse-msg'; saveMsg.textContent = ''; renderGrid(); setRosterView(state.roster.length ? 'board' : 'grid'); rosterModal.hidden = false; }
   function rosterDirty() { try { return JSON.stringify(rosterDraft) !== JSON.stringify(state.roster); } catch (e) { return false; } }
-  function applyRosterDraft() { state.roster = rosterDraft.map(p => Object.assign({}, p)); cleanupReplaces(state.roster); const moved = reconcileMemberSlots(); saveProject(); renderSidebar(); renderTokens(); return moved; }
+  function applyRosterDraft() { state.roster = rosterDraft.map(p => Object.assign({}, p)); cleanupReplaces(state.roster); pruneJogos(); const moved = reconcileMemberSlots(); saveProject(); renderSidebar(); renderTokens(); return moved; }
   // fechar com alterações pendentes pergunta se salva (é fácil perder tudo sem querer)
   async function closeRoster(force) {
     if (force !== true && !rosterModal.hidden && rosterDirty()) { if (await askConfirm(t('confirmSaveBoard'), t('saveLbl'), t('discardLbl'))) applyRosterDraft(); }
@@ -1653,7 +1769,7 @@
   }
 
   // ---- export / import / compartilhar / reset ----
-  function projectData() { return { app: 'zhi-estrategia', v: 5, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side, showNames: state.showNames, rhEvent: state.rhEvent || undefined, cenarios: state.scenarios }; }
+  function projectData() { stashJogoAtual(); return { app: 'zhi-estrategia', v: 6, exportedAt: new Date().toISOString(), currentId: state.currentId, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side, showNames: state.showNames, rhEvent: state.rhEvent || undefined, jogos: state.jogos.length ? state.jogos : undefined, jogoAtual: state.jogos.length ? state.jogoAtual : undefined, cenarios: state.scenarios }; }
   function sanitizeDesc(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => PT_IDS.includes(k) && typeof v === 'string' && v.trim()).map(([k, v]) => [k, String(v)])) : {}; }
   function sanitizePosMap(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}; }
   function exportDataFor(scope) {
@@ -1671,7 +1787,11 @@
     a.download = slug + (scope === 'all' ? '' : '-' + scope) + '-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.json';
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  function applyImported(d) { const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert(t('noScenes')); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; cleanupReplaces(state.roster); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; if (typeof d.rhEvent === 'string' && d.rhEvent) state.rhEvent = d.rhEvent; state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
+  // PLAN_V: versão do formato do plano. applyImported avisa quando o arquivo/link vem de uma
+  // versão MAIS NOVA que este app — sem isso ele descartaria os campos que não conhece e ainda
+  // gravaria o plano decepado por cima (saveProject no fim desta função). Foi o que aconteceria
+  // com o v6 em app v5, e não havia como evitar porque nada lia `v`. Daqui pra frente, avisa.
+  function applyImported(d) { if (typeof d.v === 'number' && d.v > PLAN_V && !confirm(t('vNewer') || 'Este plano foi feito numa versão mais nova do Game Plan. Abrir aqui pode descartar partes que esta versão não entende (e sobrescrever o plano). Continuar?')) return false; const scenarios = Array.isArray(d.cenarios) ? d.cenarios : (Array.isArray(d.scenarios) ? d.scenarios : null); if (!scenarios || !scenarios.length) { alert(t('noScenes')); return false; } state.scenarios = scenarios.map(sanitizeScenario); state.roster = Array.isArray(d.roster) ? d.roster.map(sanitizePlayer) : []; cleanupReplaces(state.roster); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; if (typeof d.rhEvent === 'string' && d.rhEvent) state.rhEvent = d.rhEvent; if (Array.isArray(d.jogos) && d.jogos.length) { state.jogos = d.jogos.map(sanitizeJogo); state.jogoAtual = state.jogos.some(j => j.id === d.jogoAtual) ? d.jogoAtual : state.jogos[0].id; } else { state.jogos = []; state.jogoAtual = null; } state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; hidePopover(); renderRail(); loadScenarioIntoUI(); renderDrawings(); renderObjectives(); renderSidebar(); renderTokens(); saveProject(); return true; }
   let pendingImport = null;
   function importProjectFile(file) { const reader = new FileReader(); reader.onload = async () => {
     let d; try { d = JSON.parse(reader.result); } catch (e) { toast(t('invalidJson')); return; }
@@ -2295,7 +2415,7 @@
     rosterBtn.addEventListener('click', () => { if (isMobile()) document.body.classList.toggle('mob-roster'); else openRoster(); }); editRosterBtn.addEventListener('click', openRoster); rosterClose.addEventListener('click', closeRoster);
     { const rmc = $('rosterMClose'); if (rmc) rmc.addEventListener('click', () => document.body.classList.remove('mob-roster')); }
     rosterModal.addEventListener('click', e => { if (e.target === rosterModal) closeRoster(); });
-    parseBtn.addEventListener('click', () => { const parsed = parseRoster(rosterPaste.value); if (!parsed.length) { parseMsg.className = 'parse-msg err'; parseMsg.textContent = t('rosterNone'); return; } pushBdUndo(); rosterDraft = parsed; parseMsg.className = 'parse-msg ok'; parseMsg.textContent = parsed.length + ' ' + t('rosterOk'); renderGrid(); });
+    parseBtn.addEventListener('click', () => { const parsed = parseRoster(rosterPaste.value); if (!parsed.length) { parseMsg.className = 'parse-msg err'; parseMsg.textContent = t('rosterNone'); return; } pushBdUndo(); rosterDraft = preserveIdentity(parsed); parseMsg.className = 'parse-msg ok'; parseMsg.textContent = parsed.length + ' ' + t('rosterOk'); renderGrid(); });
     if (mergeBtn) mergeBtn.addEventListener('click', () => { const parsed = parseRoster(rosterPaste.value); if (!parsed.length) { parseMsg.className = 'parse-msg err'; parseMsg.textContent = t('rosterNone'); return; } pushBdUndo(); const r = mergeRoster(parsed); parseMsg.className = 'parse-msg ok'; parseMsg.textContent = r.kept + ' ' + t('mKept') + ' · ' + r.added + ' ' + t('mAdded') + ' · ' + r.removed + ' ' + t('mRemoved'); renderGrid(); });
     { const rl = $('rhLink'), rs = $('rhSync'); if (rs) rs.addEventListener('click', async () => {
       const v = (rl && rl.value || '').trim(); const id = rhEventId(v);
@@ -2360,8 +2480,8 @@
   function setDock(open) { document.body.classList.toggle('fases-open', open); fasesBtn.classList.toggle('on', open); updateMini(); }
 
   // ---- persistência ----
-  function saveProject() { try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 5, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side, showNames: state.showNames, rhEvent: state.rhEvent || '' })); } catch (e) {} if (LIVE.on && !LIVE.applying && livePenMine()) liveScheduleTx(); }
-  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; if (typeof d.rhEvent === 'string') state.rhEvent = d.rhEvent; return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
+  function saveProject() { stashJogoAtual(); try { localStorage.setItem(CFG.projectKey, JSON.stringify({ v: 6, currentId: state.currentId, scenarios: state.scenarios, roster: state.roster, ptDesc: state.ptDesc, ptIcon: state.ptIcon, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side, showNames: state.showNames, rhEvent: state.rhEvent || '', jogos: state.jogos, jogoAtual: state.jogoAtual })); } catch (e) {} if (LIVE.on && !LIVE.applying && livePenMine()) liveScheduleTx(); }
+  function loadProject() { try { const raw = localStorage.getItem(CFG.projectKey); if (raw) { const d = JSON.parse(raw); if (Array.isArray(d.scenarios) && d.scenarios.length) { state.scenarios = d.scenarios.map(sanitizeScenario); state.currentId = d.currentId && state.scenarios.some(s => s.id === d.currentId) ? d.currentId : state.scenarios[0].id; if (Array.isArray(d.roster)) state.roster = d.roster.map(sanitizePlayer); state.objetivoPosGlobal = sanitizePosMap(d.objetivoPosGlobal); state.gates = sanitizePosMap(d.gates); state.side = (d.side === 'blue' || d.side === 'red') ? d.side : null; state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon); if (typeof d.showNames === 'boolean') state.showNames = d.showNames; if (typeof d.rhEvent === 'string') state.rhEvent = d.rhEvent; if (Array.isArray(d.jogos)) { state.jogos = d.jogos.map(sanitizeJogo); state.jogoAtual = state.jogos.some(j => j.id === d.jogoAtual) ? d.jogoAtual : (state.jogos[0] ? state.jogos[0].id : null); } return; } } } catch (e) {} const s = newScenario({ fase: 'Start', nome: 'Start (30m)' }); state.scenarios = [s]; state.currentId = s.id; }
   function sanitizeScenario(s) { return { id: s.id || uid(), fase: s.fase || 'Cenário', nome: s.nome || 'Cenário', condicao: s.condicao || null, tempo: (typeof s.tempo === 'string' ? s.tempo.slice(0, 8) : (typeof s.tempo === 'number' ? String(s.tempo) : '')), tokens: Array.isArray(s.tokens) ? s.tokens.filter(t => partyById.has(t.pt)).map(t => { const o = { pt: t.pt, xf: clamp01(t.xf), yf: clamp01(t.yf) }; if (typeof t.hp === 'number' && t.hp >= 0 && t.hp < 100) o.hp = Math.round(t.hp); return o; }) : [], desenhos: Array.isArray(s.desenhos) ? s.desenhos.filter(d => d && Array.isArray(d.pontos)).map(d => ({ id: d.id || uid(), tipo: d.tipo, pontos: d.pontos.map(p => [clamp01(p[0]), clamp01(p[1])]), cor: d.cor || '#FFC21A', largura: d.largura || 3 })) : [], objetivos: (s.objetivos && typeof s.objetivos === 'object') ? Object.fromEntries(Object.keys(s.objetivos).filter(k => objById.has(k) && s.objetivos[k]).map(k => [k, true])) : {}, objetivoPos: (s.objetivoPos && typeof s.objetivoPos === 'object') ? Object.fromEntries(Object.entries(s.objetivoPos).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}, destacados: Array.isArray(s.destacados) ? s.destacados.filter(d => partyById.has(d.pt)).map(d => { const o = { id: d.id || uid(), pt: d.pt, nome: String(d.nome || '—'), funcao: ['Tank', 'DPS', 'Healer'].includes(d.funcao) ? d.funcao : 'DPS', xf: clamp01(d.xf), yf: clamp01(d.yf) }; if (typeof d.hp === 'number' && d.hp >= 0 && d.hp < 100) o.hp = Math.round(d.hp); if (d.dead) o.dead = true; if (d.hideName) o.hideName = true; if (d.locked) o.locked = true; if (d.nameSide) o.nameSide = true; if (d.chicken) o.chicken = true; return o; }) : [], links: Array.isArray(s.links) ? s.links.filter(l => l && typeof l.a === 'string' && typeof l.b === 'string' && l.a !== l.b).map(l => ({ id: l.id || uid(), a: l.a, b: l.b })) : [], objHp: (s.objHp && typeof s.objHp === 'object') ? Object.fromEntries(Object.entries(s.objHp).filter(([k, v]) => objById.has(k) && typeof v === 'number' && v >= 0 && v <= 100).map(([k, v]) => [k, Math.round(v)])) : {}, hideMeters: (s.hideMeters && typeof s.hideMeters === 'object') ? Object.fromEntries(Object.entries(s.hideMeters).filter(([k, v]) => objById.has(k) && v).map(([k]) => [k, true])) : {}, objBuffs: (s.objBuffs && typeof s.objBuffs === 'object') ? Object.fromEntries(Object.entries(s.objBuffs).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string')])) : {}, treeCarry: (s.treeCarry && typeof s.treeCarry === 'object') ? Object.fromEntries(Object.entries(s.treeCarry).filter(([k, v]) => objById.has(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === 'string').slice(0, 2)])) : {}, notas: Array.isArray(s.notas) ? s.notas.filter(n => n && typeof n.text === 'string').map(n => ({ id: n.id || uid(), x: clamp01(n.x), y: clamp01(n.y), text: String(n.text).slice(0, 240), size: (typeof n.size === 'number' && n.size >= 0.4 && n.size <= 2.2) ? n.size : 1, color: (typeof n.color === 'string' && /^#[0-9a-f]{6}$/i.test(n.color)) ? n.color : undefined })) : [], enemies: Array.isArray(s.enemies) ? s.enemies.map(e => ({ id: e.id || uid(), x: clamp01(e.x), y: clamp01(e.y), n: Math.max(0, Math.min(99, parseInt(e.n) || 0)), label: typeof e.label === 'string' ? e.label.slice(0, 24) : '' })) : [], marcas: Array.isArray(s.marcas) ? s.marcas.filter(m => m && (m.kind === 'emoji' || (m.kind === 'asset' && CFG.assets.icons[m.val])) && typeof m.val === 'string').map(m => ({ id: m.id || uid(), x: clamp01(m.x), y: clamp01(m.y), kind: m.kind, val: String(m.val).slice(0, 8) })) : [], focus: (function(f){ var a = Array.isArray(f) ? f : (f && typeof f === 'object' ? [f] : []); return a.filter(function(x){ return x && x.w > 0 && x.h > 0; }).map(function(x){ var o = { x: clamp01(x.x), y: clamp01(x.y), w: clamp01(x.w), h: clamp01(x.h) }; if (typeof x.rot === 'number' && x.rot) o.rot = ((Math.round(x.rot) % 360) + 360) % 360; if (x.shape === 'ellipse') o.shape = 'ellipse'; return o; }); })(s.focus), varOf: typeof s.varOf === 'string' ? s.varOf : null, varLabel: typeof s.varLabel === 'string' ? s.varLabel.slice(0, 4) : null, view: (s.view && typeof s.view === 'object' && typeof s.view.scale === 'number') ? { scale: Math.max(1, Math.min(4, s.view.scale)), cxf: clamp01(s.view.cxf), cyf: clamp01(s.view.cyf) } : undefined, fill: s.fill ? true : undefined, nota: typeof s.nota === 'string' ? s.nota : '' }; }
-  function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tags: (Array.isArray(p.tags) ? p.tags : (p.tag2 ? [p.tag2] : [])).filter(tg => (CFG.secondaryTags || []).includes(tg)), flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], replace: !!p.replace, replaceOf: (typeof p.replaceOf === 'string' && p.replaceOf.trim()) ? String(p.replaceOf).slice(0, 40) : undefined, disc: (typeof p.disc === 'string' && /^\d{5,20}$/.test(p.disc)) ? p.disc : undefined, fix: PT_IDS.includes(p.fix) ? p.fix : undefined, nota: typeof p.nota === 'string' ? p.nota : '' }; }
+  function sanitizePlayer(p) { const funcao = ['Tank', 'DPS', 'Healer'].includes(p.funcao) ? p.funcao : 'DPS'; const flagIds = (CFG.specialFlags || []).map(f => f.id); return { id: p.id || uid(), nome: String(p.nome || '—'), classe: String(p.classe || funcao), funcao, status: p.status || 'primary', ausente: !!p.ausente, reserva: !!p.reserva, pt: PT_IDS.includes(p.pt) ? p.pt : null, tags: (Array.isArray(p.tags) ? p.tags : (p.tag2 ? [p.tag2] : [])).filter(tg => (CFG.secondaryTags || []).includes(tg)), flags: Array.isArray(p.flags) ? p.flags.filter(f => flagIds.includes(f)) : [], replace: !!p.replace, replaceOf: (typeof p.replaceOf === 'string' && p.replaceOf.trim()) ? String(p.replaceOf).slice(0, 40) : undefined, disc: (typeof p.disc === 'string' && /^\d{5,20}$/.test(p.disc)) ? p.disc : undefined, fix: PT_IDS.includes(p.fix) ? p.fix : undefined, signupAusente: p.signupAusente ? true : undefined, nota: typeof p.nota === 'string' ? p.nota : '' }; }
 })();
