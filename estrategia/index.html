@@ -563,6 +563,10 @@
     .bd-c{font-variant-numeric:tabular-nums;margin-left:auto;color:var(--text)}
     .bd-pool{background:rgba(217,164,65,.05);border-color:var(--line)}
     .bd-res{background:rgba(137,171,197,.05)}
+    /* Ausentes: presentes e arrastáveis, mas visualmente recuados — dá pra puxar pra simular */
+    .bd-abs{background:rgba(217,164,65,.05)}
+    .bd-abs .bd-chip{opacity:.72}
+    .bd-abs .bd-chip:hover{opacity:1}
     /* pool e reservas gerais: chips em colunas responsivas (compacto) */
     .bd-pool .bd-chips,.bd-res .bd-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
     /* board com 6 PTs de uma vez: coluna esquerda (arrastar) + grade 3x2 */
