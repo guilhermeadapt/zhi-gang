@@ -985,6 +985,9 @@
         <button class="tbtn ico" id="moreBtn" data-i18n-title="tipMore" title="Mais opções" aria-label="Mais opções"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
         <div class="plans-menu more-menu" id="moreMenu" hidden>
           <button class="tbtn" id="presentBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h20v12H2z"/><path d="M8 20h8M12 16v4"/></svg><span data-i18n="present">Apresentar</span></button>
+          <!-- Opt-in: a guerra só ganha o eixo de jogos se alguém ativar aqui. Plano que não
+               usa isso não vê barra nenhuma e segue funcionando exatamente como antes. -->
+          <button class="tbtn" id="jogosOnBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg><span data-i18n="mJogosOn">Vários jogos nesta guerra…</span></button>
           <button class="tbtn" id="exportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg><span data-i18n="mExport">Exportar JSON</span></button>
           <button class="tbtn" id="importBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M5 21h14"/></svg><span data-i18n="mImport">Importar JSON</span></button>
           <button class="tbtn" id="resetBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span data-i18n="mReset">Resetar…</span></button>
