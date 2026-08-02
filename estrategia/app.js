@@ -1562,7 +1562,7 @@
             })
           });
         }
-        secs.push({ pt: pid, linhas });
+        secs.push({ pt: pid, grupo: grpDePT(pid), linhas });
       });
     } else if (gradeMode === 'pt') {
       // Bloco = PT. Linha = cada jogador que passa por essa PT em ALGUM jogo (união, não só o
@@ -1579,7 +1579,7 @@
         const fix = linhas.filter(l => varia.indexOf(l) < 0);
         // quem não muda vira UMA linha com os nomes: antes o bloco ficava só com o cabeçalho
         // "PT1 · 5 fixos" e um vazio embaixo, que não dizia nada a ninguém.
-        secs.push({ pt: pid, cor: (partyById.get(pid) || {}).cor, fixos: fix.map(l => l.label), linhas: varia });
+        secs.push({ pt: pid, grupo: grpDePT(pid), cor: (partyById.get(pid) || {}).cor, fixos: fix.map(l => l.label), linhas: varia });
       });
     } else {
       // Lista corrida agrupada por CLASSE (não por PT): a pergunta aqui é "onde cada um joga
@@ -1594,6 +1594,8 @@
     }
     return { jogos: state.jogos.map(j => j.nome), notas: state.jogos.map(j => j.nota || ''), secs };
   }
+  // De que grupo é a PT — para separar Ataque de Defesa também fora do modo Planilha
+  const grpDePT = pid => { const g = (CFG.grupos || []).find(x => (x.pts || []).indexOf(pid) >= 0); return g ? grpNome(g.nome) : null; };
   const grpNome = n => t('grp_' + String(n || '').toLowerCase()) || n;
   // ---- modo PRINT: o layout da planilha original ----
   // Um bloco por jogo; dentro, colunas = PTs agrupadas em Ataque/Defesa e linhas = slots.
@@ -1668,7 +1670,9 @@
     obs += '</tr>';
     d.jogos.forEach(n => { h += '<th>' + esc(n) + '</th>'; });
     h += '</tr></thead><tbody>' + obs;
+    let gAtual = null;
     d.secs.forEach(s => {
+      if (s.grupo && s.grupo !== gAtual) { gAtual = s.grupo; h += '<tr class="g-grp"><td colspan="' + (d.jogos.length + 1) + '">' + esc(s.grupo) + '</td></tr>'; }
       h += '<tr class="g-sec"><td colspan="' + (d.jogos.length + 1) + '"' + (s.cor ? ' style="--rc:' + s.cor + '"' : '') + '><b>' + esc(s.pt) + '</b>'
         + (s.fixos && s.fixos.length ? '<span class="g-fix">' + s.fixos.length + ' ' + esc(t('gradeFixos')) + ': ' + esc(s.fixos.join(' · ')) + '</span>' : '') + '</td></tr>';
       s.linhas.forEach(l => {
@@ -1772,7 +1776,9 @@
       await Promise.all([...ids].map(async id => { const im = await loadSpecImg(id); if (im) imgs.set(id, im); }));
     }
     const NW = gradeMode === 'sheet' ? 62 : 195, CW = gradeMode === 'sheet' ? 178 : 112, RH = 24, HH = 32, PAD = 18, dpr = 2;
-    let rows = d.notas.some(n => n) ? 1 : 0; d.secs.forEach(s => { rows += 1 + s.linhas.length; });
+    let rows = d.notas.some(n => n) ? 1 : 0, grps = new Set();
+    d.secs.forEach(s => { rows += 1 + s.linhas.length; if (s.grupo) grps.add(s.grupo); });
+    rows += grps.size;
     const W = PAD * 2 + NW + CW * d.jogos.length, H = PAD * 2 + HH + RH * rows + 40;   // folga para a legenda do rodapé
     const cv = document.createElement('canvas'); cv.width = W * dpr; cv.height = H * dpr;
     const g = cv.getContext('2d'); g.scale(dpr, dpr);
@@ -1806,7 +1812,15 @@
       }
       y += RH;
     }
+    let gAtual = null;
     d.secs.forEach(s => {
+      if (s.grupo && s.grupo !== gAtual) {
+        gAtual = s.grupo;
+        g.fillStyle = '#0f131a'; g.fillRect(PAD, y, NW + CW * d.jogos.length, RH - 4);
+        g.fillStyle = '#5a6274'; g.font = 'bold 9px system-ui,sans-serif';
+        g.fillText(String(s.grupo).toUpperCase(), PAD + 10, y + (RH - 4) / 2);
+        y += RH - 4;
+      }
       g.fillStyle = '#161a23'; g.fillRect(PAD, y, NW + CW * d.jogos.length, RH);
       if (s.cor) { g.fillStyle = s.cor; g.fillRect(PAD, y, 3, RH); }
       g.fillStyle = s.cor || '#8b93a7'; g.font = 'bold 10px system-ui,sans-serif';
@@ -1860,8 +1874,15 @@
         y += RH;
       });
     });
-    g.fillStyle = '#5a6274'; g.font = '10px system-ui,sans-serif';
-    g.fillText('Game Plan · ' + d.jogos.length + ' ' + (d.jogos.length === 1 ? 'jogo' : 'jogos'), PAD, H - PAD + 2);
+    g.font = '10px system-ui,sans-serif'; let lx = PAD;
+    const seg = (txt, cor) => { g.fillStyle = cor; g.fillText(txt, lx, H - PAD + 2); lx += g.measureText(txt).width + 4; };
+    seg(t('tor_top'), '#7fc6ff'); seg(t('lgTop') + ' ·', '#5a6274');
+    seg(t('tor_mid'), '#ffd166'); seg(t('lgMid') + ' ·', '#5a6274');
+    seg(t('tor_bot'), '#ff8fa3'); seg(t('lgBot') + ' ·', '#5a6274');
+    seg(t('lgCh'), '#d9a441');
+    g.fillStyle = '#3d434f'; g.textAlign = 'right';
+    g.fillText('Game Plan · ' + d.jogos.length + ' ' + t(d.jogos.length === 1 ? 'lgJogo' : 'lgJogos'), W - PAD, H - PAD + 2);
+    g.textAlign = 'left';
     return entregarPNG(cv);
   }
   async function entregarPNG(cv) {
