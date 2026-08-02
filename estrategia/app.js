@@ -1582,14 +1582,15 @@
         secs.push({ pt: pid, cor: (partyById.get(pid) || {}).cor, fixos: fix.map(l => l.label), linhas: varia });
       });
     } else {
+      // Lista corrida agrupada por CLASSE (não por PT): a pergunta aqui é "onde cada um joga
+      // nos cinco", e quem lê procura pela função da pessoa, não pelo time do jogo aberto.
       const cel = (j, id) => { const e = j.escalacao[id]; return (e && e.pt) ? (e.reserva ? e.pt + '·r' : e.pt) : null; };
       const linhaDe = id => ({ label: nomeExib(byId.get(id)), full: byId.get(id).nome, cor: roleColor(byId.get(id).funcao), emote: specIcons ? specEmoteDe(byId.get(id)) : null, cels: state.jogos.map(j => cel(j, id)) });
-      PT_IDS.forEach(pid => {
-        const ids = [...usados].filter(id => { const e = atual.escalacao[id]; return e && e.pt === pid; }).sort(ord);
-        if (ids.length) secs.push({ pt: pid, cor: (partyById.get(pid) || {}).cor, linhas: ids.map(linhaDe) });
+      const ordSpec = (a, b) => String(byId.get(a).spec || byId.get(a).classe || '').localeCompare(String(byId.get(b).spec || byId.get(b).classe || '')) || byId.get(a).nome.localeCompare(byId.get(b).nome);
+      CFG.roleOrder.forEach(f => {
+        const ids = [...usados].filter(id => byId.get(id).funcao === f).sort(ordSpec);
+        if (ids.length) secs.push({ pt: f, cor: roleColor(f), linhas: ids.map(linhaDe) });
       });
-      const fora = [...usados].filter(id => { const e = atual.escalacao[id]; return !e || !e.pt; }).sort(ord);
-      if (fora.length) secs.push({ pt: t('gradeOut'), linhas: fora.map(linhaDe) });
     }
     return { jogos: state.jogos.map(j => j.nome), notas: state.jogos.map(j => j.nota || ''), secs };
   }
@@ -1770,7 +1771,7 @@
       }));
       await Promise.all([...ids].map(async id => { const im = await loadSpecImg(id); if (im) imgs.set(id, im); }));
     }
-    const NW = gradeMode === 'sheet' ? 70 : 230, CW = gradeMode === 'sheet' ? 178 : 96, RH = 24, HH = 32, PAD = 18, dpr = 2;
+    const NW = gradeMode === 'sheet' ? 62 : 195, CW = gradeMode === 'sheet' ? 178 : 112, RH = 24, HH = 32, PAD = 18, dpr = 2;
     let rows = d.notas.some(n => n) ? 1 : 0; d.secs.forEach(s => { rows += 1 + s.linhas.length; });
     const W = PAD * 2 + NW + CW * d.jogos.length, H = PAD * 2 + HH + RH * rows + 40;   // folga para a legenda do rodapé
     const cv = document.createElement('canvas'); cv.width = W * dpr; cv.height = H * dpr;
@@ -1787,12 +1788,22 @@
       g.fillStyle = '#11151d'; g.fillRect(PAD, y, NW + CW * d.jogos.length, RH);
       g.fillStyle = '#5a6274'; g.font = '10px system-ui,sans-serif';
       g.fillText(String(t('gradeObs')).toUpperCase(), PAD + 10, y + RH / 2);
-      d.notas.forEach((n, i) => {
-        if (!n) return;
-        g.fillStyle = '#8b93a7'; g.font = 'italic 11px system-ui,sans-serif';
-        let tx = n; while (g.measureText(tx).width > CW - 14 && tx.length > 3) tx = tx.slice(0, -2) + '…';
-        g.fillText(tx, PAD + NW + CW * i + 8, y + RH / 2);
-      });
+      if (gradeMode === 'sheet') {
+        // coluna larga: cada nota fica sob o seu jogo
+        d.notas.forEach((n, i) => {
+          if (!n) return;
+          g.fillStyle = '#8b93a7'; g.font = 'italic 11px system-ui,sans-serif';
+          let tx = n; while (g.measureText(tx).width > CW - 14 && tx.length > 3) tx = tx.slice(0, -2) + '…';
+          g.fillText(tx, PAD + NW + CW * i + 8, y + RH / 2);
+        });
+      } else {
+        // coluna estreita: cortar deixaria "League — m…". Melhor uma faixa só, rotulada.
+        g.font = 'italic 11px system-ui,sans-serif';
+        let tx = d.notas.map((n, i) => n ? d.jogos[i] + ': ' + n : null).filter(Boolean).join('  ·  ');
+        const lim = NW + CW * d.jogos.length - 60;
+        while (g.measureText(tx).width > lim && tx.length > 6) tx = tx.slice(0, -2) + '…';
+        g.fillStyle = '#8b93a7'; g.fillText(tx, PAD + 46, y + RH / 2);
+      }
       y += RH;
     }
     d.secs.forEach(s => {
