@@ -2002,7 +2002,7 @@
   function sanitizeDesc(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => PT_IDS.includes(k) && typeof v === 'string' && v.trim()).map(([k, v]) => [k, String(v)])) : {}; }
   function sanitizePosMap(m) { return (m && typeof m === 'object') ? Object.fromEntries(Object.entries(m).filter(([k, v]) => objById.has(k) && v).map(([k, v]) => [k, { x: clamp01(v.x), y: clamp01(v.y) }])) : {}; }
   function exportDataFor(scope) {
-    if (scope === 'board') return { app: 'zhi-board', v: 1, roster: state.roster.map(p => Object.assign({}, p)), ptDesc: state.ptDesc, ptIcon: state.ptIcon };
+    if (scope === 'board') { stashJogoAtual(); return { app: 'zhi-board', v: 2, roster: state.roster.map(slimPlayer), ptDesc: state.ptDesc, ptIcon: state.ptIcon, jogos: state.jogos.length ? state.jogos : undefined, jogoAtual: state.jogos.length ? state.jogoAtual : undefined }; }
     if (scope === 'obj') { const s = cur() || {}; return { app: 'zhi-obj', v: 1, objetivos: s.objetivos || {}, objetivoPos: s.objetivoPos || {}, objHp: s.objHp || {}, objBuffs: s.objBuffs || {}, hideMeters: s.hideMeters || {}, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side }; }
     const d = projectData(); if (scope === 'scenes') { d.roster = []; d.ptDesc = {}; d.ptIcon = {}; } return d;
   }
@@ -2059,7 +2059,7 @@
   // só board (#b) e só objetivos da cena atual (#o)
   async function buildShareUrl(scope) {
     let hash;
-    if (scope === 'board') hash = '#b=' + await encodeShare({ app: 'zhi-board', v: 1, roster: state.roster.map(p => Object.assign({}, p)), ptDesc: state.ptDesc, ptIcon: state.ptIcon });
+    if (scope === 'board') { stashJogoAtual(); hash = '#b=' + await encodeShare({ app: 'zhi-board', v: 2, roster: state.roster.map(slimPlayer), ptDesc: state.ptDesc, ptIcon: state.ptIcon, jogos: state.jogos.length ? state.jogos : undefined, jogoAtual: state.jogos.length ? state.jogoAtual : undefined }); }
     else if (scope === 'scenes') { const d = projectData(); d.roster = []; d.ptDesc = {}; d.ptIcon = {}; hash = '#s=' + await encodeShare(d); }
     else if (scope === 'obj') { const s = cur() || {}; hash = '#o=' + await encodeShare({ app: 'zhi-obj', v: 1, objetivos: s.objetivos || {}, objetivoPos: s.objetivoPos || {}, objHp: s.objHp || {}, objBuffs: s.objBuffs || {}, hideMeters: s.hideMeters || {}, objetivoPosGlobal: state.objetivoPosGlobal, gates: state.gates, side: state.side }); }
     else hash = '#p=' + await encodeShare(projectData());
@@ -2121,12 +2121,37 @@
     applyBoardData(d);
     toast(t('boardLoaded'));
   }
+  // O link do board vive dentro de uma mensagem de Discord (limite 2000 caracteres), então
+  // só viaja o que o outro lado não consegue reconstruir. sanitizePlayer repõe os defaults
+  // na chegada, então campo vazio no fio é desperdício puro.
+  function slimPlayer(p) {
+    const o = { id: p.id, nome: p.nome, funcao: p.funcao };
+    if (p.pt) o.pt = p.pt;
+    if (p.reserva) o.reserva = 1;
+    if (p.ausente) o.ausente = 1;
+    if (p.disc) o.disc = p.disc;
+    if (p.apelido) o.apelido = p.apelido;
+    if (p.classe && p.classe !== p.funcao) o.classe = p.classe;
+    if (p.replaceOf) o.replaceOf = p.replaceOf;
+    if (p.fix) o.fix = p.fix;
+    if (p.signupAusente) o.signupAusente = 1;
+    if (p.tags && p.tags.length) o.tags = p.tags;
+    if (p.flags && p.flags.length) o.flags = p.flags;
+    if (p.nota) o.nota = p.nota;
+    return o;
+  }
   function applyBoardData(d) {
     state.roster = d.roster.map(sanitizePlayer);
     state.ptDesc = sanitizeDesc(d.ptDesc); state.ptIcon = sanitizeDesc(d.ptIcon);
+    // O board de uma guerra com vários jogos É os jogos: sem isto o link levava só a
+    // escalação do jogo aberto e os outros sumiam do outro lado.
+    if (Array.isArray(d.jogos) && d.jogos.length) {
+      state.jogos = d.jogos.map(sanitizeJogo);
+      state.jogoAtual = state.jogos.some(j => j.id === d.jogoAtual) ? d.jogoAtual : state.jogos[0].id;
+    }
     cleanupReplaces(state.roster);
     reconcileMemberSlots();
-    saveProject(); renderSidebar(); renderTokens();
+    saveProject(); renderSidebar(); renderTokens(); renderJogos();
     if (rosterModal && !rosterModal.hidden) { rosterDraft = state.roster.map(p => Object.assign({}, p, { flags: (p.flags || []).slice() })); refreshRoster(); }
   }
   // dump curto (só coordenadas) — robusto para colar num chat sem corromper
