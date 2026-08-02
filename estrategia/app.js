@@ -1912,6 +1912,8 @@
       if (!np) { if (p.manual) { result.push(p); kept++; } else { removed++; } return; }
       if (np.disc && !p.disc) p.disc = np.disc;
       if (np.apelido && !p.apelido) p.apelido = np.apelido;
+      if (np.specEmote && !p.specEmote) p.specEmote = np.specEmote;
+      if (np.spec && !p.spec) p.spec = np.spec;
       // Guerra COM jogos: "Absence" é negociável (a staff conversa e a pessoa acaba jogando),
       // então quem já está numa PT permanece nela e o conflito só vira selo (signupAusente).
       // Guerra SEM jogos: comportamento de sempre — quem marcou ausência sai da PT. Quem já
@@ -2083,10 +2085,13 @@
     Silkbind_Deluge: '1448852659640467517'
   };
   const emoteUrl = id => 'https://cdn.discordapp.com/emojis/' + id + '.png?size=48';
+  // Fallback por FUNÇÃO — todo tank e todo healer têm ícone, mesmo sem spec no signup
+  // (Absence não traz spec, e roster colado à mão também não).
+  const FUNC_EMOTE = { Tank: SPEC_EMOTE.Stonesplit_Might, Healer: SPEC_EMOTE.Silkbind_Deluge, DPS: SPEC_EMOTE.Bellstrike_Splendor };
   function specEmoteDe(p) {
     if (!p) return null;
     if (p.specEmote && /^\d{5,20}$/.test(String(p.specEmote))) return String(p.specEmote);
-    return SPEC_EMOTE[p.classe] || SPEC_EMOTE[p.spec] || null;
+    return SPEC_EMOTE[p.spec] || SPEC_EMOTE[p.classe] || FUNC_EMOTE[p.funcao] || null;
   }
   let specIcons = false;
   try { specIcons = localStorage.getItem('gp-spec-icons') === '1'; } catch (e) {}
