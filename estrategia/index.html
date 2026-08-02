@@ -830,7 +830,8 @@
     .bd-chip .c-pin{flex:none;font-size:10px}
     /* Grade dos jogos (jogos nas colunas, escalação nas linhas) */
     .grade-box{background:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px;width:min(96vw,1240px);max-height:calc(100vh - 56px);display:flex;flex-direction:column;gap:10px;min-height:0}
-    .grade-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .grade-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .grade-tabs button{padding:6px 13px}
     .grade-acts{display:flex;gap:8px}
     .grade-body{overflow:auto;flex:1 1 auto;min-height:0}
     .grade-tb{border-collapse:collapse;width:100%;font-size:12.5px}
@@ -844,6 +845,7 @@
     .grade-tb td.g-nm{border-left:3px solid var(--rc,var(--line-soft))}
     .grade-tb td.g-ch{color:var(--gold);background:rgba(217,164,65,.1);font-weight:700}
     .grade-tb td.g-out{color:var(--muted)}
+    .grade-tb td.g-saiu{color:var(--gold);font-weight:700;text-align:center}
     .grade-tb td.g-slot{color:var(--muted);text-align:center;width:34px;font-size:11px}
     /* Torre: letra fina em cor, sem caixa — marca sem competir com o nome */
     .grade-tb td .g-nome,.pr-tb td .g-nome{display:inline-block;vertical-align:middle;padding-left:6px}
@@ -1308,7 +1310,12 @@
       <div class="grade-head">
         <h3 class="lv-title" data-i18n="gradeTitle">Grade dos jogos</h3>
         <div class="grade-acts">
-          <button class="rbtn" id="gradeSwap"></button>
+          <div class="view-toggle grade-tabs" id="gradeTabs">
+            <button type="button" data-gm="print" data-i18n="gradeByPrint">Planilha</button>
+            <button type="button" data-gm="sheet" data-i18n="gradeBySheet">Escalação</button>
+            <button type="button" data-gm="pt" data-i18n="gradeByPt">Por PT</button>
+            <button type="button" data-gm="player" data-i18n="gradeByPlayer">Por jogador</button>
+          </div>
           <button class="rbtn" id="gradePng" data-i18n="gradePng">🖼 Imagem</button>
           <button class="rbtn" id="gradeClose" data-i18n="close">Fechar</button>
         </div>
