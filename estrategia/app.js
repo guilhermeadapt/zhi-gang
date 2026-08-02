@@ -1558,7 +1558,7 @@
             cels: porJogo.map((col, j) => {
               const p = col[i]; if (!p) return null; const p0 = null;
               const antes = j > 0 && porJogo[j - 1].some(x => x.id === p.id);
-              return { txt: nomeExib(p), full: p.nome, cor: roleColor(p.funcao), novo: j > 0 && !antes, torre: p0 ? undefined : undefined, tor: (state.jogos[j].escalacao[p.id] || {}).torre };
+              return { txt: nomeExib(p), full: p.nome, cor: roleColor(p.funcao), novo: j > 0 && !antes, emote: specIcons ? specEmoteDe(p) : null, tor: (state.jogos[j].escalacao[p.id] || {}).torre };
             })
           });
         }
@@ -1572,19 +1572,21 @@
       PT_IDS.forEach(pid => {
         const ids = [...usados].filter(id => state.jogos.some(j => { const e = j.escalacao[id]; return e && e.pt === pid; })).sort(ord);
         if (!ids.length) return;
-        const linhas = ids.map(id => ({ label: nomeExib(byId.get(id)), full: byId.get(id).nome, cor: roleColor(byId.get(id).funcao), cels: state.jogos.map(j => cel(j, id, pid)) }));
+        const linhas = ids.map(id => ({ label: nomeExib(byId.get(id)), full: byId.get(id).nome, cor: roleColor(byId.get(id).funcao), emote: specIcons ? specEmoteDe(byId.get(id)) : null, cels: state.jogos.map(j => cel(j, id, pid)) }));
         // Quem está em todos os jogos vira só um contador: uma parede de ✓ idênticos não diz
         // nada, e o que se quer ver aqui é exatamente quem entra e sai entre as partidas.
         const varia = linhas.filter(l => l.cels.some((c, i) => i > 0 && c !== l.cels[i - 1]));
-        const fixos = linhas.length - varia.length;
-        secs.push({ pt: pid + (fixos ? ' · ' + fixos + ' ' + t('gradeFixos') : ''), linhas: varia });
+        const fix = linhas.filter(l => varia.indexOf(l) < 0);
+        // quem não muda vira UMA linha com os nomes: antes o bloco ficava só com o cabeçalho
+        // "PT1 · 5 fixos" e um vazio embaixo, que não dizia nada a ninguém.
+        secs.push({ pt: pid, cor: (partyById.get(pid) || {}).cor, fixos: fix.map(l => l.label), linhas: varia });
       });
     } else {
       const cel = (j, id) => { const e = j.escalacao[id]; return (e && e.pt) ? (e.reserva ? e.pt + '·r' : e.pt) : null; };
-      const linhaDe = id => ({ label: nomeExib(byId.get(id)), full: byId.get(id).nome, cor: roleColor(byId.get(id).funcao), cels: state.jogos.map(j => cel(j, id)) });
+      const linhaDe = id => ({ label: nomeExib(byId.get(id)), full: byId.get(id).nome, cor: roleColor(byId.get(id).funcao), emote: specIcons ? specEmoteDe(byId.get(id)) : null, cels: state.jogos.map(j => cel(j, id)) });
       PT_IDS.forEach(pid => {
         const ids = [...usados].filter(id => { const e = atual.escalacao[id]; return e && e.pt === pid; }).sort(ord);
-        if (ids.length) secs.push({ pt: pid, linhas: ids.map(linhaDe) });
+        if (ids.length) secs.push({ pt: pid, cor: (partyById.get(pid) || {}).cor, linhas: ids.map(linhaDe) });
       });
       const fora = [...usados].filter(id => { const e = atual.escalacao[id]; return !e || !e.pt; }).sort(ord);
       if (fora.length) secs.push({ pt: t('gradeOut'), linhas: fora.map(linhaDe) });
@@ -1666,12 +1668,14 @@
     d.jogos.forEach(n => { h += '<th>' + esc(n) + '</th>'; });
     h += '</tr></thead><tbody>' + obs;
     d.secs.forEach(s => {
-      h += '<tr class="g-sec"><td colspan="' + (d.jogos.length + 1) + '">' + esc(s.pt) + '</td></tr>';
+      h += '<tr class="g-sec"><td colspan="' + (d.jogos.length + 1) + '"' + (s.cor ? ' style="--rc:' + s.cor + '"' : '') + '><b>' + esc(s.pt) + '</b>'
+        + (s.fixos && s.fixos.length ? '<span class="g-fix">' + s.fixos.length + ' ' + esc(t('gradeFixos')) + ': ' + esc(s.fixos.join(' · ')) + '</span>' : '') + '</td></tr>';
       s.linhas.forEach(l => {
-        h += '<tr><td class="g-nm' + (l.cor ? '' : ' g-slot') + '" style="--rc:' + (l.cor || 'var(--line-soft)') + '" title="' + esc(l.full || l.label) + '">' + esc(l.label) + '</td>';
+        h += '<tr><td class="g-nm' + (l.cor ? '' : ' g-slot') + '" style="--rc:' + (l.cor || 'var(--line-soft)') + '" title="' + esc(l.full || l.label) + '">'
+          + (l.emote ? '<img class="g-ico" src="' + emoteUrl(l.emote) + '" alt="" loading="lazy">' : '') + esc(l.label) + '</td>';
         l.cels.forEach((c, i) => {
           // célula é string nos modos de presença; objeto {txt,cor,novo} no modo planilha
-          if (c && typeof c === 'object') { h += '<td class="' + (c.novo ? 'g-ch' : '') + '" style="border-left:3px solid ' + c.cor + '" title="' + esc(c.full || c.txt) + '"><span class="g-nome">' + esc(c.txt) + '</span>' + (c.tor ? '<span class="g-tor t-' + c.tor + '">' + t('tor_' + c.tor) + '</span>' : '') + '</td>'; return; }
+          if (c && typeof c === 'object') { h += '<td class="' + (c.novo ? 'g-ch' : '') + '" style="border-left:3px solid ' + c.cor + '" title="' + esc(c.full || c.txt) + '">' + (c.emote ? '<img class="g-ico" src="' + emoteUrl(c.emote) + '" alt="" loading="lazy">' : '') + '<span class="g-nome">' + esc(c.txt) + '</span>' + (c.tor ? '<span class="g-tor t-' + c.tor + '">' + t('tor_' + c.tor) + '</span>' : '') + '</td>'; return; }
           const mudou = i > 0 && c !== l.cels[i - 1];
           h += '<td class="' + (mudou ? 'g-ch' : (c ? '' : 'g-out')) + '">' + esc(c || '—') + '</td>';
         });
@@ -1757,9 +1761,18 @@
   async function gradePNG() {
     if (gradeMode === 'print') return entregarPNG(await printPNG());
     const d = gradeData();
-    const NW = gradeMode === 'sheet' ? 70 : 200, CW = gradeMode === 'sheet' ? 168 : 96, RH = 24, HH = 32, PAD = 18, dpr = 2;
-    let rows = 0; d.secs.forEach(s => { rows += 1 + s.linhas.length; });
-    const W = PAD * 2 + NW + CW * d.jogos.length, H = PAD * 2 + HH + RH * rows + 22;
+    const imgs = new Map();
+    if (specIcons) {
+      const ids = new Set();
+      d.secs.forEach(sc => sc.linhas.forEach(l => {
+        if (l.emote) ids.add(l.emote);
+        l.cels.forEach(c => { if (c && typeof c === 'object' && c.emote) ids.add(c.emote); });
+      }));
+      await Promise.all([...ids].map(async id => { const im = await loadSpecImg(id); if (im) imgs.set(id, im); }));
+    }
+    const NW = gradeMode === 'sheet' ? 70 : 230, CW = gradeMode === 'sheet' ? 178 : 96, RH = 24, HH = 32, PAD = 18, dpr = 2;
+    let rows = d.notas.some(n => n) ? 1 : 0; d.secs.forEach(s => { rows += 1 + s.linhas.length; });
+    const W = PAD * 2 + NW + CW * d.jogos.length, H = PAD * 2 + HH + RH * rows + 40;   // folga para a legenda do rodapé
     const cv = document.createElement('canvas'); cv.width = W * dpr; cv.height = H * dpr;
     const g = cv.getContext('2d'); g.scale(dpr, dpr);
     g.fillStyle = '#0b0e14'; g.fillRect(0, 0, W, H);
@@ -1784,24 +1797,40 @@
     }
     d.secs.forEach(s => {
       g.fillStyle = '#161a23'; g.fillRect(PAD, y, NW + CW * d.jogos.length, RH);
-      g.fillStyle = '#8b93a7'; g.font = 'bold 10px system-ui,sans-serif';
-      g.fillText(String(s.pt).toUpperCase(), PAD + 10, y + RH / 2); y += RH;
+      if (s.cor) { g.fillStyle = s.cor; g.fillRect(PAD, y, 3, RH); }
+      g.fillStyle = s.cor || '#8b93a7'; g.font = 'bold 10px system-ui,sans-serif';
+      g.fillText(String(s.pt).toUpperCase(), PAD + 10, y + RH / 2);
+      if (s.fixos && s.fixos.length) {
+        g.fillStyle = '#5a6274'; g.font = '10px system-ui,sans-serif';
+        const wp = g.measureText(String(s.pt).toUpperCase()).width;
+        let ft = s.fixos.length + ' ' + t('gradeFixos') + ': ' + s.fixos.join(' · ');
+        const lim = NW + CW * d.jogos.length - wp - 34;
+        while (g.measureText(ft).width > lim && ft.length > 6) ft = ft.slice(0, -2) + '…';
+        g.fillText(ft, PAD + 20 + wp, y + RH / 2);
+      }
+      y += RH;
       s.linhas.forEach(l => {
         if (l.cor) { g.fillStyle = l.cor; g.fillRect(PAD, y, 3, RH); }
+        const li = l.emote ? imgs.get(l.emote) : null;
+        if (li) g.drawImage(li, PAD + 8, y + 3, RH - 6, RH - 6);
         g.fillStyle = l.cor ? '#e8ecf4' : '#5a6274'; g.font = '12px system-ui,sans-serif';
-        let nm = String(l.label); while (g.measureText(nm).width > NW - 20 && nm.length > 3) nm = nm.slice(0, -2) + '…';
-        g.fillText(nm, PAD + 10, y + RH / 2);
+        const nx = li ? PAD + RH + 8 : PAD + 10;
+        let nm = String(l.label); while (g.measureText(nm).width > NW - (li ? RH + 20 : 20) && nm.length > 3) nm = nm.slice(0, -2) + '…';
+        g.fillText(nm, nx, y + RH / 2);
         l.cels.forEach((c, i) => {
           const x0 = PAD + NW + CW * i;
           // modo planilha: célula é {txt,cor,novo} e mostra o nome do jogador
           if (c && typeof c === 'object') {
             if (c.novo) { g.fillStyle = 'rgba(217,164,65,.16)'; g.fillRect(x0, y, CW, RH); }
-            g.fillStyle = c.cor; g.fillRect(x0, y, 2, RH);
+            const ci = c.emote ? imgs.get(c.emote) : null;
+            if (ci) g.drawImage(ci, x0 + 4, y + 3, RH - 6, RH - 6);
+            else { g.fillStyle = c.cor; g.fillRect(x0, y, 2, RH); }
             g.fillStyle = c.novo ? '#d9a441' : '#e8ecf4';
             g.font = (c.novo ? 'bold ' : '') + '12px system-ui,sans-serif';
-            const larg = CW - (c.tor ? 34 : 16);
+            const cx0 = ci ? x0 + RH + 4 : x0 + 8;
+            const larg = CW - (c.tor ? 34 : 16) - (ci ? RH - 6 : 0);
             let tx = c.txt; while (g.measureText(tx).width > larg && tx.length > 3) tx = tx.slice(0, -2) + '…';
-            g.fillText(tx, x0 + 8, y + RH / 2);
+            g.fillText(tx, cx0, y + RH / 2);
             if (c.tor) {   // marcador de torre, encostado à direita da célula
               const TC = { top: '#7fc6ff', mid: '#ffd166', bot: '#ff8fa3' }[c.tor];
               g.fillStyle = TC; g.fillRect(x0 + CW - 20, y + 6, 13, RH - 12);
