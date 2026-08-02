@@ -841,12 +841,29 @@
     .grade-tb td.g-ch{color:var(--gold);background:rgba(217,164,65,.1);font-weight:700}
     .grade-tb td.g-out{color:var(--muted)}
     .grade-tb td.g-slot{color:var(--muted);text-align:center;width:34px;font-size:11px}
-    /* Torre na grade: encostada à direita da célula — lê-se como coluna sem gastar largura */
-    .grade-tb td .g-nome{display:inline-block;vertical-align:middle}
-    .grade-tb td .g-tor{float:right;font-size:9px;font-weight:700;line-height:1;padding:2px 4px;border-radius:3px;color:#0b0e14;margin-left:6px}
-    .grade-tb td .g-tor.t-top{background:#7fc6ff}
-    .grade-tb td .g-tor.t-mid{background:#ffd166}
-    .grade-tb td .g-tor.t-bot{background:#ff8fa3}
+    /* Torre: letra fina em cor, sem caixa — marca sem competir com o nome */
+    .grade-tb td .g-nome,.pr-tb td .g-nome{display:inline-block;vertical-align:middle;padding-left:6px}
+    .g-tor{float:right;font-size:9.5px;font-weight:700;line-height:1.6;letter-spacing:.04em;opacity:.85}
+    .g-tor.t-top{color:#7fc6ff}
+    .g-tor.t-mid{color:#ffd166}
+    .g-tor.t-bot{color:#ff8fa3}
+    /* Modo planilha: um bloco por jogo, PTs nas colunas, Ataque/Defesa separados */
+    .pr-jogo{margin-bottom:18px}
+    .pr-head{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+    .pr-head b{font-family:var(--disp);font-size:13px;letter-spacing:.06em;color:var(--gold)}
+    .pr-obs{font-size:11.5px;font-style:italic;color:var(--muted);cursor:pointer}
+    .pr-obs:hover{color:var(--gold)}
+    .pr-obs i{opacity:.4}
+    .pr-tb{border-collapse:collapse;width:100%;font-size:12px;table-layout:fixed}
+    .pr-tb th,.pr-tb td{border:1px solid var(--line-soft);padding:4px 6px;text-align:left;white-space:nowrap;overflow:hidden}
+    .pr-tb th{background:var(--ink-2);font-family:var(--disp);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase}
+    .pr-tb .pr-gl{display:block;color:var(--muted);font-size:8.5px;min-height:11px}
+    .pr-tb .pr-pt{color:var(--rc)}
+    .pr-tb .pr-n,.pr-tb td.pr-n{width:26px;color:var(--muted);text-align:center;font-size:10.5px}
+    .pr-tb .pr-gsep{border-left:2px solid var(--line)}
+    .pr-tb td.g-ch{background:rgba(217,164,65,.1)}
+    .pr-tb td.g-ch .g-nome{color:var(--gold);font-weight:700}
+    .pr-tb .g-out{color:#4a5162;padding-left:6px}
     /* Observação por jogo */
     .grade-tb tr.g-obs td{background:#0f131a;font-size:11.5px;font-style:italic;color:var(--muted)}
     .grade-tb td.g-obs-l{font-style:normal;font-family:var(--disp);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
