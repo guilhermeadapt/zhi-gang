@@ -156,7 +156,20 @@ const WWM = {
   /* mapeia as classes do raid-helper (Discord) para as nossas funções.
      Support não existe como função própria — entra como DPS. */
   classMap: {
-    Tank: 'Tank', Healer: 'Healer', Ranged: 'DPS', Melee: 'DPS', Support: 'DPS',
+    Tank: 'Tank', Healer: 'Healer', Dps: 'DPS',
+    Ranged: 'DPS', Melee: 'DPS', Support: 'DPS',
+
+    // Quem marca Bench/Late/Tentative não manda a CLASSE, só a SPEC — o
+    // parse cai aqui com "Silkbind_Deluge" na mão. Sem estas linhas, todo
+    // reserva virava DPS no board (inclusive tank e healer).
+    Stonesplit_Might: 'Tank',
+    Silkbind_Deluge: 'Healer',
+    Bellstrike_Splendor: 'DPS',
+    Bellstrike_Umbra: 'DPS',
+    Bamboocut_Wind: 'DPS',
+    Bamboocut_Dust: 'DPS',
+    Silkbind_Jade: 'DPS',
+    Stonesplit_Strength: 'DPS',
   },
 
   /* --- PTs disponíveis na paleta ----------------------------------------
@@ -201,6 +214,20 @@ const WWM = {
     { fase: 'Pós-Nirvana',    nome: 'Pós-Nirvana',      condicao: 'vitória' },
     { fase: 'Pós-Nirvana',    nome: 'Pós-Nirvana',      condicao: 'derrota' },
     { fase: 'Colapso',        nome: 'Colapso de Árvores', condicao: null },
+  ],
+
+  /* --- fonte das inscrições ----------------------------------------------
+   * O board busca o roster direto do navegador (a API precisa liberar CORS).
+   * As bases são tentadas NA ORDEM até uma responder com inscrições — é isso
+   * que permite migrar do raid-helper para o bot próprio da guild (repositório
+   * privado zhi-signups) sem quebrar link antigo nem plano já salvo.
+   *
+   * Para virar a chave, descomente a primeira linha com a URL do seu bot:
+   *   'https://inscricoes.suaguilda.com/api/v4/events/',
+   */
+  signupApis: [
+    // 'https://inscricoes.suaguilda.com/api/v4/events/',
+    'https://raid-helper.xyz/api/v4/events/',
   ],
 
   /* --- persistência (localStorage) --------------------------------------- */

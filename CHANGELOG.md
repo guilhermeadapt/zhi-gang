@@ -114,6 +114,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v105 | 26/07/2026 | GamePlan v105: lateral do board mais larga (258px) + busca de players | `b5f4905` |
 | v106 | 26/07/2026 | GamePlan v106: tour de boas-vindas (holofote passo a passo na primeira visita) | `94cc559` |
 | v107 | 26/07/2026 | GamePlan v107: editor de fase achatado — uma linha só, sem desperdício horizontal | `f668c5e` |
+| v108 | 12/08/2026 | Game Plan aceita qualquer API de inscrição (`signupApis`), abre com `?rh=<id>` e corrige reserva caindo como DPS; o bot de inscrições que alimenta isso vive no repositório privado zhi-signups | `—` |
 
 
 ## Resumo por área
@@ -121,3 +122,4 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 - **Game Plan** (`/estrategia/`): cenas com tempo/zoom/expandir por cena, Board com replace-alvo e troca 1-clique, mesclar/copiar board, auto-foco, focos manuais (mover/girar/redimensionar), buffs com arte oficial, objetivos por lado, guia PT/ES/EN.
 - **War Timer** (`/timer/`): narração por voz gravada (todas as combinações sujeito+tempo e sujeito+up), fila de falas, voz como padrão com bipe, mobile com popup central e barra do próximo marco.
 - **Home**: tradução PT/ES/EN.
+- **Inscrições**: bot de Discord próprio no lugar do raid-helper — evento postado no canal, inscrição por botão com spec lembrada, painel privado de opções, recorrência semanal, lembrete e deadline. Mora no repositório privado `zhi-signups`; daqui, o acoplamento é só a URL em `signupApis`.

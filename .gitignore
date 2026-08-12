@@ -5,3 +5,10 @@
 
 # Saída de teste
 /estrategia/plans/*.tmp.json
+
+# --- bot de inscrições -------------------------------------------------------
+# O bot mora no repositório PRIVADO zhi-signups, não aqui. Se alguém clonar os
+# dois lado a lado (o teste do bot procura este repo em ../zhi-gang), ou trouxer
+# a pasta de volta por engano, nada de token nem de banco entra neste commit.
+/bot/
+
