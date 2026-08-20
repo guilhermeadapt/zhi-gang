@@ -114,6 +114,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v105 | 26/07/2026 | GamePlan v105: lateral do board mais larga (258px) + busca de players | `b5f4905` |
 | v106 | 26/07/2026 | GamePlan v106: tour de boas-vindas (holofote passo a passo na primeira visita) | `94cc559` |
 | v107 | 26/07/2026 | GamePlan v107: editor de fase achatado — uma linha só, sem desperdício horizontal | `f668c5e` |
+| v108 | 20/08/2026 | Game Plan v108: botão Game Plan do Discord funciona — lê `?rh=` da URL e busca as inscrições na origem do próprio link (zhi-signups), com raid-helper.xyz de reserva; parse aceita os dois dialetos da API (v4/v1); reservas mantêm a função pela spec | `fb60e92` |
 
 
 ## Resumo por área
