@@ -157,7 +157,25 @@ const WWM = {
      Support não existe como função própria — entra como DPS. */
   classMap: {
     Tank: 'Tank', Healer: 'Healer', Ranged: 'DPS', Melee: 'DPS', Support: 'DPS',
+    // Specs do zhi-signups (template wwm-gvg): Bench/Late/Tentative chegam só
+    // com a spec, e é ela que diz a função — sem isto, todo reserva vira DPS.
+    Stonesplit_Might: 'Tank',
+    Silkbind_Deluge: 'Healer',
+    Bellstrike_Splendor: 'DPS', Bellstrike_Umbra: 'DPS',
+    Bamboocut_Wind: 'DPS', Bamboocut_Dust: 'DPS',
+    Silkbind_Jade: 'DPS', Stonesplit_Strength: 'DPS',
   },
+
+  /* --- fonte do roster (sync por link de evento) --------------------------
+   * APIs tentadas em ordem pelo sync do roster (?rh= da URL, campo de link do
+   * modal). Se o link colado/recebido for uma URL, a origem DELE é tentada
+   * antes destas — colar o link de qualquer instância do zhi-signups já basta.
+   * As duas servem o mesmo shape (/api/v4/events/<id>) com CORS liberado.
+   */
+  rosterApis: [
+    'https://zhi-signups.guilherme-99b.workers.dev/api/v4/events/',
+    'https://raid-helper.xyz/api/v4/events/',   // eventos antigos do raid-helper
+  ],
 
   /* --- PTs disponíveis na paleta ----------------------------------------
    * A ferramenta é focada em PTs (grupos de ~5), não em players individuais.
