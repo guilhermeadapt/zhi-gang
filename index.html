@@ -175,6 +175,7 @@
     .tmeta{flex:1;min-width:0;display:flex;flex-direction:column;}
     .tkick{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-weight:600;
       font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+    .tchip.old{color:#f0a39a;border-color:rgba(210,96,84,.45);background:rgba(210,96,84,.10)}
     .tchip{font-family:var(--disp);font-weight:600;font-size:8px;letter-spacing:.1em;text-transform:uppercase;
       color:#241a06;background:linear-gradient(180deg,var(--gold-2),var(--gold));padding:2px 6px;border-radius:999px;}
     .tname{font-family:var(--disp);font-weight:600;font-size:1.1rem;letter-spacing:.01em;line-height:1.08;}
@@ -221,7 +222,7 @@
       <a class="card play" href="./playbook/">
         <span class="glyph" aria-hidden="true">陣</span>
         <span class="meta">
-          <span class="role" data-i18n="rolePlay">Playbook</span>
+          <span class="role" data-i18n-html="rolePlay">Playbook <span class="tchip old">Desatualizado</span></span>
           <span class="name">Playbook GvG</span>
           <span class="desc" data-i18n="descPlay">A estratégia geral da guild nas bandeiras fixas</span>
         </span>
@@ -232,7 +233,7 @@
         <a class="card tank" href="./tank/">
           <span class="glyph" aria-hidden="true">盾</span>
           <span class="meta">
-            <span class="role" data-i18n="roleGuide">Guia</span>
+            <span class="role" data-i18n-html="roleGuide">Guia <span class="tchip old">Desatualizado</span></span>
             <span class="name">Tank</span>
             <span class="desc" data-i18n="descTank">Build, frontline, controle e resistência</span>
           </span>
@@ -242,7 +243,7 @@
         <a class="card dps" href="./dps/">
           <span class="glyph" aria-hidden="true">戰</span>
           <span class="meta">
-            <span class="role" data-i18n="roleGuide">Guia</span>
+            <span class="role" data-i18n-html="roleGuide">Guia <span class="tchip old">Desatualizado</span></span>
             <span class="name">DPS</span>
             <span class="desc" data-i18n="descDps">Build, kit, decisão e dano no GvG</span>
           </span>
@@ -252,7 +253,7 @@
         <a class="card heal" href="./healer/">
           <span class="glyph" aria-hidden="true">護</span>
           <span class="meta">
-            <span class="role" data-i18n="roleGuide">Guia</span>
+            <span class="role" data-i18n-html="roleGuide">Guia <span class="tchip old">Desatualizado</span></span>
             <span class="name">Healer</span>
             <span class="desc" data-i18n="descHealer">Build, posicionamento, kit e sobrevivência</span>
           </span>
@@ -301,9 +302,9 @@
   <script>
     (function(){
       var I18N={
-        pt:{ sub:'Playbook, guias de função e ferramentas do GvG.', lbl:'Abrir os guias em', rolePlay:'Playbook', roleGuide:'Guia', descPlay:'A estratégia geral da guild nas bandeiras fixas', descTank:'Build, frontline, controle e resistência', descDps:'Build, kit, decisão e dano no GvG', descHealer:'Build, posicionamento, kit e sobrevivência', secTools:'Ferramentas', roleTool:'Ferramenta <span class=\'tchip\'>Beta</span>', descGameplan:'Plano do GvG por fase — PTs, objetivos e apresentação.', descTimer:'Marcos de tempo do GvG (JG, Boss…) com avisos.', secCommunity:'Comunidade', discordName:'Entrar no Discord da Wanted', discordDesc:'Curtiu o conteúdo? Vem fazer parte da guild.', footer:'Zhi Guides · Wanted GvG', noteTpl:'Os guias abrirão em %s.' },
-        es:{ sub:'Playbook, guías de rol y herramientas de la GvG.', lbl:'Abrir las guías en', rolePlay:'Playbook', roleGuide:'Guía', descPlay:'La estrategia general de la guild en las banderas fijas', descTank:'Build, frontline, control y resistencia', descDps:'Build, kit, decisión y daño en la GvG', descHealer:'Build, posicionamiento, kit y supervivencia', secTools:'Herramientas', roleTool:'Herramienta <span class=\'tchip\'>Beta</span>', descGameplan:'Plan de la GvG por fase — PTs, objetivos y presentación.', descTimer:'Hitos de tiempo de la GvG (JG, Boss…) con avisos.', secCommunity:'Comunidad', discordName:'Entrar al Discord de Wanted', discordDesc:'¿Te gustó el contenido? Únete a la guild.', footer:'Zhi Guides · Wanted GvG', noteTpl:'Las guías se abrirán en %s.' },
-        en:{ sub:'Playbook, role guides and GvG tools.', lbl:'Open the guides in', rolePlay:'Playbook', roleGuide:'Guide', descPlay:"The guild's overall strategy on the fixed flags", descTank:'Build, frontline, control and resistance', descDps:'Build, kit, decision-making and damage in GvG', descHealer:'Build, positioning, kit and survival', secTools:'Tools', roleTool:'<span class=\'tchip\'>Beta</span> Tool', descGameplan:'GvG plan by phase — PTs, objectives and presentation.', descTimer:'GvG time markers (JG, Boss…) with alerts.', secCommunity:'Community', discordName:'Join the Wanted Discord', discordDesc:'Liked the content? Come join the guild.', footer:'Zhi Guides · Wanted GvG', noteTpl:'The guides will open in %s.' }
+        pt:{ sub:'Playbook, guias de função e ferramentas do GvG.', lbl:'Abrir os guias em', rolePlay:'Playbook <span class=\'tchip old\'>Desatualizado</span>', roleGuide:'Guia <span class=\'tchip old\'>Desatualizado</span>', descPlay:'A estratégia geral da guild nas bandeiras fixas', descTank:'Build, frontline, controle e resistência', descDps:'Build, kit, decisão e dano no GvG', descHealer:'Build, posicionamento, kit e sobrevivência', secTools:'Ferramentas', roleTool:'Ferramenta <span class=\'tchip\'>Beta</span>', descGameplan:'Plano do GvG por fase — PTs, objetivos e apresentação.', descTimer:'Marcos de tempo do GvG (JG, Boss…) com avisos.', secCommunity:'Comunidade', discordName:'Entrar no Discord da Wanted', discordDesc:'Curtiu o conteúdo? Vem fazer parte da guild.', footer:'Zhi Guides · Wanted GvG', noteTpl:'Os guias abrirão em %s.' },
+        es:{ sub:'Playbook, guías de rol y herramientas de la GvG.', lbl:'Abrir las guías en', rolePlay:'Playbook <span class=\'tchip old\'>Desactualizado</span>', roleGuide:'Guía <span class=\'tchip old\'>Desactualizado</span>', descPlay:'La estrategia general de la guild en las banderas fijas', descTank:'Build, frontline, control y resistencia', descDps:'Build, kit, decisión y daño en la GvG', descHealer:'Build, posicionamiento, kit y supervivencia', secTools:'Herramientas', roleTool:'Herramienta <span class=\'tchip\'>Beta</span>', descGameplan:'Plan de la GvG por fase — PTs, objetivos y presentación.', descTimer:'Hitos de tiempo de la GvG (JG, Boss…) con avisos.', secCommunity:'Comunidad', discordName:'Entrar al Discord de Wanted', discordDesc:'¿Te gustó el contenido? Únete a la guild.', footer:'Zhi Guides · Wanted GvG', noteTpl:'Las guías se abrirán en %s.' },
+        en:{ sub:'Playbook, role guides and GvG tools.', lbl:'Open the guides in', rolePlay:'Playbook <span class=\'tchip old\'>Outdated</span>', roleGuide:'Guide <span class=\'tchip old\'>Outdated</span>', descPlay:"The guild's overall strategy on the fixed flags", descTank:'Build, frontline, control and resistance', descDps:'Build, kit, decision-making and damage in GvG', descHealer:'Build, positioning, kit and survival', secTools:'Tools', roleTool:'<span class=\'tchip\'>Beta</span> Tool', descGameplan:'GvG plan by phase — PTs, objectives and presentation.', descTimer:'GvG time markers (JG, Boss…) with alerts.', secCommunity:'Community', discordName:'Join the Wanted Discord', discordDesc:'Liked the content? Come join the guild.', footer:'Zhi Guides · Wanted GvG', noteTpl:'The guides will open in %s.' }
       };
       function applyI18n(l){ var d=I18N[l]||I18N.pt;
         document.querySelectorAll('[data-i18n]').forEach(function(el){ var k=el.getAttribute('data-i18n'); if(d[k]!=null) el.textContent=d[k]; });
