@@ -118,6 +118,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v109 | 21/09/2026 | GamePlan v109: seletor de idioma (bandeiras PT/ES/EN) dentro do tour guiado — no aviso de boas-vindas e em cada passo do holofote; trocar de idioma re-renderiza o passo na hora, sem perder a navegação (antes o backdrop/overlay cobria o botão de idioma da barra) | `ee33f1b` |
 | v110 | 21/09/2026 | GamePlan v110: passo 6 do tour (Roster & Board) ganhou a print do Discord com os dois pontos marcados — 1 no botão Web View, 2 no link do evento — com clique pra ampliar; e, no Board, "↔ levar esta posição para outros jogos" no popover do player e no cabeçalho da PT, com escolha de quais jogos, espelho de PT/reserva/função/torre e Ctrl+Z para desfazer | `dd77769` |
 | v111 | 21/09/2026 | GamePlan v111: o seletor de idioma do tour passa a aparecer só no aviso de boas-vindas (uma vez, na entrada); os passos do holofote não repetem o seletor | `5041174` |
+| v112 | 21/09/2026 | GamePlan v112: segundo tour, sob demanda, DENTRO do Board (botão 🎓 ao lado de 🔗 Copiar): jogos da guerra (barra G1..Gn, + duplica a escalação atual, Alt+clique cria vazio, × apaga, duplo clique renomeia), como ligar vários jogos pelo menu ⋯, que a escalação é do jogo atual, a Grade, e o popover do player (PT / função / tarja secundária / especiais, 📌 Fixar, ⇄ Replace de, ↔ levar esta posição para outros jogos) mais o ↔ do cabeçalho da PT; textos PT/ES/EN, linha nova no guia (§3 Board) e chave própria `zhi_gp_tour_board_v1` | `3f81729` |
 
 
 ## Resumo por área
