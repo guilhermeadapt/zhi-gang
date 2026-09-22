@@ -2645,14 +2645,12 @@
     card.hidden = false;
     card.innerHTML = '<div class="tc-step">' + (tourIdx + 1) + ' / ' + steps.length + '</div><div class="tc-t">' + t('tourT' + s.k) + '</div><div class="tc-d">' + t('tourD' + s.k) + '</div>'
       + (s.img ? tourImgHTML(s.img) : '')
-      + langPillsHTML()
       + '<div class="tc-btns"><button class="tc-skip">' + t('tourSkip') + '</button><span style="flex:1"></span>'
       + (tourIdx > 0 ? '<button class="tc-prev">←</button>' : '')
       + '<button class="tc-next rbtn gold">' + (tourIdx === steps.length - 1 ? t('tourDone') : t('tourNext')) + '</button></div>';
     card.querySelector('.tc-skip').onclick = tourEnd;
     const pv = card.querySelector('.tc-prev'); if (pv) pv.onclick = () => tourNext(-1);
     card.querySelector('.tc-next').onclick = () => tourNext(1);
-    wireLangPills(card.querySelector('.lg-pills'), () => tourShow(tourSteps()[tourIdx]));
     const zim = card.querySelector('.tc-img'); if (zim) zim.onclick = () => zoomImg(zim.getAttribute('src'));
     // posiciona o card no lado com mais espaço
     const cw = 312, ch = card.offsetHeight || 190, m = 14, vw = window.innerWidth, vh = window.innerHeight;
@@ -2664,9 +2662,9 @@
     card.style.left = Math.max(10, Math.min(vw - cw - 10, cx)) + 'px';
     card.style.top = Math.max(10, Math.min(vh - ch - 10, cy)) + 'px';
   }
-  /* seletor de idioma dentro do tour: a tela fica coberta pelo holofote e o
-     botao de idioma da barra nao recebe clique, entao a escolha precisa estar
-     aqui dentro. */
+  /* seletor de idioma do tour: aparece UMA vez, no aviso de boas-vindas (é quando
+     o backdrop cobre a barra e o botão de idioma não recebe clique). Os passos do
+     holofote NÃO repetem o seletor. */
   function langPillsHTML() {
     return '<div class="lg-pills" role="group" aria-label="' + t('tipLang') + '">' + LANG_CYCLE.map(function (c) {
       const nome = c === 'pt' ? 'Português (Brasil)' : (c === 'es' ? 'Español (España)' : 'English');
