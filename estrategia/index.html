@@ -920,6 +920,22 @@
     .lg-pill svg{width:22px;height:15px;border-radius:2.5px;display:block}
     .lg-pill.on{opacity:1;border-color:var(--gold);background:color-mix(in srgb,var(--gold) 16%,transparent)}
     #tourCard .lg-pills{margin:1px 0 11px}
+    /* print dentro do cartão do tour (miniatura + clique pra ampliar) */
+    #tourCard .tc-img{display:block;width:100%;border:1px solid var(--line-soft);border-radius:9px;margin:2px 0 7px;cursor:zoom-in;background:#0b0d12}
+    #tourCard .tc-cap{font-size:11px;line-height:1.45;color:var(--muted);margin:0 0 11px}
+    .tc-zoom{position:fixed;inset:0;z-index:520;background:rgba(4,6,10,.93);display:grid;place-items:center;padding:18px;cursor:zoom-out}
+    .tc-zoom img{max-width:94vw;max-height:90vh;border-radius:12px;box-shadow:0 24px 60px rgba(0,0,0,.65)}
+    /* seletor de jogos no popover do board (levar a posição/PT para outros jogos) */
+    #bdPop .bp-help{font-size:11px;line-height:1.4;color:var(--muted);margin:2px 0 7px}
+    #bdPop .bp-games{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+    #bdPop .bp-g{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border:1px solid var(--line-soft);border-radius:8px;font-size:11.5px;color:var(--text);cursor:pointer}
+    #bdPop .bp-g input{accent-color:var(--gold);width:13px;height:13px;margin:0}
+    #bdPop .bp-dup{width:100%;padding:7px 10px;border:1px solid var(--gold);border-radius:9px;background:color-mix(in srgb,var(--gold) 14%,transparent);color:var(--gold-2);font-size:12px;font-weight:600;cursor:pointer}
+    #bdPop .bp-dup:hover{background:color-mix(in srgb,var(--gold) 22%,transparent)}
+    #bdPop .bp-dup-go{flex:1;padding:7px 10px;border:1px solid var(--gold);border-radius:9px;background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--gold-2);font-size:12px;font-weight:600;cursor:pointer}
+    #bdPop .bp-dup-cancel{padding:7px 10px;border:1px solid var(--line-soft);border-radius:9px;background:none;color:var(--muted);font-size:12px;cursor:pointer}
+    .bd-pt-h .bd-dup-pt{margin-left:6px;padding:1px 6px;border:1px solid var(--line-soft);border-radius:7px;background:none;color:var(--muted);font-size:12px;line-height:1.25;cursor:pointer}
+    .bd-pt-h .bd-dup-pt:hover{color:var(--gold-2);border-color:var(--gold)}
     .gt-tour{margin-left:auto}
     .plans-wrap{position:relative;display:inline-flex}
     .more-menu{min-width:196px}
@@ -1418,7 +1434,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=109"></script>
-  <script src="./app.js?v=109"></script>
+  <script src="./config.js?v=110"></script>
+  <script src="./app.js?v=110"></script>
 </body>
 </html>

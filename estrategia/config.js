@@ -16,6 +16,10 @@ const WWM = {
   assets: {
     // Mapa base (limpo, grama até a borda, cortado) — gerado pela guild (v2).
     map: '../assets/map/board.jpg',
+    // Prints usados nos textos do tour/guias (recortadas e marcadas, sem nome de jogador).
+    prints: {
+      boardLink: '../assets/prints/board-evento-link.png'
+    },
 
     // Ícones dos objetivos (torre/ganso/árvore/boss) + classe (tank/dps/healer).
     icons: {
