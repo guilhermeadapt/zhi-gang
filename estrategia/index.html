@@ -912,6 +912,14 @@
     #tourCard .tc-skip,#tourCard .tc-prev{background:none;border:1px solid var(--line-soft);border-radius:9px;color:var(--muted);font-size:11.5px;padding:6px 10px}
     #tourCard .tc-skip:hover,#tourCard .tc-prev:hover{color:var(--text)}
     #tourCard .tc-next{padding:6px 13px}
+    /* seletor de idioma dentro do tour e do aviso de boas-vindas */
+    .lg-pills{display:flex;gap:4px;align-items:center;margin:0 0 10px}
+    .lg-pill{width:36px;height:25px;display:grid;place-items:center;padding:0;background:transparent;border:1px solid var(--line-soft);border-radius:8px;opacity:.55;cursor:pointer}
+    .lg-pill:hover{opacity:.92}
+    .lg-pill:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+    .lg-pill svg{width:22px;height:15px;border-radius:2.5px;display:block}
+    .lg-pill.on{opacity:1;border-color:var(--gold);background:color-mix(in srgb,var(--gold) 16%,transparent)}
+    #tourCard .lg-pills{margin:1px 0 11px}
     .gt-tour{margin-left:auto}
     .plans-wrap{position:relative;display:inline-flex}
     .more-menu{min-width:196px}
@@ -1410,7 +1418,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=108"></script>
-  <script src="./app.js?v=108"></script>
+  <script src="./config.js?v=109"></script>
+  <script src="./app.js?v=109"></script>
 </body>
 </html>

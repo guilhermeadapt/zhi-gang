@@ -2572,12 +2572,14 @@
     hole.style.width = (r.width + pad * 2) + 'px'; hole.style.height = (r.height + pad * 2) + 'px';
     card.hidden = false;
     card.innerHTML = '<div class="tc-step">' + (tourIdx + 1) + ' / ' + steps.length + '</div><div class="tc-t">' + t('tourT' + s.k) + '</div><div class="tc-d">' + t('tourD' + s.k) + '</div>'
+      + langPillsHTML()
       + '<div class="tc-btns"><button class="tc-skip">' + t('tourSkip') + '</button><span style="flex:1"></span>'
       + (tourIdx > 0 ? '<button class="tc-prev">←</button>' : '')
       + '<button class="tc-next rbtn gold">' + (tourIdx === steps.length - 1 ? t('tourDone') : t('tourNext')) + '</button></div>';
     card.querySelector('.tc-skip').onclick = tourEnd;
     const pv = card.querySelector('.tc-prev'); if (pv) pv.onclick = () => tourNext(-1);
     card.querySelector('.tc-next').onclick = () => tourNext(1);
+    wireLangPills(card.querySelector('.lg-pills'), () => tourShow(tourSteps()[tourIdx]));
     // posiciona o card no lado com mais espaço
     const cw = 312, ch = card.offsetHeight || 190, m = 14, vw = window.innerWidth, vh = window.innerHeight;
     let cx, cy;
@@ -2588,11 +2590,37 @@
     card.style.left = Math.max(10, Math.min(vw - cw - 10, cx)) + 'px';
     card.style.top = Math.max(10, Math.min(vh - ch - 10, cy)) + 'px';
   }
+  /* seletor de idioma dentro do tour: a tela fica coberta pelo holofote e o
+     botao de idioma da barra nao recebe clique, entao a escolha precisa estar
+     aqui dentro. */
+  function langPillsHTML() {
+    return '<div class="lg-pills" role="group" aria-label="' + t('tipLang') + '">' + LANG_CYCLE.map(function (c) {
+      const nome = c === 'pt' ? 'Português (Brasil)' : (c === 'es' ? 'Español (España)' : 'English');
+      return '<button type="button" class="lg-pill' + (c === lang ? ' on' : '') + '" data-lg="' + c + '" aria-label="' + nome + '" title="' + nome + '">' + (LANG_FLAGS[c] || '') + '</button>';
+    }).join('') + '</div>';
+  }
+  function wireLangPills(root, after) {
+    if (!root) return;
+    root.querySelectorAll('[data-lg]').forEach(function (b) {
+      b.onclick = function (e) { e.preventDefault(); e.stopPropagation(); setLang(b.getAttribute('data-lg')); if (after) after(); };
+    });
+  }
   function tourIntroShow() {
     const im = $('tourIntro'); if (!im) return;
     im.hidden = false;
     $('tourGo').onclick = tourStart;
     $('tourNo').onclick = () => { im.hidden = true; try { localStorage.setItem(TOUR_KEY, '1'); } catch (e) {} };
+    let row = im.querySelector('.lg-pills');
+    if (!row) {
+      row = document.createElement('div');
+      const hint = im.querySelector('.lv-hint');
+      if (hint && hint.parentNode) hint.parentNode.insertBefore(row, hint.nextSibling);
+      else (im.querySelector('.modal') || im).appendChild(row);
+    }
+    const novo = document.createElement('div');
+    novo.innerHTML = langPillsHTML();
+    row.replaceWith(novo.firstElementChild);
+    wireLangPills(im.querySelector('.lg-pills'), () => { if (tourIdx >= 0) tourShow(tourSteps()[tourIdx]); tourIntroShow(); });
   }
   function maybeTour() {
     if (isMobile()) return;
