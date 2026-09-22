@@ -117,6 +117,7 @@ Os 10 primeiros commits são anteriores ao versionamento (marcados como —). O 
 | v108 | 26/07/2026 | Game Plan v108: botão Game Plan do Discord funciona — lê `?rh=` da URL e busca as inscrições na origem do próprio link (zhi-signups), com raid-helper.xyz de reserva; parse aceita os dois dialetos da API (v4/v1); reservas mantêm a função pela spec | `fb60e92` |
 | v109 | 21/09/2026 | GamePlan v109: seletor de idioma (bandeiras PT/ES/EN) dentro do tour guiado — no aviso de boas-vindas e em cada passo do holofote; trocar de idioma re-renderiza o passo na hora, sem perder a navegação (antes o backdrop/overlay cobria o botão de idioma da barra) | `ee33f1b` |
 | v110 | 21/09/2026 | GamePlan v110: passo 6 do tour (Roster & Board) ganhou a print do Discord com os dois pontos marcados — 1 no botão Web View, 2 no link do evento — com clique pra ampliar; e, no Board, "↔ levar esta posição para outros jogos" no popover do player e no cabeçalho da PT, com escolha de quais jogos, espelho de PT/reserva/função/torre e Ctrl+Z para desfazer | `dd77769` |
+| v111 | 21/09/2026 | GamePlan v111: o seletor de idioma do tour passa a aparecer só no aviso de boas-vindas (uma vez, na entrada); os passos do holofote não repetem o seletor | `5041174` |
 
 
 ## Resumo por área
