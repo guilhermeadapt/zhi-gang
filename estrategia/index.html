@@ -352,14 +352,34 @@
     .roster-tabs button:hover{color:var(--text)}
     .roster-tabs button.active{color:var(--gold);background:rgba(217,164,65,.12)}
     /* Barra de jogos (G1..G5) — cada chip é uma escalação própria dentro da mesma guerra */
-    .jogo-bar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 12px 0}
+    .jogo-bar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 12px 0;align-items:center}
     .rm-jogos{padding:10px 0 2px;border-bottom:1px solid var(--line-soft);margin-bottom:8px}
     .rm-jogos .jogo-chip{padding:6px 12px;font-size:11px}
     .jogo-bar:empty{display:none}
     .jogo-chip{font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--ink-2);border:1px solid var(--line-soft);border-radius:7px;padding:5px 10px;cursor:pointer;transition:.14s;line-height:1}
     .jogo-chip:hover{color:var(--text);border-color:var(--line)}
     .jogo-chip.on{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 50%,transparent);background:rgba(217,164,65,.12)}
-    .jogo-chip.jogo-add,.jogo-chip.jogo-del{padding:5px 9px;font-size:12px}
+    .jogo-chip.jogo-add,.jogo-chip.jogo-del,.jogo-chip.jogo-rep,.jogo-chip.jogo-grade{padding:5px 9px;font-size:12px}
+    .jogo-bar .jogo-list,.jogo-bar .jogo-acts{display:inline-flex;gap:5px;align-items:center;flex-wrap:wrap}
+    .jogo-bar .jogo-acts{margin-left:auto}
+    .jogo-bar .dia-tg{display:inline-flex;padding:3px;gap:2px;background:#0b0e15;border:1px solid var(--line-soft);border-radius:10px}
+    .jogo-bar .dia-tg .jogo-chip{border:0;background:transparent;border-radius:7px;padding:6px 12px;letter-spacing:.08em}
+    .jogo-bar .dia-tg .jogo-chip.on{background:linear-gradient(180deg,rgba(217,164,65,.28),rgba(217,164,65,.14));color:var(--gold);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 45%,transparent)}
+    .jogo-bar .jogo-sep{width:1px;align-self:stretch;background:var(--line-soft);margin:0 3px}
+    .jogo-chip.jogo-rep:hover{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 50%,transparent)}
+    .rm-jogos{padding:8px 10px;border:1px solid var(--line-soft);border-radius:12px;background:rgba(255,255,255,.015)}
+    .rh-row2{margin-top:6px}
+    .rh-dia{flex:none;align-self:center;font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-2);padding:0 4px}
+    .grade-dias{margin-right:8px}
+    .grade-dias button{padding:6px 13px}
+    .grade-dias button.on{color:var(--gold)}
+    .bd-outro .bd-chip{opacity:.5}
+    .bd-extra-clr{margin-left:auto;background:none;border:0;color:var(--muted);font-size:10px;cursor:pointer}
+    .bd-extra-clr:hover{color:var(--crimson)}
+    .bd-extra .bd-chip{opacity:.62}
+    .c-extra{color:#7fc6ff}
+    .c-nota{flex:none;font-size:10px;cursor:help;opacity:.85}
+    .bp-nota{font-size:11px;color:var(--muted);background:rgba(217,164,65,.07);border:1px solid var(--line-soft);border-radius:8px;padding:5px 8px;margin:4px 0 6px;white-space:normal}
     .jogo-chip.jogo-del:hover{color:var(--crimson);border-color:color-mix(in srgb,var(--crimson) 50%,transparent)}
     .side-empty{color:var(--muted);font-size:12px;font-style:italic;padding:16px 6px;text-align:center}
     .pl-chip{display:flex;align-items:center;gap:9px;width:100%;padding:7px 10px;margin-bottom:5px;cursor:grab;background:linear-gradient(180deg,var(--ink-2),#0e1118);border:1px solid var(--line-soft);border-left:3px solid var(--rc);border-radius:9px;transition:.15s;user-select:none;font-size:13px}
@@ -1218,6 +1238,7 @@
       <div class="modal-body">
         <div class="paste-col">
           <div class="rh-row"><input id="rhLink" type="text" data-i18n-ph="rhPh" placeholder="Link do evento (zhi-signups ou raid-helper) — busca e mescla sozinho ao abrir o app"><button class="rbtn" id="rhSync" data-i18n-title="rhSyncHint" title="Salva o link e busca as inscrições agora (mescla com o board atual)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button></div>
+          <div class="rh-row rh-row2"><span class="rh-dia" data-i18n="dia_dom">Dom</span><input id="rhLink2" type="text" data-i18n-ph="rhPh2" placeholder="Link do evento de DOMINGO (opcional) — com os dois, a guerra se divide em Sáb e Dom"></div>
           <label for="rosterPaste" data-i18n="discordMontage">Montagem do Discord</label>
           <textarea id="rosterPaste" data-i18n-ph="pastePh" placeholder='Cole aqui o JSON do raid-helper (o bloco { "date":..., "signUps":[...] }) OU texto simples:&#10;PT1 — Fulano (Tank), Ciclano (DPS)&#10;PT2 — …&#10;Reservas — Sicrano (DPS)'></textarea>
           <button class="rbtn gold" id="parseBtn" style="justify-content:center" data-i18n="process">Processar (substitui)</button>
@@ -1249,6 +1270,7 @@
             <button class="rbtn" id="bdTour" style="padding:8px 12px" data-i18n-title="btBtnTip" title="Tour do Board: jogos da guerra, escalacao por jogo, Grade e o popover do player" data-i18n="btBtn">🎓</button>
             <button class="rbtn" id="bdDisc" style="padding:8px 12px" data-i18n-title="tipBdDisc" title="Copia a montagem por PT com menções do Discord" data-i18n="copyDisc">💬 Discord</button>
             <button class="rbtn" id="bdSaveJson" style="padding:8px 12px" data-i18n-title="tipBdSave" title="Baixa o board como arquivo JSON" data-i18n="bdSave">💾 Salvar</button>
+            <button class="rbtn" id="extraBtn" style="padding:8px 12px" data-i18n-title="extraAsk" title="Puxa players de um board antigo para simular" data-i18n="extraBtnS">⤓ Puxar</button>
             <span class="bd-legend" data-i18n-html="bdLegend">Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.</span>
           </div>
           <div class="roster-board" id="rosterBoard" hidden></div>
@@ -1335,6 +1357,7 @@
       <div class="grade-head">
         <h3 class="lv-title" data-i18n="gradeTitle">Grade dos jogos</h3>
         <div class="grade-acts">
+          <div class="view-toggle grade-dias" id="gradeDias" hidden></div>
           <div class="view-toggle grade-tabs" id="gradeTabs">
             <button type="button" data-gm="print" data-i18n="gradeByPrint">Planilha</button>
             <button type="button" data-gm="sheet" data-i18n="gradeBySheet">Escalação</button>
@@ -1435,7 +1458,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=112"></script>
-  <script src="./app.js?v=112"></script>
+  <script src="./config.js?v=113"></script>
+  <script src="./app.js?v=113"></script>
 </body>
 </html>
