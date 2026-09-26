@@ -1831,10 +1831,11 @@
     let h = '';
     jogos.forEach((j, ji) => {
       h += '<div class="pr-jogo">';
-      // coluna do jogo é estreita de propósito: cabe "G1" e o número do slot, nada mais.
-      // A nota vira um ponto clicável — o texto fica no tooltip, sem roubar largura.
-      h += '<table class="pr-tb"><thead><tr><th class="pr-j"><span class="pr-jn">' + esc(j.nome) + '</span>'
-        + '<span class="pr-obs' + (j.nota ? ' has' : '') + '" data-obs="' + ji + '" title="' + esc(j.nota || t('gradeObsTip')) + '">•</span></th>';
+      // v118: o nome do jogo vai numa faixa própria acima da tabela (na 1ª coluna ele era cortado);
+      // a 1ª coluna fica só com o número do slot e as colunas de PT ganham a largura que sobrou.
+      h += '<div class="pr-jh"><span class="pr-jn">' + esc(j.nome) + '</span>'
+        + '<span class="pr-obs' + (j.nota ? ' has' : '') + '" data-obs="' + ji + '" title="' + esc(j.nota || t('gradeObsTip')) + '">' + (j.nota ? '📝 ' + esc(j.nota) : '•') + '</span></div>';
+      h += '<table class="pr-tb"><thead><tr><th class="pr-j"></th>';
       j.grupos.forEach(g => g.pts.forEach((x, i) => {
         h += '<th' + (i === 0 ? ' class="pr-gsep"' : '') + '><span class="pr-gl">' + (i === 0 ? esc(g.nome) : '') + '</span><span class="pr-pt" style="--rc:' + (x.cor || '#888') + '">' + esc(x.pt) + '</span></th>';
       }));
@@ -1843,10 +1844,11 @@
         h += '<tr><td class="pr-n">' + (i + 1) + '</td>';
         j.grupos.forEach(g => g.pts.forEach((x, k) => {
           const m = x.membros[i];
-          h += '<td' + (k === 0 ? ' class="pr-gsep' + (m && m.novo ? ' g-ch' : '') + '"' : (m && m.novo ? ' class="g-ch"' : ''))
+          const cls = [k === 0 ? 'pr-gsep' : '', m && m.novo ? 'g-ch' : '', m && temaAtual === 'planilha' ? 'g-fill' : ''].filter(Boolean).join(' ');
+          h += '<td' + (cls ? ' class="' + cls + '"' : '') + (m && temaAtual === 'planilha' ? ' style="--fill:' + roleColor(m.f) + '"' : '')
             + (m ? ' title="' + esc(m.p.nome) + '"' : '') + '>'
-            + (m ? (m.emote ? '<img class="g-ico" src="' + emoteUrl(m.emote) + '" alt="" loading="lazy">' : '') + '<span class="g-nome" style="' + (temaAtual === 'planilha' ? '--fill:' + roleColor(m.f) : 'border-left:3px solid ' + roleColor(m.f)) + '">' + esc(nomeExib(m.p, m.emote ? 12 : 14)) + '</span>'
-                 + (m.tor ? '<span class="g-tor t-' + m.tor + '">' + t('tor_' + m.tor) + '</span>' : '')
+            + (m ? '<span class="g-cel">' + (m.emote ? '<img class="g-ico" src="' + emoteUrl(m.emote) + '" alt="" loading="lazy">' : '') + '<span class="g-nome"' + (temaAtual === 'planilha' ? '' : ' style="border-left:3px solid ' + roleColor(m.f) + '"') + '>' + esc(nomeExib(m.p, m.emote ? 12 : 14)) + '</span>'
+                 + (m.tor ? '<span class="g-tor t-' + m.tor + '">' + t('tor_' + m.tor) + '</span>' : '') + '</span>'
                : '<span class="g-out">—</span>') + '</td>';
         }));
         h += '</tr>';
@@ -1908,11 +1910,14 @@
       jogos.forEach(j => j.grupos.forEach(g => g.pts.forEach(x => x.membros.forEach(m => { if (m.emote) ids.add(m.emote); }))));
       await Promise.all([...ids].map(async id => { const im = await loadSpecImg(id); if (im) imgs.set(id, im); }));
     }
-    const NW = 46, CW = 150, RH = 22, HH = 30, GAP = 16, PAD = 18, dpr = 2;   // coluna do jogo: só o rótulo
+    const NW = 26, CW = 150, RH = 22, HH = 30, JH = 20, GAP = 14, PAD = 18, dpr = 2;   // v118: nome do jogo numa faixa (JH) acima; 1ª coluna só o nº do slot
+    // mistura duas cores hex (t = peso de a): pílula clara e texto escuro do cabeçalho PT, iguais ao CSS color-mix
+    const mixHex = (a, b, t) => { const p = h => [1, 3, 5].map(i => parseInt(String(h).replace('#', '').padEnd(6, '0').slice(i - 1, i + 1), 16)); const x = p(a), z = p(b); return 'rgb(' + x.map((v, i) => Math.round(v * t + z[i] * (1 - t))).join(',') + ')'; };
+    const chCor = (temaAtual === 'claro' || temaAtual === 'planilha') ? '#1c1405' : PAL.gold;
     const cols = jogos[0] ? jogos[0].grupos.reduce((a, g) => a + g.pts.length, 0) : 6;
     const W = PAD * 2 + NW + CW * cols;
     let H = PAD * 2 + 16;
-    jogos.forEach(j => { H += HH + RH * j.alt + GAP; });
+    jogos.forEach(j => { H += JH + HH + RH * j.alt + GAP; });
     H += jgLinhas().length * 20;
     const cv = document.createElement('canvas'); cv.width = W * dpr; cv.height = H * dpr;
     const g = cv.getContext('2d'); g.scale(dpr, dpr);
@@ -1922,13 +1927,18 @@
     let y = PAD;
     jogos.forEach(j => {
       let cx = PAD + NW;
+      // faixa do nome do jogo (+ nota), como na tela
+      g.font = 'bold 13px system-ui,sans-serif'; const jnm = String(j.nome).toUpperCase(), jw = g.measureText(jnm).width;
+      if (PAL.fill) { g.fillStyle = '#ffe600'; g.fillRect(PAD, y + 2, jw + 12, JH - 4); g.fillStyle = '#1c1405'; } else g.fillStyle = PAL.gold;
+      g.fillText(jnm, PAD + (PAL.fill ? 6 : 0), y + JH / 2);
+      if (j.nota) { g.fillStyle = PAL.muted2; g.font = '11px system-ui,sans-serif'; g.fillText('📝 ' + j.nota, PAD + jw + 20, y + JH / 2); }
+      y += JH;
       g.fillStyle = PAL.head; g.fillRect(PAD, y, NW + CW * cols, HH);
-      g.fillStyle = PAL.gold; g.font = 'bold 12px system-ui,sans-serif';
-      g.fillText(String(j.nome).toUpperCase(), PAD + 6, y + HH / 2);
       j.grupos.forEach(gr => gr.pts.forEach((x, i) => {
         if (i === 0) { g.fillStyle = PAL.muted; g.font = 'bold 8.5px system-ui,sans-serif'; g.fillText(String(gr.nome).toUpperCase(), cx + 7, y + 8); }
-        g.fillStyle = x.cor || '#888'; g.font = 'bold 10px system-ui,sans-serif';
-        g.fillText(x.pt, cx + 7, y + HH - 8);
+        const pc = x.cor || '#888888'; g.font = 'bold 10.5px system-ui,sans-serif'; const pw = g.measureText(x.pt).width + 14;
+        g.fillStyle = mixHex(pc, '#ffffff', .18); g.beginPath(); g.roundRect(cx + 5, y + HH - 16, pw, 13, 6.5); g.fill();
+        g.fillStyle = mixHex(pc, '#000000', .42); g.fillText(x.pt, cx + 12, y + HH - 9.5);
         cx += CW;
       }));
       y += HH;
@@ -1940,18 +1950,19 @@
           const m = x.membros[i];
           if (m) {
             // Tema Planilha: célula cheia na cor da função, como a planilha da staff.
-            if (PAL.fill) { g.fillStyle = roleColor(m.f); g.fillRect(cx, y, CW, RH); if (m.novo) { g.strokeStyle = PAL.gold; g.lineWidth = 2; g.strokeRect(cx + 1, y + 1, CW - 2, RH - 2); g.lineWidth = 1; } }
-            else if (m.novo) { g.fillStyle = PAL.novo; g.fillRect(cx, y, CW, RH); }
+            if (PAL.fill) { g.fillStyle = roleColor(m.f); g.fillRect(cx, y, CW, RH); }
+            // "mudou": moldura só na célula, sem faixa de fundo (v118)
+            if (m.novo) { g.strokeStyle = chCor; g.lineWidth = 2; g.strokeRect(cx + 1, y + 1, CW - 2, RH - 2); g.lineWidth = 1; }
             const im = m.emote ? imgs.get(m.emote) : null;
             if (im) { g.drawImage(im, cx + 4, y + 3, RH - 6, RH - 6); }
             else if (!PAL.fill) { g.fillStyle = roleColor(m.f); g.fillRect(cx + 4, y + 4, 2, RH - 8); }
-            g.fillStyle = PAL.fill ? PAL.cellText : (m.novo ? PAL.gold : PAL.text);
-            g.font = (m.novo ? 'bold ' : '') + '11.5px system-ui,sans-serif';
+            g.fillStyle = PAL.fill ? PAL.cellText : PAL.text;
+            g.font = (PAL.fill ? 'bold ' : '') + '11.5px system-ui,sans-serif';
             const tx0 = im ? cx + RH + 4 : cx + 11;
             const larg = CW - (m.tor ? 34 : 16) - (im ? RH - 6 : 0);
             let tx = nomeExib(m.p, 18); while (g.measureText(tx).width > larg && tx.length > 3) tx = tx.slice(0, -2) + '…';
             g.fillText(tx, tx0, y + RH / 2);
-            if (m.tor) { g.fillStyle = TC[m.tor]; g.font = 'bold 9px system-ui,sans-serif'; g.fillText(t('tor_' + m.tor), cx + CW - 15, y + RH / 2); }
+            if (m.tor) { g.font = 'bold 10px system-ui,sans-serif'; if (PAL.fill) { g.fillStyle = 'rgba(255,255,255,.78)'; g.fillRect(cx + CW - 18, y + 5, 13, RH - 10); } g.fillStyle = TC[m.tor]; g.fillText(t('tor_' + m.tor), cx + CW - 15, y + RH / 2); }
           } else { g.fillStyle = PAL.dim; g.font = '11px system-ui,sans-serif'; g.fillText('—', cx + 11, y + RH / 2); }
           cx += CW;
         }));

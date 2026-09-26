@@ -1186,6 +1186,31 @@ html[data-tema="contraste"] .bd-side .bd-chip{background:#1b1f27}
     /* seletor de tema na largura do texto escolhido */
     .tema-sel{field-sizing:content;flex:none}
     html[data-tema="planilha"]{--wash:20,24,33;--pane:255,255,255;--pane2:246,247,249;--field:#ffffff;--thumb:#c3c8d1;--text2:#2a2f3a}
+
+    /* ---- v118: visão Planilha da Grade. Linhas de altura fixa, nome + torre numa linha dentro da célula,
+       cabeçalho PT em pílula clara, "mudou" = moldura só na célula, nome do jogo numa faixa acima da tabela. ---- */
+    .pr-jh{display:flex;align-items:baseline;gap:8px;margin:0 0 5px;min-width:0}
+    .pr-jh .pr-jn{flex:none;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-tx)}
+    .pr-jh .pr-obs{margin:0;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+    .pr-jh .pr-obs.has{color:var(--text2)}
+    .pr-tb th.pr-j,.pr-tb td.pr-n{width:26px;padding-left:2px;padding-right:2px;text-align:center}
+    .pr-tb tbody td{height:26px;padding-top:0;padding-bottom:0;vertical-align:middle;line-height:1}
+    .pr-tb .g-cel{display:flex;align-items:center;gap:5px;min-width:0;height:26px}
+    .pr-tb .g-cel .g-nome{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:5px}
+    .pr-tb .g-cel .g-tor{flex:none;font-size:10px;font-weight:700}
+    .pr-tb .g-cel .g-ico{width:16px;height:16px;flex:none}
+    .pr-tb .pr-pt{display:inline-block;padding:1px 7px;border-radius:9px;font-size:10.5px;font-weight:700;background:color-mix(in srgb,var(--rc) 18%,#fff);color:color-mix(in srgb,var(--rc) 42%,#000)}
+    .pr-tb td.g-ch{background:none;box-shadow:inset 0 0 0 2px var(--gold)}
+    html:is([data-tema="claro"],[data-tema="planilha"]) .pr-tb td.g-ch{box-shadow:inset 0 0 0 2px #1c1405}
+    html:is([data-tema="claro"],[data-tema="planilha"]) .pr-tb .pr-pt{color:color-mix(in srgb,var(--rc) 42%,#000)}
+    html:is([data-tema="claro"],[data-tema="planilha"]) .g-tor.t-top{color:#1d4ed8}
+    html:is([data-tema="claro"],[data-tema="planilha"]) .g-tor.t-mid{color:#a16207}
+    html:is([data-tema="claro"],[data-tema="planilha"]) .g-tor.t-bot{color:#be123c}
+    html[data-tema="planilha"] .pr-tb td.g-fill{background:var(--fill);color:#10131a;font-weight:700}
+    .pr-tb td.g-ch .g-nome,html[data-tema="planilha"] .pr-tb td.g-ch .g-nome{outline:none}
+    html[data-tema="planilha"] .pr-tb td.g-fill .g-nome{padding-left:0}
+    html[data-tema="planilha"] .pr-tb td.g-fill .g-tor{background:rgba(255,255,255,.78);border-radius:3px;padding:2px 4px;line-height:1}
+    html[data-tema="planilha"] .pr-jh .pr-jn{color:#1c1405;background:#ffe600;padding:1px 6px;border-radius:3px}
 </style>
 </head>
 <body>
@@ -1615,7 +1640,7 @@ html[data-tema="contraste"] .bd-side .bd-chip{background:#1b1f27}
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=117"></script>
-  <script src="./app.js?v=117"></script>
+  <script src="./config.js?v=118"></script>
+  <script src="./app.js?v=118"></script>
 </body>
 </html>
