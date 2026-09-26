@@ -1069,6 +1069,88 @@
     #rosterModal.board-mode .modal{width:min(1800px,98vw)}
     #rosterModal.board-mode .bd-chip .c-name{font-size:13px}
     #rosterModal.board-mode .bd-pt-h b{font-size:14px}
+    /* ---- v116: temas (escuro padrão, contraste, claro, planilha) + JG por cor ---- */
+
+/* ---------- A · CLARO PLANILHA: cores cheias por função, como a planilha da staff ---------- */
+html[data-tema="planilha"]{--ink:#eef0f3;--ink-2:#ffffff;--ink-3:#f6f7f9;--line:rgba(20,24,33,.16);--line-soft:rgba(20,24,33,.10);--text:#15181f;--muted:#5b6475;--gold:#b7811d;--gold-2:#d99a2b}
+html[data-tema="planilha"] body{background:#e9ecf0}
+html[data-tema="planilha"] .modal-backdrop{background:rgba(233,236,240,.86)}
+html[data-tema="planilha"] .modal{background:#fff;box-shadow:0 30px 70px -30px rgba(20,24,33,.35)}
+html[data-tema="planilha"] #rosterModal.board-mode .rm-top{background:#f4f5f7}
+html[data-tema="planilha"] .bd-zone{background:#f6f7f9}
+html[data-tema="planilha"] .bd-pool{background:#fff8ea}
+html[data-tema="planilha"] .bd-pt-card{background:#fff;border-color:rgba(20,24,33,.14)}
+html[data-tema="planilha"] .bd-pt-card .bd-zone{background:transparent;border:0;padding:0}
+html[data-tema="planilha"] .bd-chip{background:color-mix(in srgb,var(--rc) 85%,#fff);border:1px solid color-mix(in srgb,var(--rc) 90%,#000);border-left-width:1px;color:#10131a;border-radius:6px}
+html[data-tema="planilha"] .bd-chip:hover{background:color-mix(in srgb,var(--rc) 90%,#fff)}
+html[data-tema="planilha"] .bd-chip .c-name{font-weight:700}
+html[data-tema="planilha"] .bd-chip .c-role{color:rgba(16,19,26,.72)}
+html[data-tema="planilha"] .bd-chip .c-ico{background:rgba(255,255,255,.55);border-color:rgba(16,19,26,.35);box-shadow:none}
+html[data-tema="planilha"] .bd-chip .c-ico img{filter:brightness(0) saturate(0) opacity(.75)}
+html[data-tema="planilha"] .bd-chip .c-grip{color:rgba(16,19,26,.35)}
+html[data-tema="planilha"] .bd-side .bd-chip{background:#fff;border-color:rgba(20,24,33,.14);border-left:4px solid var(--rc)}
+html[data-tema="planilha"] .bd-side .bd-chip .c-ico{background:#f1f3f6;border-color:var(--rc)}
+html[data-tema="planilha"] .bd-side .bd-chip .c-ico img{filter:none}
+html[data-tema="planilha"] .bd-slot{background:#fafbfc;color:#8a93a3}
+html[data-tema="planilha"] .rbtn,html[data-tema="planilha"] .jogo-chip{background:#fff;color:#2a2f3a;border-color:rgba(20,24,33,.16)}
+html[data-tema="planilha"] .rbtn.gold,html[data-tema="planilha"] .jogo-chip.on,html[data-tema="planilha"] .jogo-bar .dia-tg .jogo-chip.on{background:#f3c35a;color:#1c1405;border-color:#c9951f}
+html[data-tema="planilha"] .jogo-bar .dia-tg{background:#eceff3}
+html[data-tema="planilha"] .bd-search input{background:#fff;color:#15181f}
+html[data-tema="planilha"] .bd-pop{background:#fff;color:#15181f;box-shadow:0 20px 50px -20px rgba(20,24,33,.4)}
+html[data-tema="planilha"] .c-cnt{background:rgba(16,19,26,.08);color:#2a2f3a}
+
+/* ---------- B · CLARO SUAVE: papel claro, cor só na borda e no ícone ---------- */
+html[data-tema="claro"]{--ink:#f3f1ec;--ink-2:#fbfaf7;--ink-3:#f6f4ef;--line:rgba(120,92,40,.22);--line-soft:rgba(40,36,28,.10);--text:#1d1b17;--muted:#6d675c;--gold:#a8741a;--gold-2:#c98f2a}
+html[data-tema="claro"] body{background:#efece5}
+html[data-tema="claro"] .modal-backdrop{background:rgba(239,236,229,.86)}
+html[data-tema="claro"] .modal{background:#fbfaf7;box-shadow:0 30px 70px -30px rgba(40,36,28,.35)}
+html[data-tema="claro"] .bd-zone,html[data-tema="claro"] .bd-pt-card{background:#fff}
+html[data-tema="claro"] .bd-chip{background:#fff;border-color:rgba(40,36,28,.12);color:#1d1b17}
+html[data-tema="claro"] .bd-chip:hover{background:#fdf8ee}
+html[data-tema="claro"] .bd-chip .c-ico{background:#f6f4ef;box-shadow:none}
+html[data-tema="claro"] .bd-chip .c-role{filter:brightness(.8)}
+html[data-tema="claro"] .rbtn,html[data-tema="claro"] .jogo-chip{background:#fff;color:#3a352c}
+html[data-tema="claro"] .rbtn.gold,html[data-tema="claro"] .jogo-chip.on,html[data-tema="claro"] .jogo-bar .dia-tg .jogo-chip.on{background:#f0c66b;color:#241a06}
+html[data-tema="claro"] .jogo-bar .dia-tg{background:#f1ede4}
+html[data-tema="claro"] .bd-search input{background:#fff;color:#1d1b17}
+html[data-tema="claro"] .bd-pop{background:#fff;color:#1d1b17}
+html[data-tema="claro"] .bd-slot{background:#faf8f3}
+
+/* ---------- C · ESCURO CONTRASTE: fundo neutro, cartão sólido por função, texto grande ---------- */
+html[data-tema="contraste"]{--ink:#0d0f13;--ink-2:#171a21;--ink-3:#12151b;--line:rgba(255,255,255,.14);--line-soft:rgba(255,255,255,.09);--text:#ffffff;--muted:#b3bac8}
+html[data-tema="contraste"] body{background:#0d0f13}
+html[data-tema="contraste"] .modal{background:#12151b}
+html[data-tema="contraste"] .bd-pt-card{background:#181b22;border-color:rgba(255,255,255,.12)}
+html[data-tema="contraste"] .bd-pt-card .bd-zone{background:transparent;border:0;padding:0}
+html[data-tema="contraste"] .bd-chip{background:color-mix(in srgb,var(--rc) 30%,#181b22);border:1px solid color-mix(in srgb,var(--rc) 60%,transparent);border-left:5px solid var(--rc);color:#fff}
+html[data-tema="contraste"] .bd-chip .c-name{font-weight:700;font-size:13.5px}
+html[data-tema="contraste"] .bd-chip .c-role{color:#fff;opacity:.8}
+html[data-tema="contraste"] .bd-side .bd-chip{background:#1b1f27}
+    .tema-sel{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:10px}
+    .tema-sel option{color:#15181f;background:#fff}
+    .c-jg{flex:none;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:var(--jg);box-shadow:0 0 0 1.5px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.35)}
+    .c-jg img{width:12px;height:12px;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+    .bd-pop .bp-coin{width:12px;height:12px;vertical-align:-2px}
+    .bd-pop .bp-jg{display:inline-flex;align-items:center;gap:5px;font-family:var(--disp);font-weight:600;font-size:11px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--line-soft);border-radius:7px;padding:5px 8px;cursor:pointer}
+    .bd-pop .bp-jg i{width:10px;height:10px;border-radius:50%;background:var(--jg);box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+    .bd-pop .bp-jg.active{color:var(--text);border-color:var(--jg,var(--gold));box-shadow:inset 0 0 0 1px var(--jg,var(--gold))}
+    .pr-jgs{display:flex;flex-direction:column;gap:5px;margin:4px 0 8px;font-size:12px}
+    .pr-jgl{display:flex;align-items:center;gap:7px}
+    .pr-jgd{width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.45)}
+    html[data-tema="planilha"] .pr-tb td .g-nome[style*="--fill"]{display:block;background:var(--fill);color:#10131a;font-weight:700;margin:-4px -6px;padding:4px 6px}
+    html[data-tema="planilha"] .pr-tb th{background:#434343;color:#fff}
+    html[data-tema="planilha"] .pr-tb th .pr-gl{color:#ffe600}
+    html[data-tema="planilha"] .pr-tb th,html[data-tema="planilha"] .pr-tb td{border-color:rgba(0,0,0,.25)}
+    html[data-tema="planilha"] .pr-jn{color:#1c1405;background:#ffe600;padding:1px 5px;border-radius:3px}
+    html[data-tema="planilha"] .pr-tb td.g-ch .g-nome{outline:2px solid #1c1405;outline-offset:-2px;color:#10131a}
+    html[data-tema="planilha"] #gradeModal .modal,html[data-tema="claro"] #gradeModal .modal{background:#fff}
+    html[data-tema="planilha"] .grade-tb thead th,html[data-tema="claro"] .grade-tb thead th{background:#f1f3f6}
+    html[data-tema="planilha"] .grade-tb tr.g-grp td,html[data-tema="claro"] .grade-tb tr.g-grp td,html[data-tema="planilha"] .grade-tb tr.g-obs td,html[data-tema="claro"] .grade-tb tr.g-obs td{background:#f4f5f7;color:#6b7280}
+    html[data-tema="planilha"] .g-tor.t-top,html[data-tema="claro"] .g-tor.t-top{color:#1d4ed8}
+    html[data-tema="planilha"] .g-tor.t-mid,html[data-tema="claro"] .g-tor.t-mid{color:#a16207}
+    html[data-tema="planilha"] .g-tor.t-bot,html[data-tema="claro"] .g-tor.t-bot{color:#be123c}
+    html[data-tema="planilha"] .pr-tb td.pr-n,html[data-tema="claro"] .pr-tb td.pr-n{color:#6b7280}
+    html[data-tema="contraste"] .pr-tb td .g-nome{font-weight:700;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -1309,6 +1391,7 @@
             <button class="rbtn" id="bdSaveJson" style="padding:8px 12px" data-i18n-title="tipBdSave" title="Baixa o board como arquivo JSON" data-i18n="bdSave">💾 Salvar</button>
             <button class="rbtn" id="extraBtn" style="padding:8px 12px" data-i18n-title="extraAsk" title="Puxa players de um board antigo para simular" data-i18n="extraBtnS">⤓ Puxar</button>
             <button class="rbtn" id="bdPresent" style="padding:8px 12px" data-i18n-title="presentTip" title="Modo telão" data-i18n="presentBtn">⛶ Telão</button>
+            <select class="tema-sel rbtn" data-i18n-title="temaTip" title="Tema"></select>
             <span class="bd-legend" data-i18n-html="bdLegend">Alvo por PT: <b>1 Healer</b> · <b>1 Tank</b> · <b>3 DPS</b> · resto vira reserva. Arraste os jogadores; clique num deles para tarja/flags.</span>
           </div>
           <div class="roster-board" id="rosterBoard" hidden></div>
@@ -1402,6 +1485,7 @@
             <button type="button" data-gm="pt" data-i18n="gradeByPt">Por PT</button>
             <button type="button" data-gm="player" data-i18n="gradeByPlayer">Por jogador</button>
           </div>
+          <select class="tema-sel rbtn" data-i18n-title="temaTip" title="Tema"></select>
           <button class="rbtn" id="gradePng" data-i18n="gradePng">🖼 Imagem</button>
           <button class="rbtn" id="gradeClose" data-i18n="close">Fechar</button>
         </div>
@@ -1496,7 +1580,7 @@
 
   <script src="../assets/vendor/konva.min.js"></script>
   <script src="../assets/vendor/peerjs.min.js"></script>
-  <script src="./config.js?v=115"></script>
-  <script src="./app.js?v=115"></script>
+  <script src="./config.js?v=116"></script>
+  <script src="./app.js?v=116"></script>
 </body>
 </html>
